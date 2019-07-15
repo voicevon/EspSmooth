@@ -1,5 +1,6 @@
 #pragma once
 
+#include "espsmooth/components/sensor/endstop_sensor.h"
 #include "espsmooth/components/json/json_util.h"
 #include "espsmooth/components/logger/logger.h"
 #include "espsmooth/components/uptime/uptime_sensor.h"
