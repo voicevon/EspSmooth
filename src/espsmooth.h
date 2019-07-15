@@ -1,0 +1,22 @@
+#pragma once
+
+#include "espsmooth/components/json/json_util.h"
+#include "espsmooth/components/logger/logger.h"
+#include "espsmooth/components/uptime/uptime_sensor.h"
+#include "espsmooth/components/wifi/wifi_component.h"
+#include "espsmooth/components/wifi_signal/wifi_signal_sensor.h"
+#include "espsmooth/core/application.h"
+#include "espsmooth/core/automation.h"
+#include "espsmooth/core/base_automation.h"
+#include "espsmooth/core/component.h"
+#include "espsmooth/core/controller.h"
+#include "espsmooth/core/defines.h"
+#include "espsmooth/core/esphal.h"
+#include "espsmooth/core/helpers.h"
+#include "espsmooth/core/log.h"
+#include "espsmooth/core/optional.h"
+#include "espsmooth/core/preferences.h"
+#include "espsmooth/core/scheduler.h"
+#include "espsmooth/core/util.h"
+#include "espsmooth/core/version.h"
+
