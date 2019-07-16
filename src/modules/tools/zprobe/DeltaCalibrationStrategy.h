@@ -1,30 +1,29 @@
-#ifndef _DELTALEVELINGSTRATEGY
-#define _DELTALEVELINGSTRATEGY
+#pragma once
 
-#include "LevelingStrategy.h"
+#include "ZProbeStrategy.h"
 
-#define delta_calibration_strategy_checksum CHECKSUM("delta-calibration")
+class OutputStream;
+class GCode;
+class ConfigReader;
 
-class StreamOutput;
-
-class DeltaCalibrationStrategy : public LevelingStrategy
+class DeltaCalibrationStrategy : public ZProbeStrategy
 {
 public:
-    DeltaCalibrationStrategy(ZProbe *zprobe) : LevelingStrategy(zprobe){};
+    DeltaCalibrationStrategy(ZProbe *zprb) : ZProbeStrategy(zprb){};
     ~DeltaCalibrationStrategy(){};
-    bool handleGcode(Gcode* gcode);
-    bool handleConfig();
+    bool handle_gcode(GCode& gcode, OutputStream& os);
+    bool configure(ConfigReader& cr);
 
 private:
-    bool set_trim(float x, float y, float z, StreamOutput *stream);
+    bool handle_mcode(GCode& gcode, OutputStream& os);
+    bool set_trim(float x, float y, float z, OutputStream& os);
     bool get_trim(float& x, float& y, float& z);
-    bool calibrate_delta_endstops(Gcode *gcode);
-    bool calibrate_delta_radius(Gcode *gcode);
-    bool probe_delta_points(Gcode *gcode);
-    float findBed();
+    bool calibrate_delta_endstops(GCode& gcode, OutputStream& os);
+    bool calibrate_delta_radius(GCode& gcode, OutputStream& os);
+    bool probe_delta_points(GCode& gcode, OutputStream& os);
+    bool findBed(float& ht);
 
     float probe_radius;
     float initial_height;
 };
 
-#endif

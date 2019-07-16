@@ -1,37 +1,36 @@
 #pragma once
 
-#include "LevelingStrategy.h"
+#include "ZProbeStrategy.h"
 
 #include <string.h>
 #include <tuple>
 
-#define delta_grid_leveling_strategy_checksum CHECKSUM("delta-grid")
+class OutputStream;
+class GCode;
+class ConfigReader;
 
-class StreamOutput;
-class Gcode;
-
-class DeltaGridStrategy : public LevelingStrategy
+class DeltaGridStrategy : public ZProbeStrategy
 {
 public:
-    DeltaGridStrategy(ZProbe *zprobe);
+    DeltaGridStrategy(ZProbe *);
     ~DeltaGridStrategy();
-    bool handleGcode(Gcode* gcode);
-    bool handleConfig();
+    bool handle_gcode(GCode& gcode, OutputStream& os);
+    bool configure(ConfigReader& cr);
 
 private:
-
+    bool handle_mcode(GCode& gcode, OutputStream& os);
     void extrapolate_one_point(int x, int y, int xdir, int ydir);
     void extrapolate_unprobed_bed_level();
-    bool doProbe(Gcode *gc);
-    float findBed();
+    bool doProbe(GCode& gcode, OutputStream& os);
+    bool findBed(float& ht);
     void setAdjustFunction(bool on);
-    void print_bed_level(StreamOutput *stream);
+    void print_bed_level(OutputStream& os);
     void doCompensation(float *target, bool inverse);
     void reset_bed_level();
-    void save_grid(StreamOutput *stream);
-    bool load_grid(StreamOutput *stream);
-    bool probe_spiral(int n, float radius, StreamOutput *stream);
-    bool probe_grid(int n, float radius, StreamOutput *stream);
+    void save_grid(OutputStream& os);
+    bool load_grid(OutputStream& os);
+    bool probe_spiral(int n, float radius, OutputStream& os);
+    bool probe_grid(int n, float radius, OutputStream& os);
 
     float initial_height;
     float tolerance;
@@ -44,6 +43,5 @@ private:
     struct {
         bool save:1;
         bool do_home:1;
-        bool is_square:1;
     };
 };

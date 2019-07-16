@@ -1,22 +1,13 @@
-/*
-      this file is part of smoothie (http://smoothieware.org/). the motion control part is heavily based on grbl (https://github.com/simen/grbl).
-      smoothie is free software: you can redistribute it and/or modify it under the terms of the gnu general public license as published by the free software foundation, either version 3 of the license, or (at your option) any later version.
-      smoothie is distributed in the hope that it will be useful, but without any warranty; without even the implied warranty of merchantability or fitness for a particular purpose. see the gnu general public license for more details.
-      you should have received a copy of the gnu general public license along with smoothie. if not, see <http://www.gnu.org/licenses/>.
-*/
-
-#ifndef THERMISTOR_H
-#define THERMISTOR_H
+#pragma once
 
 #include "TempSensor.h"
-#include "RingBuffer.h"
-#include "Pin.h"
 
 #include <tuple>
 
 #define QUEUE_LEN 32
 
-class StreamOutput;
+class OutputStream;
+class Adc;
 
 class Thermistor : public TempSensor
 {
@@ -25,18 +16,18 @@ class Thermistor : public TempSensor
         ~Thermistor();
 
         // TempSensor interface.
-        void UpdateConfig(uint16_t module_checksum, uint16_t name_checksum);
+        bool configure(ConfigReader& cr, ConfigReader::section_map_t&);
         float get_temperature();
         bool set_optional(const sensor_options_t& options);
         bool get_optional(sensor_options_t& options);
-        void get_raw();
+        void get_raw(OutputStream& os);
         static std::tuple<float,float,float> calculate_steinhart_hart_coefficients(float t1, float r1, float t2, float r2, float t3, float r3);
-        static void print_predefined_thermistors(StreamOutput*);
+        static void print_predefined_thermistors(OutputStream& os);
 
     private:
         int new_thermistor_reading();
         float adc_value_to_temperature(uint32_t adc_value);
-        void calc_jk();
+        bool calc_jk();
 
         // Thermistor computation settings using beta, not used if using Steinhart-Hart
         float r0;
@@ -60,14 +51,10 @@ class Thermistor : public TempSensor
             };
         };
 
-        Pin  thermistor_pin;
+        Adc *thermistor_pin{nullptr};
 
         float min_temp, max_temp;
-        struct {
-            bool bad_config:1;
-            bool use_steinhart_hart:1;
-        };
+
+        bool use_steinhart_hart;
         uint8_t thermistor_number;
 };
-
-#endif

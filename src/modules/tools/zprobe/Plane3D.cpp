@@ -16,22 +16,22 @@ Plane3D::Plane3D(const Vector3 &v1, const Vector3 &v2, const Vector3 &v3)
 
 typedef union { float f; uint32_t u; } conv_t;
 // ctor used to restore a saved plane
-Plane3D::Plane3D(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
+Plane3D::Plane3D(uint32_t a, uint32_t b, uint32_t c, uint32_t dd)
 {
     conv_t ca, cb, cc, cd;
-    ca.u= a; cb.u= b; cc.u= c; cd.u= d;
+    ca.u= a; cb.u= b; cc.u= c; cd.u= dd;
     this->normal = Vector3(ca.f, cb.f, cc.f);
     this->d= cd.f;
 }
 
-void Plane3D::encode(uint32_t& a, uint32_t& b, uint32_t& c, uint32_t& d)
+void Plane3D::encode(uint32_t& a, uint32_t& b, uint32_t& c, uint32_t& dd)
 {
     conv_t ca, cb, cc, cd;
     ca.f= this->normal[0];
     cb.f= this->normal[1];
     cc.f= this->normal[2];
     cd.f= this->d;
-    a= ca.u; b= cb.u; c= cc.u; d= cd.u;
+    a= ca.u; b= cb.u; c= cc.u; dd= cd.u;
 }
 
 // solve for z given x and y

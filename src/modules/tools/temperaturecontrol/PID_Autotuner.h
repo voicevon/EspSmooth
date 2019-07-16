@@ -2,29 +2,24 @@
  * Based on https://github.com/br3ttb/Arduino-PID-AutoTune-Library
  */
 
-#ifndef _PID_AUTOTUNE_H
-#define _PID_AUTOTUNE_H
+#pragma once
 
 #include <stdint.h>
 
-#include "Module.h"
-
 class TemperatureControl;
+class GCode;
+class OutputStream;
 
-class PID_Autotuner : public Module
+class PID_Autotuner
 {
 public:
-    PID_Autotuner();
-
-    void on_module_loaded(void);
-    uint32_t on_tick(uint32_t);
-    void on_idle(void *);
-    void on_gcode_received(void *);
+    PID_Autotuner(TemperatureControl *);
+    void start(GCode&, OutputStream&);
 
 private:
-    void begin(float, int );
+    void run_auto_pid(OutputStream& os, float target, int ncycles);
+    void finishUp(OutputStream& os);
     void abort();
-    void finishUp();
 
     TemperatureControl *temp_control;
     float target_temperature;
@@ -42,12 +37,9 @@ private:
     float absMax, absMin;
     float oStep;
     int output;
-    volatile unsigned long tickCnt;
+    unsigned long tickCnt;
     struct {
         bool justchanged:1;
-        volatile bool tick:1;
         bool firstPeak:1;
     };
 };
-
-#endif /* _PID_AUTOTUNE_H */

@@ -1,32 +1,32 @@
-#ifndef _THREEPOINTSTRATEGY
-#define _THREEPOINTSTRATEGY
+#pragma once
 
-#include "LevelingStrategy.h"
+#include "ZProbeStrategy.h"
 
 #include <string.h>
 #include <tuple>
 
-#define three_point_leveling_strategy_checksum CHECKSUM("three-point-leveling")
-
-class StreamOutput;
+class OutputStream;
 class Plane3D;
+class GCode;
+class ConfigReader;
 
-class ThreePointStrategy : public LevelingStrategy
+class ThreePointStrategy : public ZProbeStrategy
 {
 public:
     ThreePointStrategy(ZProbe *zprobe);
     ~ThreePointStrategy();
-    bool handleGcode(Gcode* gcode);
-    bool handleConfig();
+    bool handle_gcode(GCode& gcode, OutputStream& os);
+    bool configure(ConfigReader& cr);
     float getZOffset(float x, float y);
 
 private:
+    bool handle_mcode(GCode& gcode, OutputStream& os);
     void homeXY();
-    bool doProbing(StreamOutput *stream);
+    bool doProbing(OutputStream& os);
     std::tuple<float, float> parseXY(const char *str);
     std::tuple<float, float, float> parseXYZ(const char *str);
     void setAdjustFunction(bool);
-    bool test_probe_points(Gcode *gcode);
+    bool test_probe_points(OutputStream& os);
 
     std::tuple<float, float, float> probe_offsets;
     std::tuple<float, float> probe_points[3];
@@ -37,5 +37,3 @@ private:
     };
     float tolerance;
 };
-
-#endif

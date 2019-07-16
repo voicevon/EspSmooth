@@ -1,62 +1,63 @@
-/*
-      This file is part of Smoothie (http://smoothieware.org/). The motion control part is heavily based on Grbl (https://github.com/simen/grbl).
-      Smoothie is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-      Smoothie is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-      You should have received a copy of the GNU General Public License along with Smoothie. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-
 #pragma once
 
 #include "Module.h"
 
-#include <stdio.h>
 #include <string>
 #include <map>
 #include <vector>
-using std::string;
+#include <thread>
 
-class StreamOutput;
+class OutputStream;
+class GCode;
 
 class Player : public Module {
     public:
         Player();
 
-        void on_module_loaded();
-        void on_console_line_received( void* argument );
-        void on_main_loop( void* argument );
-        void on_second_tick(void* argument);
-        void on_get_public_data(void* argument);
-        void on_set_public_data(void* argument);
-        void on_gcode_received(void *argument);
-        void on_halt(void *argument);
+        static bool create(ConfigReader& cr);
+        bool configure(ConfigReader&);
+        void in_command_ctx(bool idle);
+        bool request(const char *key, void *value);
+        void on_halt(bool flg);
 
     private:
-        void play_command( string parameters, StreamOutput* stream );
-        void progress_command( string parameters, StreamOutput* stream );
-        void abort_command( string parameters, StreamOutput* stream );
-        void suspend_command( string parameters, StreamOutput* stream );
-        void resume_command( string parameters, StreamOutput* stream );
-        string extract_options(string& args);
-        void suspend_part2();
+        bool handle_gcode(GCode& gcode, OutputStream& os);
+        bool handle_m23(std::string& params, OutputStream& os);
+        bool handle_m32(std::string& params, OutputStream& os);
 
-        string filename;
-        string after_suspend_gcode;
-        string before_resume_gcode;
-        string on_boot_gcode;
-        StreamOutput* current_stream;
-        StreamOutput* reply_stream;
+        bool play_command( std::string& parameters, OutputStream& os );
+        bool progress_command( std::string& parameters, OutputStream& os );
+        bool abort_command( std::string& parameters, OutputStream& os );
+        bool suspend_command( std::string& parameters, OutputStream& os );
+        bool resume_command( std::string& parameters, OutputStream& os );
+        std::string extract_options(std::string& args);
+        void suspend_part2();
+        static void play_thread(void *);
+        void player_thread();
+        static OutputStream nullos;
+        static Player *instance;
+        std::string filename;
+        std::string after_suspend_gcode;
+        std::string before_resume_gcode;
+        std::string on_boot_gcode;
+        OutputStream *current_os;
+        OutputStream *reply_os;
 
         FILE* current_file_handler;
         long file_size;
         unsigned long played_cnt;
-        unsigned long elapsed_secs;
+        unsigned long start_ticks;
         float saved_position[3]; // only saves XYZ
-        std::map<uint16_t, float> saved_temperatures;
+        std::map<Module*, float> saved_temperatures;
+
+        volatile bool abort_thread;
+        volatile bool play_thread_exited;
+        volatile bool abort_flg;
+        volatile bool playing_file;
+
         struct {
             bool on_boot_gcode_enable:1;
             bool booted:1;
-            bool playing_file:1;
             bool suspended:1;
             bool was_playing_file:1;
             bool leave_heaters_on:1;

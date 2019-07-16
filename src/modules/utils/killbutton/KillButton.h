@@ -1,17 +1,18 @@
 #pragma once
 
-#include "libs/Pin.h"
+#include "Module.h"
+#include "Pin.h"
 
 class KillButton : public Module {
     public:
         KillButton();
-
-        void on_module_loaded();
-        void on_idle(void *argument);
-        uint32_t button_tick(uint32_t dummy);
+        static bool create(ConfigReader& cr);
+        bool configure(ConfigReader& cr);
 
     private:
         Pin kill_button;
+        void button_tick();
+
         enum STATE {
             IDLE,
             KILL_BUTTON_DOWN,
@@ -29,6 +30,4 @@ class KillButton : public Module {
             bool unkill_enable:1;
             bool toggle_enable:1;
         };
-        
-        uint32_t poll_frequency;
 };

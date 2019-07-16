@@ -1,119 +1,110 @@
-#include "libs/Kernel.h"
 #include "KillButton.h"
-#include "libs/nuts_bolts.h"
-#include "libs/utils.h"
-#include "Config.h"
+
+#include "ConfigReader.h"
 #include "SlowTicker.h"
-#include "libs/SerialMessage.h"
-#include "libs/StreamOutput.h"
-#include "checksumm.h"
-#include "ConfigValue.h"
-#include "StreamOutputPool.h"
+#include "main.h"
 
-using namespace std;
+#define kill_button_enable_key "enable"
+#define kill_button_pin_key "pin"
+#define toggle_key "toggle_enable"
+#define unkill_key "unkill_enable"
 
-#define pause_button_enable_checksum CHECKSUM("pause_button_enable")
-#define kill_button_enable_checksum  CHECKSUM("kill_button_enable")
-#define toggle_checksum              CHECKSUM("kill_button_toggle_enable")
-#define unkill_checksum              CHECKSUM("unkill_enable")
-#define pause_button_pin_checksum    CHECKSUM("pause_button_pin")
-#define kill_button_pin_checksum     CHECKSUM("kill_button_pin")
-#define poll_frequency_checksum      CHECKSUM("kill_button_poll_frequency")
+REGISTER_MODULE(KillButton, KillButton::create)
 
-KillButton::KillButton()
+bool KillButton::create(ConfigReader& cr)
 {
-    this->state= IDLE;
+    printf("DEBUG: configure kill button\n");
+    KillButton *kill_button = new KillButton();
+    if(!kill_button->configure(cr)) {
+        printf("INFO: No kill button enabled\n");
+        delete kill_button;
+        kill_button = nullptr;
+    }
+    return true;
 }
 
-void KillButton::on_module_loaded()
+KillButton::KillButton() : Module("killbutton")
 {
-    bool pause_enable = THEKERNEL->config->value( pause_button_enable_checksum )->by_default(false)->as_bool(); // @deprecated
-    bool kill_enable = pause_enable || THEKERNEL->config->value( kill_button_enable_checksum )->by_default(false)->as_bool();
+    this->state = IDLE;
+}
+
+bool KillButton::configure(ConfigReader& cr)
+{
+    ConfigReader::section_map_t m;
+    if(!cr.get_section("kill button", m)) return false;
+
+    bool kill_enable = cr.get_bool(m,  kill_button_enable_key , false);
     if(!kill_enable) {
-        delete this;
-        return;
+        return false;
     }
-    this->unkill_enable = THEKERNEL->config->value( unkill_checksum )->by_default(true)->as_bool();
-    this->toggle_enable = THEKERNEL->config->value( toggle_checksum )->by_default(false)->as_bool();
 
-    Pin pause_button;
-    pause_button.from_string( THEKERNEL->config->value( pause_button_pin_checksum )->by_default("2.12")->as_string())->as_input(); // @DEPRECATED
-    this->kill_button.from_string( THEKERNEL->config->value( kill_button_pin_checksum )->by_default("nc")->as_string())->as_input();
+    this->unkill_enable = cr.get_bool(m,  unkill_key , true);
+    this->toggle_enable = cr.get_bool(m,  toggle_key , false);
 
-    if(!this->kill_button.connected() && pause_button.connected()) {
-        // use pause button for kill button if kill button not specifically defined
-        this->kill_button = pause_button;
-    }
+    this->kill_button.from_string( cr.get_string(m,  kill_button_pin_key , "nc"))->as_input();
 
     if(!this->kill_button.connected()) {
-        delete this;
-        return;
+        return false;
     }
 
-    this->register_for_event(ON_IDLE);
+    SlowTicker::getInstance()->attach(5, std::bind(&KillButton::button_tick, this));
 
-    this->poll_frequency = THEKERNEL->config->value( poll_frequency_checksum )->by_default(5)->as_number();
-    THEKERNEL->slow_ticker->attach( this->poll_frequency, this, &KillButton::button_tick );
-}
-
-void KillButton::on_idle(void *argument)
-{
-    if(state == KILL_BUTTON_DOWN) {
-        if(!THEKERNEL->is_halted()) {
-            THEKERNEL->call_event(ON_HALT, nullptr);
-            THEKERNEL->streams->printf("ALARM: Kill button pressed - reset or M999 to continue\r\n");
-        }
-
-    }else if(state == UNKILL_FIRE) {
-        if(THEKERNEL->is_halted()) {
-            THEKERNEL->call_event(ON_HALT, (void *)1); // clears on_halt
-            THEKERNEL->streams->printf("UnKill button pressed Halt cleared\r\n");
-        }
-    }
+    return true;
 }
 
 // Check the state of the button and act accordingly using the following FSM
-// Note this is ISR so don't do anything nasty in here
+// Note this is the system timer so don't do anything slow in here
 // If in toggle mode (locking estop) then button down will kill, and button up will unkill if unkill is enabled
 // otherwise it will look for a 2 second press on the kill button to unkill if unkill is set
-uint32_t KillButton::button_tick(uint32_t dummy)
+void KillButton::button_tick()
 {
-    bool killed= THEKERNEL->is_halted();
+    bool killed = is_halted(); // in Module
 
     switch(state) {
-            case IDLE:
-                if(!this->kill_button.get()) state= KILL_BUTTON_DOWN;
-                else if(unkill_enable && !toggle_enable && killed) state= KILLED_BUTTON_UP; // allow kill button to unkill if kill was created from some other source
-                break;
-            case KILL_BUTTON_DOWN:
-                if(killed) state= KILLED_BUTTON_DOWN;
-                break;
-            case KILLED_BUTTON_DOWN:
-                if(this->kill_button.get()) state= KILLED_BUTTON_UP;
-                break;
-            case KILLED_BUTTON_UP:
-                if(!killed) state= IDLE;
-                if(unkill_enable) {
-                    if(toggle_enable) state= UNKILL_FIRE; // if toggle is enabled and button is released then we unkill
-                    else if(!this->kill_button.get()) state= UNKILL_BUTTON_DOWN; // wait for button to be pressed to go into next state for timing start
-                }
-                break;
-            case UNKILL_BUTTON_DOWN:
-                unkill_timer= 0;
-                state= UNKILL_TIMING_BUTTON_DOWN;
-                break;
-            case UNKILL_TIMING_BUTTON_DOWN:
-                if(++unkill_timer > this->poll_frequency*2) state= UNKILL_FIRE;
-                else if(this->kill_button.get()) unkill_timer= 0;
-                if(!killed) state= IDLE;
-                break;
-            case UNKILL_FIRE:
-                 if(!killed) state= UNKILLED_BUTTON_DOWN;
-                 break;
-            case UNKILLED_BUTTON_DOWN:
-                if(this->kill_button.get()) state= IDLE;
-                break;
+        case IDLE:
+            if(!this->kill_button.get()) state = KILL_BUTTON_DOWN;
+            else if(unkill_enable && !toggle_enable && killed) state = KILLED_BUTTON_UP; // allow kill button to unkill if kill was created from some other source
+            break;
+        case KILL_BUTTON_DOWN:
+            if(killed) state = KILLED_BUTTON_DOWN;
+            break;
+        case KILLED_BUTTON_DOWN:
+            if(this->kill_button.get()) state = KILLED_BUTTON_UP;
+            break;
+        case KILLED_BUTTON_UP:
+            if(!killed) state = IDLE;
+            if(unkill_enable) {
+                if(toggle_enable) state = UNKILL_FIRE; // if toggle is enabled and button is released then we unkill
+                else if(!this->kill_button.get()) state = UNKILL_BUTTON_DOWN; // wait for button to be pressed to go into next state for timing start
+            }
+            break;
+        case UNKILL_BUTTON_DOWN:
+            unkill_timer = 0;
+            state = UNKILL_TIMING_BUTTON_DOWN;
+            break;
+        case UNKILL_TIMING_BUTTON_DOWN:
+            if(++unkill_timer > 5 * 2) state = UNKILL_FIRE;
+            else if(this->kill_button.get()) unkill_timer = 0;
+            if(!killed) state = IDLE;
+            break;
+        case UNKILL_FIRE:
+            if(!killed) state = UNKILLED_BUTTON_DOWN;
+            break;
+        case UNKILLED_BUTTON_DOWN:
+            if(this->kill_button.get()) state = IDLE;
+            break;
     }
 
-    return 0;
+    if(state == KILL_BUTTON_DOWN) {
+        if(!killed) {
+            Module::broadcast_halt(true);
+            print_to_all_consoles("ALARM: Kill button pressed - reset or M999 to continue\n");
+        }
+
+    } else if(state == UNKILL_FIRE) {
+        if(killed) {
+            Module::broadcast_halt(false); // clears on_halt
+            print_to_all_consoles("UnKill button pressed Halt cleared\n");
+        }
+    }
 }
