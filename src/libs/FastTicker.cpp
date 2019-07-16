@@ -1,8 +1,8 @@
 #include "FastTicker.h"
-#include "tmr-setup.h"
+//#include "tmr-setup.h"
 
 #include "FreeRTOS.h"
-#include "task.h"
+//#include "task.h"
 
 // timers are specified in Hz and periods in microseconds
 #define BASE_FREQUENCY 1000000

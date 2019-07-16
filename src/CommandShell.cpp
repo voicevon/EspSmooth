@@ -7,20 +7,19 @@
 #include "libs/AutoPushPop.h"
 #include "robot/StepperMotor.h"
 #include "main.h"
-#include "modules/tools/temperaturecontro/TemperatureControl.h"
+#include "modules/tools/temperaturecontrol/TemperatureControl.h"
 #include "ConfigWriter.h"
 #include "robot/Conveyor.h"
 #include "version.h"
 #include "libs/ymodem.h"
-#include "Adc.h"
-#include "FastTicker.h"
-#include "StepTicker.h"
-#include "Adc.h"
+#include "libs/FastTicker.h"
+#include "robot/StepTicker.h"
 
 #include "FreeRTOS.h"
-#include "task.h"
-#include "ff.h"
-#include "stopwatch.h"
+// #include "task.h"   // to double check
+// #include "ff.h"     // to  double check
+#include "libs/HAL/sdmmc/fatfs/ff.h"   // to  double check.  for DIR error
+#include "libs/HAL/stopwatch.h"
 
 #include <functional>
 #include <set>
@@ -490,7 +489,7 @@ bool CommandShell::cat_cmd(std::string& params, OutputStream& os)
     return true;
 }
 
-#include "md5.h"
+#include "libs/md5.h"
 bool CommandShell::md5sum_cmd(std::string& params, OutputStream& os)
 {
     HELP("calculate the md5sum of given filename");
@@ -522,7 +521,7 @@ bool CommandShell::md5sum_cmd(std::string& params, OutputStream& os)
     return true;
 }
 
-#include "Switch.h"
+#include "modules/tools/switch/Switch.h"
 // set or get switch state for a named switch
 bool CommandShell::switch_cmd(std::string& params, OutputStream& os)
 {
@@ -1005,7 +1004,8 @@ bool CommandShell::test_cmd(std::string& params, OutputStream& os)
         uint8_t a = ax >= 'X' ? ax - 'X' : ax - 'A' + 3;
         int steps = strtol(stepstr.c_str(), NULL, 10);
         bool dir = steps >= 0;
-        steps = std::abs(steps);
+        steps = abs(steps);
+    
 
         if(a > C_AXIS) {
             os.printf("error: axis must be x, y, z, a, b, c\n");
@@ -1047,8 +1047,8 @@ bool CommandShell::version_cmd(std::string& params, OutputStream& os)
     HELP("version - print version");
 
     Version vers;
-    const char *mcu = "LPC4330 on " BUILD_TARGET;
-    os.printf("Build version: %s, Build date: %s, MCU: %s, System Clock: %ldMHz\r\n", vers.get_build(), vers.get_build_date(), mcu, SystemCoreClock / 1000000);
+    //const char *mcu = "ESP32 on " + BUILD_TARGET;
+    //os.printf("Build version: %s, Build date: %s, MCU: %s, System Clock: %ldMHz\r\n", vers.get_build(), vers.get_build_date(), mcu, SystemCoreClock / 1000000);
     os.printf("%d axis\n", MAX_ROBOT_ACTUATORS);
 
     os.set_no_response();
@@ -1060,7 +1060,8 @@ bool CommandShell::m115_cmd(GCode& gcode, OutputStream& os)
 {
     Version vers;
 
-    os.printf("FIRMWARE_NAME:Smoothieware2, FIRMWARE_URL:http%%3A//smoothieware.org, X-SOURCE_CODE_URL:https://github.com/Smoothieware/SmoothieV2, FIRMWARE_VERSION:%s, X-FIRMWARE_BUILD_DATE:%s, X-SYSTEM_CLOCK:%ldMHz, X-AXES:%d, X-GRBL_MODE:%d\n", vers.get_build(), vers.get_build_date(), SystemCoreClock / 1000000, MAX_ROBOT_ACTUATORS, Dispatcher::getInstance()->is_grbl_mode() ? 1 : 0);
+    //os.printf("FIRMWARE_NAME:Smoothieware2, FIRMWARE_URL:http%%3A//smoothieware.org, X-SOURCE_CODE_URL:https://github.com/Smoothieware/SmoothieV2, FIRMWARE_VERSION:%s, X-FIRMWARE_BUILD_DATE:%s, X-SYSTEM_CLOCK:%ldMHz, X-AXES:%d, X-GRBL_MODE:%d\n", vers.get_build(), vers.get_build_date(), SystemCoreClock / 1000000, MAX_ROBOT_ACTUATORS, Dispatcher::getInstance()->is_grbl_mode() ? 1 : 0);
+    os.printf("FIRMWARE_NAME:Smoothieware2, FIRMWARE_URL:http%%3A//smoothieware.org, X-SOURCE_CODE_URL:https://github.com/Smoothieware/SmoothieV2, FIRMWARE_VERSION:%s, X-FIRMWARE_BUILD_DATE:%s, X-SYSTEM_CLOCK:%ldMHz, X-AXES:%d, X-GRBL_MODE:%d\n", vers.get_build(), vers.get_build_date(), 123, MAX_ROBOT_ACTUATORS, Dispatcher::getInstance()->is_grbl_mode() ? 1 : 0);
 
     return true;
 }
@@ -1260,7 +1261,7 @@ bool CommandShell::break_cmd(std::string& params, OutputStream& os)
 {
     HELP("force s/w break point");
     //*(volatile int*)0xa5a5a5a4 = 1; // force hardware fault
-    __asm("bkpt #0");
+    // __asm("bkpt #0");  //do double check
     return true;
 }
 
@@ -1273,7 +1274,7 @@ bool CommandShell::reset_cmd(std::string& params, OutputStream& os)
     return true;
 }
 
-#include "uart_comms.h"
+// #include "uart_comms.h"
 extern "C" void shutdown_sdmmc();
 extern "C" void shutdown_cdc();
 bool CommandShell::flash_cmd(std::string& params, OutputStream& os)
@@ -1297,11 +1298,11 @@ bool CommandShell::flash_cmd(std::string& params, OutputStream& os)
     f_unmount("sd");
     FastTicker::getInstance()->stop();
     StepTicker::getInstance()->stop();
-    Adc::stop();
+    // Adc::stop();  //to double check
     shutdown_sdmmc();
     shutdown_cdc();
     vTaskSuspendAll();
-    __disable_irq();
+    // __disable_irq();  // ti double check
     //NVIC_DisableIRQ(USB0_IRQn);
     //NVIC_DisableIRQ(SysTick_IRQn);
 
@@ -1309,12 +1310,12 @@ bool CommandShell::flash_cmd(std::string& params, OutputStream& os)
     uint32_t p = *(uint32_t*)0x14700004;
     void (*runat)(void) = *(void (*)())p;
     os.printf("Executing at %p\n", runat);
-    stop_uart();
+    // stop_uart();  to double check
 
     runat();
 
     // should never get here
-    __asm("bkpt #0");
+    // __asm("bkpt #0");  // to double check
     return true;
 }
 

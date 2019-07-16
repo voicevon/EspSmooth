@@ -1,6 +1,6 @@
 #include "GCode.h"
 
-#include "OutputStream.h"
+#include "libs/OutputStream.h"
 
 GCode::GCode()
 {

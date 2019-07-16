@@ -1,5 +1,5 @@
 #include "Module.h"
-#include "Robot.h"
+#include "robot/Robot.h"
 
 // static
 std::map<const std::string, Module::modrec_t> Module::registry;

@@ -1,9 +1,9 @@
 #include "Dispatcher.h"
 #include "GCode.h"
 #include "GCodeProcessor.h"
-#include "OutputStream.h"
+#include "libs/OutputStream.h"
 #include "Module.h"
-#include "StringUtils.h"
+#include "libs/StringUtils.h"
 
 #include <ctype.h>
 #include <cmath>
