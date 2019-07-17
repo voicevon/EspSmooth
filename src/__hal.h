@@ -1,7 +1,8 @@
 #pragma once
 
 
-#include "libs/HAL/Pin/Pin.h"
+#include "libs/HAL/Pin.h"
+#include "libs/HAL/Pwm.h"
 
 bool isnan(float xx){
     return false;
@@ -13,7 +14,8 @@ typedef void * TimerHandle_t;
 
 
 // https://github.com/Smoothieware/SmoothieV2/blob/97f5278ae5f26b751c71a98927c8c539ff78a2e8/Firmware/Hal/src/tmr-setup.c
-void tmr1_stop(){}
+void tmr1_stop(){
+}
 
 // frequency in HZ
 int tmr1_setup(uint32_t frequency, void *timer_handler){

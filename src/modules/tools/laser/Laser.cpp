@@ -1,17 +1,17 @@
 #include "Laser.h"
 
 #include "Block.h"
-#include "Robot.h"
+#include "robot/Robot.h"
 #include "Dispatcher.h"
-#include "SlowTicker.h"
-#include "FastTicker.h"
-#include "Pwm.h"
-#include "Pin.h"
-#include "StepTicker.h"
+#include "libs/SlowTicker.h"
+#include "libs/FastTicker.h"
+// #include "Pwm.h"
+#include "__hal.h"
+#include "robot/StepTicker.h"
 #include "ConfigReader.h"
 #include "GCode.h"
-#include "OutputStream.h"
-#include "StringUtils.h"
+#include "libs/OutputStream.h"
+#include "libs/StringUtils.h"
 
 #include <algorithm>
 
