@@ -1,8 +1,10 @@
 #include "FastTicker.h"
+
 //>>>Xuming
 //#include "tmr-setup.h"
-#include "libs/HAL/timer/tmr-setup.h"
+//#include "libs/HAL/timer/tmr-setup.h"
 //Xuming<<<
+
 #include "FreeRTOS.h"
 //#include "task.h"
 
