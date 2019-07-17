@@ -83,9 +83,17 @@ int FastTicker::attach(uint32_t frequency, std::function<void(void)> cb)
         max_frequency = frequency;
     }
 
-    taskENTER_CRITICAL();
+    //>>>Xuming
+    //taskENTER_CRITICAL();
+    portMUX_TYPE xx;
+    portENTER_CRITICAL(&xx);
+    //Xuming<<<
+
     callbacks.push_back(std::make_tuple(countdown, period, cb));
-    taskEXIT_CRITICAL();
+    //>>>Xuming
+    //taskEXIT_CRITICAL();
+    portEXIT_CRITICAL(&xx);
+    //Xuming<<<
 
     // return the index it is in
     return callbacks.size()-1;
