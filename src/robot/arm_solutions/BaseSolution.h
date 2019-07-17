@@ -2,7 +2,7 @@
 #pragma once
 
 #include <map>
-#include "ActuatorCoordinates.h"
+#include "robot/ActuatorCoordinates.h"
 
 class ConfigReader;
 

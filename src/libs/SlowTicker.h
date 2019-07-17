@@ -5,7 +5,7 @@
 #include <functional>
 
 #include "FreeRTOS.h"
-#include "timers.h"
+#include "__hal.h"
 
 class SlowTicker
 {

@@ -1,12 +1,9 @@
 #include "FastTicker.h"
 
-//>>>Xuming
-//#include "tmr-setup.h"
-//#include "libs/HAL/timer/tmr-setup.h"
-//Xuming<<<
 
 #include "FreeRTOS.h"
 // #include "task.h"
+#include "__hal.h"
 
 // timers are specified in Hz and periods in microseconds
 #define BASE_FREQUENCY 1000000

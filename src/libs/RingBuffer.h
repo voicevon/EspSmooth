@@ -1,3 +1,5 @@
+
+
 //
 //  Simple fixed size ring buffer.
 //  Manage objects by value.
@@ -6,6 +8,8 @@
 //  Slightly modified for naming
 
 #pragma once
+
+#include <malloc.h>
 
 template <class kind, size_t length>
 class RingBuffer

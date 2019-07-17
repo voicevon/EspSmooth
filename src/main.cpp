@@ -14,24 +14,24 @@
 #include <functional>
 
 #include "FreeRTOS.h"
-#include "task.h"
-#include "ff.h"
-#include "semphr.h"
 
-#include "uart_comms.h"
-#include "uart3_comms.h"
-#include "stopwatch.h"
+#include "ff.h"
+#include "freertos/semphr.h"
+
+// #include "uart_comms.h"
+// #include "uart3_comms.h"
+// #include "stopwatch.h"
 
 #include "Module.h"
-#include "OutputStream.h"
-#include "MessageQueue.h"
+#include "libs/OutputStream.h"
+#include "libs/MessageQueue.h"
 #include "GCode.h"
 #include "GCodeProcessor.h"
 #include "Dispatcher.h"
-#include "Robot.h"
-#include "RingBuffer.h"
-#include "Conveyor.h"
-#include "Pin.h"
+#include "robot/Robot.h"
+#include "libs/RingBuffer.h"
+#include "robot/Conveyor.h"
+#include "__hal.h"
 
 static bool system_running= false;
 static bool rpi_port_enabled= false;
