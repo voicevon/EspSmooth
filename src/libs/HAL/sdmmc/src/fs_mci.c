@@ -29,15 +29,15 @@
  * this code.
  */
 
-#include "fsmci_cfg.h"
-#include "board.h"
-#include "chip.h"
+#include "../inc/fsmci_cfg.h"
+// #include "board.h"
+// #include "chip.h"
 
-#include "FreeRTOS.h"
-#include "task.h"
+#include "libs/RTOS/include/FreeRTOS.h"
+#include "libs/RTOS/include/task.h"
 
 #include <stdlib.h>
-
+ 
 
 /*****************************************************************************
  * Private types/enumerations/variables
