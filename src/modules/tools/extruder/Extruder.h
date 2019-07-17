@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Module.h"
-#include "Pin.h"
+#include "__hal.h"
 #include "ConfigReader.h"
 
 #include <tuple>

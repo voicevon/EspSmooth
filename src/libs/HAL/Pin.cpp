@@ -546,7 +546,7 @@ Pin* Pin::as_input()
 {
     if(valid) {
         //>>>Xuming
-        Chip_GPIO_SetPinDIRInput(LPC_GPIO_PORT, gpioport, gpiopin);
+        //Chip_GPIO_SetPinDIRInput(LPC_GPIO_PORT, gpioport, gpiopin);
         //Xuming<<<
         return this;
     }

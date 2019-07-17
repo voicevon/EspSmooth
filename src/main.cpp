@@ -14,24 +14,24 @@
 #include <functional>
 
 #include "FreeRTOS.h"
-#include "task.h"
-#include "ff.h"
-#include "semphr.h"
 
-#include "uart_comms.h"
-#include "uart3_comms.h"
-#include "stopwatch.h"
+#include "ff.h"
+#include "freertos/semphr.h"
+
+// #include "uart_comms.h"
+// #include "uart3_comms.h"
+// #include "stopwatch.h"
 
 #include "Module.h"
-#include "OutputStream.h"
-#include "MessageQueue.h"
+#include "libs/OutputStream.h"
+#include "libs/MessageQueue.h"
 #include "GCode.h"
 #include "GCodeProcessor.h"
 #include "Dispatcher.h"
-#include "Robot.h"
-#include "RingBuffer.h"
-#include "Conveyor.h"
-#include "Pin.h"
+#include "robot/Robot.h"
+#include "libs/RingBuffer.h"
+#include "robot/Conveyor.h"
+#include "__hal.h"
 
 static bool system_running= false;
 static bool rpi_port_enabled= false;
@@ -584,23 +584,24 @@ void safe_sleep(uint32_t ms)
 }
 
 #include "CommandShell.h"
-#include "SlowTicker.h"
-#include "FastTicker.h"
-#include "StepTicker.h"
+#include "libs/SlowTicker.h"
+#include "libs/FastTicker.h"
+#include "robot/StepTicker.h"
 #include "ConfigReader.h"
-#include "Switch.h"
-#include "Planner.h"
-#include "Robot.h"
-#include "KillButton.h"
-#include "Extruder.h"
-#include "TemperatureControl.h"
-#include "Adc.h"
-#include "Pwm.h"
-#include "CurrentControl.h"
-#include "Laser.h"
-#include "Endstops.h"
-#include "ZProbe.h"
-#include "Player.h"
+#include "modules/tools/switch/Switch.h"
+#include "robot/Planner.h"
+#include "robot/Robot.h"
+#include "modules/utils/killbutton/KillButton.h"
+#include "modules/tools/extruder/Extruder.h"
+#include "modules/tools/temperaturecontrol/TemperatureControl.h"
+#include "modules/utils/currentcontrol/CurrentControl.h"
+#include "modules/tools/laser/Laser.h"
+#include "modules/tools/endstops/Endstops.h"
+#include "modules/tools/zprobe/ZProbe.h"
+#include "modules/utils/player/Player.h"
+
+// #include "Adc.h"
+// #include "Pwm.h"
 
 extern void configureSPIFI();
 //float get_pll1_clk();

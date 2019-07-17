@@ -1,12 +1,12 @@
 #include "Extruder.h"
 
-#include "Conveyor.h"
+#include "robot/Conveyor.h"
 #include "Block.h"
-#include "StepperMotor.h"
+#include "robot/StepperMotor.h"
 #include "ConfigReader.h"
-#include "Robot.h"
+#include "robot/Robot.h"
 #include "GCode.h"
-#include "OutputStream.h"
+#include "libs/OutputStream.h"
 #include "AxisDefns.h"
 #include "Dispatcher.h"
 

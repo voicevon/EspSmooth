@@ -1,6 +1,6 @@
 #pragma once
 
-#include "libs/HAL/Pin/Pin.h"
+#include "libs/HAL/Pin.h"
 
 class TMC26X;
 class ConfigReader;

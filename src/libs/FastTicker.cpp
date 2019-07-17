@@ -1,10 +1,9 @@
 #include "FastTicker.h"
-//>>>Xuming
-//#include "tmr-setup.h"
-#include "libs/HAL/timer/tmr-setup.h"
-//Xuming<<<
+
+
 #include "FreeRTOS.h"
-//#include "task.h"
+// #include "task.h"
+#include "__hal.h"
 
 // timers are specified in Hz and periods in microseconds
 #define BASE_FREQUENCY 1000000
@@ -83,9 +82,17 @@ int FastTicker::attach(uint32_t frequency, std::function<void(void)> cb)
         max_frequency = frequency;
     }
 
-    taskENTER_CRITICAL();
+    //>>>Xuming
+    //taskENTER_CRITICAL();
+    portMUX_TYPE xx;
+    portENTER_CRITICAL(&xx);
+    //Xuming<<<
+
     callbacks.push_back(std::make_tuple(countdown, period, cb));
-    taskEXIT_CRITICAL();
+    //>>>Xuming
+    //taskEXIT_CRITICAL();
+    portEXIT_CRITICAL(&xx);
+    //Xuming<<<
 
     // return the index it is in
     return callbacks.size()-1;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FreeRTOS.h"
-#include "queue.h"
+// #include "queue.h"
 
 #define MAX_LINE_LENGTH 132
 #ifdef __cplusplus

@@ -16,10 +16,12 @@
 #include "robot/StepTicker.h"
 
 #include "FreeRTOS.h"
-// #include "task.h"   // to double check
-// #include "ff.h"     // to  double check
-#include "libs/HAL/sdmmc/fatfs/ff.h"   // to  double check.  for DIR error
+
+//>>>Xuming
+//#include "task.h"   // to double check
+//#include "ff.h"     // to  double check
 #include "libs/HAL/stopwatch.h"
+//Xuming<<<
 
 #include <functional>
 #include <set>
@@ -160,60 +162,63 @@ bool CommandShell::ls_cmd(std::string& params, OutputStream& os)
     }
 #else
     // newlib does not support dirent so use ff lib directly
-    DIR dir;
-    FILINFO finfo;
-    FATFS *fs;
-    FRESULT res = f_opendir(&dir, path.c_str());
-    if(FR_OK != res) {
-        os.printf("Could not open directory %s\n", path.c_str());
-        return true;
-    }
 
-    DWORD p1, s1, s2;
-    p1 = s1 = s2 = 0;
-    bool simple = false;
-    if(opts.find("-1", 0, 2) != std::string::npos) {
-        simple = true;
-    }
+    //>>>Xuming
+    // DIR dir;
+    // FILINFO finfo;
+    // FATFS *fs;
+    // FRESULT res = f_opendir(&dir, path.c_str());
+    // if(FR_OK != res) {
+    //     os.printf("Could not open directory %s\n", path.c_str());
+    //     return true;
+    // }
 
-    for(;;) {
-        //if(Module::is_halted()) {f_closedir(&dir); return true; }
-        res = f_readdir(&dir, &finfo);
-        if ((res != FR_OK) || !finfo.fname[0]) break;
-        if(simple) {
-            if(finfo.fattrib & AM_DIR) {
-                os.printf("%s/\n", finfo.fname);
-            } else {
-                os.printf("%s\n", finfo.fname);
-            }
-        } else {
-            if (finfo.fattrib & AM_DIR) {
-                s2++;
-            } else {
-                s1++; p1 += finfo.fsize;
-            }
-            os.printf("%c%c%c%c%c %u/%02u/%02u %02u:%02u %9lu  %s\n",
-                      (finfo.fattrib & AM_DIR) ? 'D' : '-',
-                      (finfo.fattrib & AM_RDO) ? 'R' : '-',
-                      (finfo.fattrib & AM_HID) ? 'H' : '-',
-                      (finfo.fattrib & AM_SYS) ? 'S' : '-',
-                      (finfo.fattrib & AM_ARC) ? 'A' : '-',
-                      (finfo.fdate >> 9) + 1980, (finfo.fdate >> 5) & 15, finfo.fdate & 31,
-                      (finfo.ftime >> 11), (finfo.ftime >> 5) & 63,
-                      (DWORD)finfo.fsize, finfo.fname);
-        }
-    }
-    if(!simple) {
-        os.printf("%4lu File(s),%10lu bytes total\n%4lu Dir(s)", s1, p1, s2);
-        res = f_getfree("/sd", (DWORD*)&p1, &fs);
-        if(FR_OK == res) {
-            os.printf(", %10lu bytes free\n", p1 * fs->csize * 512);
-        } else {
-            os.printf("\n");
-        }
-        os.set_no_response();
-    }
-    f_closedir(&dir);
+    // DWORD p1, s1, s2;
+    // p1 = s1 = s2 = 0;
+    // bool simple = false;
+    // if(opts.find("-1", 0, 2) != std::string::npos) {
+    //     simple = true;
+    // }
+
+    // for(;;) {
+    //     //if(Module::is_halted()) {f_closedir(&dir); return true; }
+    //     res = f_readdir(&dir, &finfo);
+    //     if ((res != FR_OK) || !finfo.fname[0]) break;
+    //     if(simple) {
+    //         if(finfo.fattrib & AM_DIR) {
+    //             os.printf("%s/\n", finfo.fname);
+    //         } else {
+    //             os.printf("%s\n", finfo.fname);
+    //         }
+    //     } else {
+    //         if (finfo.fattrib & AM_DIR) {
+    //             s2++;
+    //         } else {
+    //             s1++; p1 += finfo.fsize;
+    //         }
+    //         os.printf("%c%c%c%c%c %u/%02u/%02u %02u:%02u %9lu  %s\n",
+    //                   (finfo.fattrib & AM_DIR) ? 'D' : '-',
+    //                   (finfo.fattrib & AM_RDO) ? 'R' : '-',
+    //                   (finfo.fattrib & AM_HID) ? 'H' : '-',
+    //                   (finfo.fattrib & AM_SYS) ? 'S' : '-',
+    //                   (finfo.fattrib & AM_ARC) ? 'A' : '-',
+    //                   (finfo.fdate >> 9) + 1980, (finfo.fdate >> 5) & 15, finfo.fdate & 31,
+    //                   (finfo.ftime >> 11), (finfo.ftime >> 5) & 63,
+    //                   (DWORD)finfo.fsize, finfo.fname);
+    //     }
+    // }
+    // if(!simple) {
+    //     os.printf("%4lu File(s),%10lu bytes total\n%4lu Dir(s)", s1, p1, s2);
+    //     res = f_getfree("/sd", (DWORD*)&p1, &fs);
+    //     if(FR_OK == res) {
+    //         os.printf(", %10lu bytes free\n", p1 * fs->csize * 512);
+    //     } else {
+    //         os.printf("\n");
+    //     }
+    //     os.set_no_response();
+    // }
+    // f_closedir(&dir);
+    //Xuming<<<
 #endif
     return true;
 }
@@ -242,9 +247,11 @@ bool CommandShell::cd_cmd(std::string& params, OutputStream& os)
     if(fn.empty()) {
         fn= "/";
     }
-    if(FR_OK != f_chdir(fn.c_str())) {
-        os.puts("failed to change to directory\n");
-    }
+    // >>>Xuming   SD card
+    // if(FR_OK != f_chdir(fn.c_str())) {
+    //     os.puts("failed to change to directory\n");
+    // }
+    // Xuming<<<
     return true;
 }
 
@@ -256,9 +263,11 @@ bool CommandShell::mkdir_cmd(std::string& params, OutputStream& os)
         os.puts("directory name required\n");
         return true;
     }
-    if(FR_OK != f_mkdir(fn.c_str())) {
-        os.puts("failed to make directory\n");
-    }
+    // >>>Xuming
+    // if(FR_OK != f_mkdir(fn.c_str())) {
+    //     os.puts("failed to make directory\n");
+    // }
+    // Xuming<<<
     return true;
 }
 
@@ -1207,28 +1216,29 @@ bool CommandShell::ry_cmd(std::string& params, OutputStream& os)
 
 bool CommandShell::truncate_file(const char *fn, int size, OutputStream& os)
 {
-    FIL fp;  /* File object */
-    // Open file
-    int ret = f_open(&fp, fn, FA_WRITE);
-    if(FR_OK != ret) {
-        os.printf("file %s does not exist\n", fn);
-        return false;
-    }
+    // >>>Xuming
+    // FIL fp;  /* File object */
+    // // Open file
+    // int ret = f_open(&fp, fn, FA_WRITE);
+    // if(FR_OK != ret) {
+    //     os.printf("file %s does not exist\n", fn);
+    //     return false;
+    // }
 
-    ret = f_lseek(&fp, size);
-    if(FR_OK != ret) {
-        f_close(&fp);
-        os.printf("error %d seeking to %d bytes\n", ret, size);
-        return false;
-    }
+    // ret = f_lseek(&fp, size);
+    // if(FR_OK != ret) {
+    //     f_close(&fp);
+    //     os.printf("error %d seeking to %d bytes\n", ret, size);
+    //     return false;
+    // }
 
-    ret = f_truncate(&fp);
-    f_close(&fp);
-    if(FR_OK != ret) {
-        os.printf("error %d truncating file\n", ret);
-        return false;
-    }
-
+    // ret = f_truncate(&fp);
+    // f_close(&fp);
+    // if(FR_OK != ret) {
+    //     os.printf("error %d truncating file\n", ret);
+    //     return false;
+    // }
+    // Xuming<<<
     return true;
 }
 
@@ -1295,7 +1305,11 @@ bool CommandShell::flash_cmd(std::string& params, OutputStream& os)
     fclose(fp);
 
     // stop stuff
-    f_unmount("sd");
+
+    //>>>Xuming
+    // f_unmount("sd");
+    //Xuming<<<
+
     FastTicker::getInstance()->stop();
     StepTicker::getInstance()->stop();
     // Adc::stop();  //to double check

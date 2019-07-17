@@ -2,7 +2,7 @@
 #include "OutputStream.h"
 
 #include "FreeRTOS.h" // defines public interface we're implementing here
-#include "task.h" // defines public interface we're implementing here
+// #include "task.h" // defines public interface we're implementing here
 
 #ifdef MEMDEBUG
     #define MDEBUG(...) printf(__VA_ARGS__)
