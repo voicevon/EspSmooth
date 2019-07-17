@@ -263,9 +263,11 @@ bool CommandShell::mkdir_cmd(std::string& params, OutputStream& os)
         os.puts("directory name required\n");
         return true;
     }
-    if(FR_OK != f_mkdir(fn.c_str())) {
-        os.puts("failed to make directory\n");
-    }
+    // >>>Xuming
+    // if(FR_OK != f_mkdir(fn.c_str())) {
+    //     os.puts("failed to make directory\n");
+    // }
+    // Xuming<<<
     return true;
 }
 
