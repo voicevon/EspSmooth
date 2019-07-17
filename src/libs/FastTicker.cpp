@@ -1,6 +1,8 @@
 #include "FastTicker.h"
+//>>>Xuming
 //#include "tmr-setup.h"
-
+#include "libs/HAL/timer/tmr-setup.h"
+//Xuming<<<
 #include "FreeRTOS.h"
 //#include "task.h"
 
@@ -24,7 +26,7 @@ FastTicker::FastTicker()
 FastTicker::~FastTicker()
 {
     instance= nullptr;
-    tmr1_stop();
+    tmr1_stop();   
 }
 
 #define _ramfunc_ __attribute__ ((section(".ramfunctions"),long_call,noinline))

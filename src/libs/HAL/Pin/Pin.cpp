@@ -507,7 +507,9 @@ std::string Pin::to_string() const
 {
     if(valid) {
         std::string s("gpio");
-        s.append(std::to_string(gpioport)).append("_").append(std::to_string(gpiopin));
+        ///>>>Xuming
+        //s.append(std::to_string(gpioport)).append("_").append(std::to_string(gpiopin));
+        //Xuming<<<
 
         uint32_t v = port_pin_lut[gpioport][gpiopin];
         uint16_t port = ((v & PINCONF_PINS_MASK) >> PINCONF_PINS_SHIFT);
@@ -516,7 +518,9 @@ std::string Pin::to_string() const
         s.append("(p");
         s.push_back(digits[port]);
         s.push_back('_');
-        s.append(std::to_string(pin)).append(")");
+        //>>>Xuming
+        //s.append(std::to_string(pin)).append(")");
+        //Xuming<<<
         if(open_drain) s.push_back('o');
         if(inverting) s.push_back('!');
         return s;
@@ -529,7 +533,9 @@ std::string Pin::to_string() const
 Pin* Pin::as_output()
 {
     if(valid) {
-        Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, gpioport, gpiopin);
+        //>>>Xuming
+        //Chip_GPIO_SetPinDIROutput(LPC_GPIO_PORT, gpioport, gpiopin);
+        //Xuming<<<
         return this;
     }
 
@@ -539,7 +545,9 @@ Pin* Pin::as_output()
 Pin* Pin::as_input()
 {
     if(valid) {
+        //>>>Xuming
         Chip_GPIO_SetPinDIRInput(LPC_GPIO_PORT, gpioport, gpiopin);
+        //Xuming<<<
         return this;
     }
 
