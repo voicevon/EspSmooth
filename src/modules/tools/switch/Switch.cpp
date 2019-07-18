@@ -1,19 +1,22 @@
 #include "Switch.h"
 
 #include "GCode.h"
-#include "OutputStream.h"
+#include "libs/OutputStream.h"
 #include "ConfigReader.h"
-#include "SlowTicker.h"
-#include "FastTicker.h"
-#include "SigmaDeltaPwm.h"
-#include "Pwm.h"
+#include "libs/SlowTicker.h"
+#include "libs/FastTicker.h"
+#include "libs/SigmaDeltaPwm.h"
+// #include "Pwm.h"
+#include "__hal.h"
 #include "GCodeProcessor.h"
 #include "Dispatcher.h"
 #include "main.h"
 
 #include <algorithm>
 #include <math.h>
-#include <string.h>
+#include <string>
+#include <sstream>
+#include <iostream>
 
 #define startup_state_key       "startup_state"
 #define startup_value_key       "startup_value"
