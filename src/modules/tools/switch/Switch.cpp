@@ -14,9 +14,8 @@
 
 #include <algorithm>
 #include <math.h>
-#include <string>
-#include <sstream>
-#include <iostream>
+#include <string.h>
+
 
 #define startup_state_key       "startup_state"
 #define startup_value_key       "startup_value"

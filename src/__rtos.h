@@ -3,6 +3,11 @@
 #include "stdint.h"
 
 
+void __taskENTER_CRITICAL();
+void __taskEXIT_CRITICAL();
+
+
+
 // freertos/timers.h
 // typedef void * TimerHandle_t;
 // void xTimerDelete(TimerHandle_t, uint32_t);

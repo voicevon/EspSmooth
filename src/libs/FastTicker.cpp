@@ -1,10 +1,11 @@
 #include "FastTicker.h"
 
 
-#include "FreeRTOS.h"
-#include "freertos/task.h"
+// #include "FreeRTOS.h"
+// #include "freertos/task.h"
 
  #include "__hal.h"
+ #include "__rtos.h"
 
 // timers are specified in Hz and periods in microseconds
 #define BASE_FREQUENCY 1000000
@@ -83,10 +84,9 @@ int FastTicker::attach(uint32_t frequency, std::function<void(void)> cb)
         max_frequency = frequency;
     }
 
-    taskENTER_CRITICAL();
-
+    __taskENTER_CRITICAL();
     callbacks.push_back(std::make_tuple(countdown, period, cb));
-    taskEXIT_CRITICAL();
+    __taskEXIT_CRITICAL();
 
     // return the index it is in
     return callbacks.size()-1;
@@ -96,9 +96,9 @@ void FastTicker::detach(int n)
 {
     // TODO need to remove it but that would change all the indexes
     // For now we just zero the callback
-    taskENTER_CRITICAL();
+    __taskENTER_CRITICAL();
     std::get<2>(callbacks[n])= nullptr;
-    taskEXIT_CRITICAL();
+    __taskEXIT_CRITICAL();
 }
 
 // Set the base frequency we use for all sub-frequencies

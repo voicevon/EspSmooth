@@ -1,11 +1,11 @@
 #include "TemperatureControl.h"
 #include "TempSensor.h"
-#include "SigmaDeltaPwm.h"
-#include "Conveyor.h"
-#include "OutputStream.h"
+#include "libs/SigmaDeltaPwm.h"
+#include "robot/Conveyor.h"
+#include "libs/OutputStream.h"
 #include "GCode.h"
-#include "SlowTicker.h"
-#include "FastTicker.h"
+#include "libs/SlowTicker.h"
+#include "libs/FastTicker.h"
 #include "Dispatcher.h"
 #include "main.h"
 #include "PID_Autotuner.h"
@@ -18,6 +18,8 @@
 //#include "max31855.h"
 //#include "AD8495.h"
 //#include "PT100_E3D.h"
+
+#include "__hal.h"
 
 #define UNDEFINED -1
 
