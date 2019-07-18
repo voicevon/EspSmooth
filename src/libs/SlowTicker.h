@@ -4,8 +4,11 @@
 #include <tuple>
 #include <functional>
 
-#include "__hal.h"
-#include "__rtos.h"
+// #include "__hal.h"
+// #include "__rtos.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/timers.h"
+
 class SlowTicker
 {
     public:
