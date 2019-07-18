@@ -1013,7 +1013,7 @@ extern "C" void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTask
     Board_LED_Set(1, false);
     Board_LED_Set(2, true);
     Board_LED_Set(3, true);
-   __asm("bkpt #0");
+   __asm_("bkpt #0");
     for( ;; );
 }
 
@@ -1032,7 +1032,7 @@ extern "C" void vApplicationMallocFailedHook( void )
     provide information on how the remaining heap might be fragmented). */
     #if 0
     taskDISABLE_INTERRUPTS();
-    __asm("bkpt #0");
+    __asm_("bkpt #0");
     for( ;; );
     #else
     // we don't want to use any memory for this
@@ -1047,6 +1047,6 @@ extern "C" void HardFault_Handler(void) {
     Board_LED_Set(1, true);
     Board_LED_Set(2, false);
     Board_LED_Set(3, false);
-    __asm("bkpt #0");
+    __asm_("bkpt #0");
     for( ;; );
 }

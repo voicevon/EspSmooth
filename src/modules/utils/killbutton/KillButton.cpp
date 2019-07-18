@@ -1,7 +1,7 @@
 #include "KillButton.h"
 
 #include "ConfigReader.h"
-#include "SlowTicker.h"
+#include "libs/SlowTicker.h"
 #include "main.h"
 
 #define kill_button_enable_key "enable"

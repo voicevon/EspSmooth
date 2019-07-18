@@ -7,13 +7,13 @@ Author: Michael Hackney, mhackney@eclecticangler.com
 */
 
 #include "TemperatureSwitch.h"
-#include "TemperatureControl.h"
+#include "modules/tools/temperaturecontrol/TemperatureControl.h"
 #include "GCode.h"
 #include "Dispatcher.h"
-#include "OutputStream.h"
+#include "libs/OutputStream.h"
 
 #include "FreeRTOS.h"
-#include "task.h"
+// #include "freertos/task.h"
 #define TICK2MS( xTicks ) ( (uint32_t) ( (xTicks * 1000) / configTICK_RATE_HZ ) )
 
 #define hotend_key "hotend"
