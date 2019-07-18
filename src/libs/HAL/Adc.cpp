@@ -2,16 +2,16 @@
 // TODO allow non thermistor instances to be created
 
 #include "Adc.h"
-#include "SlowTicker.h"
+// #include "SlowTicker.h"
 
 #include <string>
 #include <cctype>
 #include <algorithm>
 
-#include "board.h"
+// #include "board.h"
 
-#include "FreeRTOS.h"
-#include "task.h"
+// #include "FreeRTOS.h"
+// #include "task.h"
 
 #undef __GNU_VISIBLE
 #define __GNU_VISIBLE 1 // for strcasestr
@@ -21,15 +21,25 @@
 #define NO_ADC_INTERRUPTS
 
 #define _LPC_ADC_ID LPC_ADC0
-const ADC_CHANNEL_T CHANNEL_LUT[] = {
-    ADC_CH0,                /**< ADC channel 0 */
-    ADC_CH1,                /**< ADC channel 1 */
-    ADC_CH2,                /**< ADC channel 2 */
-    ADC_CH3,                /**< ADC channel 3 */
-    ADC_CH4,                /**< ADC channel 4 */
-    ADC_CH5,                /**< ADC channel 5 */
-    ADC_CH6,                /**< ADC channel 6 */
-    ADC_CH7                 /**< ADC channel 7 */
+// const ADC_CHANNEL_T CHANNEL_LUT[] = {
+//     ADC_CH0,                /**< ADC channel 0 */
+//     ADC_CH1,                /**< ADC channel 1 */
+//     ADC_CH2,                /**< ADC channel 2 */
+//     ADC_CH3,                /**< ADC channel 3 */
+//     ADC_CH4,                /**< ADC channel 4 */
+//     ADC_CH5,                /**< ADC channel 5 */
+//     ADC_CH6,                /**< ADC channel 6 */
+//     ADC_CH7                 /**< ADC channel 7 */
+// };
+const int CHANNEL_LUT[] = {
+    0,                /**< ADC channel 0 */
+    1,                /**< ADC channel 1 */
+    2,                /**< ADC channel 2 */
+    3,                /**< ADC channel 3 */
+    4,                /**< ADC channel 4 */
+    5,                /**< ADC channel 5 */
+    6,                /**< ADC channel 6 */
+    7                 /**< ADC channel 7 */
 };
 
 Adc *Adc::instances[Adc::num_channels] = {nullptr};
@@ -38,7 +48,8 @@ int Adc::ninstances = 0;
 bool Adc::running = false;
 int Adc::slowticker_n = -1;
 
-static ADC_CLOCK_SETUP_T ADCSetup;
+// static ADC_CLOCK_SETUP_T ADCSetup;
+static int ADCSetup;
 
 // NOTE we cannot create these once ADC is running
 Adc::Adc()
@@ -55,22 +66,22 @@ Adc::~Adc()
 {
     if(channel == -1 || instance_idx < 0) return;
     allocated_channels.erase(channel);
-    Chip_ADC_Int_SetChannelCmd(_LPC_ADC_ID, CHANNEL_LUT[channel], DISABLE);
-    Chip_ADC_EnableChannel(_LPC_ADC_ID, CHANNEL_LUT[channel], DISABLE);
+    // Chip_ADC_Int_SetChannelCmd(_LPC_ADC_ID, CHANNEL_LUT[channel], DISABLE);
+    // Chip_ADC_EnableChannel(_LPC_ADC_ID, CHANNEL_LUT[channel], DISABLE);
 
     channel = -1;
     enabled = false;
     // remove from instances array
-    taskENTER_CRITICAL();
+    // taskENTER_CRITICAL();
     instances[instance_idx] = nullptr;
     for (int i = instance_idx; i < ninstances - 1; ++i) {
         instances[i] = instances[i + 1];
     }
     --ninstances;
-    taskEXIT_CRITICAL();
+    // taskEXIT_CRITICAL();
     if(ninstances == 0) {
         if(slowticker_n >= 0) {
-            SlowTicker::getInstance()->detach(slowticker_n);
+            // SlowTicker::getInstance()->detach(slowticker_n);
             slowticker_n = -1;
         }
     }
@@ -79,14 +90,15 @@ Adc::~Adc()
 bool Adc::setup()
 {
     // ADC Init
-    Chip_ADC_Init(_LPC_ADC_ID, &ADCSetup);
+    // Chip_ADC_Init(_LPC_ADC_ID, &ADCSetup);
 
     // ADC sample rate need to be fast enough to be able to read the enabled channels within the thermistor poll time
     // even though there maybe 32 samples we only need one new one within the polling time
     // Set sample rate to 70KHz (That is as slow as it will go)
     // As this is a lot of IRQ overhead we can't use interrupts in burst mode
     // so we need to sample it from a slow timer instead
-    Chip_ADC_SetSampleRate(_LPC_ADC_ID, &ADCSetup, ADC_MAX_SAMPLE_RATE);
+
+    // Chip_ADC_SetSampleRate(_LPC_ADC_ID, &ADCSetup, ADC_MAX_SAMPLE_RATE);
 
     // NOTE we would like to just trigger a sample after we sample, but that seemed to only work for the first channel
     // the second channel was never ready
@@ -95,7 +107,7 @@ bool Adc::setup()
     Chip_ADC_SetBurstCmd(_LPC_ADC_ID, DISABLE);
 #else
     // We use burst mode so samples are always ready when we sample the ADC values
-    Chip_ADC_SetBurstCmd(_LPC_ADC_ID, ENABLE);
+    // Chip_ADC_SetBurstCmd(_LPC_ADC_ID, ENABLE);
 #endif
 
     // init instances array
@@ -123,7 +135,7 @@ bool Adc::start()
     //Chip_ADC_SetStartMode(_LPC_ADC_ID, ADC_START_NOW, ADC_TRIGGERMODE_RISING);
     running = true;
     // read conversion every 10ms
-    slowticker_n = SlowTicker::getInstance()->attach(100, Adc::on_tick);
+    // slowticker_n = SlowTicker::getInstance()->attach(100, Adc::on_tick);
 #endif
     return true;
 }
@@ -150,8 +162,8 @@ bool Adc::stop()
 #ifndef NO_ADC_INTERRUPTS
     NVIC_DisableIRQ(ADC0_IRQn);
 #endif
-    Chip_ADC_SetBurstCmd(_LPC_ADC_ID, DISABLE);
-    Chip_ADC_DeInit(_LPC_ADC_ID);
+    // Chip_ADC_SetBurstCmd(_LPC_ADC_ID, DISABLE);
+    // Chip_ADC_DeInit(_LPC_ADC_ID);
 
     return true;
 }
@@ -215,8 +227,8 @@ Adc* Adc::from_string(const char *name)
 
         // now need to set to input, disable receiver with EZI bit, disable pullup EPUN=1 and disable pulldown EPD=0
         uint16_t modefunc = 1 << 4; // disable pullup,
-        Chip_SCU_PinMuxSet(port, pin, modefunc);
-        Chip_SCU_ADC_Channel_Config(0, channel);
+        // Chip_SCU_PinMuxSet(port, pin, modefunc);
+        // Chip_SCU_ADC_Channel_Config(0, channel);
 
     } else {
         return nullptr;
@@ -226,7 +238,7 @@ Adc* Adc::from_string(const char *name)
 
     memset(sample_buffer, 0, sizeof(sample_buffer));
     memset(ave_buf, 0, sizeof(ave_buf));
-    Chip_ADC_EnableChannel(_LPC_ADC_ID, CHANNEL_LUT[channel], ENABLE);
+    // Chip_ADC_EnableChannel(_LPC_ADC_ID, CHANNEL_LUT[channel], ENABLE);
 #ifndef NO_ADC_INTERRUPTS
     Chip_ADC_Int_SetChannelCmd(_LPC_ADC_ID, CHANNEL_LUT[channel], ENABLE);
 #endif
@@ -258,12 +270,12 @@ void Adc::sample_isr()
         if(ch < 0) continue; // no channel assigned
         uint16_t dataADC = 0;
         // NOTE these are not in RAM
-        if(Chip_ADC_ReadStatus(_LPC_ADC_ID, CHANNEL_LUT[ch], ADC_DR_DONE_STAT) == SET && Chip_ADC_ReadValue(_LPC_ADC_ID, CHANNEL_LUT[ch], &dataADC) == SUCCESS) {
-            adc->new_sample(dataADC);
-        } else {
-            // NOTE in interrupt mode this is not meaningful as we get an interrupt when each channel is ready
-            adc->not_ready_error++;
-        }
+        // if(Chip_ADC_ReadStatus(_LPC_ADC_ID, CHANNEL_LUT[ch], ADC_DR_DONE_STAT) == SET && Chip_ADC_ReadValue(_LPC_ADC_ID, CHANNEL_LUT[ch], &dataADC) == SUCCESS) {
+        //     adc->new_sample(dataADC);
+        // } else {
+        //     // NOTE in interrupt mode this is not meaningful as we get an interrupt when each channel is ready
+        //     adc->not_ready_error++;
+        // }
     }
 }
 
@@ -288,9 +300,9 @@ uint32_t Adc::read()
     uint16_t median_buffer[num_samples];
 
     // needs atomic access TODO maybe be able to use std::atomic here or some lockless mutex
-    taskENTER_CRITICAL();
+    // taskENTER_CRITICAL();
     memcpy(median_buffer, sample_buffer, sizeof(median_buffer));
-    taskEXIT_CRITICAL();
+    // taskEXIT_CRITICAL();
 
 #ifdef USE_MEDIAN_FILTER
     // returns the median value of the last 8 samples
@@ -360,9 +372,9 @@ float Adc::read_voltage()
     uint16_t median_buffer[num_samples];
 
     // needs atomic access TODO maybe be able to use std::atomic here or some lockless mutex
-    taskENTER_CRITICAL();
-    memcpy(median_buffer, sample_buffer, sizeof(median_buffer));
-    taskEXIT_CRITICAL();
+    // taskENTER_CRITICAL();
+    // memcpy(median_buffer, sample_buffer, sizeof(median_buffer));
+    // taskEXIT_CRITICAL();
 
     // take the median value
     unsigned int i= quick_median(median_buffer, num_samples);
