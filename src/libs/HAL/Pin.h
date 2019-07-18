@@ -38,6 +38,7 @@ public:
     }
 
     // we need to do this inline due to ISR being in SRAM not FLASH
+    uint8_t vvv;
     inline void set(bool value)
     {
         if (!this->valid) return;
@@ -47,6 +48,7 @@ public:
             // simulates open drain by setting to input to turn off
             //Chip_GPIO_SetPinDIR(LPC_GPIO_PORT, gpioport, gpiopin, v);   ; to be updated
         }
+        vvv= v;
     }
 
     inline uint16_t get_gpioport() const { return this->gpioport; }
