@@ -73,16 +73,16 @@
 
 #include "CartGridStrategy.h"
 #include "ConfigReader.h"
-#include "Robot.h"
+#include "robot/Robot.h"
 #include "main.h"
 #include "GCode.h"
-#include "Conveyor.h"
+#include "robot/Conveyor.h"
 #include "ZProbe.h"
 #include "Dispatcher.h"
-#include "StepperMotor.h"
-#include "BaseSolution.h"
-#include "StringUtils.h"
-#include "OutputStream.h"
+#include "robot/StepperMotor.h"
+#include "robot/arm_solutions/BaseSolution.h"
+#include "libs/StringUtils.h"
+#include "libs/OutputStream.h"
 
 #include <string>
 #include <algorithm>

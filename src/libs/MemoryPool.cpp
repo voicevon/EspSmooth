@@ -3,6 +3,7 @@
 
 #include "FreeRTOS.h" // defines public interface we're implementing here
 // #include "task.h" // defines public interface we're implementing here
+#include "__hal.h"
 
 #ifdef MEMDEBUG
     #define MDEBUG(...) printf(__VA_ARGS__)
@@ -131,7 +132,7 @@ void* MemoryPool::alloc(size_t nbytes)
                 {
                     // captain, we have a problem!
                     // this can only happen if something has corrupted our heap, since we should simply fail to find a free block if it's full
-                    __asm("bkpt #0");
+                    __asm_("bkpt #0");
                 }
             }
 
@@ -173,7 +174,7 @@ void MemoryPool::dealloc(void* d)
         {
             // captain, we have a problem!
             // this can only happen if something has corrupted our heap, since we should simply fail to find a free block if it's full
-            __asm("bkpt #0");
+            __asm_("bkpt #0");
         }
 
         p->next += q->next;
@@ -197,7 +198,7 @@ void MemoryPool::dealloc(void* d)
                 {
                     // captain, we have a problem!
                     // this can only happen if something has corrupted our heap, since we should simply fail to find a free block if it's full
-                    __asm("bkpt #0");
+                    __asm_("bkpt #0");
                 }
             }
 

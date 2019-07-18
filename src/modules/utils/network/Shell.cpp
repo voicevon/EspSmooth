@@ -4,18 +4,20 @@
 #include "lwip/sockets.h"
 
 #include "main.h"
-#include "OutputStream.h"
-#include "RingBuffer.h"
+#include "libs/OutputStream.h"
+#include "libs/RingBuffer.h"
 
 #include "FreeRTOS.h"
-#include "timers.h"
+#include "freertos/timers.h"
 
-#if !(LWIP_SOCKET && LWIP_SOCKET_SELECT)
-#error LWIP_SOCKET_SELECT and  LWIP_SOCKET needed
+// >>>Xuming
+#if !(LWIP_SOCKET && LWIP_SOCKET_SELECT)   
+//#error LWIP_SOCKET_SELECT and  LWIP_SOCKET needed
 #endif
 #ifndef LWIP_NETCONN_FULLDUPLEX
 #error LWIP_NETCONN_FULLDUPLEX is required for this to work
 #endif
+//Xuming<<<
 
 #define MAX_SERV 3
 #define BUFSIZE 256

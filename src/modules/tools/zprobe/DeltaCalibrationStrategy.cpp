@@ -1,15 +1,15 @@
 #include "DeltaCalibrationStrategy.h"
 
 #include "ConfigReader.h"
-#include "Robot.h"
+#include "robot/Robot.h"
 #include "main.h"
 #include "GCode.h"
-#include "Conveyor.h"
+#include "robot/Conveyor.h"
 #include "ZProbe.h"
 #include "Dispatcher.h"
-#include "StepperMotor.h"
-#include "BaseSolution.h"
-#include "OutputStream.h"
+#include "robot/StepperMotor.h"
+#include "robot/arm_solutions/BaseSolution.h"
+#include "libs/OutputStream.h"
 
 #include <cmath>
 #include <tuple>

@@ -1,7 +1,7 @@
 #include "PID_Autotuner.h"
 #include "TemperatureControl.h"
-#include "SigmaDeltaPwm.h"
-#include "OutputStream.h"
+#include "libs/SigmaDeltaPwm.h"
+#include "libs/OutputStream.h"
 #include "GCode.h"
 #include "main.h"
 

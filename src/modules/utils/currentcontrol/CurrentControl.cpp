@@ -1,11 +1,12 @@
 #include "CurrentControl.h"
 #include "ConfigReader.h"
-#include "Pwm.h"
+// #include "Pwm.h"
+#include "__hal.h"
 #include "GCode.h"
-#include "OutputStream.h"
+#include "libs/OutputStream.h"
 #include "Dispatcher.h"
-#include "Robot.h"
-#include "StepperMotor.h"
+#include "robot/Robot.h"
+#include "robot/StepperMotor.h"
 
 #include <string>
 #include <map>

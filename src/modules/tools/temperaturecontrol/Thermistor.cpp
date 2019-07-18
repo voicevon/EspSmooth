@@ -1,9 +1,10 @@
 #include "Thermistor.h"
 
 #include "ConfigReader.h"
-#include "OutputStream.h"
-#include "StringUtils.h"
-#include "Adc.h"
+#include "libs/OutputStream.h"
+#include "libs/StringUtils.h"
+// #include "Adc.h"
+#include "__hal.h"
 
 // a const list of predefined thermistors
 #include "predefined_thermistors.h"

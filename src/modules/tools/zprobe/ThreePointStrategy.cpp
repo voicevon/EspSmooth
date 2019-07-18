@@ -53,14 +53,14 @@
 
 #include "ThreePointStrategy.h"
 #include "ConfigReader.h"
-#include "Robot.h"
+#include "robot/Robot.h"
 #include "main.h"
 #include "GCode.h"
-#include "Conveyor.h"
+#include "robot/Conveyor.h"
 #include "ZProbe.h"
 #include "Plane3D.h"
 #include "Dispatcher.h"
-#include "OutputStream.h"
+#include "libs/OutputStream.h"
 
 #include <string>
 #include <algorithm>

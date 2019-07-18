@@ -1,12 +1,13 @@
 #include "Switch.h"
 
 #include "GCode.h"
-#include "OutputStream.h"
+#include "libs/OutputStream.h"
 #include "ConfigReader.h"
-#include "SlowTicker.h"
-#include "FastTicker.h"
-#include "SigmaDeltaPwm.h"
-#include "Pwm.h"
+#include "libs/SlowTicker.h"
+#include "libs/FastTicker.h"
+#include "libs/SigmaDeltaPwm.h"
+// #include "Pwm.h"
+#include "__hal.h"
 #include "GCodeProcessor.h"
 #include "Dispatcher.h"
 #include "main.h"
@@ -14,6 +15,7 @@
 #include <algorithm>
 #include <math.h>
 #include <string.h>
+
 
 #define startup_state_key       "startup_state"
 #define startup_value_key       "startup_value"
@@ -225,6 +227,9 @@ bool Switch::configure(ConfigReader& cr, ConfigReader::section_map_t& m)
     return true;
 }
 
+// >>>Xuming
+#include "__patch.h"
+// Xuming<<<
 std::string Switch::get_info() const
 {
     std::string s;
@@ -254,18 +259,18 @@ std::string Switch::get_info() const
     if(input_on_command_letter) {
         s.append("INPUT_ON_COMMAND:");
         s.push_back(input_on_command_letter);
-        s.append(std::to_string(input_on_command_code));
+        s.append(patch::to_string(input_on_command_code));
         s.append(",");
     }
     if(input_off_command_letter) {
         s.append("INPUT_OFF_COMMAND:");
         s.push_back(input_off_command_letter);
-        s.append(std::to_string(input_off_command_code));
+        s.append(patch::to_string(input_off_command_code));
         s.append(",");
     }
     if(subcode != 0) {
         s.append("SUBCODE:");
-        s.append(std::to_string(subcode));
+        s.append(patch::to_string(subcode));
         s.append(",");
     }
     if(!output_on_command.empty()) {
