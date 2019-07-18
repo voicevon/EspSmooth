@@ -4,9 +4,8 @@
 #include <tuple>
 #include <functional>
 
-#include "FreeRTOS.h"
 #include "__hal.h"
-
+#include "__rtos.h"
 class SlowTicker
 {
     public:
