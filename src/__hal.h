@@ -3,34 +3,31 @@
 
 #include "libs/HAL/Pin.h"
 #include "libs/HAL/Pwm.h"
+#include "libs/HAL/Adc.h"
 
-bool isnan(float xx){
-    return false;
-}
+bool isnan(float xx){    return false;}
 
-// freertos/timers.h
-typedef void * TimerHandle_t;
 
 
 
 // https://github.com/Smoothieware/SmoothieV2/blob/97f5278ae5f26b751c71a98927c8c539ff78a2e8/Firmware/Hal/src/tmr-setup.c
-void tmr1_stop(){
-}
+void tmr1_stop(){}
 
 // frequency in HZ
-int tmr1_setup(uint32_t frequency, void *timer_handler){
-    return 1;
-}
+int tmr1_setup(uint32_t frequency, void *timer_handler){ return 1;}
 
-int tmr1_set_frequency(uint32_t frequency){
-    return 1;
-}
+int tmr1_set_frequency(uint32_t frequency)  {return 1;}
 
-#include "FreeRTOS.h"
-#include "freertos/timers.h"
-// https://github.com/Smoothieware/SmoothieV2/blob/fc46e2b88e431686f5a4f83e04e2e2c58fa20692/Firmware/RTOS/include/timers.h
-#define xTimerDelete( xTimer, xTicksToWait ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_DELETE, 0U, NULL, ( xTicksToWait ) )
+typedef void * TaskHandle_t;
+#define xTaskHandle TaskHandle_t
+//uart  //https://github.com/Smoothieware/SmoothieV2/blob/97f5278ae5f26b751c71a98927c8c539ff78a2e8/Firmware/Hal/src/uart_comms.h
+void set_notification_uart(xTaskHandle h){}
+
+size_t read_uart(char * buf, size_t length){};
+size_t write_uart(const char * buf, size_t length){}
 
 
-// https://github.com/Smoothieware/SmoothieV2/blob/fc46e2b88e431686f5a4f83e04e2e2c58fa20692/Firmware/RTOS/include/timers.h
-#define xTimerChangePeriod( xTimer, xNewPeriod, xTicksToWait ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_CHANGE_PERIOD, ( xNewPeriod ), NULL, ( xTicksToWait ) )
+// board  https://github.com/Smoothieware/SmoothieV2/blob/ed7237065621f55f37fd420ea0b78b91bc411d63/Firmware/Hal/lpc_board/src/board.c
+void Board_LED_Toggle(uint8_t LEDNumber){}
+
+

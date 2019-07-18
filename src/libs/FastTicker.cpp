@@ -1,8 +1,9 @@
 #include "FastTicker.h"
 
 
-#include "FreeRTOS.h"
+// #include "FreeRTOS.h"
 // #include "task.h"
+#include "__rtos.h"
 #include "__hal.h"
 
 // timers are specified in Hz and periods in microseconds
@@ -82,17 +83,10 @@ int FastTicker::attach(uint32_t frequency, std::function<void(void)> cb)
         max_frequency = frequency;
     }
 
-    //>>>Xuming
-    //taskENTER_CRITICAL();
-    portMUX_TYPE xx;
-    portENTER_CRITICAL(&xx);
-    //Xuming<<<
+    taskENTER_CRITICAL();
 
     callbacks.push_back(std::make_tuple(countdown, period, cb));
-    //>>>Xuming
-    //taskEXIT_CRITICAL();
-    portEXIT_CRITICAL(&xx);
-    //Xuming<<<
+    taskEXIT_CRITICAL();
 
     // return the index it is in
     return callbacks.size()-1;
