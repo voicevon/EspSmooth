@@ -1,10 +1,10 @@
 #include "FastTicker.h"
 
 
-// #include "FreeRTOS.h"
-// #include "task.h"
-#include "__rtos.h"
-#include "__hal.h"
+#include "FreeRTOS.h"
+#include "freertos/task.h"
+
+ #include "__hal.h"
 
 // timers are specified in Hz and periods in microseconds
 #define BASE_FREQUENCY 1000000
