@@ -10,6 +10,8 @@
 #include "FreeRTOS.h"
 #include "freertos/timers.h"
 
+#include "__hal.h"
+
 // >>>Xuming
 #if !(LWIP_SOCKET && LWIP_SOCKET_SELECT)   
 //#error LWIP_SOCKET_SELECT and  LWIP_SOCKET needed
