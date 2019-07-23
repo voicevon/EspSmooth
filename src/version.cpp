@@ -1,5 +1,6 @@
 #include "version.h"
 const char *Version::get_build(void) const {
+    #define  __GITVERSIONSTRING__  "ESP32 Version 0.1"
     #ifdef DISABLEMSD
         return __GITVERSIONSTRING__ "NOMSD";
     #else

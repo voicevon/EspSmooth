@@ -32,6 +32,7 @@
 #include "libs/RingBuffer.h"
 #include "robot/Conveyor.h"
 #include "__hal.h"
+#include "_hal/uart.h"
 
 static bool system_running= false;
 static bool rpi_port_enabled= false;

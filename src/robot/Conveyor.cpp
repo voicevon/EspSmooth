@@ -12,7 +12,7 @@
 #include "main.h"
 
 #include "FreeRTOS.h"
-#include "task.h"
+#include "freertos/task.h"
 
 #include <functional>
 #include <vector>

@@ -17,19 +17,17 @@ bool isnan(float xx){    return false;}
 
 // https://github.com/Smoothieware/SmoothieV2/blob/97f5278ae5f26b751c71a98927c8c539ff78a2e8/Firmware/Hal/src/tmr-setup.c
 void tmr1_stop(){}
+void tmr0_stop(){}
 
 // frequency in HZ
 int tmr1_setup(uint32_t frequency, void *timer_handler){ return 1;}
+// Setup where frequency is in Hz, delay is in microseconds
+int tmr0_setup(uint32_t frequency, uint32_t delay, void *mr0handler, void *mr1handler);
 
+void tmr0_mr1_start();
 int tmr1_set_frequency(uint32_t frequency)  {return 1;}
 
-typedef void * TaskHandle_t;
-#define xTaskHandle TaskHandle_t
-//uart  //https://github.com/Smoothieware/SmoothieV2/blob/97f5278ae5f26b751c71a98927c8c539ff78a2e8/Firmware/Hal/src/uart_comms.h
-int setup_uart(){return 1;}
-size_t read_uart(char * buf, size_t length);
-size_t write_uart(const char * buf, size_t length){return 1;}
-void set_notification_uart(xTaskHandle h);
+
 
 
 // board  https://github.com/Smoothieware/SmoothieV2/blob/ed7237065621f55f37fd420ea0b78b91bc411d63/Firmware/Hal/lpc_board/src/board.c

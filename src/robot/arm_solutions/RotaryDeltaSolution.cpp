@@ -4,6 +4,7 @@
 #include "AxisDefns.h"
 
 #include <math.h>
+#include <stdio.h>
 
 #define delta_e_key "delta_e"
 #define delta_f_key "delta_f"

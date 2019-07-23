@@ -1,10 +1,11 @@
 #include "LinearDeltaSolution.h"
 
 #include "ConfigReader.h"
-#include "Vector3.h"
+#include "libs/Vector3.h"
 #include "AxisDefns.h"
 
 #include <math.h>
+#include <stdio.h>
 
 #define arm_length_key         "arm_length"
 #define arm_radius_key         "arm_radius"

@@ -1,4 +1,4 @@
-/* Copyright (c) 2013, Philipp Tölke
+/* Copyright (c) 2013, Philipp Tï¿½lke
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,12 +27,17 @@
 #ifndef INCLUDE_VFS_H
 #define INCLUDE_VFS_H
 
+//>>>Xuming  for DIR
+#define FF_DEFINE_DIR
+//Xuming<<<
+
 #include "ff.h"
 #include <stddef.h>
 
 #define vfs_load_plugin(x)
-#define bcopy(src, dest, len) memmove(dest, src, len)
-
+//>>>Xuming
+//#define bcopy(src, dest, len) memmove(dest, src, len)
+//Xuming<<<
 
 typedef struct {
 	short date;
