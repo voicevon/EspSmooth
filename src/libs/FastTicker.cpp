@@ -4,8 +4,8 @@
 // #include "FreeRTOS.h"
 // #include "freertos/task.h"
 
- #include "__hal.h"
- #include "__rtos.h"
+ #include "_hal/timer.h"
+ #include "_hal/rtos.h"
 
 // timers are specified in Hz and periods in microseconds
 #define BASE_FREQUENCY 1000000

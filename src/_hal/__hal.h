@@ -13,25 +13,8 @@ bool isnan(float xx){    return false;}
 
 
 
-// https://github.com/Smoothieware/SmoothieV2/blob/97f5278ae5f26b751c71a98927c8c539ff78a2e8/Firmware/Hal/src/tmr-setup.c
-void tmr1_stop(){}
-void tmr0_stop(){}
-
-// frequency in HZ
-int tmr1_setup(uint32_t frequency, void *timer_handler){ return 1;}
-// Setup where frequency is in Hz, delay is in microseconds
-int tmr0_setup(uint32_t frequency, uint32_t delay, void *mr0handler, void *mr1handler){return 0;};
-
-void tmr0_mr1_start(){};
-int tmr1_set_frequency(uint32_t frequency)  {return 1;}
 
 
-
-
-// board  https://github.com/Smoothieware/SmoothieV2/blob/ed7237065621f55f37fd420ea0b78b91bc411d63/Firmware/Hal/lpc_board/src/board.c
-void Board_Init(void){};
-void Board_LED_Toggle(uint8_t LEDNumber){};
-void Board_LED_Set(uint8_t LEDNumber, bool On){};
 
 // cpu    https://github.com/Smoothieware/SmoothieV2/blob/fc46e2b88e431686f5a4f83e04e2e2c58fa20692/Firmware/Hal/lpc_chip_43xx/inc/core_cm3.h
 void NVIC_SetPriorityGrouping(uint32_t PriorityGroup){};

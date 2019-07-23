@@ -6,7 +6,7 @@
 #include "Conveyor.h"
 #include "Module.h"
 // #include "tmr-setup.h"
-#include "__hal.h"
+#include "_hal/timer.h"
 
 #include <fcntl.h>
 #include <errno.h>

@@ -5,7 +5,7 @@
 #include "libs/StringUtils.h"
 #include "stdio.h"
 // #include "Adc.h"
-#include "__hal.h"
+#include "_hal/__hal.h"
 #include "_hal/Adc.h"
 
 // a const list of predefined thermistors

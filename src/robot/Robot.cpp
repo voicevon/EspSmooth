@@ -3,7 +3,7 @@
 #include "Conveyor.h"
 #include "Dispatcher.h"
 //#include "Pin.h"
-#include "__hal.h"
+#include "_hal/__hal.h"
 #include "StepperMotor.h"
 #include "GCode.h"
 #include "StepTicker.h"

@@ -7,7 +7,7 @@
 #include "libs/FastTicker.h"
 #include "libs/SigmaDeltaPwm.h"
 // #include "Pwm.h"
-#include "__hal.h"
+#include "_hal/__hal.h"
 #include "_hal/Pwm.h"
 #include "GCodeProcessor.h"
 #include "Dispatcher.h"
@@ -229,7 +229,7 @@ bool Switch::configure(ConfigReader& cr, ConfigReader::section_map_t& m)
 }
 
 // >>>Xuming
-#include "__patch.h"
+#include "_hal/patch.h"
 // Xuming<<<
 std::string Switch::get_info() const
 {

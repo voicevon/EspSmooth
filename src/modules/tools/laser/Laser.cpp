@@ -7,7 +7,7 @@
 #include "libs/FastTicker.h"
 #include "_hal/Pwm.h"
 #include "_hal/Pin.h"
-#include "__hal.h"
+#include "_hal/__hal.h"
 #include "robot/StepTicker.h"
 #include "ConfigReader.h"
 #include "GCode.h"
@@ -50,7 +50,7 @@ Laser::Laser() : Module("laser")
     manual_fire= false;
 }
 
-#include "__patch.h"
+#include "_hal/patch.h"
 bool Laser::configure(ConfigReader& cr)
 {
     ConfigReader::section_map_t m;

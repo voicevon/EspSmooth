@@ -19,7 +19,7 @@
 //#include "AD8495.h"
 //#include "PT100_E3D.h"
 
-#include "__hal.h"
+#include "_hal/__hal.h"
 
 #define UNDEFINED -1
 
