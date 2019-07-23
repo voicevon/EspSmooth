@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Module.h"
-#include "__hal.h"
+#include "_hal/Pin.h"
 
 // defined here as they are used in multiple files
 #define leveling_strategy_key "leveling-strategy"

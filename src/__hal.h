@@ -2,9 +2,8 @@
 //  Is this our target?
 //  https://github.com/espressif/arduino-esp32/blob/fa74767b2e4b4808439f81b97cb454e1118621f8/cores/esp32/esp32-hal.h
 
-#include "_hal/Pin.h"
-#include "_hal/Pwm.h"
-#include "_hal/Adc.h"
+#include "stdint.h"
+#include "stddef.h"
 
 #define BUILD_TARGET "ESP32_WROOM"
 
@@ -45,7 +44,7 @@ void SystemCoreClockUpdate(void){};
 // uint32_t StopWatch_TicksPerSecond(void){return 1;}
 
 // unity_internals.h  https://github.com/Smoothieware/SmoothieV2/blob/fc46e2b88e431686f5a4f83e04e2e2c58fa20692/Firmware/Unity/src/unity_internals.h
-#define isinf(n) (isnan((n) - (n)) && !isnan(n))
+// #define isinf(n) (isnan((n) - (n)) && !isnan(n))
 
 void __asm_ (const char* xxxx){};
 

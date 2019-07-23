@@ -8,6 +8,7 @@
 #include "libs/SigmaDeltaPwm.h"
 // #include "Pwm.h"
 #include "__hal.h"
+#include "_hal/Pwm.h"
 #include "GCodeProcessor.h"
 #include "Dispatcher.h"
 #include "main.h"

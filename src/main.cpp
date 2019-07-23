@@ -33,6 +33,8 @@
 #include "robot/Conveyor.h"
 #include "__hal.h"
 #include "_hal/uart.h"
+#include "_hal/Adc.h"
+#include "_hal/Pwm.h"
 #include "_hal/stopwatch.h"
 
 static bool system_running= false;
