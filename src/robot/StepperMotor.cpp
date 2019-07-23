@@ -65,7 +65,7 @@ int32_t StepperMotor::steps_to_target(float target)
 // Does a manual step pulse, used for direct encoder control of a stepper
 // NOTE manual step is experimental and may change and/or be removed in the future, it is an unsupported feature.
 // use at your own risk
-#include "libs/HAL/stopwatch.h"
+#include "_hal/stopwatch.h"
 void StepperMotor::manual_step(bool dir)
 {
     if(!is_enabled()) enable(true);
