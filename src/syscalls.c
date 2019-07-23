@@ -1,4 +1,5 @@
 /* Includes */
+
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -8,10 +9,11 @@
 #include <sys/time.h>
 #include <sys/times.h>
 #include <fcntl.h>
-
-#include "board.h"
+// #include "board.h"
 #include "ff.h"
-#include "uart_comms.h"
+// #include "uart_comms.h"
+#include "_hal/uart.h"
+
 
 extern int fatfs_to_errno( FRESULT Result );
 
@@ -62,7 +64,7 @@ int _kill(int pid, int sig)
 void _exit (int status)
 {
 	_kill(status, -1);
-    __asm("bkpt #0");
+    __asm_("bkpt #0");
 	while (1) {}		/* Make sure we hang here */
 }
 

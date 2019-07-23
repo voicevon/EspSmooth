@@ -2,7 +2,7 @@
 
 #include "Module.h"
 #include "ConfigReader.h"
-#include "libs/HAL/Pin.h"
+#include "_hal/Pin.h"
 
 
 #include <string>

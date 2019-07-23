@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Module.h"
-#include "__hal.h"
+#include "_hal/Pin.h"
 
 #include <bitset>
 #include <array>

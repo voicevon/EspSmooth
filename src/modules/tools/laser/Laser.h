@@ -1,13 +1,13 @@
 #pragma once
 
 #include "Module.h"
-
+#include "robot/Block.h"
 #include <stdint.h>
 #include <string>
 
 class Pin;
 class Pwm;
-class Block;
+// class Block;
 class ConfigReader;
 class GCode;
 class OutputStream;

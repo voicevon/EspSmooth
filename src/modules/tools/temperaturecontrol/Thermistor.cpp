@@ -3,8 +3,10 @@
 #include "ConfigReader.h"
 #include "libs/OutputStream.h"
 #include "libs/StringUtils.h"
+#include "stdio.h"
 // #include "Adc.h"
-#include "__hal.h"
+#include "_hal/__hal.h"
+#include "_hal/Adc.h"
 
 // a const list of predefined thermistors
 #include "predefined_thermistors.h"
@@ -239,6 +241,9 @@ bool Thermistor::calc_jk()
     return true;
 }
 
+// >>>Xuming
+#define isinf(n) (isnan((n) - (n)) && !isnan(n))
+//Xuming<<<
 float Thermistor::get_temperature()
 {
     float t = adc_value_to_temperature(new_thermistor_reading());

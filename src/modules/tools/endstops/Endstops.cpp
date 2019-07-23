@@ -2,7 +2,7 @@
 #include "GCode.h"
 #include "robot/Conveyor.h"
 #include "robot/ActuatorCoordinates.h"
-#include "__hal.h"
+#include "_hal/__hal.h"
 #include "robot/StepperMotor.h"
 #include "robot/Robot.h"
 #include "libs/SlowTicker.h"

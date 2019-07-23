@@ -15,7 +15,7 @@ class Block {
         void debug() const;
         void ready() { is_ready= true; }
         void clear();
-    public:
+
         std::array<uint32_t, k_max_actuators> steps; // Number of steps for each axis for this block
         uint32_t steps_event_count;  // Steps for the longest axis
         float nominal_rate;       // Nominal rate in steps per second

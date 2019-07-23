@@ -3,7 +3,7 @@
 
 #include "FreeRTOS.h" // defines public interface we're implementing here
 // #include "task.h" // defines public interface we're implementing here
-#include "__hal.h"
+#include "_hal/__hal.h"
 
 #ifdef MEMDEBUG
     #define MDEBUG(...) printf(__VA_ARGS__)

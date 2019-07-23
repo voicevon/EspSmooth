@@ -1,6 +1,6 @@
 #pragma once
 
-#include "__hal.h"
+#include "_hal/Pin.h"
 
 class SigmaDeltaPwm : public Pin {
 public:

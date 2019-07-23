@@ -42,7 +42,7 @@
 const uint32_t ExtRateIn = 0;
 const uint32_t OscRateIn = 12000000;
 #else
-#include "board.h"
+// #include "board.h"
 #endif
 
 /*****************************************************************************

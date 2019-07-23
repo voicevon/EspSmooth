@@ -1,4 +1,4 @@
-
+//>>>Xuming  will rerwrite almost everything...
 #include "lwip/opt.h"
 #include "lwip/arch.h"
 #include "lwip/api.h"
@@ -6,7 +6,7 @@
 #include "sha1.h"
 #include "base64.h"
 
-#include "OutputStream.h"
+#include "libs/OutputStream.h"
 #include "main.h"
 
 #include <string>
@@ -48,8 +48,9 @@ static const char *webdir = "/sd/www";
  */
 static bool write_header(struct netconn *conn, const char *hdr)
 {
-    err_t err = netconn_write(conn, hdr, strlen(hdr), NETCONN_NOCOPY);
-    return err == ERR_OK;
+    // err_t err = netconn_write(conn, hdr, strlen(hdr), NETCONN_NOCOPY);
+    // return err == ERR_OK;
+    return true;
 }
 
 // construct path and test if file exists
@@ -263,7 +264,7 @@ static err_t websocket_read(WebsocketState& state, uint8_t *buf, uint16_t buflen
         // read entire payload into provided buffer
         n = pbuf_copy_partial(state.p, buf, plen, o);
         // free up read pbufs
-        state.p = pbuf_free_header(state.p, plen + o);
+        // state.p = pbuf_free_header(state.p, plen + o);
 
         if(n != plen) {
             printf("websocket_read: pbuf_copy_partial failed: %d\n", plen);
@@ -326,17 +327,17 @@ static int websocket_write(struct netconn *conn, const char *data, uint16_t len,
 static err_t handle_incoming_websocket(struct netconn *conn, const char *keystr)
 {
     unsigned char encoded_key[32];
-    int len = strlen(keystr);
-    const char WS_GUID[] = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
-    char key[len + sizeof(WS_GUID)];
+    // int len = strlen(keystr);
+    // const char WS_GUID[] = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+    // char key[len + sizeof(WS_GUID)];
 
     /* Concatenate key */
-    memcpy(key, keystr, len);
-    strcpy(&key[len], WS_GUID); // FIXME needs to be length checked
+    // memcpy(key, keystr, len);
+    // strcpy(&key[len], WS_GUID); // FIXME needs to be length checked
     //printf("Resulting key: %s\n", key);
 
     unsigned char sha1sum[20];
-    mbedtls_sha1((unsigned char *) key, sizeof(WS_GUID) + len - 1, sha1sum);
+    // mbedtls_sha1((unsigned char *) key, sizeof(WS_GUID) + len - 1, sha1sum);
     /* Base64 encode */
     unsigned int olen;
     mbedtls_base64_encode(NULL, 0, &olen, sha1sum, 20); //get length
@@ -577,7 +578,7 @@ static err_t parse_headers(struct netconn *conn, struct pbuf* &cp, std::string& 
             // free up pbufs that have been read
             // NOTE real version of pbuf_free_header() will have issues with last_offset being > pbuf->tot_len
             // So:- if(last_offset > cp->tot_len) last_offset= cp->tot_len;
-            cp = pbuf_free_header(cp, offset + 1);
+            // cp = pbuf_free_header(cp, offset + 1);
             //printf("parse_headers: end of headers\n");
             return ERR_OK;
             }
@@ -592,14 +593,14 @@ static err_t parse_headers(struct netconn *conn, struct pbuf* &cp, std::string& 
         last_offset = offset + 2;
 
         //printf("parse_headers: reading header: %s\n", hdrbuf);
-        char *o = strchr(hdrbuf, ':');
-        if(o == nullptr || o + 2 >= &hdrbuf[len]) {
-            printf("parse_headers: bad header\n");
-        } else {
-            std::string k(hdrbuf, (size_t)(o - hdrbuf));
-            std::string v(o + 2, (size_t)(len - (o - hdrbuf) - 2));
-            hdrs[k] = v;
-        }
+        // char *o = strchr(hdrbuf, ':');
+        // if(o == nullptr || o + 2 >= &hdrbuf[len]) {
+        //     printf("parse_headers: bad header\n");
+        // } else {
+        //     std::string k(hdrbuf, (size_t)(o - hdrbuf));
+        //     std::string v(o + 2, (size_t)(len - (o - hdrbuf) - 2));
+        //     hdrs[k] = v;
+        // }
     }
 }
 

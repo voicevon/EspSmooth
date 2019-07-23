@@ -1,18 +1,18 @@
 #include "Player.h"
 
-#include "Robot.h"
-#include "OutputStream.h"
+#include "robot/Robot.h"
+#include "libs/OutputStream.h"
 #include "GCode.h"
 #include "ConfigReader.h"
 #include "Dispatcher.h"
-#include "Conveyor.h"
-#include "StringUtils.h"
-#include "TemperatureControl.h"
+#include "robot/Conveyor.h"
+#include "libs/StringUtils.h"
+#include "modules/tools/temperaturecontrol/TemperatureControl.h"
 #include "main.h"
-#include "MessageQueue.h"
+#include "libs/MessageQueue.h"
 
 #include "FreeRTOS.h"
-#include "task.h"
+#include "freertos/task.h"
 
 #include <cstddef>
 #include <cmath>
