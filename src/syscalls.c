@@ -60,13 +60,14 @@ int _kill(int pid, int sig)
 	errno = EINVAL;
 	return -1;
 }
-
-void _exit (int status)
-{
-	_kill(status, -1);
-    __asm_("bkpt #0");
-	while (1) {}		/* Make sure we hang here */
-}
+//>>>Xuming
+// void _exit (int status)
+// {
+// 	_kill(status, -1);
+//     __asm_("bkpt #0");
+// 	while (1) {}		/* Make sure we hang here */
+// }
+//Xuming<<<
 
 int _open(char *path, int flags, ...)
 {
