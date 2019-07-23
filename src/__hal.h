@@ -58,5 +58,3 @@ void * mem_malloc(mem_size_t size);
 void mem_free(void *rmem);
 
 
-int strncmp ( const char * str1, const char * str2, size_t num );
-void * memset ( void * ptr, int value, size_t num );

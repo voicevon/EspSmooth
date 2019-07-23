@@ -11,6 +11,7 @@
 #include "freertos/timers.h"
 
 #include "__hal.h"
+#include "__patch.h"
 
 // >>>Xuming
 #if !(LWIP_SOCKET && LWIP_SOCKET_SELECT)   

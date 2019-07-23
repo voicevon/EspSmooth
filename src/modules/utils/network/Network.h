@@ -3,8 +3,8 @@
 #include "Module.h"
 
 #include <string>
-
-class OutputStream;
+#include "libs/OutputStream.h"
+// class OutputStream;
 class Ftpd;
 
 class Network : public Module {
