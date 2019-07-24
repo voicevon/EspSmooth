@@ -11,7 +11,7 @@
 #define BUILD_TARGET "ESP32_WROOM"
 
 
-bool isnan(float xx);
+// bool isnan(float xx);
 
 
 

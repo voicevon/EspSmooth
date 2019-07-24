@@ -8,6 +8,8 @@ void __taskEXIT_CRITICAL();
 
 
 
+typedef unsigned int  UBaseType_t;
+
 // freertos/timers.h
 // typedef void * TimerHandle_t;
 // void xTimerDelete(TimerHandle_t, uint32_t);

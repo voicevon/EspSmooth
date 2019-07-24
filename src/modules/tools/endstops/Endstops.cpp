@@ -1042,6 +1042,7 @@ bool Endstops::handle_mcode(GCode& gcode, OutputStream& os)
     return true;
 }
 
+#include "Arduino.h"
 bool Endstops::request(const char *key, void *value)
 {
     if(strcmp(key, "get_homing_status") == 0) {
