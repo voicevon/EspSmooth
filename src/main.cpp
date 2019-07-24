@@ -928,7 +928,7 @@ static void smoothie_startup(void *)
     // does not return from above
 }
 
-int main_main(int argc)
+void setup()
 {
     NVIC_SetPriorityGrouping( 0 );
 
@@ -963,7 +963,7 @@ int main_main(int argc)
     vTaskStartScheduler();
 
     // never gets here
-    return 1;
+    return;
 }
 
 #define TICKS2MS( xTicks ) ( ((xTicks) * 1000.0F) / configTICK_RATE_HZ )
@@ -972,10 +972,7 @@ int main_main(int argc)
 
 
 
-void setup(){
-    main_main(1);
 
-}
 
 void loop(){
 
