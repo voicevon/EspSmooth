@@ -942,6 +942,7 @@ void setup()
     if(setup_uart() < 0) {
         printf("FATAL: UART setup failed\n");
     }
+    
 
 #ifndef FLASH16BIT
     configureSPIFI(); // setup the winbond SPIFI to max speed
