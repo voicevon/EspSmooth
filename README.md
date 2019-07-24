@@ -1,9 +1,11 @@
-# EspSmooth
+# Project Goal
+- Same function with Smoothieware. 
+- Report all sensors with MQTT publisher, like ESPhome
+- Remote control all actuators and other output component with MQTT subscriber. 
 
-Based on 
-[Smoothieware](https://github.com/Smoothieware/Smoothieware/tree/edge/src), 
-[GrblEsp32](https://github.com/bdring/Grbl_Esp32/tree/master/Grbl_Esp32), 
-[EspHome](https://github.com/esphome/esphome/tree/dev/esphome)
+## Based on 
+- [Smoothieware](https://github.com/Smoothieware/Smoothieware/tree/edge/src), 
+- [EspHome](https://github.com/esphome/esphome/tree/dev/esphome)
 
 ## ESP32 Arduino: using FreeRTOS
 
