@@ -28,3 +28,8 @@ extern MemoryPool *_RAM2;
 extern MemoryPool *_RAM3;
 extern MemoryPool *_RAM4;
 extern MemoryPool *_RAM5;
+
+
+extern uint32_t SystemCoreClock;
+extern void configureSPIFI();
+

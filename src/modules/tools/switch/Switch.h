@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Module.h"
-#include "ConfigReader.h"
+#include "smoothie/Module.h"
+#include "smoothie/ConfigReader.h"
 #include "_hal/Pin.h"
 
 

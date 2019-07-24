@@ -3,10 +3,10 @@
 #include "libs/SigmaDeltaPwm.h"
 #include "robot/Conveyor.h"
 #include "libs/OutputStream.h"
-#include "GCode.h"
+#include "smoothie/GCode.h"
 #include "libs/SlowTicker.h"
 #include "libs/FastTicker.h"
-#include "Dispatcher.h"
+#include "smoothie/Dispatcher.h"
 #include "main.h"
 #include "PID_Autotuner.h"
 

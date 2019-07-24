@@ -1,16 +1,16 @@
 #include "Switch.h"
 
-#include "GCode.h"
+#include "smoothie/GCode.h"
 #include "libs/OutputStream.h"
-#include "ConfigReader.h"
+#include "smoothie/ConfigReader.h"
 #include "libs/SlowTicker.h"
 #include "libs/FastTicker.h"
 #include "libs/SigmaDeltaPwm.h"
 // #include "Pwm.h"
 #include "_hal/__hal.h"
 #include "_hal/Pwm.h"
-#include "GCodeProcessor.h"
-#include "Dispatcher.h"
+#include "smoothie/GCodeProcessor.h"
+#include "smoothie/Dispatcher.h"
 #include "main.h"
 
 #include <algorithm>

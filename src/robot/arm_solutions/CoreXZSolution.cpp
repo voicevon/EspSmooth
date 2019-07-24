@@ -1,6 +1,6 @@
 #include "CoreXZSolution.h"
-#include "ConfigReader.h"
-#include "AxisDefns.h"
+#include "smoothie/ConfigReader.h"
+#include "smoothie/AxisDefns.h"
 
 #define x_reduction_key         "x_reduction"
 #define z_reduction_key         "z_reduction"

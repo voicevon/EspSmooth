@@ -1,5 +1,5 @@
 #include "Endstops.h"
-#include "GCode.h"
+#include "smoothie/GCode.h"
 #include "robot/Conveyor.h"
 #include "robot/ActuatorCoordinates.h"
 #include "_hal/__hal.h"
@@ -9,8 +9,8 @@
 #include "robot/Planner.h"
 #include "libs/OutputStream.h"
 #include "robot/StepTicker.h"
-#include "ConfigReader.h"
-#include "Dispatcher.h"
+#include "smoothie/ConfigReader.h"
+#include "smoothie/Dispatcher.h"
 #include "main.h"
 
 #include "robot/arm_solutions/BaseSolution.h"
