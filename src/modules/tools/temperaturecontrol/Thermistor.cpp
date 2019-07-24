@@ -242,6 +242,8 @@ bool Thermistor::calc_jk()
 }
 
 // >>>Xuming
+#include "Arduino.h"
+
 #define isinf(n) (isnan((n) - (n)) && !isnan(n))
 //Xuming<<<
 float Thermistor::get_temperature()

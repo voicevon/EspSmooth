@@ -9,3 +9,9 @@ bool setup_sdmmc(void){
     return true;
 }
 
+void shutdown_cdc(){}
+void shutdown_sdmmc(){}
+
+
+
+

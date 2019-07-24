@@ -1507,6 +1507,7 @@ void Robot::reset_axis_position(float position, int axis)
     }
 }
 
+#include "Arduino.h"
 // similar to reset_axis_position but directly sets the actuator positions in actuators units (eg mm for cartesian, degrees for rotary delta)
 // then sets the axis positions to match. currently only called from Endstops.cpp and RotaryDeltaCalibration.cpp
 void Robot::reset_actuator_position(const ActuatorCoordinates &ac)

@@ -230,6 +230,7 @@ bool Switch::configure(ConfigReader& cr, ConfigReader::section_map_t& m)
 
 // >>>Xuming
 #include "_hal/patch.h"
+#include "Arduino.h"
 // Xuming<<<
 std::string Switch::get_info() const
 {
@@ -260,18 +261,18 @@ std::string Switch::get_info() const
     if(input_on_command_letter) {
         s.append("INPUT_ON_COMMAND:");
         s.push_back(input_on_command_letter);
-        s.append(patch::to_string(input_on_command_code));
+        s.append(String(input_on_command_code).c_str());
         s.append(",");
     }
     if(input_off_command_letter) {
         s.append("INPUT_OFF_COMMAND:");
         s.push_back(input_off_command_letter);
-        s.append(patch::to_string(input_off_command_code));
+        s.append(String(input_off_command_code).c_str());
         s.append(",");
     }
     if(subcode != 0) {
         s.append("SUBCODE:");
-        s.append(patch::to_string(subcode));
+        s.append(String(subcode).c_str());
         s.append(",");
     }
     if(!output_on_command.empty()) {
