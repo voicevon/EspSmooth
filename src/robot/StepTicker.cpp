@@ -37,13 +37,13 @@ StepTicker::~StepTicker()
 }
 
 // ISR callbacks from timer
-_ramfunc_ void StepTicker::step_timer_handler(void)
+void StepTicker::step_timer_handler(void)
 {
     StepTicker::getInstance()->step_tick();
 }
 
 // ISR callbacks from timer
-_ramfunc_ void StepTicker::unstep_timer_handler(void)
+void StepTicker::unstep_timer_handler(void)
 {
     StepTicker::getInstance()->unstep_tick();
 }
@@ -110,7 +110,7 @@ void StepTicker::set_unstep_time( float microseconds )
     delay = d;
 }
 
-_ramfunc_  bool StepTicker::start_unstep_ticker()
+bool StepTicker::start_unstep_ticker()
 {
     // enable the MR1 match register interrupt
     // this works as we are in MR0 match which reset counter so we will get an interrupt 2us after this is enabled
@@ -120,7 +120,7 @@ _ramfunc_  bool StepTicker::start_unstep_ticker()
 }
 
 // Reset step pins on any motor that was stepped
-_ramfunc_  void StepTicker::unstep_tick()
+void StepTicker::unstep_tick()
 {
     uint32_t bitmsk= 1;
     for (int i = 0; i < num_motors; i++) {
@@ -145,7 +145,7 @@ _ramfunc_  void StepTicker::unstep_tick()
 // }
 
 // step clock
-_ramfunc_  void StepTicker::step_tick (void)
+void StepTicker::step_tick (void)
 {
     //SET_STEPTICKER_DEBUG_PIN(running ? 1 : 0);
 
@@ -263,7 +263,7 @@ _ramfunc_  void StepTicker::step_tick (void)
 }
 
 // only called from the step tick ISR (single consumer)
-_ramfunc_ bool StepTicker::start_next_block()
+bool StepTicker::start_next_block()
 {
     if(current_block == nullptr) return false;
 

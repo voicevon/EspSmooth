@@ -29,6 +29,7 @@
 //#define _ramfunc_ __attribute__ ((section(".ramfunctions"),long_call,noinline))
 #define _ramfunc_
 
+
 REGISTER_MODULE(Laser, Laser::create)
 
 bool Laser::create(ConfigReader& cr)
@@ -189,7 +190,7 @@ bool Laser::handle_M221(GCode& gcode, OutputStream& os)
 // NOTE if we need to put this in RAMFUNC then note that some of these calcs cause calls
 // to internal math functions that are not in RAM (ltof etc) and tracking them all down is a rabbit hole
 // calculates the current speed ratio from the currently executing block
-_ramfunc_ float Laser::current_speed_ratio(const Block *block) const
+float Laser::current_speed_ratio(const Block *block) const
 {
     // find the primary moving actuator (the one with the most steps)
     size_t pm= 0;
@@ -210,7 +211,7 @@ _ramfunc_ float Laser::current_speed_ratio(const Block *block) const
 }
 
 // get laser power for the currently executing block, returns false if nothing running or a G0
-_ramfunc_ bool Laser::get_laser_power(float& power) const
+bool Laser::get_laser_power(float& power) const
 {
     const Block *block = StepTicker::getInstance()->get_current_block();
 
@@ -228,7 +229,7 @@ _ramfunc_ bool Laser::get_laser_power(float& power) const
 }
 
 // called every millisecond from timer ISR
-_ramfunc_ void Laser::set_proportional_power(void)
+void Laser::set_proportional_power(void)
 {
     if(manual_fire) return;
 
@@ -245,7 +246,7 @@ _ramfunc_ void Laser::set_proportional_power(void)
     return;
 }
 
-_ramfunc_ bool Laser::set_laser_power(float power)
+bool Laser::set_laser_power(float power)
 {
     // Ensure power is >=0 and <= 1
     if(power < 0) power= 0;
