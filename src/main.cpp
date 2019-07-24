@@ -608,7 +608,7 @@ void safe_sleep(uint32_t ms)
 // #include "Adc.h"
 // #include "Pwm.h"
 
-extern void configureSPIFI();
+
 //float get_pll1_clk();
 
 #define SD_CONFIG
@@ -898,8 +898,10 @@ static void smoothie_startup(void *)
         }
     }
 #endif
-
-    struct mallinfo mi = mallinfo();
+    //Xuming>>>
+    //struct mallinfo mi = mallinfo();
+    struct mallinfo mi;
+    //<<<Xuming
     printf("DEBUG: Initial: free malloc memory= %d, free sbrk memory= %d, Total free= %d\n", mi.fordblks, xPortGetFreeHeapSize() - mi.fordblks, xPortGetFreeHeapSize());
 
     // indicate we are up and running
@@ -926,7 +928,7 @@ static void smoothie_startup(void *)
     // does not return from above
 }
 
-int main_main(int argc, char *argv[])
+int main_main(int argc)
 {
     NVIC_SetPriorityGrouping( 0 );
 
@@ -971,7 +973,8 @@ int main_main(int argc, char *argv[])
 
 
 void setup(){
- 
+    main_main(1);
+
 }
 
 void loop(){
