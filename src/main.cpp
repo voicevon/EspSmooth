@@ -967,43 +967,43 @@ int main(int argc, char *argv[])
 #define TICKS2MS( xTicks ) ( ((xTicks) * 1000.0F) / configTICK_RATE_HZ )
 
 // hooks from freeRTOS
-extern "C" void vApplicationIdleHook( void )
-{
-    static TickType_t last_time_check = xTaskGetTickCount();
-    if(TICKS2MS(xTaskGetTickCount() - last_time_check) >= 300) {
-        last_time_check = xTaskGetTickCount();
-        if(!config_error_msg.empty()) {
-            // handle config error
-            // flash both leds
-            Board_LED_Toggle(0);
-            Board_LED_Toggle(1);
-        } else {
-            // handle play led 1 and aux play led
-            if(system_running) {
-                if(Module::is_halted()) {
-                    Board_LED_Toggle(1);
-                    if(aux_play_led != nullptr) {
-                        aux_play_led->set(!aux_play_led->get());
-                    }
-                }else{
-                    Board_LED_Set(1, !Conveyor::getInstance()->is_idle());
-                    if(aux_play_led != nullptr) {
-                        aux_play_led->set(!Conveyor::getInstance()->is_idle());
-                    }
-                }
-            }
-        }
-    }
-}
+// extern "C" void vApplicationIdleHook( void )
+// {
+//     static TickType_t last_time_check = xTaskGetTickCount();
+//     if(TICKS2MS(xTaskGetTickCount() - last_time_check) >= 300) {
+//         last_time_check = xTaskGetTickCount();
+//         if(!config_error_msg.empty()) {
+//             // handle config error
+//             // flash both leds
+//             Board_LED_Toggle(0);
+//             Board_LED_Toggle(1);
+//         } else {
+//             // handle play led 1 and aux play led
+//             if(system_running) {
+//                 if(Module::is_halted()) {
+//                     Board_LED_Toggle(1);
+//                     if(aux_play_led != nullptr) {
+//                         aux_play_led->set(!aux_play_led->get());
+//                     }
+//                 }else{
+//                     Board_LED_Set(1, !Conveyor::getInstance()->is_idle());
+//                     if(aux_play_led != nullptr) {
+//                         aux_play_led->set(!Conveyor::getInstance()->is_idle());
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
 
-extern "C" void vApplicationTickHook( void )
-{
-    /* This function will be called by each tick interrupt if
-    configUSE_TICK_HOOK is set to 1 in FreeRTOSConfig.h.  User code can be
-    added here, but the tick hook is called from an interrupt context, so
-    code must not attempt to block, and only the interrupt safe FreeRTOS API
-    functions can be used (those that end in FromISR()). */
-}
+// extern "C" void vApplicationTickHook( void )
+// {
+//     /* This function will be called by each tick interrupt if
+//     configUSE_TICK_HOOK is set to 1 in FreeRTOSConfig.h.  User code can be
+//     added here, but the tick hook is called from an interrupt context, so
+//     code must not attempt to block, and only the interrupt safe FreeRTOS API
+//     functions can be used (those that end in FromISR()). */
+// }
 
 extern "C" void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTaskName )
 {
