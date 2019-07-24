@@ -22,8 +22,8 @@
 // #include "lpc_phy.h" /* For the PHY monitor support */
 
 #include "main.h"
-#include "ConfigReader.h"
-#include "Dispatcher.h"
+#include "smoothie/ConfigReader.h"
+#include "smoothie/Dispatcher.h"
 // #include "OutputStream.h"
 
 #include "modules/utils/network/ftpd/ftpd.h"

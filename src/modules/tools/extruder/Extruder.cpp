@@ -3,12 +3,12 @@
 #include "robot/Conveyor.h"
 #include "Block.h"
 #include "robot/StepperMotor.h"
-#include "ConfigReader.h"
+#include "smoothie/ConfigReader.h"
 #include "robot/Robot.h"
-#include "GCode.h"
+#include "smoothie/GCode.h"
 #include "libs/OutputStream.h"
-#include "AxisDefns.h"
-#include "Dispatcher.h"
+#include "smoothie/AxisDefns.h"
+#include "smoothie/Dispatcher.h"
 
 #include <math.h>
 

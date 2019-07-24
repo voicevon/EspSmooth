@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Module.h"
+#include "smoothie/Module.h"
 
 #include <string>
 #include "libs/OutputStream.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Module.h"
+#include "smoothie/Module.h"
 #include "_hal/Pin.h"
 
 // defined here as they are used in multiple files

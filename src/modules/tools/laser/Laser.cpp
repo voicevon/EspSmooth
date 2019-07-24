@@ -2,15 +2,15 @@
 
 
 #include "robot/Robot.h"
-#include "Dispatcher.h"
+#include "smoothie/Dispatcher.h"
 #include "libs/SlowTicker.h"
 #include "libs/FastTicker.h"
 #include "_hal/Pwm.h"
 #include "_hal/Pin.h"
 #include "_hal/__hal.h"
 #include "robot/StepTicker.h"
-#include "ConfigReader.h"
-#include "GCode.h"
+#include "smoothie/ConfigReader.h"
+#include "smoothie/GCode.h"
 #include "libs/OutputStream.h"
 #include "libs/StringUtils.h"
 

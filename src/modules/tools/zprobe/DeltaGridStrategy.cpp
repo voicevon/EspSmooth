@@ -63,13 +63,13 @@
 */
 
 #include "DeltaGridStrategy.h"
-#include "ConfigReader.h"
+#include "smoothie/ConfigReader.h"
 #include "robot/Robot.h"
 #include "main.h"
-#include "GCode.h"
+#include "smoothie/GCode.h"
 #include "robot/Conveyor.h"
 #include "ZProbe.h"
-#include "Dispatcher.h"
+#include "smoothie/Dispatcher.h"
 #include "robot/StepperMotor.h"
 #include "robot/arm_solutions/BaseSolution.h"
 #include "libs/StringUtils.h"

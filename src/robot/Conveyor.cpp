@@ -1,10 +1,10 @@
 #include "Conveyor.h"
 
-#include "AxisDefns.h"
-#include "GCode.h"
+#include "smoothie/AxisDefns.h"
+#include "smoothie/GCode.h"
 #include "Block.h"
 #include "Planner.h"
-#include "ConfigReader.h"
+#include "smoothie/ConfigReader.h"
 #include "StepTicker.h"
 #include "Robot.h"
 #include "StepperMotor.h"

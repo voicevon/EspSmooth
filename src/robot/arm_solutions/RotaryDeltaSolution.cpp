@@ -1,7 +1,7 @@
 #include "RotaryDeltaSolution.h"
 
-#include "ConfigReader.h"
-#include "AxisDefns.h"
+#include "smoothie/ConfigReader.h"
+#include "smoothie/AxisDefns.h"
 
 #include <math.h>
 #include <stdio.h>

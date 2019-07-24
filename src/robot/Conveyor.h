@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Module.h"
+#include "smoothie/Module.h"
 
 class PlannerQueue;
 class Block;

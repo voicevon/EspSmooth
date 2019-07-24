@@ -1,6 +1,6 @@
 #include "KillButton.h"
 
-#include "ConfigReader.h"
+#include "smoothie/ConfigReader.h"
 #include "libs/SlowTicker.h"
 #include "main.h"
 
