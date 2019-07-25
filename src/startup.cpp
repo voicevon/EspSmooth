@@ -613,7 +613,7 @@ void safe_sleep(uint32_t ms)
 
 //float get_pll1_clk();
 
-// #define CONFIG_SOURCE_SD 1
+//#define CONFIG_SOURCE_SD 1
 #define CONFIG_SOURCE_SPIFFS 2
 // #define CONFIG_SOURCE_CODED_STRING 3
 
@@ -662,6 +662,7 @@ void register_startup(StartupFunc_t sf)
     startup_fncs.push_back(sf);
 }
 
+#include "_hal/spiffs_ext.h"
 void smoothie_startup(void *)
 {
     printf("INFO: Smoothie V2.alpha Build for %s - starting up\n", BUILD_TARGET);
@@ -728,7 +729,7 @@ void smoothie_startup(void *)
         printf("DEBUG: Starting configuration of modules from memory...\n");
 #endif
 #ifdef CONFIG_SOURCE_SPIFFS
-        std::fstream fs;
+        std::fstream fs = spiffs_reading();
         ConfigReader cr(fs);
 #endif
 

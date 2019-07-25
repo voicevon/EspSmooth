@@ -50,7 +50,7 @@ void setup_spiffs_reading(){
     Serial.println("File content:");
     while(file.available()) {
         Serial.write (file.read());
-        Serial.println();
+        //Serial.println();
     }
 
     file.close();
@@ -104,10 +104,10 @@ void setup_smooth(){
 
 void setup(){
     Serial.begin(115200);
-    // setup_smooth();
+     setup_smooth();
     // setup_log();
-    setup_spiffs_writting();
-    setup_spiffs_reading();
+    //setup_spiffs_writting();
+    //setup_spiffs_reading();
 }
 
 uint64_t cpu_idle_counter = 0;
@@ -118,9 +118,9 @@ void loop(){
 
     if(esp_timer_get_time () - last_time_stamp >= 10000000){
         //printf("cpu_idle_counter = %i", cpu_idle_counter);
-        uint32_t passed_time = cpu_idle_counter / 10000;
-        uint32_t uptime = esp_timer_get_time();
-        printf("uptime = %i us, cpu idle counter =  %i\n",uptime, passed_time);
+        uint16_t passed_time = cpu_idle_counter / 10000;
+        uint16_t uptime_second = esp_timer_get_time() / 1000000;  
+        printf("uptime = %i seconds, cpu idle counter =  %i\n",uptime_second, passed_time);
 
         //vTaskList(ptrTaskList);   vTaskList is not supportted?  Jun2019      https://github.com/espressif/esp-idf/issues/416
 
