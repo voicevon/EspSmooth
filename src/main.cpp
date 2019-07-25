@@ -4,8 +4,7 @@
 #include "_hal/board.h"
 #include "_hal/stopwatch.h"
 
-// #include "FreeRTOS.h"
-// #include "freertos/task.h"
+// #include <Arduino_FreeRTOS.h>
 
 
 
@@ -39,7 +38,6 @@ void setup2()
 void setup()
 {
     Serial.begin(115200);
-
     NVIC_SetPriorityGrouping( 0 );
     SystemCoreClockUpdate();
 
@@ -57,29 +55,34 @@ void setup()
 
 
     // led 4 indicates boot phase 1 complete
-    Board_LED_Set(3, true);
+    // Board_LED_Set(3, true);
 
-    //ESP_LOGE(TAG,"setup completed, RTOS is begining ........................");
 
     // launch the startup thread which will become the command thread that executes all incoming commands
     // 10000 Bytes stack
-    xTaskCreate(smoothie_startup, "CommandThread", 10000/4, NULL, (tskIDLE_PRIORITY + 2UL), (TaskHandle_t *) NULL);
-
-
-
-    /* Start the scheduler */
-    vTaskStartScheduler();
-
-    // never gets here
-    return;
+    // xTaskCreate(smoothie_startup, "CommandThread", 10000/4, NULL, (tskIDLE_PRIORITY + 2UL), (TaskHandle_t *) NULL);
+    
+    // vTaskStartScheduler();    Don't call vTaskStartScheduler()     https://esp32.com/viewtopic.php?t=1336
 }
 
 
-
+uint64_t cpu_idle_counter = 0;
+uint64_t last_time_stamp = 0;   //us
 void loop(){
-    // esphome::App.loop();
-    // ESP_LOGD(TAG,"Main.loop()");
-       ESP_LOGE(TAG,"RTOS is not started !!! ");
-      delay(1000);
+    // Actually, this is the lowest priority task.
+    cpu_idle_counter++;
+
+    if(esp_timer_get_time () - last_time_stamp >= 10000000){
+        //printf("cpu_idle_counter = %i", cpu_idle_counter);
+        uint32_t passed_time = cpu_idle_counter / 10000;
+        uint32_t uptime = esp_timer_get_time();
+        printf("uptime = %i us, cpu idle counter =  %i\n",uptime, passed_time);
+
+        //vTaskList(ptrTaskList);   vTaskList is not supportted?  Jun2019      https://github.com/espressif/esp-idf/issues/416
+
+        cpu_idle_counter = 0;
+        last_time_stamp = esp_timer_get_time();
+    }
 
 }
+
