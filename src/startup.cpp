@@ -613,14 +613,25 @@ void safe_sleep(uint32_t ms)
 
 //float get_pll1_clk();
 
-#define SD_CONFIG
+// #define CONFIG_SOURCE_SD 1
+#define CONFIG_SOURCE_SPIFFS 2
+// #define CONFIG_SOURCE_CODED_STRING 3
 
-#ifndef SD_CONFIG
-#include STRING_CONFIG_H
+
+#ifdef CONFIG_SOURCE_CODED_STRING
+//Xuming>>>
+#include STRING_CONFIG_H    //not impliment in origin SmoothieV2
 static std::string str(string_config);
 static std::stringstream ss(str);
-#else
+//<<<Xuming
+#endif
+
+#ifdef CONFIG_SOURCE_SD
 extern "C" bool setup_sdmmc();
+#endif
+
+#ifdef CONFIG_SOURCE_SPIFFS
+
 #endif
 
 // voltage monitors
@@ -658,7 +669,7 @@ void smoothie_startup(void *)
 
     // led 4 indicates boot phase 2 starts
     Board_LED_Set(3, true);
-
+    printf("AAAAAAAAAAAAAAAAAAAAA\n");
     // create the SlowTicker here as it is used by some modules
     SlowTicker *slow_ticker = new SlowTicker();
 
@@ -667,6 +678,7 @@ void smoothie_startup(void *)
 
     // create the StepTicker, don't start it yet
     StepTicker *step_ticker = new StepTicker();
+    printf("bbbbbbbbbbbbbbbbbbbbbbbbb\n");
 #ifdef DEBUG
     // when debug is enabled we cannot run stepticker at full speed
     step_ticker->set_frequency(10000); // 10KHz
@@ -679,16 +691,17 @@ void smoothie_startup(void *)
     new Dispatcher();
 
     bool ok = false;
-
+    printf ("cccccccccccccccccccccc\n");
     // open the config file
     do {
-#ifdef SD_CONFIG
+#ifdef CONFIG_SOURCE_SD
         static FATFS fatfs; /* File system object */
+        printf("111111111111111\n");
         if(!setup_sdmmc()) {
             std::cout << "Error: setting up sdmmc\n";
             break;
         }
-
+        printf ("ffffffffffffffff\n");
         // TODO check the card is inserted
 
         int ret = f_mount(&fatfs, "sd", 1);
@@ -709,9 +722,14 @@ void smoothie_startup(void *)
 
         ConfigReader cr(fs);
         printf("DEBUG: Starting configuration of modules from sdcard...\n");
-#else
+#endif
+#ifdef CONFIG_SOURCE_CODED_STRING
         ConfigReader cr(ss);
         printf("DEBUG: Starting configuration of modules from memory...\n");
+#endif
+#ifdef CONFIG_SOURCE_SPIFFS
+        std::fstream fs;
+        ConfigReader cr(fs);
 #endif
 
         {
@@ -926,7 +944,7 @@ void smoothie_startup(void *)
 
     // run the command handler in this thread
     command_handler();
-
+    printf("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n");
     // does not return from above
 }
 

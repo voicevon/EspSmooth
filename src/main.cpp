@@ -1,5 +1,6 @@
 #include "HardwareSerial.h"
 #include "esp32-hal-log.h"
+#include "SPIFFS.h"
 
 #include "_hal/board.h"
 #include "_hal/stopwatch.h"
@@ -15,10 +16,47 @@ extern void configureSPIFI();
 extern uint32_t SystemCoreClock;
 extern void smoothie_startup(void *);
 
+void setup_spiffs_writting() {
+    if(!SPIFFS.begin(true)) {
+        Serial.println ("An eooro has occurred while mounting SPIFFS");
+        return;
+    }
 
-void setup2()
-{
-    Serial.begin(115200); 
+    File file =  SPIFFS.open("/config.ini",FILE_WRITE);
+    if(!file) {
+        Serial.println("There was an error opening the file for wrtting");
+        return;
+    }
+
+    if(!file.print("TEST")) {
+        Serial.println("File write failed");
+    }
+
+    file.close();
+
+}
+void setup_spiffs_reading(){
+    if(!SPIFFS.begin(true)) {
+        Serial.println("An error has occurred while mounting SPIFFS ");
+        return;
+    }
+
+    File file = SPIFFS.open ("/config.ini",FILE_READ);
+    if(!file) {
+        Serial.println("There was an error opening the file for reading");
+        return;
+    }
+
+    Serial.println("File content:");
+    while(file.available()) {
+        Serial.write (file.read());
+        Serial.println();
+    }
+
+    file.close();
+}
+
+void setup_log(){
     Serial.println("==============================================");
 
     esp_log_level_set("*", ESP_LOG_INFO);  
@@ -35,9 +73,8 @@ void setup2()
     ESP_LOGD("TAG", "Debug");
     ESP_LOGV("TAG", "Verbose");
 }
-void setup()
-{
-    Serial.begin(115200);
+
+void setup_smooth(){
     NVIC_SetPriorityGrouping( 0 );
     SystemCoreClockUpdate();
 
@@ -60,11 +97,18 @@ void setup()
 
     // launch the startup thread which will become the command thread that executes all incoming commands
     // 10000 Bytes stack
-    // xTaskCreate(smoothie_startup, "CommandThread", 10000/4, NULL, (tskIDLE_PRIORITY + 2UL), (TaskHandle_t *) NULL);
+    xTaskCreate(smoothie_startup, "CommandThread", 10000/4, NULL, (tskIDLE_PRIORITY + 2UL), (TaskHandle_t *) NULL);
     
     // vTaskStartScheduler();    Don't call vTaskStartScheduler()     https://esp32.com/viewtopic.php?t=1336
 }
 
+void setup(){
+    Serial.begin(115200);
+    // setup_smooth();
+    // setup_log();
+    setup_spiffs_writting();
+    setup_spiffs_reading();
+}
 
 uint64_t cpu_idle_counter = 0;
 uint64_t last_time_stamp = 0;   //us
