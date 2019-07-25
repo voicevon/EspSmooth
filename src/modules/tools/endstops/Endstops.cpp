@@ -11,7 +11,7 @@
 #include "robot/StepTicker.h"
 #include "smoothie/ConfigReader.h"
 #include "smoothie/Dispatcher.h"
-#include "main.h"
+#include "startup.h"
 
 #include "robot/arm_solutions/BaseSolution.h"
 

@@ -6,7 +6,7 @@
 #include "robot/Robot.h"
 #include "libs/AutoPushPop.h"
 #include "robot/StepperMotor.h"
-#include "main.h"
+#include "startup.h"
 #include "modules/tools/temperaturecontrol/TemperatureControl.h"
 #include "ConfigWriter.h"
 #include "robot/Conveyor.h"

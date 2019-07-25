@@ -8,7 +8,7 @@
 #include "robot/Conveyor.h"
 #include "libs/StringUtils.h"
 #include "modules/tools/temperaturecontrol/TemperatureControl.h"
-#include "main.h"
+#include "startup.h"
 #include "libs/MessageQueue.h"
 
 #include "FreeRTOS.h"

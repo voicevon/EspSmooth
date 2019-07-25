@@ -3,7 +3,7 @@
 #include "lwip/api.h"
 #include "lwip/sockets.h"
 
-#include "main.h"
+#include "startup.h"
 #include "libs/OutputStream.h"
 #include "libs/RingBuffer.h"
 

@@ -11,7 +11,7 @@
 #include "_hal/Pwm.h"
 #include "smoothie/GCodeProcessor.h"
 #include "smoothie/Dispatcher.h"
-#include "main.h"
+#include "startup.h"
 
 #include <algorithm>
 #include <math.h>

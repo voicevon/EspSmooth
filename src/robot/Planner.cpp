@@ -7,7 +7,7 @@
 #include "StepTicker.h"
 #include "Robot.h"
 #include "Conveyor.h"
-#include "main.h"
+#include "startup.h"
 #include "smoothie/Module.h"
 
 #include <math.h>

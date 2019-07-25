@@ -21,7 +21,7 @@
 // #include "arch/sys_arch.h"
 // #include "lpc_phy.h" /* For the PHY monitor support */
 
-#include "main.h"
+#include "startup.h"
 #include "smoothie/ConfigReader.h"
 #include "smoothie/Dispatcher.h"
 // #include "OutputStream.h"

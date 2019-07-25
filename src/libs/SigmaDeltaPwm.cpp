@@ -1,5 +1,5 @@
 #include "SigmaDeltaPwm.h"
-#include "main.h"
+#include "startup.h"
 
 #define confine(value, min, max) (((value) < (min))?(min):(((value) > (max))?(max):(value)))
 

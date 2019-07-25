@@ -65,7 +65,7 @@
 #include "DeltaGridStrategy.h"
 #include "smoothie/ConfigReader.h"
 #include "robot/Robot.h"
-#include "main.h"
+#include "startup.h"
 #include "smoothie/GCode.h"
 #include "robot/Conveyor.h"
 #include "ZProbe.h"

@@ -9,7 +9,7 @@
 #include "StepTicker.h"
 #include "smoothie/ConfigReader.h"
 #include "libs/StringUtils.h"
-#include "main.h"
+#include "startup.h"
 #include "modules/tools/temperaturecontrol/TemperatureControl.h"
 #include "libs/SlowTicker.h"
 

@@ -7,7 +7,7 @@
 #include "libs/SlowTicker.h"
 #include "libs/FastTicker.h"
 #include "smoothie/Dispatcher.h"
-#include "main.h"
+#include "startup.h"
 #include "PID_Autotuner.h"
 
 #include <math.h>

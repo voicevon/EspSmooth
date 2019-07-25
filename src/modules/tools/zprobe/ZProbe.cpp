@@ -4,7 +4,7 @@
 #include "smoothie/ConfigReader.h"
 #include "robot/Robot.h"
 #include "robot/StepperMotor.h"
-#include "main.h"
+#include "startup.h"
 #include "smoothie/GCode.h"
 #include "robot/Conveyor.h"
 #include "libs/SlowTicker.h"

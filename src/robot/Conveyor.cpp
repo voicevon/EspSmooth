@@ -9,7 +9,7 @@
 #include "Robot.h"
 #include "StepperMotor.h"
 #include "PlannerQueue.h"
-#include "main.h"
+#include "startup.h"
 
 #include "FreeRTOS.h"
 #include "freertos/task.h"

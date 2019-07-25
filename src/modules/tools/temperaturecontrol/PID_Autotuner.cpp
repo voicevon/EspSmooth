@@ -3,7 +3,7 @@
 #include "libs/SigmaDeltaPwm.h"
 #include "libs/OutputStream.h"
 #include "smoothie/GCode.h"
-#include "main.h"
+#include "startup.h"
 
 #include <cmath>        // std::abs
 
