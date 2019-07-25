@@ -1,6 +1,6 @@
 #include "main.h"
 
-#include <stdio.h>
+// #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -37,6 +37,8 @@
 #include "_hal/Adc.h"
 #include "_hal/Pwm.h"
 #include "_hal/stopwatch.h"
+
+static const char *TAG = "espsmooth.main";
 
 static bool system_running= false;
 static bool rpi_port_enabled= false;
@@ -928,8 +930,52 @@ static void smoothie_startup(void *)
     // does not return from above
 }
 
+
+// #include "esphome/esphome.h"
+#include "esp_log.h"
+// using namespace esphome;
+
+// logger::Logger *logger_logger;
+
+// void setup_logger(){
+//   logger_logger = new logger::Logger(115200, 512, logger::UART_SELECTION_UART0);
+//   logger_logger->pre_setup();
+// //   // logger_logger->set_log_level("",ESPHOME_LOG_LEVEL_INFO);
+// //   logger_logger->set_log_level("sensor", ESPHOME_LOG_LEVEL_INFO);
+// //   logger_logger->set_log_level("adc", ESPHOME_LOG_LEVEL_INFO);
+// //   logger_logger->set_log_level("pulse_counter", ESPHOME_LOG_LEVEL_INFO);
+// //   logger_logger->set_log_level("switch", ESPHOME_LOG_LEVEL_INFO);
+// //   logger_logger->set_log_level("mqtt", ESPHOME_LOG_LEVEL_INFO);
+//   App.register_component(logger_logger);
+// }
+
+// wifi::WiFiComponent *wifi_wificomponent;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+
+void setup_wifi(){
+//   wifi_wificomponent = new wifi::WiFiComponent();
+//   wifi_wificomponent->set_use_address("water.local");
+//   wifi::WiFiAP wifi_wifiap = wifi::WiFiAP();
+//   wifi_wifiap.set_ssid("FuckGFW");
+//   wifi_wifiap.set_password("refuckgfw");
+//   wifi_wifiap.set_priority(0.000000f);
+//   wifi_wificomponent->add_sta(wifi_wifiap);
+//   wifi_wificomponent->set_reboot_timeout(900000);
+//   wifi_wificomponent->set_power_save_mode(wifi::WIFI_POWER_SAVE_LIGHT);
+//   wifi_wificomponent->set_fast_connect(false);
+//   App.register_component(wifi_wificomponent);
+}
+
+
+void setup_esphome(){
+    // App.pre_setup("water", __DATE__ ", " __TIME__);
+    // setup_logger();
+    // setup_wifi();
+    // esphome::App.setup();
+}
 void setup()
 {
+    setup_esphome();
+
     NVIC_SetPriorityGrouping( 0 );
 
     // Read clock settings and update SystemCoreClock variable
@@ -960,6 +1006,8 @@ void setup()
     // 10000 Bytes stack
     xTaskCreate(smoothie_startup, "CommandThread", 10000/4, NULL, (tskIDLE_PRIORITY + 2UL), (TaskHandle_t *) NULL);
 
+
+
     /* Start the scheduler */
     vTaskStartScheduler();
 
@@ -967,14 +1015,9 @@ void setup()
     return;
 }
 
-#define TICKS2MS( xTicks ) ( ((xTicks) * 1000.0F) / configTICK_RATE_HZ )
-
-
-
-
-
 
 
 void loop(){
-
+    // esphome::App.loop();
+    ESP_LOGD(TAG,"Main.loop()");
 }
