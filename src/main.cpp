@@ -932,7 +932,7 @@ static void smoothie_startup(void *)
 
 
 // #include "esphome/esphome.h"
-#include "esp_log.h"
+#include "esp32-hal-log.h"
 // using namespace esphome;
 
 // logger::Logger *logger_logger;
@@ -972,23 +972,35 @@ void setup_esphome(){
     // setup_wifi();
     // esphome::App.setup();
 }
+#include "HardwareSerial.h"
+//void setup_test_esp_log()
+void setup2()
+{
+    Serial.begin(115200); 
+    Serial.println("==============================================");
+
+    esp_log_level_set("*", ESP_LOG_INFO);  
+    ESP_LOGE("TAG", "1Error");
+    ESP_LOGW("TAG", "1Warning");
+    ESP_LOGI("TAG", "1Info");
+    ESP_LOGD("TAG", "1Debug");
+    ESP_LOGV("TAG", "1Verbose");
+
+    esp_log_level_set(TAG,ESP_LOG_VERBOSE);  
+    ESP_LOGE("TAG", "Error");
+    ESP_LOGW("TAG", "Warning");
+    ESP_LOGI("TAG", "Info");
+    ESP_LOGD("TAG", "Debug");
+    ESP_LOGV("TAG", "Verbose");
+}
 void setup()
 {
-    setup_esphome();
+    Serial.begin(115200);
 
     NVIC_SetPriorityGrouping( 0 );
-
-    // Read clock settings and update SystemCoreClock variable
     SystemCoreClockUpdate();
 
-    // Set up and initialize all required blocks and
-    // functions related to the board hardware
     Board_Init();
-
-    if(setup_uart() < 0) {
-        printf("FATAL: UART setup failed\n");
-    }
-    
 
 #ifndef FLASH16BIT
     configureSPIFI(); // setup the winbond SPIFI to max speed
@@ -999,8 +1011,12 @@ void setup()
     StopWatch_Init();
     printf("StopWatch clock rate= %lu Hz\n", StopWatch_TicksPerSecond());
 
+
+
     // led 4 indicates boot phase 1 complete
     Board_LED_Set(3, true);
+
+    //ESP_LOGE(TAG,"setup completed, RTOS is begining ........................");
 
     // launch the startup thread which will become the command thread that executes all incoming commands
     // 10000 Bytes stack
@@ -1019,5 +1035,8 @@ void setup()
 
 void loop(){
     // esphome::App.loop();
-    ESP_LOGD(TAG,"Main.loop()");
+    // ESP_LOGD(TAG,"Main.loop()");
+       ESP_LOGE(TAG,"RTOS is not started !!! ");
+      delay(1000);
+
 }
