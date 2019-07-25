@@ -3,7 +3,9 @@
 
 #include "stdint.h"
 
-// https://github.com/Smoothieware/SmoothieV2/blob/97f5278ae5f26b751c71a98927c8c539ff78a2e8/Firmware/Hal/src/tmr-setup.c
+//RTOS timer        https://gist.github.com/shirish47/5b2a04f81eab4281b5c69f678a4da352
+
+//SmothieV2         https://github.com/Smoothieware/SmoothieV2/blob/97f5278ae5f26b751c71a98927c8c539ff78a2e8/Firmware/Hal/src/tmr-setup.c
 void tmr1_stop();
 void tmr0_stop();
 

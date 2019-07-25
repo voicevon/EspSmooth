@@ -2,7 +2,9 @@
 #include "stopwatch.h"
 // #include "stdint.h"
 
-void StopWatch_Init(void){}
+void StopWatch_Init(void){
+    
+}
 
 uint32_t StopWatch_Start(void){return 0;}
 
