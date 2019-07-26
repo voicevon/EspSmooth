@@ -729,11 +729,11 @@ void smoothie_startup(void *)
         printf("DEBUG: Starting configuration of modules from memory...\n");
 #endif
 #ifdef CONFIG_SOURCE_SPIFFS
-        printf("pppppppppppppppppppppppp\n");
-        std::string fs = spiffs_reading();
-        std::stringstream ss(fs);
-        ConfigReader cr(ss);
-        printf("qqqqqqqqqqqqqqqqqqqqqqq\n");
+        // printf("pppppppppppppppppppppppp\n");
+        std::string std_string = spiffs_reading();
+        std::stringstream std_string_stream(std_string);
+        ConfigReader cr(std_string_stream);
+        // printf("qqqqqqqqqqqqqqqqqqqqqqq\n");
 #endif
 
         {
@@ -807,6 +807,7 @@ void smoothie_startup(void *)
             } else {
                 printf("ERROR: ADC failed to setup\n");
             }
+            printf ("DEBUG: config temperature control IS COMPLETED ==================================================");
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////

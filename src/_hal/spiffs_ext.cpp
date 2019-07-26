@@ -2,68 +2,39 @@
 #include "SPIFFS.h"
 
 
-void test(){
-    std::fstream fs;
-    fs.open("/config.ini",std::fstream::in);
+#define FILE_SIZE 17000    // the real size is 15894 Bytes,  Jun 2019
 
-}
-
+// TODO :  Add parameters:  File_name, file_size.
 std::string spiffs_reading(void){
 
-    std::string std_string;
-    // printf("K000000000000\n");
+    std::string err = "READ CONFIG ERROR!";
     if(!SPIFFS.begin(true)) {
         Serial.println("An error has occurred while mounting SPIFFS ");
-        return std_string;
+        return err;
     }
 
     File file = SPIFFS.open ("/config.ini",FILE_READ);
     if(!file) {
         Serial.println("There was an error opening the file for reading");
-        return std_string;
+        return err;
     }
-    // printf("kkkkkkkkkkkk1111111111111111\n");
     
-    char ccc[200];
+    char file_content[FILE_SIZE];
     int index = 0;
-    printf("kkkkkkkkkkkkkkkkkk22222222222222\n");
     while(file.available()) {
-        int xx = file.read();
-        ccc[index] = char(xx);
-        // printf ("[%i]: %i \n",index,xx);
+        int this_byte = file.read();
+        file_content[index] = char(this_byte);
+        // printf ("[%i]: %i \n",index,this_byte);
         index++;
-        if (index >= sizeof(ccc) - 2) break;
+        if (index >= sizeof(file_content) - 2) break;
     }
-    ccc[index] = 0;   //be sure to set the null terminator!!!
-    // printf("K33333333333333333\n");
+    file_content[index] = 0;   //be sure to set the null terminator!!!
 
-    String arduino_string((char*)(ccc));
-    printf("Total bytes in spiffs file:  %i :\n", index);
-    printf("========================Begin of content==============\n");
-    Serial.println(arduino_string);
-    printf("==================End of content in Arduino::String===\n");
-
-    // std::string std_string_ =  arduino_string.c_str();
-    // for(int i=0; i<100;i++){
-    //     char cc = std_string_[i];
-    //     printf("==[%i], %i \n",i,cc);
-    // }
-    // printf("in std_string, Length = %i \n",sizeof(std_string_) );
-    // printf("content in type of std::string:\n  %s \n",std_string_);
+    std::string string_result(file_content);
+    printf("INFO:  completed Reading /config.ini , file size is  = %i \n",string_result.length() );
+    // printf("content in type of std::string:\n  %s \n",string_result.c_str());
     // printf("==================End of content in std::string=======\n");
 
-    std::string ssss(ccc);
-    //std::string ssss="THis is a test from                                 ddddddddddddddddd      Mars!!!!!!!!!!!!!!!!!!!!!!!!!";
-    printf("in std_string, Length = %i \n",ssss.length() );
-    printf("content in type of std::string:\n  %s \n",ssss.c_str());
-    printf("==================End of content in std::string=======\n");
-
-
-    // fs.open ("/config.ini",std::fstream::in);
-    // if(!fs.is_open()){
-    //     Serial.write("fs open got error.");
-    //     Serial.println("-------------------------------");
-    // }
     file.close();
-    return std_string;
+    return string_result;
 }
