@@ -369,69 +369,69 @@ void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line
     }
 }
 
-extern "C" size_t write_cdc(const char *buf, size_t len);
-extern "C" size_t read_cdc(char *buf, size_t len);
-extern "C" int setup_cdc(void *taskhandle);
+// extern "C" size_t write_cdc(const char *buf, size_t len);
+// extern "C" size_t read_cdc(char *buf, size_t len);
+// extern "C" int setup_cdc(void *taskhandle);
 
-static void usb_comms(void *)
-{
-    printf("DEBUG: USB Comms thread running\n");
+// static void usb_comms(void *)
+// { 
+//     printf("DEBUG: USB Comms thread running\n");
 
-    if(!setup_cdc(xTaskGetCurrentTaskHandle())) {
-        printf("FATAL: CDC setup failed\n");
-        return;
-    }
+//     if(!setup_cdc(xTaskGetCurrentTaskHandle())) {
+//         printf("FATAL: CDC setup failed\n");
+//         return;
+//     }
 
-    // on first connect we send a welcome message after getting a '\n'
-    static const char *welcome_message = "Welcome to Smoothie\nok\n";
-    const TickType_t waitms = pdMS_TO_TICKS( 300 );
+//     // on first connect we send a welcome message after getting a '\n'
+//     static const char *welcome_message = "Welcome to Smoothie\nok\n";
+//     const TickType_t waitms = pdMS_TO_TICKS( 300 );
 
-    size_t n;
-    char rx_buf[256];
-    bool done = false;
+//     size_t n;
+//     char rx_buf[256];
+//     bool done = false;
 
-    // first we wait for an initial '\n' sent from host
-    while (!done) {
-        // Wait to be notified that there has been a USB irq.
-        ulTaskNotifyTake( pdTRUE, waitms );
-        n = read_cdc(rx_buf, sizeof(rx_buf));
-        if(n > 0) {
-            for (size_t i = 0; i < n; ++i) {
-                if(rx_buf[i] == '\n') {
-                    if(config_error_msg.empty()) {
-                        write_cdc(welcome_message, strlen(welcome_message));
-                    }else{
-                        write_cdc(config_error_msg.c_str(), config_error_msg.size());
-                    }
-                    done = true;
-                    break;
-                }
-            }
-        }
-    }
+//     // first we wait for an initial '\n' sent from host
+//     while (!done) {
+//         // Wait to be notified that there has been a USB irq.
+//         ulTaskNotifyTake( pdTRUE, waitms );
+//         n = read_cdc(rx_buf, sizeof(rx_buf));
+//         if(n > 0) {
+//             for (size_t i = 0; i < n; ++i) {
+//                 if(rx_buf[i] == '\n') {
+//                     if(config_error_msg.empty()) {
+//                         write_cdc(welcome_message, strlen(welcome_message));
+//                     }else{
+//                         write_cdc(config_error_msg.c_str(), config_error_msg.size());
+//                     }
+//                     done = true;
+//                     break;
+//                 }
+//             }
+//         }
+//     }
 
-    // create an output stream that writes to the cdc
-    static OutputStream os([](const char *buf, size_t len) { return write_cdc(buf, len); });
-    output_streams.push_back(&os);
+//     // create an output stream that writes to the cdc
+//     static OutputStream os([](const char *buf, size_t len) { return write_cdc(buf, len); });
+//     output_streams.push_back(&os);
 
-    // now read lines and dispatch them
-    char line[MAX_LINE_LENGTH];
-    size_t cnt = 0;
-    bool discard = false;
-    while(1) {
-        // Wait to be notified that there has been a USB irq.
-        uint32_t ulNotificationValue = ulTaskNotifyTake( pdTRUE, waitms );
+//     // now read lines and dispatch them
+//     char line[MAX_LINE_LENGTH];
+//     size_t cnt = 0;
+//     bool discard = false;
+//     while(1) {
+//         // Wait to be notified that there has been a USB irq.
+//         uint32_t ulNotificationValue = ulTaskNotifyTake( pdTRUE, waitms );
 
-        if( ulNotificationValue != 1 ) {
-            /* The call to ulTaskNotifyTake() timed out. check anyway */
-        }
+//         if( ulNotificationValue != 1 ) {
+//             /* The call to ulTaskNotifyTake() timed out. check anyway */
+//         }
 
-        n = read_cdc(rx_buf, sizeof(rx_buf));
-        if(n > 0) {
-            process_command_buffer(n, rx_buf, &os, line, cnt, discard);
-        }
-    }
-}
+//         n = read_cdc(rx_buf, sizeof(rx_buf));
+//         if(n > 0) {
+//             process_command_buffer(n, rx_buf, &os, line, cnt, discard);
+//         }
+//     }
+// }
 
 static void uart_comms(void *)
 {
@@ -710,7 +710,7 @@ void setup_section_core(ConfigReader cr){
         freq = cr.get_int(m, "frequency", freq);
     }
     Pwm::setup(freq);
-    printf("INFO: PWM frequency set to %lu Hz\n", freq);
+    printf("INFO: PWM frequency set to %d Hz\n", freq);
 }
 
 void setup_section_extruder(ConfigReader cr){
