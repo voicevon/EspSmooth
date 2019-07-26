@@ -535,6 +535,7 @@ static void handle_query(bool need_done)
 static void command_handler()
 {
     printf("DEBUG: Command thread running\n");
+    int counter=0;
 
     for(;;) {
         char *line;
@@ -543,29 +544,42 @@ static void command_handler()
 
         // This will timeout after 100 ms
         if(receive_message_queue(&line, &os)) {
-            //printf("DEBUG: got line: %s\n", line);
+            printf("DEBUG: got line: %s\n", line);
             dispatch_line(*os, line);
             handle_query(false);
             os->set_done(); // set after all possible output
 
         } else {
             // timed out or other error
+            printf("uuuuuuuuuuuuuuuuuuuuuuuuu\n");
+
             idle = true;
             if(config_error_msg.empty()) {
                 // toggle led to show we are alive, but idle
                 Board_LED_Toggle(0);
             }
+            printf("vvvvvvvvvvvvvvvvvvvvvvvvv\n");
             handle_query(true);
+            printf("wwwwwwwwwwwwwwwwwwwwww\n");
         }
-
+        printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
         // call in_command_ctx for all modules that want it
         // dispatch_line can be called from that
         Module::broadcast_in_commmand_ctx(idle);
+        printf("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n");
 
         // we check the queue to see if it is ready to run
         // we specifically deal with this in append_block, but need to check for other places
         if(Conveyor::getInstance() != nullptr) {
+        printf("cccccccccccccccccccccccccccccc\n");
             Conveyor::getInstance()->check_queue();
+        }
+        printf("fffffffffffffffffffffffffffffffffffffff\n");
+
+        counter++;
+        if(counter>99999){
+            counter = 0;
+            printf("command_handler is alive....");
         }
     }
 }
