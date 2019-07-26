@@ -664,6 +664,63 @@ void register_startup(StartupFunc_t sf)
 
 #include "_hal/spiffs_ext.h"
 
+//get general system settings
+void setup_section_genenal(ConfigReader cr){
+    ConfigReader::section_map_t m;
+    if(cr.get_section("general", m)) {
+        bool f = cr.get_bool(m, "grbl_mode", false);
+        THEDISPATCHER->set_grbl_mode(f);
+        printf("INFO: grbl mode %s\n", f ? "set" : "not set");
+        config_override= cr.get_bool(m, "config-override", false);
+        printf("INFO: use config override is %s\n", config_override ? "set" : "not set");
+        rpi_port_enabled= cr.get_bool(m, "rpi_port_enable", false);
+        rpi_baudrate= cr.get_int(m, "rpi_baudrate", 115200);
+        printf("INFO: rpi port is %senabled, at baudrate: %lu\n", rpi_port_enabled ? "" : "not ", rpi_baudrate);
+        std::string p = cr.get_string(m, "aux_play_led", "nc");
+        aux_play_led = new Pin(p.c_str(), Pin::AS_OUTPUT);
+        if(!aux_play_led->connected()) {
+            delete aux_play_led;
+            aux_play_led = nullptr;
+        }else{
+            printf("INFO: auxilliary play led set to %s\n", aux_play_led->to_string().c_str());
+        }
+    }
+}
+
+// configure core modules here
+void setup_section_core(ConfigReader cr){
+    // Pwm needs to be initialized, there can only be one frequency
+    // needs to be done before any module that could use it
+    uint32_t freq = 10000; // default is 10KHz
+    ConfigReader::section_map_t m;
+    if(cr.get_section("pwm", m)) {
+        freq = cr.get_int(m, "frequency", freq);
+    }
+    Pwm::setup(freq);
+    printf("INFO: PWM frequency set to %lu Hz\n", freq);
+}
+
+void setup_section_extruder(ConfigReader cr){
+    printf("DEBUG: configure extruder\n");
+    // this creates any configured extruders then we can remove it
+    Extruder ex("extruder loader");
+    if(!ex.configure(cr)) {
+        printf("INFO: no Extruders loaded\n");
+    }
+}
+
+void setup_section_temperature_control(ConfigReader cr){
+    if(Adc::setup()) {
+        // this creates any configured temperature controls
+        if(!TemperatureControl::load_controls(cr)) {
+            printf("INFO: no Temperature Controls loaded\n");
+        }
+        // printf("[OK][setup.temperature.control] aaaaaaaaaaaaaaaaa \n");
+    } else {
+        printf("ERROR: ADC failed to setup\n");
+    }
+    //  printf ("[OK][setup.temperature.controls] bbbbbbbbbbbbbbbbbbb\n");
+}
 
 void smoothie_startup(void *)
 {
@@ -672,7 +729,6 @@ void smoothie_startup(void *)
 
     // led 4 indicates boot phase 2 starts
     Board_LED_Set(3, true);
-    // printf("AAAAAAAAAAAAAAAAAAAAA\n");
     // create the SlowTicker here as it is used by some modules
     SlowTicker *slow_ticker = new SlowTicker();
 
@@ -681,7 +737,6 @@ void smoothie_startup(void *)
 
     // create the StepTicker, don't start it yet
     StepTicker *step_ticker = new StepTicker();
-    // printf("bbbbbbbbbbbbbbbbbbbbbbbbb\n");
 #ifdef DEBUG
     // when debug is enabled we cannot run stepticker at full speed
     step_ticker->set_frequency(10000); // 10KHz
@@ -699,12 +754,10 @@ void smoothie_startup(void *)
     do {
 #ifdef CONFIG_SOURCE_SD
         static FATFS fatfs; /* File system object */
-        printf("111111111111111\n");
         if(!setup_sdmmc()) {
             std::cout << "Error: setting up sdmmc\n";
             break;
         }
-        printf ("ffffffffffffffff\n");
         // TODO check the card is inserted
 
         int ret = f_mount(&fatfs, "sd", 1);
@@ -731,99 +784,46 @@ void smoothie_startup(void *)
         printf("DEBUG: Starting configuration of modules from memory...\n");
 #endif
 #ifdef CONFIG_SOURCE_SPIFFS
-        // printf("pppppppppppppppppppppppp\n");
         std::string std_string = spiffs_reading();
         std::stringstream std_string_stream(std_string);
         ConfigReader cr(std_string_stream);
-        // printf("qqqqqqqqqqqqqqqqqqqqqqq\n");
 #endif
 
-        {
-            // get general system settings
-            ConfigReader::section_map_t m;
-            if(cr.get_section("general", m)) {
-                bool f = cr.get_bool(m, "grbl_mode", false);
-                THEDISPATCHER->set_grbl_mode(f);
-                printf("INFO: grbl mode %s\n", f ? "set" : "not set");
-                config_override= cr.get_bool(m, "config-override", false);
-                printf("INFO: use config override is %s\n", config_override ? "set" : "not set");
-                rpi_port_enabled= cr.get_bool(m, "rpi_port_enable", false);
-                rpi_baudrate= cr.get_int(m, "rpi_baudrate", 115200);
-                printf("INFO: rpi port is %senabled, at baudrate: %lu\n", rpi_port_enabled ? "" : "not ", rpi_baudrate);
-                std::string p = cr.get_string(m, "aux_play_led", "nc");
-                aux_play_led = new Pin(p.c_str(), Pin::AS_OUTPUT);
-                if(!aux_play_led->connected()) {
-                    delete aux_play_led;
-                    aux_play_led = nullptr;
-                }else{
-                    printf("INFO: auxilliary play led set to %s\n", aux_play_led->to_string().c_str());
-                }
-            }
-        }
+        setup_section_genenal(cr);
 
-        printf("DEBUG: configure the planner\n");
         Planner *planner = new Planner();
         planner->configure(cr);
 
-        printf("DEBUG: configure the conveyor\n");
         Conveyor *conveyor = new Conveyor();
         conveyor->configure(cr);
 
-        printf("DEBUG: configure the robot\n");
         Robot *robot = new Robot();
         if(!robot->configure(cr)) {
             printf("ERROR: Configuring robot failed\n");
             break;
         }
 
-        ///////////////////////////////////////////////////////////
-        // configure core modules here
-        {
-            // Pwm needs to be initialized, there can only be one frequency
-            // needs to be done before any module that could use it
-            uint32_t freq = 10000; // default is 10KHz
-            ConfigReader::section_map_t m;
-            if(cr.get_section("pwm", m)) {
-                freq = cr.get_int(m, "frequency", freq);
-            }
-            Pwm::setup(freq);
-            printf("INFO: PWM frequency set to %lu Hz\n", freq);
-        }
+        setup_section_core(cr);
+        setup_section_extruder(cr);
+        setup_section_temperature_control(cr);
+        
 
-        {
-            printf("DEBUG: configure extruder\n");
-            // this creates any configured extruders then we can remove it
-            Extruder ex("extruder loader");
-            if(!ex.configure(cr)) {
-                printf("INFO: no Extruders loaded\n");
-            }
-        }
-
-        {
-            printf("DEBUG: configure temperature control\n");
-            if(Adc::setup()) {
-                // this creates any configured temperature controls
-                if(!TemperatureControl::load_controls(cr)) {
-                    printf("INFO: no Temperature Controls loaded\n");
-                }
-                printf("COMPLETED:---------------------------- emperatureControl::load_controls() is ok. \n");
-            } else {
-                printf("ERROR: ADC failed to setup\n");
-            }
-            printf ("COMPLETED: config temperature control IS COMPLETED ==================================================");
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////////////
         // create all registered modules, the addresses are stored in a known location in flash
         extern uint32_t __registered_modules_start;
         extern uint32_t __registered_modules_end;
         uint32_t *g_pfnModules= &__registered_modules_start;
+        printf("[DEBUG][registered_modules]aaaaaaaaaaaaaaa\n");
+        int i=0;
         while (g_pfnModules < &__registered_modules_end) {
+            printf("------ index = %i\n",i);
+            i++;
+
             uint32_t *addr= g_pfnModules++;
             bool (*pfnModule)(ConfigReader& cr)= (bool (*)(ConfigReader& cr))*addr;
             // this calls the registered create function for the module
             pfnModule(cr);
         }
+        printf("[OK][registered_modules].............\n");
 
         // end of module creation and configuration
         ////////////////////////////////////////////////////////////////
@@ -846,8 +846,10 @@ void smoothie_startup(void *)
                     }
                 }
             }
+            printf("[OK][setup] configure voltage monitors .........\n");
         }
-#ifdef SD_CONFIG
+        
+#ifdef CONFIG_SOURCE_SD
         // close the file stream
         fs.close();
 
