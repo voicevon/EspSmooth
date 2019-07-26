@@ -960,9 +960,10 @@ void smoothie_startup(void *)
     Board_LED_Set(2, false);
     Board_LED_Set(3, false);
 
+    printf("[OK][setup] run command_handle. \n");
     // run the command handler in this thread
     command_handler();
-    printf("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n");
+    printf("[OK][setup] is going to return.]]\n");
     // does not return from above
 }
 
