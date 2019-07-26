@@ -31,7 +31,7 @@ std::string spiffs_reading(void){
     file_content[index] = 0;   //be sure to set the null terminator!!!
 
     std::string string_result(file_content);
-    printf("INFO:  completed Reading /config.ini , file size is  = %i \n",string_result.length() );
+    printf("[I] [spiffs.reader]:  completed Reading /config.ini , file size is  = %i \n",string_result.length() );
     // printf("content in type of std::string:\n  %s \n",string_result.c_str());
     // printf("==================End of content in std::string=======\n");
 
