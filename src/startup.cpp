@@ -369,69 +369,69 @@ void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line
     }
 }
 
-extern "C" size_t write_cdc(const char *buf, size_t len);
-extern "C" size_t read_cdc(char *buf, size_t len);
-extern "C" int setup_cdc(void *taskhandle);
+// extern "C" size_t write_cdc(const char *buf, size_t len);
+// extern "C" size_t read_cdc(char *buf, size_t len);
+// extern "C" int setup_cdc(void *taskhandle);
 
-static void usb_comms(void *)
-{
-    printf("DEBUG: USB Comms thread running\n");
+// static void usb_comms(void *)
+// { 
+//     printf("DEBUG: USB Comms thread running\n");
 
-    if(!setup_cdc(xTaskGetCurrentTaskHandle())) {
-        printf("FATAL: CDC setup failed\n");
-        return;
-    }
+//     if(!setup_cdc(xTaskGetCurrentTaskHandle())) {
+//         printf("FATAL: CDC setup failed\n");
+//         return;
+//     }
 
-    // on first connect we send a welcome message after getting a '\n'
-    static const char *welcome_message = "Welcome to Smoothie\nok\n";
-    const TickType_t waitms = pdMS_TO_TICKS( 300 );
+//     // on first connect we send a welcome message after getting a '\n'
+//     static const char *welcome_message = "Welcome to Smoothie\nok\n";
+//     const TickType_t waitms = pdMS_TO_TICKS( 300 );
 
-    size_t n;
-    char rx_buf[256];
-    bool done = false;
+//     size_t n;
+//     char rx_buf[256];
+//     bool done = false;
 
-    // first we wait for an initial '\n' sent from host
-    while (!done) {
-        // Wait to be notified that there has been a USB irq.
-        ulTaskNotifyTake( pdTRUE, waitms );
-        n = read_cdc(rx_buf, sizeof(rx_buf));
-        if(n > 0) {
-            for (size_t i = 0; i < n; ++i) {
-                if(rx_buf[i] == '\n') {
-                    if(config_error_msg.empty()) {
-                        write_cdc(welcome_message, strlen(welcome_message));
-                    }else{
-                        write_cdc(config_error_msg.c_str(), config_error_msg.size());
-                    }
-                    done = true;
-                    break;
-                }
-            }
-        }
-    }
+//     // first we wait for an initial '\n' sent from host
+//     while (!done) {
+//         // Wait to be notified that there has been a USB irq.
+//         ulTaskNotifyTake( pdTRUE, waitms );
+//         n = read_cdc(rx_buf, sizeof(rx_buf));
+//         if(n > 0) {
+//             for (size_t i = 0; i < n; ++i) {
+//                 if(rx_buf[i] == '\n') {
+//                     if(config_error_msg.empty()) {
+//                         write_cdc(welcome_message, strlen(welcome_message));
+//                     }else{
+//                         write_cdc(config_error_msg.c_str(), config_error_msg.size());
+//                     }
+//                     done = true;
+//                     break;
+//                 }
+//             }
+//         }
+//     }
 
-    // create an output stream that writes to the cdc
-    static OutputStream os([](const char *buf, size_t len) { return write_cdc(buf, len); });
-    output_streams.push_back(&os);
+//     // create an output stream that writes to the cdc
+//     static OutputStream os([](const char *buf, size_t len) { return write_cdc(buf, len); });
+//     output_streams.push_back(&os);
 
-    // now read lines and dispatch them
-    char line[MAX_LINE_LENGTH];
-    size_t cnt = 0;
-    bool discard = false;
-    while(1) {
-        // Wait to be notified that there has been a USB irq.
-        uint32_t ulNotificationValue = ulTaskNotifyTake( pdTRUE, waitms );
+//     // now read lines and dispatch them
+//     char line[MAX_LINE_LENGTH];
+//     size_t cnt = 0;
+//     bool discard = false;
+//     while(1) {
+//         // Wait to be notified that there has been a USB irq.
+//         uint32_t ulNotificationValue = ulTaskNotifyTake( pdTRUE, waitms );
 
-        if( ulNotificationValue != 1 ) {
-            /* The call to ulTaskNotifyTake() timed out. check anyway */
-        }
+//         if( ulNotificationValue != 1 ) {
+//             /* The call to ulTaskNotifyTake() timed out. check anyway */
+//         }
 
-        n = read_cdc(rx_buf, sizeof(rx_buf));
-        if(n > 0) {
-            process_command_buffer(n, rx_buf, &os, line, cnt, discard);
-        }
-    }
-}
+//         n = read_cdc(rx_buf, sizeof(rx_buf));
+//         if(n > 0) {
+//             process_command_buffer(n, rx_buf, &os, line, cnt, discard);
+//         }
+//     }
+// }
 
 static void uart_comms(void *)
 {
@@ -458,7 +458,8 @@ static void uart_comms(void *)
 
         size_t n = read_uart(rx_buf, sizeof(rx_buf));
         if(n > 0) {
-           process_command_buffer(n, rx_buf, &os, line, cnt, discard);
+            printf("[I][task.uart] got rs buffer not empty...");
+            process_command_buffer(n, rx_buf, &os, line, cnt, discard);
         }
     }
 }
@@ -535,6 +536,7 @@ static void handle_query(bool need_done)
 static void command_handler()
 {
     printf("DEBUG: Command thread running\n");
+    int counter = 0;
 
     for(;;) {
         char *line;
@@ -543,33 +545,44 @@ static void command_handler()
 
         // This will timeout after 100 ms
         if(receive_message_queue(&line, &os)) {
-            //printf("DEBUG: got line: %s\n", line);
+            printf("DEBUG: got line: %s\n", line);
             dispatch_line(*os, line);
             handle_query(false);
             os->set_done(); // set after all possible output
 
         } else {
             // timed out or other error
+            // printf("uuuuuuuuuuuuuuuuuuuuuuuuu\n");
+
             idle = true;
             if(config_error_msg.empty()) {
                 // toggle led to show we are alive, but idle
                 Board_LED_Toggle(0);
             }
+            // printf("vvvvvvvvvvvvvvvvvvvvvvvvv\n");
             handle_query(true);
+            // printf("wwwwwwwwwwwwwwwwwwwwww\n");
         }
-
+        // printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
         // call in_command_ctx for all modules that want it
         // dispatch_line can be called from that
         Module::broadcast_in_commmand_ctx(idle);
+        // printf("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n");
 
         // we check the queue to see if it is ready to run
         // we specifically deal with this in append_block, but need to check for other places
         if(Conveyor::getInstance() != nullptr) {
+        // printf("cccccccccccccccccccccccccccccc\n");
             Conveyor::getInstance()->check_queue();
+        }
+        // printf("fffffffffffffffffffffffffffffffffffffff\n");
+
+        counter++;
+        if(counter % 100 == 0){
+            printf("command_handler run times = %i \n",counter);
         }
     }
 }
-
 // called only in command thread context, it will sleep (and yield) thread but will also
 // process things like instant query
 void safe_sleep(uint32_t ms)
@@ -663,6 +676,87 @@ void register_startup(StartupFunc_t sf)
 }
 
 #include "_hal/spiffs_ext.h"
+
+//get general system settings
+void setup_section_genenal(ConfigReader cr){
+    ConfigReader::section_map_t m;
+    if(cr.get_section("general", m)) {
+        bool f = cr.get_bool(m, "grbl_mode", false);
+        THEDISPATCHER->set_grbl_mode(f);
+        printf("INFO: grbl mode %s\n", f ? "set" : "not set");
+        config_override= cr.get_bool(m, "config-override", false);
+        printf("INFO: use config override is %s\n", config_override ? "set" : "not set");
+        rpi_port_enabled= cr.get_bool(m, "rpi_port_enable", false);
+        rpi_baudrate= cr.get_int(m, "rpi_baudrate", 115200);
+        printf("INFO: rpi port is %senabled, at baudrate: %lu\n", rpi_port_enabled ? "" : "not ", rpi_baudrate);
+        std::string p = cr.get_string(m, "aux_play_led", "nc");
+        aux_play_led = new Pin(p.c_str(), Pin::AS_OUTPUT);
+        if(!aux_play_led->connected()) {
+            delete aux_play_led;
+            aux_play_led = nullptr;
+        }else{
+            printf("INFO: auxilliary play led set to %s\n", aux_play_led->to_string().c_str());
+        }
+    }
+}
+
+// configure core modules here
+void setup_section_core(ConfigReader cr){
+    // Pwm needs to be initialized, there can only be one frequency
+    // needs to be done before any module that could use it
+    uint32_t freq = 10000; // default is 10KHz
+    ConfigReader::section_map_t m;
+    if(cr.get_section("pwm", m)) {
+        freq = cr.get_int(m, "frequency", freq);
+    }
+    Pwm::setup(freq);
+    printf("INFO: PWM frequency set to %d Hz\n", freq);
+}
+
+void setup_section_extruder(ConfigReader cr){
+    printf("DEBUG: configure extruder\n");
+    // this creates any configured extruders then we can remove it
+    Extruder ex("extruder loader");
+    if(!ex.configure(cr)) {
+        printf("INFO: no Extruders loaded\n");
+    }
+}
+
+void setup_section_temperature_control(ConfigReader cr){
+    if(Adc::setup()) {
+        // this creates any configured temperature controls
+        if(!TemperatureControl::load_controls(cr)) {
+            printf("INFO: no Temperature Controls loaded\n");
+        }
+        // printf("[OK][setup.temperature.control] aaaaaaaaaaaaaaaaa \n");
+    } else {
+        printf("ERROR: ADC failed to setup\n");
+    }
+    //  printf ("[OK][setup.temperature.controls] bbbbbbbbbbbbbbbbbbb\n");
+}
+
+// configure voltage monitors if any
+void setup_section_voltage_monitors(ConfigReader cr){
+    ConfigReader::section_map_t m;
+    if(cr.get_section("voltage monitor", m)) {
+        for(auto& s : m) {
+            std::string k = s.first;
+            std::string v = s.second;
+
+            Adc *padc= new Adc;
+            if(padc->from_string(v.c_str()) == nullptr) {
+                printf("WARNING: Failed to create %s voltage monitor\n", k.c_str());
+                delete padc;
+            }else{
+                voltage_monitors[k]= padc;
+                printf("DEBUG: added voltage monitor %s: %s\n", k.c_str(), v.c_str());
+            }
+        }
+    }
+    printf("[OK][setup] configure voltage monitors .........\n");
+}
+
+
 void smoothie_startup(void *)
 {
     printf("INFO: Smoothie V2.alpha Build for %s - starting up\n", BUILD_TARGET);
@@ -670,7 +764,6 @@ void smoothie_startup(void *)
 
     // led 4 indicates boot phase 2 starts
     Board_LED_Set(3, true);
-    // printf("AAAAAAAAAAAAAAAAAAAAA\n");
     // create the SlowTicker here as it is used by some modules
     SlowTicker *slow_ticker = new SlowTicker();
 
@@ -679,7 +772,6 @@ void smoothie_startup(void *)
 
     // create the StepTicker, don't start it yet
     StepTicker *step_ticker = new StepTicker();
-    // printf("bbbbbbbbbbbbbbbbbbbbbbbbb\n");
 #ifdef DEBUG
     // when debug is enabled we cannot run stepticker at full speed
     step_ticker->set_frequency(10000); // 10KHz
@@ -697,12 +789,10 @@ void smoothie_startup(void *)
     do {
 #ifdef CONFIG_SOURCE_SD
         static FATFS fatfs; /* File system object */
-        printf("111111111111111\n");
         if(!setup_sdmmc()) {
             std::cout << "Error: setting up sdmmc\n";
             break;
         }
-        printf ("ffffffffffffffff\n");
         // TODO check the card is inserted
 
         int ret = f_mount(&fatfs, "sd", 1);
@@ -729,121 +819,53 @@ void smoothie_startup(void *)
         printf("DEBUG: Starting configuration of modules from memory...\n");
 #endif
 #ifdef CONFIG_SOURCE_SPIFFS
-        printf("pppppppppppppppppppppppp\n");
-        std::string fs = spiffs_reading();
-        std::stringstream ss(fs);
-        ConfigReader cr(ss);
-        printf("qqqqqqqqqqqqqqqqqqqqqqq\n");
+        std::string std_string = spiffs_reading();
+        std::stringstream std_string_stream(std_string);
+        ConfigReader cr(std_string_stream);
 #endif
 
-        {
-            // get general system settings
-            ConfigReader::section_map_t m;
-            if(cr.get_section("general", m)) {
-                bool f = cr.get_bool(m, "grbl_mode", false);
-                THEDISPATCHER->set_grbl_mode(f);
-                printf("INFO: grbl mode %s\n", f ? "set" : "not set");
-                config_override= cr.get_bool(m, "config-override", false);
-                printf("INFO: use config override is %s\n", config_override ? "set" : "not set");
-                rpi_port_enabled= cr.get_bool(m, "rpi_port_enable", false);
-                rpi_baudrate= cr.get_int(m, "rpi_baudrate", 115200);
-                printf("INFO: rpi port is %senabled, at baudrate: %lu\n", rpi_port_enabled ? "" : "not ", rpi_baudrate);
-                std::string p = cr.get_string(m, "aux_play_led", "nc");
-                aux_play_led = new Pin(p.c_str(), Pin::AS_OUTPUT);
-                if(!aux_play_led->connected()) {
-                    delete aux_play_led;
-                    aux_play_led = nullptr;
-                }else{
-                    printf("INFO: auxilliary play led set to %s\n", aux_play_led->to_string().c_str());
-                }
-            }
-        }
+        setup_section_genenal(cr);
 
-        printf("DEBUG: configure the planner\n");
         Planner *planner = new Planner();
         planner->configure(cr);
 
-        printf("DEBUG: configure the conveyor\n");
         Conveyor *conveyor = new Conveyor();
         conveyor->configure(cr);
 
-        printf("DEBUG: configure the robot\n");
         Robot *robot = new Robot();
         if(!robot->configure(cr)) {
             printf("ERROR: Configuring robot failed\n");
             break;
         }
 
-        ///////////////////////////////////////////////////////////
-        // configure core modules here
-        {
-            // Pwm needs to be initialized, there can only be one frequency
-            // needs to be done before any module that could use it
-            uint32_t freq = 10000; // default is 10KHz
-            ConfigReader::section_map_t m;
-            if(cr.get_section("pwm", m)) {
-                freq = cr.get_int(m, "frequency", freq);
-            }
-            Pwm::setup(freq);
-            printf("INFO: PWM frequency set to %lu Hz\n", freq);
-        }
+        setup_section_core(cr);
+        setup_section_extruder(cr);
+        setup_section_temperature_control(cr);
+        
 
-        {
-            printf("DEBUG: configure extruder\n");
-            // this creates any configured extruders then we can remove it
-            Extruder ex("extruder loader");
-            if(!ex.configure(cr)) {
-                printf("INFO: no Extruders loaded\n");
-            }
-        }
-
-        {
-            printf("DEBUG: configure temperature control\n");
-            if(Adc::setup()) {
-                // this creates any configured temperature controls
-                if(!TemperatureControl::load_controls(cr)) {
-                    printf("INFO: no Temperature Controls loaded\n");
-                }
-            } else {
-                printf("ERROR: ADC failed to setup\n");
-            }
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////////////
         // create all registered modules, the addresses are stored in a known location in flash
-        extern uint32_t __registered_modules_start;
-        extern uint32_t __registered_modules_end;
-        uint32_t *g_pfnModules= &__registered_modules_start;
-        while (g_pfnModules < &__registered_modules_end) {
-            uint32_t *addr= g_pfnModules++;
-            bool (*pfnModule)(ConfigReader& cr)= (bool (*)(ConfigReader& cr))*addr;
-            // this calls the registered create function for the module
-            pfnModule(cr);
-        }
+        //Xuming>>>
+        // extern uint32_t __registered_modules_start;
+        // extern uint32_t __registered_modules_end;
+        // uint32_t *g_pfnModules= &__registered_modules_start;
+        // printf("[DEBUG][registered_modules]aaaaaaaaaaaaaaa\n");
+        // int i=0;
+        // while (g_pfnModules < &__registered_modules_end) {
+        //     printf("------ index = %i\n",i);
+        //     i++;
 
+        //     uint32_t *addr= g_pfnModules++;
+        //     bool (*pfnModule)(ConfigReader& cr)= (bool (*)(ConfigReader& cr))*addr;
+        //     // this calls the registered create function for the module
+        //     pfnModule(cr);
+        // }
+        //printf("[OK][registered_modules].............\n");
+        //<<<Xuming
         // end of module creation and configuration
-        ////////////////////////////////////////////////////////////////
 
-        {
-            // configure voltage monitors if any
-            ConfigReader::section_map_t m;
-            if(cr.get_section("voltage monitor", m)) {
-                for(auto& s : m) {
-                    std::string k = s.first;
-                    std::string v = s.second;
-
-                    Adc *padc= new Adc;
-                    if(padc->from_string(v.c_str()) == nullptr) {
-                        printf("WARNING: Failed to create %s voltage monitor\n", k.c_str());
-                        delete padc;
-                    }else{
-                        voltage_monitors[k]= padc;
-                        printf("DEBUG: added voltage monitor %s: %s\n", k.c_str(), v.c_str());
-                    }
-                }
-            }
-        }
-#ifdef SD_CONFIG
+        setup_section_voltage_monitors(cr);
+        
+#ifdef CONFIG_SOURCE_SD
         // close the file stream
         fs.close();
 
@@ -870,6 +892,7 @@ void smoothie_startup(void *)
     shell->initialize();
 
     if(ok) {
+        printf("[DEBUG][setup.ok] yyyyyyyyyyyyyyyyyy \n");
         // start the timers
         if(!slow_ticker->start()) {
             printf("Error: failed to start SlowTicker\n");
@@ -888,6 +911,8 @@ void smoothie_startup(void *)
         }
 
     } else {
+        printf("[DEBUG][setup.ok] nnnnnnnnnnnnnnnnnnnnn \n");
+
         puts("ERROR: Configure failed\n");
         config_error_msg= "There was a fatal error in the config.ini this must be fixed to continue\nOnly some shell commands are allowed and sdcard access\n";
         Module::broadcast_halt(true);
@@ -899,11 +924,13 @@ void smoothie_startup(void *)
         // Failed to create the queue.
         printf("Error: failed to create comms i/o queue\n");
     }
-
+    printf("[OK][message_queue] is created...................\n");
     // Start comms threads Higher priority than the command thread
     // fixed stack size of 4k Bytes each
-    xTaskCreate(usb_comms, "USBCommsThread", 1500/4, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
-    xTaskCreate(uart_comms, "UARTCommsThread", 1500/4, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
+    // xTaskCreate(usb_comms, "USBCommsThread", 1500/4, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
+    // printf("[OK][task.usbCommsThread]........\n");
+    xTaskCreate(uart_comms, "UARTCommsThread", 1500, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
+    printf("[OK][task.UARTCommsThread]........\n");
 
     // run any startup functions that have been registered
     for(auto f : startup_fncs) {
@@ -946,9 +973,10 @@ void smoothie_startup(void *)
     Board_LED_Set(2, false);
     Board_LED_Set(3, false);
 
+    printf("[OK][setup] run command_handle. \n");
     // run the command handler in this thread
     command_handler();
-    printf("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n");
+    printf("[OK][setup] is going to return.]]\n");
     // does not return from above
 }
 
