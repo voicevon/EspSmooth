@@ -663,6 +663,8 @@ void register_startup(StartupFunc_t sf)
 }
 
 #include "_hal/spiffs_ext.h"
+
+
 void smoothie_startup(void *)
 {
     printf("INFO: Smoothie V2.alpha Build for %s - starting up\n", BUILD_TARGET);
@@ -804,10 +806,11 @@ void smoothie_startup(void *)
                 if(!TemperatureControl::load_controls(cr)) {
                     printf("INFO: no Temperature Controls loaded\n");
                 }
+                printf("COMPLETED:---------------------------- emperatureControl::load_controls() is ok. \n");
             } else {
                 printf("ERROR: ADC failed to setup\n");
             }
-            printf ("DEBUG: config temperature control IS COMPLETED ==================================================");
+            printf ("COMPLETED: config temperature control IS COMPLETED ==================================================");
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////

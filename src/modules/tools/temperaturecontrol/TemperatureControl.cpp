@@ -119,7 +119,7 @@ bool TemperatureControl::load_controls(ConfigReader& cr)
         vfet_enable_pin->set(true);
     }
 #endif
-
+    printf("ddddddddddddddddddddd========================\n");
     return cnt > 0;
 }
 
