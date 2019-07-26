@@ -670,7 +670,7 @@ void smoothie_startup(void *)
 
     // led 4 indicates boot phase 2 starts
     Board_LED_Set(3, true);
-    printf("AAAAAAAAAAAAAAAAAAAAA\n");
+    // printf("AAAAAAAAAAAAAAAAAAAAA\n");
     // create the SlowTicker here as it is used by some modules
     SlowTicker *slow_ticker = new SlowTicker();
 
@@ -679,7 +679,7 @@ void smoothie_startup(void *)
 
     // create the StepTicker, don't start it yet
     StepTicker *step_ticker = new StepTicker();
-    printf("bbbbbbbbbbbbbbbbbbbbbbbbb\n");
+    // printf("bbbbbbbbbbbbbbbbbbbbbbbbb\n");
 #ifdef DEBUG
     // when debug is enabled we cannot run stepticker at full speed
     step_ticker->set_frequency(10000); // 10KHz
@@ -692,7 +692,7 @@ void smoothie_startup(void *)
     new Dispatcher();
 
     bool ok = false;
-    printf ("cccccccccccccccccccccc\n");
+    // printf ("cccccccccccccccccccccc\n");
     // open the config file
     do {
 #ifdef CONFIG_SOURCE_SD
@@ -729,8 +729,11 @@ void smoothie_startup(void *)
         printf("DEBUG: Starting configuration of modules from memory...\n");
 #endif
 #ifdef CONFIG_SOURCE_SPIFFS
-        std::fstream fs = spiffs_reading();
-        ConfigReader cr(fs);
+        printf("pppppppppppppppppppppppp\n");
+        std::string fs = spiffs_reading();
+        std::stringstream ss(fs);
+        ConfigReader cr(ss);
+        printf("qqqqqqqqqqqqqqqqqqqqqqq\n");
 #endif
 
         {
