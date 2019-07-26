@@ -458,7 +458,8 @@ static void uart_comms(void *)
 
         size_t n = read_uart(rx_buf, sizeof(rx_buf));
         if(n > 0) {
-           process_command_buffer(n, rx_buf, &os, line, cnt, discard);
+            printf("[I][task.uart] got rs buffer not empty...");
+            process_command_buffer(n, rx_buf, &os, line, cnt, discard);
         }
     }
 }
@@ -535,7 +536,7 @@ static void handle_query(bool need_done)
 static void command_handler()
 {
     printf("DEBUG: Command thread running\n");
-    int counter=0;
+    int counter = 0;
 
     for(;;) {
         char *line;
@@ -551,39 +552,37 @@ static void command_handler()
 
         } else {
             // timed out or other error
-            printf("uuuuuuuuuuuuuuuuuuuuuuuuu\n");
+            // printf("uuuuuuuuuuuuuuuuuuuuuuuuu\n");
 
             idle = true;
             if(config_error_msg.empty()) {
                 // toggle led to show we are alive, but idle
                 Board_LED_Toggle(0);
             }
-            printf("vvvvvvvvvvvvvvvvvvvvvvvvv\n");
+            // printf("vvvvvvvvvvvvvvvvvvvvvvvvv\n");
             handle_query(true);
-            printf("wwwwwwwwwwwwwwwwwwwwww\n");
+            // printf("wwwwwwwwwwwwwwwwwwwwww\n");
         }
-        printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
+        // printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
         // call in_command_ctx for all modules that want it
         // dispatch_line can be called from that
         Module::broadcast_in_commmand_ctx(idle);
-        printf("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n");
+        // printf("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n");
 
         // we check the queue to see if it is ready to run
         // we specifically deal with this in append_block, but need to check for other places
         if(Conveyor::getInstance() != nullptr) {
-        printf("cccccccccccccccccccccccccccccc\n");
+        // printf("cccccccccccccccccccccccccccccc\n");
             Conveyor::getInstance()->check_queue();
         }
-        printf("fffffffffffffffffffffffffffffffffffffff\n");
+        // printf("fffffffffffffffffffffffffffffffffffffff\n");
 
         counter++;
-        if(counter>99999){
-            counter = 0;
-            printf("command_handler is alive....");
+        if(counter % 100 == 0){
+            printf("command_handler run times = %i \n",counter);
         }
     }
 }
-
 // called only in command thread context, it will sleep (and yield) thread but will also
 // process things like instant query
 void safe_sleep(uint32_t ms)
@@ -928,8 +927,8 @@ void smoothie_startup(void *)
     printf("[OK][message_queue] is created...................\n");
     // Start comms threads Higher priority than the command thread
     // fixed stack size of 4k Bytes each
-    xTaskCreate(usb_comms, "USBCommsThread", 1500/4, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
-    printf("[OK][task.usbCommsThread]........\n");
+    // xTaskCreate(usb_comms, "USBCommsThread", 1500/4, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
+    // printf("[OK][task.usbCommsThread]........\n");
     xTaskCreate(uart_comms, "UARTCommsThread", 1500, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
     printf("[OK][task.UARTCommsThread]........\n");
 
