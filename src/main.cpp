@@ -102,12 +102,34 @@ void setup_smooth(){
     // vTaskStartScheduler();    Don't call vTaskStartScheduler()     https://esp32.com/viewtopic.php?t=1336
 }
 
+
+void task2_test(void*){
+    for(;;){
+        delay(1000);
+        printf("task 2  is live....\n");
+    }
+}
+void task1_test(void*){
+    xTaskCreate(task2_test, "test_task 2", 30000, NULL, (tskIDLE_PRIORITY + 2UL), (TaskHandle_t *) NULL);
+
+    for(;;){
+        delay(1000);
+        printf("task 1  is live....\n");
+    }
+}
+
+void setup_test()
+{
+    xTaskCreate(task1_test, "test_task 1", 30000, NULL, (tskIDLE_PRIORITY + 2UL), (TaskHandle_t *) NULL);
+
+}
 void setup(){
     Serial.begin(115200);
-     setup_smooth();
-    // setup_log();
+    //setup_smooth();
+    //setup_log();
     //setup_spiffs_writting();
     //setup_spiffs_reading();
+    setup_test();
 }
 
 uint64_t cpu_idle_counter = 0;
