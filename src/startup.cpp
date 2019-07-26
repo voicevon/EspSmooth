@@ -722,6 +722,28 @@ void setup_section_temperature_control(ConfigReader cr){
     //  printf ("[OK][setup.temperature.controls] bbbbbbbbbbbbbbbbbbb\n");
 }
 
+// configure voltage monitors if any
+void setup_section_voltage_monitors(ConfigReader cr){
+    ConfigReader::section_map_t m;
+    if(cr.get_section("voltage monitor", m)) {
+        for(auto& s : m) {
+            std::string k = s.first;
+            std::string v = s.second;
+
+            Adc *padc= new Adc;
+            if(padc->from_string(v.c_str()) == nullptr) {
+                printf("WARNING: Failed to create %s voltage monitor\n", k.c_str());
+                delete padc;
+            }else{
+                voltage_monitors[k]= padc;
+                printf("DEBUG: added voltage monitor %s: %s\n", k.c_str(), v.c_str());
+            }
+        }
+    }
+    printf("[OK][setup] configure voltage monitors .........\n");
+}
+
+
 void smoothie_startup(void *)
 {
     printf("INFO: Smoothie V2.alpha Build for %s - starting up\n", BUILD_TARGET);
@@ -809,45 +831,26 @@ void smoothie_startup(void *)
         
 
         // create all registered modules, the addresses are stored in a known location in flash
-        extern uint32_t __registered_modules_start;
-        extern uint32_t __registered_modules_end;
-        uint32_t *g_pfnModules= &__registered_modules_start;
-        printf("[DEBUG][registered_modules]aaaaaaaaaaaaaaa\n");
-        int i=0;
-        while (g_pfnModules < &__registered_modules_end) {
-            printf("------ index = %i\n",i);
-            i++;
+        //Xuming>>>
+        // extern uint32_t __registered_modules_start;
+        // extern uint32_t __registered_modules_end;
+        // uint32_t *g_pfnModules= &__registered_modules_start;
+        // printf("[DEBUG][registered_modules]aaaaaaaaaaaaaaa\n");
+        // int i=0;
+        // while (g_pfnModules < &__registered_modules_end) {
+        //     printf("------ index = %i\n",i);
+        //     i++;
 
-            uint32_t *addr= g_pfnModules++;
-            bool (*pfnModule)(ConfigReader& cr)= (bool (*)(ConfigReader& cr))*addr;
-            // this calls the registered create function for the module
-            pfnModule(cr);
-        }
-        printf("[OK][registered_modules].............\n");
-
+        //     uint32_t *addr= g_pfnModules++;
+        //     bool (*pfnModule)(ConfigReader& cr)= (bool (*)(ConfigReader& cr))*addr;
+        //     // this calls the registered create function for the module
+        //     pfnModule(cr);
+        // }
+        //printf("[OK][registered_modules].............\n");
+        //<<<Xuming
         // end of module creation and configuration
-        ////////////////////////////////////////////////////////////////
 
-        {
-            // configure voltage monitors if any
-            ConfigReader::section_map_t m;
-            if(cr.get_section("voltage monitor", m)) {
-                for(auto& s : m) {
-                    std::string k = s.first;
-                    std::string v = s.second;
-
-                    Adc *padc= new Adc;
-                    if(padc->from_string(v.c_str()) == nullptr) {
-                        printf("WARNING: Failed to create %s voltage monitor\n", k.c_str());
-                        delete padc;
-                    }else{
-                        voltage_monitors[k]= padc;
-                        printf("DEBUG: added voltage monitor %s: %s\n", k.c_str(), v.c_str());
-                    }
-                }
-            }
-            printf("[OK][setup] configure voltage monitors .........\n");
-        }
+        setup_section_voltage_monitors(cr);
         
 #ifdef CONFIG_SOURCE_SD
         // close the file stream
@@ -876,6 +879,7 @@ void smoothie_startup(void *)
     shell->initialize();
 
     if(ok) {
+        printf("[DEBUG][setup.ok] yyyyyyyyyyyyyyyyyy \n");
         // start the timers
         if(!slow_ticker->start()) {
             printf("Error: failed to start SlowTicker\n");
@@ -894,6 +898,8 @@ void smoothie_startup(void *)
         }
 
     } else {
+        printf("[DEBUG][setup.ok] nnnnnnnnnnnnnnnnnnnnn \n");
+
         puts("ERROR: Configure failed\n");
         config_error_msg= "There was a fatal error in the config.ini this must be fixed to continue\nOnly some shell commands are allowed and sdcard access\n";
         Module::broadcast_halt(true);
@@ -905,11 +911,13 @@ void smoothie_startup(void *)
         // Failed to create the queue.
         printf("Error: failed to create comms i/o queue\n");
     }
-
+    printf("[OK][message_queue] is created...................\n");
     // Start comms threads Higher priority than the command thread
     // fixed stack size of 4k Bytes each
     xTaskCreate(usb_comms, "USBCommsThread", 1500/4, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
-    xTaskCreate(uart_comms, "UARTCommsThread", 1500/4, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
+    printf("[OK][task.usbCommsThread]........\n");
+    xTaskCreate(uart_comms, "UARTCommsThread", 1500, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
+    printf("[OK][task.UARTCommsThread]........\n");
 
     // run any startup functions that have been registered
     for(auto f : startup_fncs) {
