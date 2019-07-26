@@ -579,7 +579,7 @@ static void command_handler()
 
         counter++;
         if(counter % 100 == 0){
-            printf("command_handler run times = %i \n",counter);
+            //printf("command_handler run times = %i \n",counter);
         }
     }
 }
@@ -784,7 +784,6 @@ void smoothie_startup(void *)
     new Dispatcher();
 
     bool ok = false;
-    // printf ("cccccccccccccccccccccc\n");
     // open the config file
     do {
 #ifdef CONFIG_SOURCE_SD
@@ -973,10 +972,8 @@ void smoothie_startup(void *)
     Board_LED_Set(2, false);
     Board_LED_Set(3, false);
 
-    printf("[OK][setup] run command_handle. \n");
     // run the command handler in this thread
     command_handler();
-    printf("[OK][setup] is going to return.]]\n");
     // does not return from above
 }
 

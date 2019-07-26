@@ -18,7 +18,6 @@ FastTicker *FastTicker::instance;
 // This module uses a Timer to periodically call registered callbacks
 // Modules register with a function ( callback ) and a frequency, and we then call that function at the given frequency.
 // We could use TMR1 fir this
-
 FastTicker::FastTicker()
 {
     instance= this;
