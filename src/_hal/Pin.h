@@ -28,7 +28,8 @@ public:
     Pin* as_output();
     Pin* as_input();
 
-    // we need to do this inline due to ISR being in SRAM not FLASH
+    // we need to do this inline due to ISR being in SRAM not FLASH   
+    // Right now, it's not in SRAM !
     inline bool get() const
     {
         if (!this->valid) return false;
@@ -37,6 +38,7 @@ public:
     }
 
     // we need to do this inline due to ISR being in SRAM not FLASH
+    // Right now, it's not in SRAM !
     uint8_t vvv;
     inline void set(bool value)
     {
@@ -50,21 +52,17 @@ public:
         vvv= v;
     }
 
-    inline uint16_t get_gpiopin() const { return this->gpiopin; }
+    inline uint16_t get_gpiopin() const { return this->gpio_pin_num; }
 
     bool is_inverting() const { return inverting; }
     void set_inverting(bool f) { inverting = f; }
 
-    // mbed::InterruptIn *interrupt_pin();
-
-
 private:
 
     static bool set_allocated(uint8_t, bool set= true);
-    bool config_gpio_pin(); //configures pin for GPIO
 
     struct {
-        uint8_t gpiopin: 8;
+        uint8_t gpio_pin_num: 8;
         bool inverting: 1;
         bool open_drain: 1;
         bool valid: 1;
