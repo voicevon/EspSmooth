@@ -8,6 +8,7 @@
 #include "FreeRTOS.h"
 #include "freertos/timers.h"
 
+// SingleTon, use FreeRTOS soft timer.
 class SlowTicker
 {
     public:

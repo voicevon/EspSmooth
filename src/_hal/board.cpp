@@ -21,5 +21,5 @@ void Board_LED_Set(uint8_t LEDNumber, bool On){
 }
 
 void SystemCoreClockUpdate(void){
-    SystemCoreClock = 1;   //10Khz for RTOS time_slot.   240Mhz?  
+    SystemCoreClock = 240000000;   //10Khz for RTOS time_slot.   240Mhz?  
 }
