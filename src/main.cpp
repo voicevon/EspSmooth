@@ -117,7 +117,6 @@ void loop(){
     cpu_idle_counter++;
 
     if(esp_timer_get_time () - last_time_stamp >= 10000000){
-        //printf("cpu_idle_counter = %i", cpu_idle_counter);
         uint16_t passed_time = cpu_idle_counter / 10000;
         uint16_t uptime_second = esp_timer_get_time() / 1000000;  
         printf("uptime = %i seconds, cpu idle counter =  %i\n",uptime_second, passed_time);

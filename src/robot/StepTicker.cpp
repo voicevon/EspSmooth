@@ -48,6 +48,7 @@ void StepTicker::unstep_timer_handler(void)
     StepTicker::getInstance()->unstep_tick();
 }
 
+//TODO:  will use TIMER1 because TIMER0 is used by RTOS.   Xuming Jun 2019
 bool StepTicker::start()
 {
     if(!started) {
