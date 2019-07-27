@@ -762,7 +762,6 @@ void smoothie_startup(void *)
 #endif
 
         setup_section_genenal(cr);
-        printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
         Planner *planner = new Planner();
         planner->configure(cr);
 
