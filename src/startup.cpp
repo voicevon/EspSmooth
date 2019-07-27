@@ -312,9 +312,10 @@ static std::vector<OutputStream*> output_streams;
 // this is here so we do not need to duplicate this logic for USB and UART
 void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line, size_t& cnt, bool& discard)
 {
+    os->puts("[DEBUG] Start process_command_buffer()\n");
     for (size_t i = 0; i < n; ++i) {
         line[cnt] = rx_buf[i];
-        if(capture_fnc) {
+        if(capture_fnc) {      // What does it mean?  Jun 2019
             capture_fnc(line[cnt]);
             continue;
         }
@@ -395,7 +396,7 @@ static void uart_comms(void *)
 
         size_t n = read_uart(rx_buf, sizeof(rx_buf));
         if(n > 0) {
-            printf("[I][task.uart] got rs buffer not empty...");
+            os.puts("[I][task.uart] got rs buffer not empty...\n");
             process_command_buffer(n, rx_buf, &os, line, cnt, discard);
         }
     }
