@@ -5,7 +5,7 @@
 // Source   Priority    Consumer    
 // Timer0 , 1 Low       RTOS           
 // Timer1,  3 High      step_tick
-// Timer2,  2 Middle    StopWatch
+// Timer2,  2 Middle    StopWatch ? Mightly don't use. 
 // Timer3,  Disabled  
 
 #ifndef _HAL_TIMER_H_
