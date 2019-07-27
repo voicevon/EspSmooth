@@ -631,6 +631,7 @@ void setup_section_genenal(ConfigReader cr){
         if(!aux_play_led->connected()) {
             delete aux_play_led;
             aux_play_led = nullptr;
+            printf("INFO: auxilliary play led is not avaliable.\n");
         }else{
             printf("INFO: auxilliary play led set to %s\n", aux_play_led->to_string().c_str());
         }
@@ -761,7 +762,7 @@ void smoothie_startup(void *)
 #endif
 
         setup_section_genenal(cr);
-
+        printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
         Planner *planner = new Planner();
         planner->configure(cr);
 

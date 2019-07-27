@@ -5,7 +5,6 @@
 #include <string>
 #include <bitset>
 
-// #include "board.h"
 
 class Pin
 {
@@ -51,7 +50,6 @@ public:
         vvv= v;
     }
 
-    inline uint16_t get_gpioport() const { return this->gpioport; }
     inline uint16_t get_gpiopin() const { return this->gpiopin; }
 
     bool is_inverting() const { return inverting; }
@@ -62,17 +60,18 @@ public:
 
 private:
 
-    static bool set_allocated(uint8_t, uint8_t, bool set= true);
-    bool config_pin(uint32_t gpioconfig); //configures pin for GPIO
+    static bool set_allocated(uint8_t, bool set= true);
+    bool config_gpio_pin(); //configures pin for GPIO
 
     struct {
-        uint8_t gpioport:8;
-        uint8_t gpiopin:8;
+        uint8_t gpiopin: 8;
         bool inverting: 1;
         bool open_drain: 1;
         bool valid: 1;
-        bool adc_only: 1;   //true if adc only pin
-        int adc_channel: 8;   //adc channel
+        bool is_pull_up: 1;
+        bool is_pull_down: 1;
+        bool adc_only: 1;     //true if adc only pin
+        int adc_channel: 8;   //adc channel   ??
     };
 };
 
