@@ -7,7 +7,7 @@
 - [Smoothieware](https://github.com/Smoothieware/Smoothieware/tree/edge/src), 
 - [EspHome](https://github.com/esphome/esphome/tree/dev/esphome)
 
-## ESP32 Arduino: using FreeRTOS
+## Learning A:  ESP32 Arduino: using FreeRTOS
 
 - [Using FreeRTOS functions](https://techtutorialsx.com/2017/05/06/esp32-arduino-using-freertos-functions/)
 
@@ -17,7 +17,7 @@
 
 - [Arduino ESP32 FreeRTOS 4: How to use Binary Semaphore - Mutex - Counting semaphore - Critical section for resources management](http://www.iotsharing.com/2017/06/how-to-use-binary-semaphore-mutex-counting-semaphore-resource-management.html)
 
-## Some test
+## Learning B: Some test
 
 - [Arduino ESP32 FreeRTOS 1: How to create a task](http://www.iotsharing.com/2017/06/how-to-apply-freertos-in-arduino-esp32.htm)
 

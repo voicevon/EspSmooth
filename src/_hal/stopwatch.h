@@ -40,15 +40,11 @@
 extern "C" {
 #endif
 
-/** @defgroup Stop_Watch CHIP: Stopwatch primitives.
- * @ingroup CHIP_Common
- * @{
- */
-
-/**
- * @brief	Initialize stopwatch
- * @return	Nothing
- */
+// What is StopWatch?
+//     It is not an object.
+//     It's using a hardware timer.
+//     Very high accuracy of timing calculation.
+//     Many helper like delay, time_to_my_goal, time_from_my_base_point, etc..
 void StopWatch_Init(void);
 
 /**

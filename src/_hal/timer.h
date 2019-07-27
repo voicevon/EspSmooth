@@ -2,9 +2,11 @@
 // How to re-asign it hardware Timer1 ? 
 // https://esp32.com/viewtopic.php?t=10331
 
-
-// Timer0 , for stepper motor
-// Timer1,  for 
+// Source   Priority    Consumer    
+// Timer0 , 1 Low       RTOS           
+// Timer1,  3 High      step_tick
+// Timer2,  2 Middle    StopWatch ? Mightly don't use. 
+// Timer3,  Disabled  
 
 #ifndef _HAL_TIMER_H_
 #define _HAL_TIMER_H_

@@ -8,7 +8,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <iostream>
-#include <malloc.h>
+
 #include <fstream>
 #include <vector>
 #include <functional>
@@ -369,69 +369,6 @@ void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line
     }
 }
 
-// extern "C" size_t write_cdc(const char *buf, size_t len);
-// extern "C" size_t read_cdc(char *buf, size_t len);
-// extern "C" int setup_cdc(void *taskhandle);
-
-// static void usb_comms(void *)
-// { 
-//     printf("DEBUG: USB Comms thread running\n");
-
-//     if(!setup_cdc(xTaskGetCurrentTaskHandle())) {
-//         printf("FATAL: CDC setup failed\n");
-//         return;
-//     }
-
-//     // on first connect we send a welcome message after getting a '\n'
-//     static const char *welcome_message = "Welcome to Smoothie\nok\n";
-//     const TickType_t waitms = pdMS_TO_TICKS( 300 );
-
-//     size_t n;
-//     char rx_buf[256];
-//     bool done = false;
-
-//     // first we wait for an initial '\n' sent from host
-//     while (!done) {
-//         // Wait to be notified that there has been a USB irq.
-//         ulTaskNotifyTake( pdTRUE, waitms );
-//         n = read_cdc(rx_buf, sizeof(rx_buf));
-//         if(n > 0) {
-//             for (size_t i = 0; i < n; ++i) {
-//                 if(rx_buf[i] == '\n') {
-//                     if(config_error_msg.empty()) {
-//                         write_cdc(welcome_message, strlen(welcome_message));
-//                     }else{
-//                         write_cdc(config_error_msg.c_str(), config_error_msg.size());
-//                     }
-//                     done = true;
-//                     break;
-//                 }
-//             }
-//         }
-//     }
-
-//     // create an output stream that writes to the cdc
-//     static OutputStream os([](const char *buf, size_t len) { return write_cdc(buf, len); });
-//     output_streams.push_back(&os);
-
-//     // now read lines and dispatch them
-//     char line[MAX_LINE_LENGTH];
-//     size_t cnt = 0;
-//     bool discard = false;
-//     while(1) {
-//         // Wait to be notified that there has been a USB irq.
-//         uint32_t ulNotificationValue = ulTaskNotifyTake( pdTRUE, waitms );
-
-//         if( ulNotificationValue != 1 ) {
-//             /* The call to ulTaskNotifyTake() timed out. check anyway */
-//         }
-
-//         n = read_cdc(rx_buf, sizeof(rx_buf));
-//         if(n > 0) {
-//             process_command_buffer(n, rx_buf, &os, line, cnt, discard);
-//         }
-//     }
-// }
 
 static void uart_comms(void *)
 {
@@ -694,6 +631,7 @@ void setup_section_genenal(ConfigReader cr){
         if(!aux_play_led->connected()) {
             delete aux_play_led;
             aux_play_led = nullptr;
+            printf("INFO: auxilliary play led is not avaliable.\n");
         }else{
             printf("INFO: auxilliary play led set to %s\n", aux_play_led->to_string().c_str());
         }
@@ -756,7 +694,7 @@ void setup_section_voltage_monitors(ConfigReader cr){
     printf("[OK][setup] configure voltage monitors .........\n");
 }
 
-
+#include "Esp.h"   
 void smoothie_startup(void *)
 {
     printf("INFO: Smoothie V2.alpha Build for %s - starting up\n", BUILD_TARGET);
@@ -824,7 +762,6 @@ void smoothie_startup(void *)
 #endif
 
         setup_section_genenal(cr);
-
         Planner *planner = new Planner();
         planner->configure(cr);
 
@@ -891,7 +828,7 @@ void smoothie_startup(void *)
     shell->initialize();
 
     if(ok) {
-        printf("[DEBUG][setup.ok] yyyyyyyyyyyyyyyyyy \n");
+        printf("[DEBUG][setup.ok] Yes. \n");
         // start the timers
         if(!slow_ticker->start()) {
             printf("Error: failed to start SlowTicker\n");
@@ -923,13 +860,11 @@ void smoothie_startup(void *)
         // Failed to create the queue.
         printf("Error: failed to create comms i/o queue\n");
     }
-    printf("[OK][message_queue] is created...................\n");
+    printf("[OK][message_queue] is created.\n");
     // Start comms threads Higher priority than the command thread
     // fixed stack size of 4k Bytes each
-    // xTaskCreate(usb_comms, "USBCommsThread", 1500/4, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
-    // printf("[OK][task.usbCommsThread]........\n");
     xTaskCreate(uart_comms, "UARTCommsThread", 1500, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
-    printf("[OK][task.UARTCommsThread]........\n");
+    printf("[OK][task.startup] created task.UARTCommsThread. \n");
 
     // run any startup functions that have been registered
     for(auto f : startup_fncs) {
@@ -948,11 +883,12 @@ void smoothie_startup(void *)
         }
     }
 #endif
-    //Xuming>>>
-    //struct mallinfo mi = mallinfo();
-    struct mallinfo mi;
-    //<<<Xuming
-    printf("DEBUG: Initial: free malloc memory= %d, free sbrk memory= %d, Total free= %d\n", mi.fordblks, xPortGetFreeHeapSize() - mi.fordblks, xPortGetFreeHeapSize());
+
+    uint32_t free_heap = ESP.getFreeHeap(); 
+    printf("------------------------------------------------------------------------------------------\n");  
+    printf("DEBUG: Initial: free malloc memory= %d, free sbrk memory= %d, Total free= %d\n", free_heap, xPortGetFreeHeapSize() - free_heap, xPortGetFreeHeapSize());
+    printf("[esp_get_free_heap_size()] free heap size = %d \n",esp_get_free_heap_size());   //Are they same? NO! WHY ?
+    printf("------------------------------------------------------------------------------------------\n");  
 
     // indicate we are up and running
     system_running= true;

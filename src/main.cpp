@@ -1,12 +1,9 @@
 #include "HardwareSerial.h"
 #include "esp32-hal-log.h"
-#include "SPIFFS.h"
+#include "SPIFFS.h"     // ESP class
 
 #include "_hal/board.h"
 #include "_hal/stopwatch.h"
-
-// #include <Arduino_FreeRTOS.h>
-
 
 
 static const char *TAG = "espsmooth.main";
@@ -15,6 +12,18 @@ static const char *TAG = "espsmooth.main";
 extern void configureSPIFI();
 extern uint32_t SystemCoreClock;
 extern void smoothie_startup(void *);
+
+
+// class ESP  
+// https://techtutorialsx.com/2017/12/17/esp32-arduino-getting-the-free-heap/
+void show_memory_allocate(){
+    printf("--------------------------------------------------------------\n");
+    Serial.print("[power on][ESP.getFreeHeap()]      free heap size = ");
+    Serial.println(ESP.getFreeHeap());  
+    printf("[power on][esp_get_free_heap_size] free heap size = %d \n",esp_get_free_heap_size());   //Are they same? NO! WHY ?
+    printf("--------------------------------------------------------------\n");
+    delay(40);   //Wait for Serial/printf() is finished processing, seems serial sending is in a another thread/core cpu ?
+}
 
 void setup_spiffs_writting() {
     if(!SPIFFS.begin(true)) {
@@ -74,6 +83,7 @@ void setup_log(){
     ESP_LOGV("TAG", "Verbose");
 }
 
+
 void setup_smooth(){
     NVIC_SetPriorityGrouping( 0 );
     SystemCoreClockUpdate();
@@ -104,10 +114,11 @@ void setup_smooth(){
 
 void setup(){
     Serial.begin(115200);
-     setup_smooth();
+    show_memory_allocate();
     // setup_log();
     //setup_spiffs_writting();
     //setup_spiffs_reading();
+    setup_smooth();
 }
 
 uint64_t cpu_idle_counter = 0;
@@ -117,7 +128,6 @@ void loop(){
     cpu_idle_counter++;
 
     if(esp_timer_get_time () - last_time_stamp >= 10000000){
-        //printf("cpu_idle_counter = %i", cpu_idle_counter);
         uint16_t passed_time = cpu_idle_counter / 10000;
         uint16_t uptime_second = esp_timer_get_time() / 1000000;  
         printf("uptime = %i seconds, cpu idle counter =  %i\n",uptime_second, passed_time);

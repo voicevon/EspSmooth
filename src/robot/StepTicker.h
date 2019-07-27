@@ -13,9 +13,10 @@ class Block;
 
 // handle 2.62 Fixed point
 #define STEP_TICKER_FREQUENCY (StepTicker::getInstance()->get_frequency())
-#define STEPTICKER_FPSCALE (1LL<<62)
+#define STEPTICKER_FPSCALE (1LL<<62)   //TODO: adjust 62
 #define STEPTICKER_FROMFP(x) ((float)(x)/STEPTICKER_FPSCALE)
 
+// SingleTon
 class StepTicker
 {
 public:
