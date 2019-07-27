@@ -309,13 +309,18 @@ void set_capture(std::function<void(char)> cf)
 
 static std::vector<OutputStream*> output_streams;
 
+#include "stdio.h"
+#include "_hal/patch.h"
+char debug_const[100];
 // this is here so we do not need to duplicate this logic for USB and UART
 void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line, size_t& cnt, bool& discard)
 {
-    os->puts("[DEBUG] Start process_command_buffer()\n");
+    // os->puts("[DEBUG] Start process_command_buffer()\n");
     for (size_t i = 0; i < n; ++i) {
         line[cnt] = rx_buf[i];
+        // os->puts(&rx_buf[i]);
         if(capture_fnc) {      // What does it mean?  Jun 2019
+            os->puts("capture_fuc == true \n");
             capture_fnc(line[cnt]);
             continue;
         }
@@ -330,6 +335,7 @@ void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line
 
         } else if(line[cnt] == '?') {
             if(!queries.full()) {
+                os->puts("--- query \n");
                 queries.push_back({os, nullptr});
             }
 
@@ -343,9 +349,19 @@ void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line
             cnt = 0;
             os->puts("error:Discarding long line\n");
 
-        } else if(line[cnt] == '\n') {
+        } else if(line[cnt] == char(10)) {    // "\n" == char(10) == LF   char(80)='P'   char(13)=CR
+            os->puts("---- end of line\n");
             os->clear_flags(); // clear the done flag here to avoid race conditions
             line[cnt] = '\0'; // remove the \n and nul terminate
+            os->puts(line);
+            os->puts("\n");
+                debug_const[0] = cnt & 0xff;
+            debug_const[1] = (cnt >> 8)  & 0xff;
+            // debug_const[2] = (cnt >> 16) & 0xff;
+            // debug_const[3] = (cnt >> 24) & 0xff;
+            debug_const[2]=0;
+            os->puts(debug_const);
+
             if(cnt == 2 && line[0] == '$' && (line[1] == 'I' || line[1] == 'S')) {
                 // Handle $I and $S as instant queries
                 if(!queries.full()) {
@@ -353,6 +369,7 @@ void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line
                 }
 
             }else{
+                os->puts("sending message queue. \n");
                 send_message_queue(line, os);
             }
             cnt = 0;
@@ -396,7 +413,7 @@ static void uart_comms(void *)
 
         size_t n = read_uart(rx_buf, sizeof(rx_buf));
         if(n > 0) {
-            os.puts("[I][task.uart] got rs buffer not empty...\n");
+            // os.puts("[I][task.uart] got rs buffer not empty...\n");
             process_command_buffer(n, rx_buf, &os, line, cnt, discard);
         }
     }
