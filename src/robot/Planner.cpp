@@ -219,7 +219,7 @@ bool Planner::append_block(ActuatorCoordinates& actuator_pos, uint8_t n_motors, 
     // The block can now be used
     block->ready();
 
-    //block->debug();
+    block->debug();  //Xuming
 
     while(!queue->queue_head()) {
         // queue is full

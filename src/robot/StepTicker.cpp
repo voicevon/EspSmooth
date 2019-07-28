@@ -55,7 +55,8 @@ void StepTicker::unstep_timer_handler(void)
 //TODO:  will use TIMER1 because TIMER0 is used by RTOS.   Xuming Jun 2019
 bool StepTicker::start()
 {
-    Serial.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  stepTicker should use TMR1, because RTOS is using TMR0");
+    Serial.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  stepTicker should use TMR1, because RTOS is using TMR0.");
+    Serial.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  and becare of fastTicker.start()");
     if(!started) {
 
         // setup the step tick timer, which handles step ticks and one off unstep interrupts
@@ -217,6 +218,7 @@ void StepTicker::step_tick (void)
             ++current_block->tick_info[m].step_count;
 
             // step the motor
+            Serial.print("->");    // Even can we find one sign?
             bool ismoving = motor[m]->step(); // returns false if the moving flag was set to false externally (probes, endstops etc)
             // we stepped so schedule an unstep
             unstep |= (1<<m);

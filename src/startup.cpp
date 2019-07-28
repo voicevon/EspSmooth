@@ -524,7 +524,7 @@ static void handle_query(bool need_done)
  */
 static void command_handler()
 {
-    printf("DEBUG: Command thread running\n");
+    printf("DEBUG: Command thread running\n\n\n\n");
     int counter = 0;
 
     for(;;) {
@@ -806,19 +806,17 @@ void smoothie_startup(void *)
         ConfigReader cr(std_string_stream);
 #endif
 
-        setup_section_genenal(cr);
         Planner *planner = new Planner();
-        planner->configure(cr);
-
         Conveyor *conveyor = new Conveyor();
-        conveyor->configure(cr);
-
         Robot *robot = new Robot();
+
+        setup_section_genenal(cr);
+        planner->configure(cr);
+        conveyor->configure(cr);
         if(!robot->configure(cr)) {
             printf("ERROR: Configuring robot failed\n");
             break;
         }
-
         setup_section_core(cr);
         setup_section_extruder(cr);
         setup_section_temperature_control(cr);
@@ -880,7 +878,7 @@ void smoothie_startup(void *)
         }
 
         if(!fast_ticker->start()) {
-            printf("WARNING: failed to start FastTicker (maybe nothing is using it?)\n");
+            printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  WARNING: failed to start FastTicker (maybe nothing is using it?)\n");
         }
 
         if(!step_ticker->start()) {
