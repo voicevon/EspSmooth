@@ -352,7 +352,7 @@ void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line
             os->puts("error:Discarding long line\n");
 
         } else if(line[cnt] == char(80)) {    // "\n" == char(10) == LF   char(80)='P'   char(13)=CR
-            os->puts("---- end of line\n");
+            // os->puts("---- end of line\n");
             os->clear_flags(); // clear the done flag here to avoid race conditions
             line[cnt] = '\0'; // remove the \n and nul terminate
             // os->puts(line);
@@ -424,20 +424,20 @@ static void uart_comms(void *)
         size_t n = read_uart(rx_buf, sizeof(rx_buf));
         if(n > 0) {
             //os.puts("[I][task.uart] got rs buffer not empty...\n");
-            Serial.print("===============before. Line cnt = ");
-            Serial.println(cnt);
-            Serial.println(line);
-            Serial.print("----------------before. rxbuffer n = ");
-            Serial.println(n);
-            Serial.println(rx_buf);
+            // Serial.print("===============before. Line cnt = ");
+            // Serial.println(cnt);
+            // Serial.println(line);
+            // Serial.print("----------------before. rxbuffer n = ");
+            // Serial.println(n);
+            // Serial.println(rx_buf);
 
-            // process_command_buffer(n, rx_buf, &os, line, cnt, discard);
-            Serial.print("====================after. line cnt = ");
-            Serial.println(cnt);
-            Serial.println(line);
-            Serial.print("-----------------------after. rx n = ");
-            Serial.println(n);
-            Serial.println(rx_buf);
+            process_command_buffer(n, rx_buf, &os, line, cnt, discard);
+            // Serial.print("====================after. line cnt = ");
+            // Serial.println(cnt);
+            // Serial.println(line);
+            // Serial.print("-----------------------after. rx n = ");
+            // Serial.println(n);
+            // Serial.println(rx_buf);
         }
     }
 }
