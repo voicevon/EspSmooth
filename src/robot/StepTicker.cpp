@@ -220,16 +220,20 @@ void StepTicker::step_tick (void)
             ++current_block->tick_info[m].step_count;
 
             // step the motor
-             Serial.print("/");    // Even can we find one sign?
+            Serial.print("/");    // Even can we find one sign?
             bool ismoving = motor[m]->step(); // returns false if the moving flag was set to false externally (probes, endstops etc)
             // we stepped so schedule an unstep
             unstep |= (1<<m);
-
+            Serial.print("  ");
+            Serial.print(current_block->tick_info[m].step_count);
+            Serial.print("-");
+            Serial.print(current_block->tick_info[m].steps_to_move);
             if(!ismoving || current_block->tick_info[m].step_count == current_block->tick_info[m].steps_to_move) {
                 // done
                 current_block->tick_info[m].steps_to_move = 0;
                 motor[m]->stop_moving(); // let motor know it is no longer moving
-                Serial.print(" Block is done, stop motor.");    // Even can we find one sign?
+                Serial.println("");
+                Serial.println(" Block is done, stop motor.");    // Even can we find one sign?
             }
         }
 
