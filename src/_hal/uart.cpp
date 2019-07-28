@@ -9,9 +9,8 @@ size_t read_uart(char * buf, size_t length) {
         incomingByte = Serial.read();
         // Serial.print("`");
         // Serial.print(char(incomingByte));
-
-        counter++;
         buf[counter] = char(incomingByte);
+        counter++;
     }
     return counter;
 }

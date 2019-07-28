@@ -319,8 +319,10 @@ void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line
     for (size_t i = 0; i < n; ++i) {
         line[cnt] = rx_buf[i];
         // os->puts(&rx_buf[i]);
+        // os->puts(line);
+        // os->puts("\n");
         if(capture_fnc) {      // What does it mean?  Jun 2019
-            os->puts("capture_fuc == true \n");
+            // os->puts("capture_fuc == true \n");
             capture_fnc(line[cnt]);
             continue;
         }
@@ -349,18 +351,18 @@ void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line
             cnt = 0;
             os->puts("error:Discarding long line\n");
 
-        } else if(line[cnt] == char(10)) {    // "\n" == char(10) == LF   char(80)='P'   char(13)=CR
+        } else if(line[cnt] == char(80)) {    // "\n" == char(10) == LF   char(80)='P'   char(13)=CR
             os->puts("---- end of line\n");
             os->clear_flags(); // clear the done flag here to avoid race conditions
             line[cnt] = '\0'; // remove the \n and nul terminate
-            os->puts(line);
-            os->puts("\n");
-                debug_const[0] = cnt & 0xff;
-            debug_const[1] = (cnt >> 8)  & 0xff;
+            // os->puts(line);
+            // os->puts("\n");
+            //     debug_const[0] = cnt & 0xff;
+            // debug_const[1] = (cnt >> 8)  & 0xff;
             // debug_const[2] = (cnt >> 16) & 0xff;
             // debug_const[3] = (cnt >> 24) & 0xff;
-            debug_const[2]=0;
-            os->puts(debug_const);
+            // debug_const[2]=0;
+            // os->puts(debug_const);
 
             if(cnt == 2 && line[0] == '$' && (line[1] == 'I' || line[1] == 'S')) {
                 // Handle $I and $S as instant queries
@@ -387,7 +389,7 @@ void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line
     }
 }
 
-
+#include "Arduino.h"
 static void uart_comms(void *)
 {
     printf("DEBUG: UART Comms thread running\n");
@@ -403,18 +405,39 @@ static void uart_comms(void *)
     char line[MAX_LINE_LENGTH];
     size_t cnt = 0;
     bool discard = false;
+    // for(char x: rx_buf){x = char(0);}
+    for(int i=0; i< 256;i++){rx_buf[i] = 0;}
+    // for(char x: line){x = char(0);}
+    for(int i=0; i< MAX_LINE_LENGTH;i++){line[i] = 0;}
+
     while(1) {
         // Wait to be notified that there has been a UART irq. (it may have been rx or tx so may not be anything to read)
         uint32_t ulNotificationValue = ulTaskNotifyTake( pdTRUE, waitms );
 
         if( ulNotificationValue != 1 ) {
-            /* The call to ulTaskNotifyTake() timed out. check anyway */
+            /* The call to ulTaskNotifyTake() timed out. check anyway */   
+            //It is always == 0;
+            // Serial.print("ulNotificationValue = ");
+            // Serial.println(ulNotificationValue);
         }
 
         size_t n = read_uart(rx_buf, sizeof(rx_buf));
         if(n > 0) {
-            // os.puts("[I][task.uart] got rs buffer not empty...\n");
-            process_command_buffer(n, rx_buf, &os, line, cnt, discard);
+            //os.puts("[I][task.uart] got rs buffer not empty...\n");
+            Serial.print("===============before. Line cnt = ");
+            Serial.println(cnt);
+            Serial.println(line);
+            Serial.print("----------------before. rxbuffer n = ");
+            Serial.println(n);
+            Serial.println(rx_buf);
+
+            // process_command_buffer(n, rx_buf, &os, line, cnt, discard);
+            Serial.print("====================after. line cnt = ");
+            Serial.println(cnt);
+            Serial.println(line);
+            Serial.print("-----------------------after. rx n = ");
+            Serial.println(n);
+            Serial.println(rx_buf);
         }
     }
 }
