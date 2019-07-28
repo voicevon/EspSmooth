@@ -70,17 +70,19 @@ bool Dispatcher::dispatch(GCode& gc, OutputStream& os, bool need_ok) const
 	auto& handler = gc.has_g() ? gcode_handlers : mcode_handlers;
 	const auto& f = handler.equal_range(gc.get_code());
 	bool ret = false;
-	Serial.println("--------before plan a block\n");
+	Serial.println("---------------------------------------before plan a block\n");
 
 	for (auto it = f.first; it != f.second; ++it) {
+	Serial.println("======  before plan a block\n");
 		if(it->second(gc, os)) {
 			ret = true;
 		} else {
 			// not really useful as many handlers will only process if certain params are set, so not an error unless no handler deals with it.
 			DEBUG_WARNING("//INFO: handler did not handle %c%d\n", gc.has_g() ? 'G' : 'M', gc.get_code());
 		}
+	Serial.println("======  after plan a block\n");
 	}
-	Serial.println("--------after plan a block\n");
+	Serial.println("---------------------------------------after plan a block\n");
 
 	if(ret) {
 		// Serial.println("QQQQQQQQQQ   4444\n");
