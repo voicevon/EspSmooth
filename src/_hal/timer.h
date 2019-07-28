@@ -10,7 +10,7 @@
 // Timer0 , 1 Low       RTOS           
 // Timer1,  3 High      step_tick
 // Timer2,  2 Middle    StopWatch ? Mightly don't use. 
-// Timer3,  Disabled  
+// Timer3,  Disabled    FastTicker ? only consumer is Temperature PWM output. lower than 1kHz will let it use SlowTicker.
 
 #ifndef _HAL_TIMER_H_
 #define _HAL_TIMER_H_
