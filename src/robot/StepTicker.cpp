@@ -13,6 +13,8 @@
 
 #include <math.h>
 
+#include "Arduino.h"
+
 #ifdef STEPTICKER_DEBUG_PIN
 // debug pins, only used if defined in src/makefile
 #include "Pin.h"
@@ -39,18 +41,21 @@ StepTicker::~StepTicker()
 // ISR callbacks from timer
 void StepTicker::step_timer_handler(void)
 {
+    Serial.print(">");
     StepTicker::getInstance()->step_tick();
 }
 
 // ISR callbacks from timer
 void StepTicker::unstep_timer_handler(void)
 {
+    Serial.print("<");
     StepTicker::getInstance()->unstep_tick();
 }
 
 //TODO:  will use TIMER1 because TIMER0 is used by RTOS.   Xuming Jun 2019
 bool StepTicker::start()
 {
+    Serial.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  stepTicker should use TMR1, because RTOS is using TMR0");
     if(!started) {
 
         // setup the step tick timer, which handles step ticks and one off unstep interrupts
