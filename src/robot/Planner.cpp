@@ -497,11 +497,13 @@ float Planner::max_exit_speed(Block *block)
     return std::min(max, block->nominal_speed);
 }
 
+#include "Arduino.h"
+ 
 // prepare block for the step ticker, called everytime the block changes
 // this is done during planning so does not delay tick generation and step ticker can simply grab the next block during the interrupt
 void Planner::prepare(Block *block, float acceleration_in_steps, float deceleration_in_steps)
 {
-
+    Serial.println("WWWWWWWWWWWWWWWWWWWWWWWWW  AAA\n");
     float inv = 1.0F / block->steps_event_count;
 
     // Now figure out the acceleration PER TICK, this should ideally be held as a double as it's very critical to the block timing

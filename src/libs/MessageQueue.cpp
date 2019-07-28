@@ -27,6 +27,7 @@ int get_message_queue_space()
 {
     return uxQueueSpacesAvailable(queue_handle);
 }
+#include "Arduino.h"
 
 // can be called by several threads to submit messages to the dispatcher
 // the line is copied into the message so can be on the stack
@@ -37,6 +38,8 @@ bool send_message_queue(char *pline, OutputStream *pos)
     comms_msg_t msg_buffer;
 	strcpy(msg_buffer.pline, pline);
 	msg_buffer.pos= pos;
+    // pos->puts("seding_message_queue.  \n");  This don't work.
+    // Serial.println("sending message queue ");
 	xQueueSend( queue_handle, ( void * )&msg_buffer, portMAX_DELAY);
 
     return true;

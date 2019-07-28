@@ -126,6 +126,7 @@ static bool load_config_override(OutputStream& os)
 // can be called by modules when in command thread context
 bool dispatch_line(OutputStream& os, const char *cl)
 {
+    // printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
     // Don't like this, but we need a writable copy of the input line
     char line[strlen(cl) + 1];
     strcpy(line, cl);
@@ -189,6 +190,7 @@ bool dispatch_line(OutputStream& os, const char *cl)
         return true;
     }
 
+    //printf("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq\n");
     // Handle Gcode
     GCodeProcessor::GCodes_t gcodes;
 
@@ -203,6 +205,7 @@ bool dispatch_line(OutputStream& os, const char *cl)
         os.puts("ok\n");
         return true;
     }
+    //printf("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww\n");
 
     // if in M28 mode then just save all incoming lines to the file until we get M29
     if(uploading && gcodes[0].has_m() && gcodes[0].get_code() == 29) {
@@ -213,15 +216,16 @@ bool dispatch_line(OutputStream& os, const char *cl)
         os.printf("Done saving file.\nok\n");
         return true;
     }
+    //printf("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\n");
 
     // dispatch gcodes
     // NOTE return one ok per line instead of per GCode only works for regular gcodes like G0-G3, G92 etc
     // gcodes returning data like M114 should NOT be put on multi gcode lines.
     int ngcodes = gcodes.size();
     for(auto& i : gcodes) {
-        //i.dump(os);
+        i.dump(os);     //
         if(i.has_m() || i.has_g()) {
-
+            // printf("------------ AAA\n");   
             if(uploading) {
                 // just save the gcodes to the file
                 if(upload_fp != nullptr) {
@@ -232,7 +236,7 @@ bool dispatch_line(OutputStream& os, const char *cl)
                 os.printf("ok\n");
                 return true;
             }
-
+            //printf("------------bbb\n");
             // potentially handle M500 - M503 here
             OutputStream *pos= &os;
             std::fstream *fsout= nullptr;
@@ -272,15 +276,19 @@ bool dispatch_line(OutputStream& os, const char *cl)
                     i.set_command('M', 500, 3); // change gcode to be M500.3
                 }
             }
+            // printf("------------ccc\n");
 
             // if this is a multi gcode line then dispatch must not send ok unless this is the last one
             if(!THEDISPATCHER->dispatch(i, *pos, ngcodes == 1 && !m500)) {
                 // no handler processed this gcode, return ok - ignored
                 if(ngcodes == 1) os.puts("ok - ignored\n");
             }
+            // printf("------------ddd\n");
 
             // clean up after M500
             if(m500) {
+                printf("------------fffffffff\n");
+
                 m500= false;
                 fsout->close();
                 delete fsout;
@@ -290,13 +298,16 @@ bool dispatch_line(OutputStream& os, const char *cl)
                 }
                 os.printf("Settings Stored to %s\nok\n", OVERRIDE_FILE);
             }
+            // printf("------------ggg\n");
 
         } else {
             // if it has neither g or m then it was a blank line or comment
             os.puts("ok\n");
         }
+        // printf("------------hhhhhhhh\n");
         --ngcodes;
     }
+    // printf("------------kkkkkkkk\n");
 
     return true;
 }
@@ -351,7 +362,7 @@ void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line
             cnt = 0;
             os->puts("error:Discarding long line\n");
 
-        } else if(line[cnt] == char(80)) {    // "\n" == char(10) == LF   char(80)='P'   char(13)=CR
+        } else if(line[cnt] == char(10)) {    // "\n" == char(10) == LF   char(80)='P'   char(13)=CR
             // os->puts("---- end of line\n");
             os->clear_flags(); // clear the done flag here to avoid race conditions
             line[cnt] = '\0'; // remove the \n and nul terminate
@@ -371,7 +382,7 @@ void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line
                 }
 
             }else{
-                os->puts("sending message queue. \n");
+                // os->puts("sending message queue. \n");
                 send_message_queue(line, os);
             }
             cnt = 0;
@@ -530,30 +541,23 @@ static void command_handler()
 
         } else {
             // timed out or other error
-            // printf("uuuuuuuuuuuuuuuuuuuuuuuuu\n");
 
             idle = true;
             if(config_error_msg.empty()) {
                 // toggle led to show we are alive, but idle
                 Board_LED_Toggle(0);
             }
-            // printf("vvvvvvvvvvvvvvvvvvvvvvvvv\n");
             handle_query(true);
-            // printf("wwwwwwwwwwwwwwwwwwwwww\n");
         }
-        // printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
         // call in_command_ctx for all modules that want it
         // dispatch_line can be called from that
         Module::broadcast_in_commmand_ctx(idle);
-        // printf("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n");
 
         // we check the queue to see if it is ready to run
         // we specifically deal with this in append_block, but need to check for other places
         if(Conveyor::getInstance() != nullptr) {
-        // printf("cccccccccccccccccccccccccccccc\n");
             Conveyor::getInstance()->check_queue();
         }
-        // printf("fffffffffffffffffffffffffffffffffffffff\n");
 
         counter++;
         if(counter % 100 == 0){

@@ -40,9 +40,12 @@ static bool is_allowed_mcode(int m) {
     return false;
 }
 
+
+#include "Arduino.h"
 // Must be called from the command thread context
 bool Dispatcher::dispatch(GCode& gc, OutputStream& os, bool need_ok) const
 {
+	// Serial.println("QQQQQQQQQQ   1111\n");
 	os.clear_flags();
 	if(Module::is_halted()) {
 		// If we are halted then we reject most g/m codes unless in exception list
@@ -62,10 +65,12 @@ bool Dispatcher::dispatch(GCode& gc, OutputStream& os, bool need_ok) const
 			return true;
 		}
 	}
+	// Serial.println("QQQQQQQQQQ   2222\n");
 
 	auto& handler = gc.has_g() ? gcode_handlers : mcode_handlers;
 	const auto& f = handler.equal_range(gc.get_code());
 	bool ret = false;
+	Serial.println("--------before plan a block\n");
 
 	for (auto it = f.first; it != f.second; ++it) {
 		if(it->second(gc, os)) {
@@ -75,8 +80,11 @@ bool Dispatcher::dispatch(GCode& gc, OutputStream& os, bool need_ok) const
 			DEBUG_WARNING("//INFO: handler did not handle %c%d\n", gc.has_g() ? 'G' : 'M', gc.get_code());
 		}
 	}
+	Serial.println("--------after plan a block\n");
 
 	if(ret) {
+		// Serial.println("QQQQQQQQQQ   4444\n");
+
 		bool send_ok = true;
 
 		if (gc.has_error()) {
@@ -100,6 +108,7 @@ bool Dispatcher::dispatch(GCode& gc, OutputStream& os, bool need_ok) const
 			return true;
 		}
 
+		// Serial.println("QQQQQQQQQQ   5555\n");
 
 		if(os.is_prepend_ok()) {
 			// output the result after the ok
