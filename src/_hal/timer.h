@@ -2,6 +2,10 @@
 // How to re-asign it hardware Timer1 ? 
 // https://esp32.com/viewtopic.php?t=10331
 
+
+// Esp32 timer 101.  
+// https://techtutorialsx.com/2017/10/07/esp32-arduino-timer-interrupts/
+
 // Source   Priority    Consumer    
 // Timer0 , 1 Low       RTOS           
 // Timer1,  3 High      step_tick

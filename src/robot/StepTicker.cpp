@@ -41,7 +41,7 @@ StepTicker::~StepTicker()
 // ISR callbacks from timer
 void StepTicker::step_timer_handler(void)
 {
-    Serial.print(">");
+    // Serial.print(">");
     StepTicker::getInstance()->step_tick();
 }
 
@@ -55,8 +55,8 @@ void StepTicker::unstep_timer_handler(void)
 //TODO:  will use TIMER1 because TIMER0 is used by RTOS.   Xuming Jun 2019
 bool StepTicker::start()
 {
-    Serial.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  stepTicker should use TMR1, because RTOS is using tmr1.");
-    Serial.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  and becare of fastTicker.start()");
+    // Serial.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  stepTicker should use TMR1, because RTOS is using TIMER0.");
+    // Serial.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  and becare of fastTicker.start()");
     if(!started) {
 
         // setup the step tick timer, which handles step ticks and one off unstep interrupts
@@ -133,6 +133,7 @@ void StepTicker::unstep_tick()
     for (int i = 0; i < num_motors; i++) {
         if(this->unstep & bitmsk) {
             this->motor[i]->unstep();
+            Serial.print("\\_");
         }
         bitmsk <<= 1;
     }
@@ -218,7 +219,7 @@ void StepTicker::step_tick (void)
             ++current_block->tick_info[m].step_count;
 
             // step the motor
-            Serial.print("->");    // Even can we find one sign?
+             Serial.print("/");    // Even can we find one sign?
             bool ismoving = motor[m]->step(); // returns false if the moving flag was set to false externally (probes, endstops etc)
             // we stepped so schedule an unstep
             unstep |= (1<<m);
@@ -227,6 +228,7 @@ void StepTicker::step_tick (void)
                 // done
                 current_block->tick_info[m].steps_to_move = 0;
                 motor[m]->stop_moving(); // let motor know it is no longer moving
+                Serial.print(" Block is done, stop motor.");    // Even can we find one sign?
             }
         }
 
