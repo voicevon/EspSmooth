@@ -40,6 +40,7 @@ static void timer_handler()
 bool FastTicker::start()
 {
     if(max_frequency == 0) {
+        //known consumers are:   Temperature control PWM output, in "config.frequency.pwm=10000"
         printf("WARNING: FastTicker not started as nothing has attached to it\n");
         return false;
     }

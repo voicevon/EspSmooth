@@ -878,7 +878,7 @@ void smoothie_startup(void *)
         }
 
         if(!fast_ticker->start()) {
-            printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  WARNING: failed to start FastTicker (maybe nothing is using it?)\n");
+            printf("WARNING: failed to start FastTicker (maybe nothing is using it?)\n");
         }
 
         if(!step_ticker->start()) {
