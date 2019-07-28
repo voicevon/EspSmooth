@@ -13,6 +13,8 @@
 
 #include <math.h>
 
+#include "Arduino.h"
+
 #ifdef STEPTICKER_DEBUG_PIN
 // debug pins, only used if defined in src/makefile
 #include "Pin.h"
@@ -39,24 +41,28 @@ StepTicker::~StepTicker()
 // ISR callbacks from timer
 void StepTicker::step_timer_handler(void)
 {
+    // Serial.print(">");
     StepTicker::getInstance()->step_tick();
 }
 
 // ISR callbacks from timer
 void StepTicker::unstep_timer_handler(void)
 {
+    Serial.print("<");
     StepTicker::getInstance()->unstep_tick();
 }
 
 //TODO:  will use TIMER1 because TIMER0 is used by RTOS.   Xuming Jun 2019
 bool StepTicker::start()
 {
+    // Serial.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  stepTicker should use TMR1, because RTOS is using TIMER0.");
+    // Serial.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  and becare of fastTicker.start()");
     if(!started) {
 
         // setup the step tick timer, which handles step ticks and one off unstep interrupts
-        int permod = tmr0_setup(frequency, delay, (void *)step_timer_handler, (void *)unstep_timer_handler);
+        int permod = tmr1_setup(frequency, delay, (void *)step_timer_handler, (void *)unstep_timer_handler);
         if(permod <  0) {
-            printf("ERROR: tmr0 setup failed\n");
+            printf("ERROR: tmr1 setup failed\n");
             return false;
         }
         if(permod != 0) {
@@ -75,7 +81,7 @@ bool StepTicker::start()
 bool StepTicker::stop()
 {
     if(started) {
-        tmr0_stop();
+        tmr1_stop();
     }
     return true;
 }
@@ -116,7 +122,7 @@ bool StepTicker::start_unstep_ticker()
     // enable the MR1 match register interrupt
     // this works as we are in MR0 match which reset counter so we will get an interrupt 2us after this is enabled
     // which we will use to unstep the step pin.
-    tmr0_mr1_start();
+    tmr1_mr1_start();
     return true;
 }
 
@@ -127,6 +133,7 @@ void StepTicker::unstep_tick()
     for (int i = 0; i < num_motors; i++) {
         if(this->unstep & bitmsk) {
             this->motor[i]->unstep();
+            Serial.print("\\");
         }
         bitmsk <<= 1;
     }
@@ -153,6 +160,7 @@ void StepTicker::step_tick (void)
     if(unstep != 0) {
         // this is a failsafe, if we get here it means we missed the unstep from a previous tick
         // so we need to unstep the pin now or it will remain high
+        Serial.print("^");
         unstep_tick();
         missed_unsteps++; // keep trck for diagnostics
     }
@@ -212,6 +220,7 @@ void StepTicker::step_tick (void)
             ++current_block->tick_info[m].step_count;
 
             // step the motor
+             Serial.print("/");    // Even can we find one sign?
             bool ismoving = motor[m]->step(); // returns false if the moving flag was set to false externally (probes, endstops etc)
             // we stepped so schedule an unstep
             unstep |= (1<<m);
@@ -220,6 +229,7 @@ void StepTicker::step_tick (void)
                 // done
                 current_block->tick_info[m].steps_to_move = 0;
                 motor[m]->stop_moving(); // let motor know it is no longer moving
+                Serial.print(" Block is done, stop motor.");    // Even can we find one sign?
             }
         }
 

@@ -3,7 +3,7 @@
 
 namespace patch
 {
-    // template < typename T > std::string to_string( const T& n );
+    template < typename T > std::string to_string( const T& n );
 
 
     uint32_t min(uint32_t x, uint32_t y);

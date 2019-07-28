@@ -28,6 +28,8 @@
 #include <string>
 #include <algorithm>
 
+#include "Arduino.h"
+
 #define hypotf(a, b) (sqrtf(((a)*(a)) + ((b)*(b))))
 
 #define  default_seek_rate_key          "default_seek_rate"
@@ -793,6 +795,7 @@ bool Robot::handle_G92(GCode& gcode, OutputStream& os)
 
 bool Robot::handle_motion_command(GCode& gcode, OutputStream& os)
 {
+    Serial.println("[D][robot::handle_motion_command()] I am handling command from message queue... ");
     bool handled = true;
     enum MOTION_MODE_T motion_mode = NONE;
     if( gcode.has_g()) {
@@ -1339,6 +1342,8 @@ int Robot::get_active_extruder() const
 // process a G0/G1/G2/G3
 void Robot::process_move(GCode& gcode, enum MOTION_MODE_T motion_mode)
 {
+    Serial.println("[D][robot::process_move()] just entered...");
+
     // we have a G0/G1/G2/G3 so extract parameters and apply offsets to get machine coordinate target
     // get XYZ and one E (which goes to the selected extruder)
     float param[4] {0, 0, 0, 0};
@@ -1507,7 +1512,6 @@ void Robot::reset_axis_position(float position, int axis)
     }
 }
 
-#include "Arduino.h"
 // similar to reset_axis_position but directly sets the actuator positions in actuators units (eg mm for cartesian, degrees for rotary delta)
 // then sets the axis positions to match. currently only called from Endstops.cpp and RotaryDeltaCalibration.cpp
 void Robot::reset_actuator_position(const ActuatorCoordinates &ac)
@@ -1708,6 +1712,7 @@ bool Robot::append_milestone(const float target[], float rate_mm_s)
     // Append the block to the planner
     // NOTE that distance here should be either the distance travelled by the XYZ axis, or the E mm travel if a solo E move
     // NOTE this call will bock until there is room in the block queue
+    Serial.println("[D][robot::append_milestone()] going to append block...");
     if(Planner::getInstance()->append_block( actuator_pos, n_motors, rate_mm_s, distance, auxilliary_move ? nullptr : unit_vec, acceleration, s_value, is_g123)) {
         // this is the new compensated machine position
         memcpy(this->compensated_machine_position, transformed_target, n_motors * sizeof(float));
@@ -1749,6 +1754,7 @@ bool Robot::delta_move(const float *delta, float rate_mm_s, uint8_t naxis)
 // Append a move to the queue ( cutting it into segments if needed )
 bool Robot::append_line(GCode& gcode, const float target[], float rate_mm_s, float delta_e)
 {
+    Serial.println("[D][robot::append_line()] at entrance");
     // catch negative or zero feed rates and return the same error as GRBL does
     if(rate_mm_s <= 0.0F) {
         gcode.set_error(rate_mm_s == 0 ? "Undefined feed rate" : "feed rate < 0");

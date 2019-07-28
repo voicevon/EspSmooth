@@ -19,6 +19,9 @@
 #define minimum_planner_speed_key "minimum_planner_speed"
 #define planner_queue_size_key    "planner_queue_size"
 
+#include "Arduino.h"
+
+
 Planner *Planner::instance= nullptr;
 
 // The Planner does the acceleration math for the queue of Blocks ( movements ).
@@ -59,6 +62,7 @@ bool Planner::initialize(uint8_t n)
 // Append a block to the queue, compute it's speed factors
 bool Planner::append_block(ActuatorCoordinates& actuator_pos, uint8_t n_motors, float rate_mm_s, float distance, float *unit_vec, float acceleration, float s_value, bool g123)
 {
+    Serial.print("[D][planenr.append_block()] at entrance.\n");
     // get the head block
     Block* block = queue->get_head();
     block->clear();
@@ -209,12 +213,13 @@ bool Planner::append_block(ActuatorCoordinates& actuator_pos, uint8_t n_motors, 
     }
 
     // Math-heavy re-computing of the whole queue to take the new
+    Serial.println("");
     this->recalculate();
 
     // The block can now be used
     block->ready();
 
-    //block->debug();
+    block->debug();  //Xuming
 
     while(!queue->queue_head()) {
         // queue is full
@@ -421,6 +426,7 @@ void Planner::calculate_trapezoid(Block *block, float entryspeed, float exitspee
     block->exit_speed = exitspeed;
 
     // prepare the block for stepticker
+    Serial.println("[D][planner.calculate_trapezoid()] Going to prepare block\n");
     prepare(block, acceleration_in_steps, deceleration_in_steps);
 
     block->locked= false;
@@ -497,11 +503,12 @@ float Planner::max_exit_speed(Block *block)
     return std::min(max, block->nominal_speed);
 }
 
+
 // prepare block for the step ticker, called everytime the block changes
 // this is done during planning so does not delay tick generation and step ticker can simply grab the next block during the interrupt
 void Planner::prepare(Block *block, float acceleration_in_steps, float deceleration_in_steps)
 {
-
+    Serial.println("[D][planner] prepare a block...\n");
     float inv = 1.0F / block->steps_event_count;
 
     // Now figure out the acceleration PER TICK, this should ideally be held as a double as it's very critical to the block timing

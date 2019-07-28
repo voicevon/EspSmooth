@@ -126,6 +126,7 @@ static bool load_config_override(OutputStream& os)
 // can be called by modules when in command thread context
 bool dispatch_line(OutputStream& os, const char *cl)
 {
+    // printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
     // Don't like this, but we need a writable copy of the input line
     char line[strlen(cl) + 1];
     strcpy(line, cl);
@@ -189,6 +190,7 @@ bool dispatch_line(OutputStream& os, const char *cl)
         return true;
     }
 
+    //printf("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq\n");
     // Handle Gcode
     GCodeProcessor::GCodes_t gcodes;
 
@@ -203,6 +205,7 @@ bool dispatch_line(OutputStream& os, const char *cl)
         os.puts("ok\n");
         return true;
     }
+    //printf("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww\n");
 
     // if in M28 mode then just save all incoming lines to the file until we get M29
     if(uploading && gcodes[0].has_m() && gcodes[0].get_code() == 29) {
@@ -213,15 +216,16 @@ bool dispatch_line(OutputStream& os, const char *cl)
         os.printf("Done saving file.\nok\n");
         return true;
     }
+    //printf("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\n");
 
     // dispatch gcodes
     // NOTE return one ok per line instead of per GCode only works for regular gcodes like G0-G3, G92 etc
     // gcodes returning data like M114 should NOT be put on multi gcode lines.
     int ngcodes = gcodes.size();
     for(auto& i : gcodes) {
-        //i.dump(os);
+        i.dump(os);     //
         if(i.has_m() || i.has_g()) {
-
+            // printf("------------ AAA\n");   
             if(uploading) {
                 // just save the gcodes to the file
                 if(upload_fp != nullptr) {
@@ -232,7 +236,7 @@ bool dispatch_line(OutputStream& os, const char *cl)
                 os.printf("ok\n");
                 return true;
             }
-
+            //printf("------------bbb\n");
             // potentially handle M500 - M503 here
             OutputStream *pos= &os;
             std::fstream *fsout= nullptr;
@@ -272,15 +276,19 @@ bool dispatch_line(OutputStream& os, const char *cl)
                     i.set_command('M', 500, 3); // change gcode to be M500.3
                 }
             }
+            // printf("------------ccc\n");
 
             // if this is a multi gcode line then dispatch must not send ok unless this is the last one
             if(!THEDISPATCHER->dispatch(i, *pos, ngcodes == 1 && !m500)) {
                 // no handler processed this gcode, return ok - ignored
                 if(ngcodes == 1) os.puts("ok - ignored\n");
             }
+            // printf("------------ddd\n");
 
             // clean up after M500
             if(m500) {
+                printf("------------fffffffff\n");
+
                 m500= false;
                 fsout->close();
                 delete fsout;
@@ -290,13 +298,16 @@ bool dispatch_line(OutputStream& os, const char *cl)
                 }
                 os.printf("Settings Stored to %s\nok\n", OVERRIDE_FILE);
             }
+            // printf("------------ggg\n");
 
         } else {
             // if it has neither g or m then it was a blank line or comment
             os.puts("ok\n");
         }
+        // printf("------------hhhhhhhh\n");
         --ngcodes;
     }
+    // printf("------------kkkkkkkk\n");
 
     return true;
 }
@@ -309,12 +320,20 @@ void set_capture(std::function<void(char)> cf)
 
 static std::vector<OutputStream*> output_streams;
 
+#include "stdio.h"
+#include "_hal/patch.h"
+char debug_const[100];
 // this is here so we do not need to duplicate this logic for USB and UART
 void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line, size_t& cnt, bool& discard)
 {
+    // os->puts("[DEBUG] Start process_command_buffer()\n");
     for (size_t i = 0; i < n; ++i) {
         line[cnt] = rx_buf[i];
-        if(capture_fnc) {
+        // os->puts(&rx_buf[i]);
+        // os->puts(line);
+        // os->puts("\n");
+        if(capture_fnc) {      // What does it mean?  Jun 2019
+            // os->puts("capture_fuc == true \n");
             capture_fnc(line[cnt]);
             continue;
         }
@@ -329,6 +348,7 @@ void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line
 
         } else if(line[cnt] == '?') {
             if(!queries.full()) {
+                os->puts("--- query \n");
                 queries.push_back({os, nullptr});
             }
 
@@ -342,9 +362,19 @@ void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line
             cnt = 0;
             os->puts("error:Discarding long line\n");
 
-        } else if(line[cnt] == '\n') {
+        } else if(line[cnt] == char(10)) {    // "\n" == char(10) == LF   char(80)='P'   char(13)=CR
+            // os->puts("---- end of line\n");
             os->clear_flags(); // clear the done flag here to avoid race conditions
             line[cnt] = '\0'; // remove the \n and nul terminate
+            // os->puts(line);
+            // os->puts("\n");
+            //     debug_const[0] = cnt & 0xff;
+            // debug_const[1] = (cnt >> 8)  & 0xff;
+            // debug_const[2] = (cnt >> 16) & 0xff;
+            // debug_const[3] = (cnt >> 24) & 0xff;
+            // debug_const[2]=0;
+            // os->puts(debug_const);
+
             if(cnt == 2 && line[0] == '$' && (line[1] == 'I' || line[1] == 'S')) {
                 // Handle $I and $S as instant queries
                 if(!queries.full()) {
@@ -352,6 +382,7 @@ void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line
                 }
 
             }else{
+                // os->puts("sending message queue. \n");
                 send_message_queue(line, os);
             }
             cnt = 0;
@@ -369,7 +400,7 @@ void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line
     }
 }
 
-
+#include "Arduino.h"
 static void uart_comms(void *)
 {
     printf("DEBUG: UART Comms thread running\n");
@@ -385,18 +416,39 @@ static void uart_comms(void *)
     char line[MAX_LINE_LENGTH];
     size_t cnt = 0;
     bool discard = false;
+    // for(char x: rx_buf){x = char(0);}
+    for(int i=0; i< 256;i++){rx_buf[i] = 0;}
+    // for(char x: line){x = char(0);}
+    for(int i=0; i< MAX_LINE_LENGTH;i++){line[i] = 0;}
+
     while(1) {
         // Wait to be notified that there has been a UART irq. (it may have been rx or tx so may not be anything to read)
         uint32_t ulNotificationValue = ulTaskNotifyTake( pdTRUE, waitms );
 
         if( ulNotificationValue != 1 ) {
-            /* The call to ulTaskNotifyTake() timed out. check anyway */
+            /* The call to ulTaskNotifyTake() timed out. check anyway */   
+            //It is always == 0;
+            // Serial.print("ulNotificationValue = ");
+            // Serial.println(ulNotificationValue);
         }
 
         size_t n = read_uart(rx_buf, sizeof(rx_buf));
         if(n > 0) {
-            printf("[I][task.uart] got rs buffer not empty...");
+            //os.puts("[I][task.uart] got rs buffer not empty...\n");
+            // Serial.print("===============before. Line cnt = ");
+            // Serial.println(cnt);
+            // Serial.println(line);
+            // Serial.print("----------------before. rxbuffer n = ");
+            // Serial.println(n);
+            // Serial.println(rx_buf);
+
             process_command_buffer(n, rx_buf, &os, line, cnt, discard);
+            // Serial.print("====================after. line cnt = ");
+            // Serial.println(cnt);
+            // Serial.println(line);
+            // Serial.print("-----------------------after. rx n = ");
+            // Serial.println(n);
+            // Serial.println(rx_buf);
         }
     }
 }
@@ -472,7 +524,7 @@ static void handle_query(bool need_done)
  */
 static void command_handler()
 {
-    printf("DEBUG: Command thread running\n");
+    printf("DEBUG: Command thread running\n\n\n\n");
     int counter = 0;
 
     for(;;) {
@@ -489,30 +541,23 @@ static void command_handler()
 
         } else {
             // timed out or other error
-            // printf("uuuuuuuuuuuuuuuuuuuuuuuuu\n");
 
             idle = true;
             if(config_error_msg.empty()) {
                 // toggle led to show we are alive, but idle
                 Board_LED_Toggle(0);
             }
-            // printf("vvvvvvvvvvvvvvvvvvvvvvvvv\n");
             handle_query(true);
-            // printf("wwwwwwwwwwwwwwwwwwwwww\n");
         }
-        // printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
         // call in_command_ctx for all modules that want it
         // dispatch_line can be called from that
         Module::broadcast_in_commmand_ctx(idle);
-        // printf("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n");
 
         // we check the queue to see if it is ready to run
         // we specifically deal with this in append_block, but need to check for other places
         if(Conveyor::getInstance() != nullptr) {
-        // printf("cccccccccccccccccccccccccccccc\n");
             Conveyor::getInstance()->check_queue();
         }
-        // printf("fffffffffffffffffffffffffffffffffffffff\n");
 
         counter++;
         if(counter % 100 == 0){
@@ -761,19 +806,17 @@ void smoothie_startup(void *)
         ConfigReader cr(std_string_stream);
 #endif
 
-        setup_section_genenal(cr);
         Planner *planner = new Planner();
-        planner->configure(cr);
-
         Conveyor *conveyor = new Conveyor();
-        conveyor->configure(cr);
-
         Robot *robot = new Robot();
+
+        setup_section_genenal(cr);
+        planner->configure(cr);
+        conveyor->configure(cr);
         if(!robot->configure(cr)) {
             printf("ERROR: Configuring robot failed\n");
             break;
         }
-
         setup_section_core(cr);
         setup_section_extruder(cr);
         setup_section_temperature_control(cr);

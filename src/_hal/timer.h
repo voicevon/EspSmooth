@@ -2,6 +2,10 @@
 // How to re-asign it hardware Timer1 ? 
 // https://esp32.com/viewtopic.php?t=10331
 
+
+// Esp32 timer 101.  
+// https://techtutorialsx.com/2017/10/07/esp32-arduino-timer-interrupts/
+
 // Source   Priority    Consumer    
 // Timer0 , 1 Low       RTOS           
 // Timer1,  3 High      step_tick
@@ -19,15 +23,16 @@
 //SmothieV2         
 //https://github.com/Smoothieware/SmoothieV2/blob/97f5278ae5f26b751c71a98927c8c539ff78a2e8/Firmware/Hal/src/tmr-setup.c
 void tmr1_stop();
-void tmr0_stop();
+// void tmr0_stop();
+void tmr2_stop();
 
 // frequency in HZ
-int tmr1_setup(uint32_t frequency, void *timer_handler);
+int tmr2_setup(uint32_t frequency, void *timer_handler);
 
 // Setup where frequency is in Hz, delay is in microseconds
-int tmr0_setup(uint32_t frequency, uint32_t delay, void *mr0handler, void *mr1handler);
+int tmr1_setup(uint32_t frequency, uint32_t delay, void *mr0handler, void *mr1handler);
 
-void tmr0_mr1_start();
-int tmr1_set_frequency(uint32_t frequency);
+void tmr1_mr1_start();
+ int tmr2_set_frequency(uint32_t frequency);
 
 #endif
