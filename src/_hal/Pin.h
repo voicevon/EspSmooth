@@ -5,6 +5,7 @@
 #include <string>
 #include <bitset>
 
+#include "esp32-hal-gpio.h"
 
 class Pin
 {
@@ -33,23 +34,20 @@ public:
     inline bool get() const
     {
         if (!this->valid) return false;
-        // return (LPC_GPIO_PORT->B[this->gpioport][this->gpiopin]) ^ this->inverting;
-        return this->inverting;   // to be updated.
+        bool v = digitalRead(this->gpio_pin_num);
+        return v ^ this->inverting;
     }
 
     // we need to do this inline due to ISR being in SRAM not FLASH
-    // Right now, it's not in SRAM !
-    uint8_t vvv;
+    // Right now, it's not in SRAM !   By Xuming Jun 2019
     inline void set(bool value)
     {
         if (!this->valid) return;
         uint8_t v= (this->inverting ^ value) ? 1 : 0;
-        //LPC_GPIO_PORT->B[this->gpioport][this->gpiopin] = v;   ; to be updated
+        digitalWrite(this->gpio_pin_num,v);
         if(open_drain) {
-            // simulates open drain by setting to input to turn off
-            //Chip_GPIO_SetPinDIR(LPC_GPIO_PORT, gpioport, gpiopin, v);   ; to be updated
+            // simulates open drain by setting to input to turn off  ??
         }
-        vvv= v;
     }
 
     inline uint16_t get_gpiopin() const { return this->gpio_pin_num; }

@@ -57,8 +57,7 @@ bool Pin::set_allocated(uint8_t pin_number, bool set)
     return false;
 }
 
-
-#include "Arduino.h"
+#include "WString.h"
 // Make a new pin object from a string
 // Pins are defined for the LPC43xx as GPIO names GPIOp[n] or gpiop_n where p is the GPIO port and n is the pin or as pin names eg P1_6 or P1.6
 // For ESP32,  string format is "gpio_xx" , for examples "gpio_03", "gpio_12",
@@ -73,11 +72,8 @@ Pin* Pin::from_string(std::string value)
 
     // uint16_t port = 0;
     uint16_t target_pin_num = 0;
-    // printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA value = %s \n",value.c_str());
 
     if(stringutils::toUpper(value.substr(0, 5)) == "GPIO_") {
-        // grab first integer as GPIO port.
-        // port = strtol(value.substr(4).c_str(), nullptr, 10);
         String str_pos = value.substr(5,2).c_str();
         target_pin_num = str_pos.toInt();
         // printf("Target Pin number = %i\n", target_pin_num);
@@ -143,8 +139,6 @@ std::string Pin::to_string() const
         return "nc";
     }
 }
-
-#include "esp32-hal-gpio.h"
 
 Pin* Pin::as_output()
 {
