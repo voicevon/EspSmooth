@@ -143,11 +143,15 @@ std::string Pin::to_string() const
 Pin* Pin::as_output()
 {
     if(valid) {
-        if(this->open_drain){
-            pinMode(this->gpio_pin_num, OUTPUT_OPEN_DRAIN);
-            return this;
+        if(this->gpio_pin_num <= MAX_MCU_GPIO_INDEX){
+            if(this->open_drain){
+                pinMode(this->gpio_pin_num, OUTPUT_OPEN_DRAIN);
+                return this;
+            }
+            pinMode(this->gpio_pin_num, OUTPUT);
+        }else{  //expaned io
+            
         }
-        pinMode(this->gpio_pin_num, OUTPUT);
     }
 
     return nullptr;
@@ -156,15 +160,19 @@ Pin* Pin::as_output()
 Pin* Pin::as_input()
 {
     if(valid) {
-        if(this->is_pull_up) {
-            pinMode(this->gpio_pin_num, INPUT_PULLUP);
-            return this;
-        } 
-        if(this->is_pull_down){
-            pinMode(this->gpio_pin_num, INPUT_PULLDOWN);
-            return this;
+        if(this->gpio_pin_num <= MAX_MCU_GPIO_INDEX ){
+            if(this->is_pull_up) {
+                pinMode(this->gpio_pin_num, INPUT_PULLUP);
+                return this;
+            } 
+            if(this->is_pull_down){
+                pinMode(this->gpio_pin_num, INPUT_PULLDOWN);
+                return this;
+            }
+            pinMode(this->gpio_pin_num, INPUT);
+        }else{ //expaned gpio
+
         }
-        pinMode(this->gpio_pin_num, INPUT);
     }
     return nullptr;
 }

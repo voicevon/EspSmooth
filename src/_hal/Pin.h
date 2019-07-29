@@ -7,6 +7,8 @@
 
 #include "esp32-hal-gpio.h"
 
+#define MAX_MCU_GPIO_INDEX   35
+
 class Pin
 {
 public:
@@ -34,8 +36,13 @@ public:
     inline bool get() const
     {
         if (!this->valid) return false;
-        bool v = digitalRead(this->gpio_pin_num);
-        return v ^ this->inverting;
+        if(this->gpio_pin_num <= MAX_MCU_GPIO_INDEX) {
+            bool value = digitalRead(this->gpio_pin_num);
+            return value ^ this->inverting;
+        }else { //expanded io
+
+        }
+
     }
 
     // we need to do this inline due to ISR being in SRAM not FLASH
@@ -43,10 +50,14 @@ public:
     inline void set(bool value)
     {
         if (!this->valid) return;
-        uint8_t v= (this->inverting ^ value) ? 1 : 0;
-        digitalWrite(this->gpio_pin_num,v);
-        if(open_drain) {
-            // simulates open drain by setting to input to turn off  ??
+        if(this->gpio_pin_num <= MAX_MCU_GPIO_INDEX){
+            uint8_t v= (this->inverting ^ value) ? 1 : 0;
+            digitalWrite(this->gpio_pin_num,v);
+            if(open_drain) {
+                // simulates open drain by setting to input to turn off  ??
+            }
+        }else{  // expanded output
+
         }
     }
 
