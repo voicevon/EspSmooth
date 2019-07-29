@@ -1,15 +1,16 @@
 #pragma once
 
 #include <stdint.h>
+#include "_hal/Pin.h"
 
-class Pwm
+class Pwm: public Pin
 {
 public:
 	Pwm();
 	~Pwm(){};
-	Pwm(const char* pin);
-	bool from_string(const char *pin);
-	bool is_valid() const { return valid; }
+	Pwm(const char* str);
+	// bool from_string(const char *str);
+	// bool is_valid() const { return valid; }
 	// set duty cycle 0-1
 	void set(float v);
 	float get() const { return value; }

@@ -42,9 +42,9 @@ Pwm::Pwm()
 	index= 0;
 }
 
-Pwm::Pwm(const char *pin)
+Pwm::Pwm(const char *str): Pin (str)
 {
-	from_string(pin);
+	// from_string(str);
 }
 
 // static
@@ -54,19 +54,19 @@ bool Pwm::setup(uint32_t freq)
 	return true;
 }
 
-bool Pwm::from_string(const char *pin)
-{
-	int xind= map_pin_to_pwm(pin);
-    if(xind > 0){
-    	valid= true;
-    	index= xind;
-    	return true;
-    }
+// bool Pwm::from_string(const char *str)
+// {
+// 	int xind= map_pin_to_pwm(str);
+//     if(xind > 0){
+//     	valid= true;
+//     	index= xind;
+//     	return true;
+//     }
 
- 	valid= false;
- 	index= 0;
- 	return false;
-}
+//  	valid= false;
+//  	index= 0;
+//  	return false;
+// }
 
 void Pwm::set(float v)
 {

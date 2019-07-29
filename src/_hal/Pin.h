@@ -24,9 +24,9 @@ public:
     enum TYPE_T {AS_INPUT, AS_OUTPUT};
     Pin(const char *s, Pin::TYPE_T);
 
-
     Pin* from_string(std::string value);
     std::string to_string() const;
+
 
     bool connected() const
     {
@@ -71,10 +71,14 @@ public:
     bool is_inverting() const { return inverting; }
     void set_inverting(bool f) { inverting = f; }
 
+    bool is_valid() const { return this->valid; }
+
+protected:    
+    virtual bool check_validation();
+
 private:
-
     static bool set_allocated(uint8_t, bool set= true);
-
+    bool __check_validation();
     struct {
         uint8_t gpio_pin_num: 8;
         bool inverting: 1;

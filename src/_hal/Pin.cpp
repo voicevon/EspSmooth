@@ -120,7 +120,7 @@ Pin* Pin::from_string(std::string value)
 
     // save the gpio port and pin (we can always get the pin number from this and the lut)
     this->gpio_pin_num = target_pin_num;
-    this->valid = true;
+    this->valid = __check_validation();
     return this;
 }
 
@@ -178,4 +178,13 @@ Pin* Pin::as_input()
     return nullptr;
 }
 
+ bool Pin::check_validation()
+ {
+     return true;
+ }
+
+ bool Pin::__check_validation()
+ {
+    return check_validation();
+ }
 
