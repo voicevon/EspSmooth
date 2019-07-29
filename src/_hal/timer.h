@@ -20,17 +20,20 @@
 //RTOS timer        
 //https://gist.github.com/shirish47/5b2a04f81eab4281b5c69f678a4da352
 
+
+// Setup where frequency is in Hz, delay is in microseconds
+int stepTicker_setup(uint32_t frequency, uint32_t delay, void *mr0handler, void *mr1handler);
+
 //SmothieV2         
 //https://github.com/Smoothieware/SmoothieV2/blob/97f5278ae5f26b751c71a98927c8c539ff78a2e8/Firmware/Hal/src/tmr-setup.c
-void tmr1_stop();
+void stepTicker_stop();
 // void tmr0_stop();
 void tmr2_stop();
 
 // frequency in HZ
 int tmr2_setup(uint32_t frequency, void *timer_handler);
 
-// Setup where frequency is in Hz, delay is in microseconds
-int tmr1_setup(uint32_t frequency, uint32_t delay, void *mr0handler, void *mr1handler);
+
 
 void tmr1_mr1_start();
  int tmr2_set_frequency(uint32_t frequency);

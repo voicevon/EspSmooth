@@ -60,7 +60,7 @@ bool StepTicker::start()
     if(!started) {
 
         // setup the step tick timer, which handles step ticks and one off unstep interrupts
-        int permod = tmr1_setup(frequency, delay, (void *)step_timer_handler, (void *)unstep_timer_handler);
+        int permod = stepTicker_setup(frequency, delay, (void *)step_timer_handler, (void *)unstep_timer_handler);
         if(permod <  0) {
             printf("ERROR: tmr1 setup failed\n");
             return false;
@@ -81,7 +81,7 @@ bool StepTicker::start()
 bool StepTicker::stop()
 {
     if(started) {
-        tmr1_stop();
+        stepTicker_stop();
     }
     return true;
 }
