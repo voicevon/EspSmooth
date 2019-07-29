@@ -133,7 +133,7 @@ void StepTicker::unstep_tick()
     for (int i = 0; i < num_motors; i++) {
         if(this->unstep & bitmsk) {
             this->motor[i]->unstep();
-            Serial.print("\\");
+            // Serial.print("\\");
         }
         bitmsk <<= 1;
     }
@@ -160,7 +160,7 @@ void StepTicker::step_tick (void)
     if(unstep != 0) {
         // this is a failsafe, if we get here it means we missed the unstep from a previous tick
         // so we need to unstep the pin now or it will remain high
-        Serial.print("^");
+        // Serial.print("^");
         unstep_tick();
         missed_unsteps++; // keep trck for diagnostics
     }
@@ -220,7 +220,7 @@ void StepTicker::step_tick (void)
             ++current_block->tick_info[m].step_count;
 
             // step the motor
-             Serial.print("/");    // Even can we find one sign?
+            //  Serial.print("/");    // Even can we find one sign?
             bool ismoving = motor[m]->step(); // returns false if the moving flag was set to false externally (probes, endstops etc)
             // we stepped so schedule an unstep
             unstep |= (1<<m);
