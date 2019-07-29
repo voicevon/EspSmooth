@@ -88,11 +88,13 @@ Pin* Pin::from_string(std::string value)
     // now check for modifiers:-
     // ! = invert pin
     // o = set pin to open drain
+    // p = set pin to pwm             new feature,   Xuming Jun 2019
+    // h = set pin to hardware-pwm    new feature,   Xuming Jun 2019
     // ^ = set pin to pull up
     // v = set pin to pull down
     // - = set pin to no pull up or down
     // default to pull up for input pins, neither for output
-    // gpio |= PINCONF_PULLUP;
+
     for(char c : value.substr(7)) {
         switch(c) {
             case '!':
