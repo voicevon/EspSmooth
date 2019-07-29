@@ -7,7 +7,12 @@
 
 #include "esp32-hal-gpio.h"
 
+#define GPIO_PINS_COUNT      99    //All IO pins, include expanded
 #define MAX_MCU_GPIO_INDEX   35
+
+#if(GPIO_PINS_COUNT > MAX_MCU_GPIO_INDEX) 
+    #define USE_EXPANDED_IO
+#endif
 
 class Pin
 {

@@ -1,7 +1,6 @@
 #include "Pin.h"
 #include "libs/StringUtils.h"
 
-#define NUM_GPIO_PINS       99
 
 Pin::Pin()
 {
@@ -38,7 +37,7 @@ Pin::~Pin()
 
 // bitset to indicate a pin has been configured
 #include <bitset>
-static std::bitset<NUM_GPIO_PINS> allocated_pins;   //default constructor :The object is initialized with zeros.
+static std::bitset<GPIO_PINS_COUNT> allocated_pins;   //default constructor :The object is initialized with zeros.
 bool Pin::set_allocated(uint8_t pin_number, bool set)
 {
     if(!set) {
