@@ -62,4 +62,9 @@ class Block {
             volatile bool locked:1;              // set to true when the critical data is being updated, stepticker will have to skip if this is set
             uint16_t s_value:12;                 // for laser 1.11 Fixed point
         };
+
+        float dc_motor_meassured_position;   //is an angle.
+        float dc_motor_target_position;
+        
+        float servo_target_position;         //openloop, pwm output
 };
