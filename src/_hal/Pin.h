@@ -74,10 +74,12 @@ public:
     bool is_valid() const { return this->valid; }
 
 protected:    
-    virtual bool check_validation();
-
+    virtual void _from_string(std::string value);
+    virtual bool _check_validation();
+    
 private:
-    static bool set_allocated(uint8_t, bool set= true);
+    static bool __set_allocated(uint8_t, bool set= true);
+    void __from_string(std::string value);
     bool __check_validation();
     struct {
         uint8_t gpio_pin_num: 8;

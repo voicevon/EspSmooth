@@ -38,7 +38,7 @@ Pin::~Pin()
 // bitset to indicate a pin has been configured
 #include <bitset>
 static std::bitset<GPIO_PINS_COUNT> allocated_pins;   //default constructor :The object is initialized with zeros.
-bool Pin::set_allocated(uint8_t pin_number, bool set)
+bool Pin::__set_allocated(uint8_t pin_number, bool set)
 {
     if(!set) {
         // deallocate it
@@ -80,46 +80,14 @@ Pin* Pin::from_string(std::string value)
         return nullptr;
     }
 
-    if(!set_allocated(target_pin_num)) {
+    if(!__set_allocated(target_pin_num)) {
         printf("WARNING: GPIO_[%d] has already been allocated\n",  target_pin_num);
     }
 
 
-    // now check for modifiers:-
-    // ! = invert pin
-    // o = set pin to open drain
-    // p = set pin to pwm             new feature,   Xuming Jun 2019
-    // h = set pin to hardware-pwm    new feature,   Xuming Jun 2019
-    // ^ = set pin to pull up
-    // v = set pin to pull down
-    // - = set pin to no pull up or down
-    // default to pull up for input pins, neither for output
-
-    for(char c : value.substr(7)) {
-        switch(c) {
-            case '!':
-                this->inverting = true;
-                break;
-            case 'o':
-                this->open_drain= true; // we need to set pin to input when off for simulated opendrain
-                break;
-            case '^':
-                this->is_pull_up = true;
-                this->is_pull_down = false;
-                break;
-            case 'v':
-                this->is_pull_down = true;
-                this->is_pull_up = false;
-                break;
-            case '-':
-            	this->is_pull_up = false;
-                this->is_pull_down = false;
-                break;
-        }
-    }
-
     // save the gpio port and pin (we can always get the pin number from this and the lut)
     this->gpio_pin_num = target_pin_num;
+    __from_string(value);
     this->valid = __check_validation();
     return this;
 }
@@ -178,13 +146,45 @@ Pin* Pin::as_input()
     return nullptr;
 }
 
- bool Pin::check_validation()
+ bool Pin::_check_validation()
  {
      return true;
  }
 
  bool Pin::__check_validation()
  {
-    return check_validation();
+    return _check_validation();
  }
+void Pin::__from_string(std::string value){
+    _from_string(value);
+}
+void Pin::_from_string(std::string value){
+    // now check for modifiers:-
+    // ! = invert pin
+    // o = set pin to open drain
+    // p = set pin to pwm             new feature,   Xuming Jun 2019
+    // h = set pin to hardware-pwm    new feature,   Xuming Jun 2019
+    // ^ = set pin to pull up
+    // v = set pin to pull down
 
+    // default to pull up for input pins, neither for output   ??
+
+    for(char c : value.substr(7)) {
+        switch(c) {
+            case '!':
+                this->inverting = true;
+                break;
+            case 'o':
+                this->open_drain= true; // we need to set pin to input when off for simulated opendrain
+                break;
+            case '^':
+                this->is_pull_up = true;
+                this->is_pull_down = false;
+                break;
+            case 'v':
+                this->is_pull_down = true;
+                this->is_pull_up = false;
+                break;
+        }
+    }
+}

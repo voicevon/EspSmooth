@@ -42,9 +42,9 @@ Pwm::Pwm()
 	index= 0;
 }
 
-Pwm::Pwm(const char *str): Pin (str)
+Pwm::Pwm(const char *str): Pin ()
 {
-	// from_string(str);
+	from_string(str);
 }
 
 // static
@@ -71,4 +71,10 @@ bool Pwm::setup(uint32_t freq)
 void Pwm::set(float v)
 {
 	value= v;
+}
+
+// not all pins can output pwm
+bool Pwm::check_validation() {
+	if(1)
+		return true;
 }
