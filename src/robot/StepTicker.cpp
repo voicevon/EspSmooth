@@ -60,7 +60,7 @@ bool StepTicker::start()
     if(!started) {
 
         // setup the step tick timer, which handles step ticks and one off unstep interrupts
-        int permod = tmr1_setup(frequency, delay, (void *)step_timer_handler, (void *)unstep_timer_handler);
+        int permod = stepTicker_setup(frequency, delay, (void *)step_timer_handler, (void *)unstep_timer_handler);
         if(permod <  0) {
             printf("ERROR: tmr1 setup failed\n");
             return false;
@@ -81,7 +81,7 @@ bool StepTicker::start()
 bool StepTicker::stop()
 {
     if(started) {
-        tmr1_stop();
+        stepTicker_stop();
     }
     return true;
 }
@@ -220,13 +220,13 @@ void StepTicker::step_tick (void)
             ++current_block->tick_info[m].step_count;
 
             // step the motor
-            Serial.print("/");    // Even can we find one sign?
+            // Serial.print("/");    // Even can we find one sign?
             bool ismoving = motor[m]->step(); // returns false if the moving flag was set to false externally (probes, endstops etc)
             // we stepped so schedule an unstep
             unstep |= (1<<m);
-            Serial.print("  ");
-            Serial.print(current_block->tick_info[m].step_count);
-            Serial.print("-");
+            // Serial.print("  ");
+            // Serial.print(current_block->tick_info[m].step_count);
+            // Serial.print("-");
             Serial.print(current_block->tick_info[m].steps_to_move);
             if(!ismoving || current_block->tick_info[m].step_count == current_block->tick_info[m].steps_to_move) {
                 // done

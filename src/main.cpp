@@ -123,17 +123,17 @@ void setup(){
 
 uint64_t cpu_idle_counter = 0;
 uint64_t last_time_stamp = 0;   //us
+uint64_t report_inteval_second = 1 ;
 void loop(){
     // Actually, this is the lowest priority task.
     cpu_idle_counter++;
 
-    if(esp_timer_get_time () - last_time_stamp >= 10000000){
+    if(esp_timer_get_time () - last_time_stamp >= report_inteval_second * 1000000){
         uint16_t passed_time = cpu_idle_counter / 10000;
         uint16_t uptime_second = esp_timer_get_time() / 1000000;  
         printf("uptime = %i seconds, cpu idle counter =  %i\n",uptime_second, passed_time);
 
         //vTaskList(ptrTaskList);   vTaskList is not supportted?  Jun2019      https://github.com/espressif/esp-idf/issues/416
-
         cpu_idle_counter = 0;
         last_time_stamp = esp_timer_get_time();
     }
