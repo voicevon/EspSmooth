@@ -121,13 +121,17 @@ void setup(){
     setup_smooth();
 }
 
+
+uint64_t rtos_report_inteval_second = 10 ;
+
 uint64_t cpu_idle_counter = 0;
 uint64_t last_time_stamp = 0;   //us
+
 void loop(){
     // Actually, this is the lowest priority task.
     cpu_idle_counter++;
 
-    if(esp_timer_get_time () - last_time_stamp >= 10000000){
+    if(esp_timer_get_time () - last_time_stamp >= rtos_report_inteval_second * 1000000){
         uint16_t passed_time = cpu_idle_counter / 10000;
         uint16_t uptime_second = esp_timer_get_time() / 1000000;  
         printf("uptime = %i seconds, cpu idle counter =  %i\n",uptime_second, passed_time);

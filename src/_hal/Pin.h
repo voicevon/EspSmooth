@@ -5,6 +5,14 @@
 #include <string>
 #include <bitset>
 
+#include "esp32-hal-gpio.h"
+
+#define GPIO_PINS_COUNT      99    //All IO pins, include expanded
+#define MAX_MCU_GPIO_INDEX   35
+
+#if(GPIO_PINS_COUNT > MAX_MCU_GPIO_INDEX) 
+    #define USE_EXPANDED_IO
+#endif
 
 class Pin
 {
@@ -33,23 +41,29 @@ public:
     inline bool get() const
     {
         if (!this->valid) return false;
-        // return (LPC_GPIO_PORT->B[this->gpioport][this->gpiopin]) ^ this->inverting;
-        return this->inverting;   // to be updated.
+        if(this->gpio_pin_num <= MAX_MCU_GPIO_INDEX) {
+            bool value = digitalRead(this->gpio_pin_num);
+            return value ^ this->inverting;
+        }else { //expanded io
+
+        }
+
     }
 
     // we need to do this inline due to ISR being in SRAM not FLASH
-    // Right now, it's not in SRAM !
-    uint8_t vvv;
+    // Right now, it's not in SRAM !   By Xuming Jun 2019
     inline void set(bool value)
     {
         if (!this->valid) return;
-        uint8_t v= (this->inverting ^ value) ? 1 : 0;
-        //LPC_GPIO_PORT->B[this->gpioport][this->gpiopin] = v;   ; to be updated
-        if(open_drain) {
-            // simulates open drain by setting to input to turn off
-            //Chip_GPIO_SetPinDIR(LPC_GPIO_PORT, gpioport, gpiopin, v);   ; to be updated
+        if(this->gpio_pin_num <= MAX_MCU_GPIO_INDEX){
+            uint8_t v= (this->inverting ^ value) ? 1 : 0;
+            digitalWrite(this->gpio_pin_num,v);
+            if(open_drain) {
+                // simulates open drain by setting to input to turn off  ??
+            }
+        }else{  // expanded output
+
         }
-        vvv= v;
     }
 
     inline uint16_t get_gpiopin() const { return this->gpio_pin_num; }

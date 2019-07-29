@@ -1,7 +1,6 @@
 #include "Pin.h"
 #include "libs/StringUtils.h"
 
-#define NUM_GPIO_PINS       99
 
 Pin::Pin()
 {
@@ -38,7 +37,7 @@ Pin::~Pin()
 
 // bitset to indicate a pin has been configured
 #include <bitset>
-static std::bitset<NUM_GPIO_PINS> allocated_pins;   //default constructor :The object is initialized with zeros.
+static std::bitset<GPIO_PINS_COUNT> allocated_pins;   //default constructor :The object is initialized with zeros.
 bool Pin::set_allocated(uint8_t pin_number, bool set)
 {
     if(!set) {
@@ -57,8 +56,7 @@ bool Pin::set_allocated(uint8_t pin_number, bool set)
     return false;
 }
 
-
-#include "Arduino.h"
+#include "WString.h"
 // Make a new pin object from a string
 // Pins are defined for the LPC43xx as GPIO names GPIOp[n] or gpiop_n where p is the GPIO port and n is the pin or as pin names eg P1_6 or P1.6
 // For ESP32,  string format is "gpio_xx" , for examples "gpio_03", "gpio_12",
@@ -73,11 +71,8 @@ Pin* Pin::from_string(std::string value)
 
     // uint16_t port = 0;
     uint16_t target_pin_num = 0;
-    // printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA value = %s \n",value.c_str());
 
     if(stringutils::toUpper(value.substr(0, 5)) == "GPIO_") {
-        // grab first integer as GPIO port.
-        // port = strtol(value.substr(4).c_str(), nullptr, 10);
         String str_pos = value.substr(5,2).c_str();
         target_pin_num = str_pos.toInt();
         // printf("Target Pin number = %i\n", target_pin_num);
@@ -144,16 +139,18 @@ std::string Pin::to_string() const
     }
 }
 
-#include "esp32-hal-gpio.h"
-
 Pin* Pin::as_output()
 {
     if(valid) {
-        if(this->open_drain){
-            pinMode(this->gpio_pin_num, OUTPUT_OPEN_DRAIN);
-            return this;
+        if(this->gpio_pin_num <= MAX_MCU_GPIO_INDEX){
+            if(this->open_drain){
+                pinMode(this->gpio_pin_num, OUTPUT_OPEN_DRAIN);
+                return this;
+            }
+            pinMode(this->gpio_pin_num, OUTPUT);
+        }else{  //expaned io
+            
         }
-        pinMode(this->gpio_pin_num, OUTPUT);
     }
 
     return nullptr;
@@ -162,15 +159,19 @@ Pin* Pin::as_output()
 Pin* Pin::as_input()
 {
     if(valid) {
-        if(this->is_pull_up) {
-            pinMode(this->gpio_pin_num, INPUT_PULLUP);
-            return this;
-        } 
-        if(this->is_pull_down){
-            pinMode(this->gpio_pin_num, INPUT_PULLDOWN);
-            return this;
+        if(this->gpio_pin_num <= MAX_MCU_GPIO_INDEX ){
+            if(this->is_pull_up) {
+                pinMode(this->gpio_pin_num, INPUT_PULLUP);
+                return this;
+            } 
+            if(this->is_pull_down){
+                pinMode(this->gpio_pin_num, INPUT_PULLDOWN);
+                return this;
+            }
+            pinMode(this->gpio_pin_num, INPUT);
+        }else{ //expaned gpio
+
         }
-        pinMode(this->gpio_pin_num, INPUT);
     }
     return nullptr;
 }
