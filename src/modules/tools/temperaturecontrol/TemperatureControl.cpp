@@ -1,6 +1,6 @@
 #include "TemperatureControl.h"
 #include "TempSensor.h"
-#include "libs/SigmaDeltaPwm.h"
+#include "_hal/SigmaDeltaPwm.h"
 #include "robot/Conveyor.h"
 #include "libs/OutputStream.h"
 #include "smoothie/GCode.h"

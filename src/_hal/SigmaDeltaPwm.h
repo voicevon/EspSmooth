@@ -1,5 +1,8 @@
 #pragma once
 
+// known consumers:
+//   Switch, Pid_Autotuner,TemperatureControl
+
 #include "_hal/Pin.h"
 
 class SigmaDeltaPwm : public Pin {
