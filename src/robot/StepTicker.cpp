@@ -225,6 +225,16 @@ void StepTicker::step_tick (void)
             // we stepped so schedule an unstep
             unstep |= (1<<m);
 
+            // Serial.print("  ");
+            // Serial.print(current_block->tick_info[m].step_count);
+            // Serial.print("-");
+            // Serial.print(current_block->tick_info[m].steps_to_move);
+
+            if(m == 2){
+                // Esp32 servo
+                // https://forum.arduino.cc/index.php?topic=557367.0
+                ledcWrite(12, current_block->tick_info[m].step_count / 100000);
+            }
             if(!ismoving || current_block->tick_info[m].step_count == current_block->tick_info[m].steps_to_move) {
                 // done
                 current_block->tick_info[m].steps_to_move = 0;
