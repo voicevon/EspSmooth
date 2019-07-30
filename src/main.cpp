@@ -113,15 +113,30 @@ void setup_smooth(){
     // vTaskStartScheduler();    Don't call vTaskStartScheduler()     https://esp32.com/viewtopic.php?t=1336
 }
 
+#include "robot/ServoMotor.h"
 
+void test_servo_motor(){
+    ServoMotor sm(12);
+    do{
+        for(int i=150 ; i<210;i++)
+        {
+            delay(30);
+            sm.analogWriteESP32(i);
+            i++;
+            Serial.println(i);
+        }
+    }
+    while(1);
+}
 void setup(){
     Serial.begin(115200);
     
     show_memory_allocate();
+    test_servo_motor();
     // setup_log();
     //setup_spiffs_writting();
     //setup_spiffs_reading();
-    setup_smooth();
+    // setup_smooth();
 }
 
 
