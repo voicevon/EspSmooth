@@ -1,18 +1,12 @@
-// Exploring04-04
-// Servo Potentiometer Control
-//   Arduino:  LOLIN32 Lite (with ESP32)
+
 
 // #include <Servo.h> This is not implemented for the ESP32, so the servo pulse has
 // to be controlled directly using the analogWriteESP32() function below.
 
-// The following array and two functions are needed because the analogWrite() function
-// is not implemented for the ESP32.
 
 #include "esp32-hal-ledc.h"
 #include "esp32-hal-adc.h"
 #include "ServoMotor.h"
-
-
 
 
 
