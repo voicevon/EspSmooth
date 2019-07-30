@@ -13,7 +13,7 @@
 
 #include <math.h>
 
-#include "Arduino.h"
+#include "HardwareSerial.h"
 
 #ifdef STEPTICKER_DEBUG_PIN
 // debug pins, only used if defined in src/makefile
