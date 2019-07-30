@@ -1,5 +1,14 @@
 #include "uart.h"
 #include "Arduino.h"
+#include "esp32-hal-uart.h"  // https://github.com/espressif/arduino-esp32/blob/master/cores/esp32/esp32-hal-uart.h
+
+#define UART_SERIAL_USB 0
+
+uart_t* Serial_USB;
+int setup_uart(){
+    // uart_t* uartBegin(uint8_t uart_nr, uint32_t baudrate, uint32_t config, int8_t rxPin, int8_t txPin, uint16_t queueLen, bool inverted);
+    // Serial_USB = uartBegin(UART_SERIAL_USB,115200,0, )
+}
 
 size_t read_uart(char * buf, size_t length) {
     unsigned int  counter = 0 ; 
