@@ -1,9 +1,10 @@
-#include "HardwareSerial.h"
+#include "HardwareSerial.h"  //Serial
 #include "esp32-hal-log.h"
 #include "SPIFFS.h"     // ESP class
 
 #include "_hal/board.h"
 #include "_hal/stopwatch.h"
+// #include "_hal/uart.h"
 
 
 static const char *TAG = "espsmooth.main";
@@ -118,8 +119,10 @@ void test_servo(){
     sss.attach(5);
     sss.write(123);
 }
+
 void setup(){
     Serial.begin(115200);
+    
     show_memory_allocate();
     // setup_log();
     //setup_spiffs_writting();
