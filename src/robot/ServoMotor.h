@@ -1,20 +1,23 @@
-#ifndef _SERVO_MOTOR_H_
-#define _SERVO_MOTOR_H_
-// #include "esp32-hal-ledc.h"
-// #include "esp32-hal-adc.h"
+#pragma once
+
+// #ifndef _SERVO_MOTOR_H_
+// #define _SERVO_MOTOR_H_
+#include "_hal/Pin.h"
 
 class ServoMotor{
-public:
-    ServoMotor(int in_numer);
-    void analogWriteESP32(int value);
-    // void setup_ledc(int gpio_pin_number);
-private:
-    void __test();
-    // int __pin2channel[12]; // holds the PWM channel (0-15) attached to a given pin (0-63)
-    // void __setupAnalogWritePin(int pin, int channel, int freq=500, int resolution=8);
-    int __gpio_pin_number;
+    public:
+        ServoMotor();
+        ~ServoMotor();
+        ServoMotor(int pin_numer);
+        void setup(int pin_number);
+        void goto_position(float angle);
+
+    private:
+        // void __test();
+        // Pin out;
+        int __gpio_pin_number;  //TODO  Remove this.
+        long __map(long x, long in_min, long in_max, long out_min, long out_max);
 };
 
 
-#endif
-
+// #endif

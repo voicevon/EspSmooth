@@ -8,6 +8,7 @@
 #include "smoothie/Module.h"
 #include "ActuatorCoordinates.h"
 #include "smoothie/AxisDefns.h"
+#include "ServoMotor.h"
 
 class GCode;
 class BaseSolution;
@@ -71,6 +72,7 @@ public:
 
     // gets accessed by Panel, Endstops, ZProbe, Extruder
     std::vector<StepperMotor*> actuators;
+    ServoMotor actuator_servo_motors[5];
 
     // set by a leveling strategy to transform the target of a move according to the current plan
     std::function<void(float*, bool)> compensationTransform;

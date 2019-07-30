@@ -121,7 +121,7 @@ void test_servo_motor(){
         for(int i=150 ; i<210;i++)
         {
             delay(30);
-            sm.analogWriteESP32(i);
+            sm.goto_position((float)i);
             i++;
             Serial.println(i);
         }
@@ -132,11 +132,11 @@ void setup(){
     Serial.begin(115200);
     
     show_memory_allocate();
-    test_servo_motor();
+    //test_servo_motor();
     // setup_log();
     //setup_spiffs_writting();
     //setup_spiffs_reading();
-    // setup_smooth();
+    setup_smooth();
 }
 
 
