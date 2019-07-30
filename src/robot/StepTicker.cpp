@@ -231,11 +231,9 @@ void StepTicker::step_tick (void)
             Serial.print(current_block->tick_info[m].steps_to_move);
 
             if(m == 2){
-                // Esp32 servo
-                // https://forum.arduino.cc/index.php?topic=557367.0
-                int servoPos = 500 + (-1) * current_block->tick_info[m].step_count;  //block_start_pos + dir * block.step_count
-                servoPos /= 123456;
-                ledcWrite(12, servoPos);   //will use lib
+                float angle = 500 + (-1) * current_block->tick_info[m].step_count;  //block_start_pos + dir * block.step_count
+                angle  /= 123456;
+                servo_motors[m]->goto_position(angle);
             }
             if(!ismoving || current_block->tick_info[m].step_count == current_block->tick_info[m].steps_to_move) {
                 // done
@@ -324,4 +322,10 @@ int StepTicker::register_actuator(StepperMotor* m)
 {
     motor[num_motors++] = m;
     return num_motors - 1;
+}
+int StepTicker::register_servo_motor(ServoMotor* servo_motor)
+{
+    __num_servo_motors++;
+    servo_motor[__num_servo_motors] = servo_motor;
+    return __num_servo_motors - 1; 
 }
