@@ -1,17 +1,20 @@
 #include "Robot.h"
 #include "Planner.h"
 #include "Conveyor.h"
-#include "smoothie/Dispatcher.h"
+#include "startup.h"
+#include "StepTicker.h"
+#include "StepperMotor.h"
 //#include "Pin.h"
 #include "_hal/__hal.h"
-#include "StepperMotor.h"
-#include "smoothie/GCode.h"
-#include "StepTicker.h"
-#include "smoothie/ConfigReader.h"
+
 #include "libs/StringUtils.h"
-#include "startup.h"
-#include "modules/tools/temperaturecontrol/TemperatureControl.h"
 #include "libs/SlowTicker.h"
+#include "libs/OutputStream.h"
+
+#include "smoothie/Dispatcher.h"
+#include "modules/tools/temperaturecontrol/TemperatureControl.h"
+#include "smoothie/GCode.h"
+#include "smoothie/ConfigReader.h"
 
 #include "robot/arm_solutions/BaseSolution.h"
 #include "robot/arm_solutions/CartesianSolution.h"
@@ -21,7 +24,6 @@
 #include "robot/arm_solutions/CoreXZSolution.h"
 #include "robot/arm_solutions/MorganSCARASolution.h"
 
-#include "libs/OutputStream.h"
 #include "ActuatorCoordinates.h"
 
 #include <math.h>
@@ -29,6 +31,7 @@
 #include <algorithm>
 
 #include "Arduino.h"
+#include "esp32-hal-uart.h"
 
 #define hypotf(a, b) (sqrtf(((a)*(a)) + ((b)*(b))))
 

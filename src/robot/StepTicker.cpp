@@ -235,7 +235,7 @@ void StepTicker::step_tick (void)
                 // https://forum.arduino.cc/index.php?topic=557367.0
                 int servoPos = 500 + (-1) * current_block->tick_info[m].step_count;  //block_start_pos + dir * block.step_count
                 servoPos /= 123456;
-                ledcWrite(12, servoPos);
+                ledcWrite(12, servoPos);   //will use lib
             }
             if(!ismoving || current_block->tick_info[m].step_count == current_block->tick_info[m].steps_to_move) {
                 // done
