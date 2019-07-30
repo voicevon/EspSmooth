@@ -113,12 +113,6 @@ void setup_smooth(){
     // vTaskStartScheduler();    Don't call vTaskStartScheduler()     https://esp32.com/viewtopic.php?t=1336
 }
 
-#include "Servo.h"
-Servo sss;
-void test_servo(){
-    sss.attach(5);
-    sss.write(123);
-}
 
 void setup(){
     Serial.begin(115200);
