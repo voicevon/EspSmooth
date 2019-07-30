@@ -19,7 +19,7 @@
 #define minimum_planner_speed_key "minimum_planner_speed"
 #define planner_queue_size_key    "planner_queue_size"
 
-#include "Arduino.h"
+#include "HardwareSerial.h"
 
 
 Planner *Planner::instance= nullptr;

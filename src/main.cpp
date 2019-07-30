@@ -1,9 +1,10 @@
-#include "HardwareSerial.h"
+#include "HardwareSerial.h"  //Serial
 #include "esp32-hal-log.h"
 #include "SPIFFS.h"     // ESP class
 
 #include "_hal/board.h"
 #include "_hal/stopwatch.h"
+// #include "_hal/uart.h"
 
 
 static const char *TAG = "espsmooth.main";
@@ -112,19 +113,30 @@ void setup_smooth(){
     // vTaskStartScheduler();    Don't call vTaskStartScheduler()     https://esp32.com/viewtopic.php?t=1336
 }
 
-#include "Servo.h"
-Servo sss;
-void test_servo(){
-    sss.attach(5);
-    sss.write(123);
+#include "robot/ServoMotor.h"
+
+void test_servo_motor(){
+    ServoMotor sm(12);
+    do{
+        for(int i=150 ; i<210;i++)
+        {
+            delay(30);
+            sm.analogWriteESP32(i);
+            i++;
+            Serial.println(i);
+        }
+    }
+    while(1);
 }
 void setup(){
     Serial.begin(115200);
+    
     show_memory_allocate();
+    test_servo_motor();
     // setup_log();
     //setup_spiffs_writting();
     //setup_spiffs_reading();
-    setup_smooth();
+    // setup_smooth();
 }
 
 
