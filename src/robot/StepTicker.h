@@ -9,6 +9,7 @@
 #include "ActuatorCoordinates.h"
 
 class StepperMotor;
+class Actuator;
 class Block;
 
 // handle 2.62 Fixed point
@@ -54,7 +55,7 @@ private:
     static void step_timer_handler(void);
     static void unstep_timer_handler(void);
 
-    std::array<StepperMotor*, k_max_actuators> motor;
+    std::array<Actuator*, k_max_actuators> motor;
 
     uint32_t unstep{0}; // one bit set per motor to indicayte step pin needs to be unstepped
     uint32_t missed_unsteps{0};
