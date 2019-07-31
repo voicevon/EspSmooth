@@ -44,29 +44,9 @@ int32_t Actuator::steps_to_target(float target)
     return target_steps - last_milestone_steps;
 }
 
-// Does a manual step pulse, used for direct encoder control of a stepper
-// NOTE manual step is experimental and may change and/or be removed in the future, it is an unsupported feature.
-// use at your own risk
-#include "_hal/stopwatch.h"
-void Actuator::manual_step(bool dir)
-{
-    if(!is_enabled()) enable(true);
 
-    // set direction if needed
-    if(this->direction != dir) {
-        this->direction= dir;
-        this->dir_pin.set(dir);
-        StopWatch_DelayUs(1);
-    }
 
-    // pulse step pin
-    this->step_pin.set(1);
-    StopWatch_DelayUs(3); // TODO could use configured step pulse delay
-    this->step_pin.set(0);
 
-    // keep track of actuators actual position in steps
-    this->current_position_steps += (dir ? -1 : 1);
-}
 
 
 #ifdef BOARD_PRIMEALPHA
@@ -192,14 +172,6 @@ bool Actuator::check_driver_error()
 
 //Minialpha has enable pins on the drivers
 
-void Actuator::enable(bool state)
-{
-    en_pin.set(!state);
-}
 
-bool Actuator::is_enabled() const
-{
-    return !en_pin.get();
-}
 
 #endif

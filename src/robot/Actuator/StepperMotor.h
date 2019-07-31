@@ -17,11 +17,15 @@ class StepperMotor:public Actuator
         virtual bool step() override;
         virtual void unstep() override;
         virtual void set_direction(bool f) override;
-
+        virtual void manual_step(bool dir) override;
+        virtual void enable(bool state) override;
+        virtual bool is_enabled() const override;
 
 
     private:
-
+        Pin step_pin;
+        Pin dir_pin;
+        Pin en_pin;
       
 
 

@@ -17,17 +17,21 @@ class Actuator
         // called from step ticker ISR
         virtual bool step(){return true;}
         // called from unstep ISR
-        virtual void unstep(){}
+        virtual void unstep() {}
         // called from step ticker ISR
-        virtual void set_direction(bool f){}
+        virtual void set_direction(bool f) {}
+        
+        // Does a manual step pulse, used for direct encoder control of a stepper
+        // NOTE manual step is experimental and may change and/or be removed in the future, it is an unsupported feature.
+        // use at your own risk
+        virtual void manual_step(bool dir) {}
 
-        void enable(bool state);
-        bool is_enabled() const;
+        virtual void enable(bool state) {}
+        virtual bool is_enabled() const {return true;}
         bool is_moving() const { return moving; };
         void start_moving() { moving= true; }
         void stop_moving() { moving= false; }
 
-        void manual_step(bool dir);
 
         bool which_direction() const { return direction; }
 
@@ -53,9 +57,7 @@ class Actuator
         int32_t steps_to_target(float);
 
     protected:
-        Pin step_pin;
-        Pin dir_pin;
-        Pin en_pin;
+
 
         float steps_per_second;
         float steps_per_mm;

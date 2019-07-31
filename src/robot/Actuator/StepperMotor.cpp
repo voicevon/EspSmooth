@@ -1,5 +1,7 @@
 #include "StepperMotor.h"
-#include "robot/StepTicker.h"
+#include "_hal/stopwatch.h"
+
+#include "robot/StepTicker.h"   //??
 
 #include <math.h>
 
@@ -45,6 +47,36 @@ void StepperMotor::unstep() {
 void StepperMotor::set_direction(bool f) { 
     dir_pin.set(f); 
     direction= f; 
+}
+
+void StepperMotor::enable(bool state)
+{
+    en_pin.set(!state);
+}
+
+bool StepperMotor::is_enabled() const
+{
+    return !en_pin.get();
+}
+
+void StepperMotor::manual_step(bool dir)
+{
+    if(!is_enabled()) enable(true);
+
+    // set direction if needed
+    if(this->direction != dir) {
+        this->direction= dir;
+        this->dir_pin.set(dir);
+        StopWatch_DelayUs(1);
+    }
+
+    // pulse step pin
+    this->step_pin.set(1);
+    StopWatch_DelayUs(3); // TODO could use configured step pulse delay
+    this->step_pin.set(0);
+
+    // keep track of actuators actual position in steps
+    this->current_position_steps += (dir ? -1 : 1);
 }
 
 
