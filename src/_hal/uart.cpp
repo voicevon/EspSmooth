@@ -20,7 +20,6 @@ size_t read_uart(char * buf, size_t length) {
         incomingChar = Serial.read();
         buf[index] = char(incomingChar);
         // buf[counter] = uartRead(UART_SERIAL_USB);
-        index++;
     }
     return index;
 }
