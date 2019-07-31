@@ -15,7 +15,7 @@ ServoMotor::ServoMotor(){
 ServoMotor::~ServoMotor(){
 
 }
-ServoMotor::ServoMotor(int pin_number){
+ServoMotor::ServoMotor(int pin_number):Actuator(){
     setup(pin_number);
 }
 
