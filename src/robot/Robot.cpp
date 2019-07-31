@@ -1,28 +1,37 @@
 #include "Robot.h"
 #include "Planner.h"
 #include "Conveyor.h"
-#include "smoothie/Dispatcher.h"
-//#include "Pin.h"
-#include "_hal/__hal.h"
-#include "Actuator/StepperMotor.h"
-#include "smoothie/GCode.h"
 #include "StepTicker.h"
+#include "ActuatorCoordinates.h"
+
+#include "Actuator/ActuatorType.h"
+#include "Actuator/StepperMotor.h"
+#include "Actuator/ServoMotor.h"
+#include "Actuator/DcMotor.h"
+
+#include "arm_solutions/BaseSolution.h"
+#include "arm_solutions/CartesianSolution.h"
+#include "arm_solutions/LinearDeltaSolution.h"
+#include "arm_solutions/RotaryDeltaSolution.h"
+#include "arm_solutions/HBotSolution.h"
+#include "arm_solutions/CoreXZSolution.h"
+#include "arm_solutions/MorganSCARASolution.h"
+
 #include "smoothie/ConfigReader.h"
-#include "libs/StringUtils.h"
+#include "smoothie/Dispatcher.h"
+#include "smoothie/GCode.h"
+
 #include "startup.h"
 #include "modules/tools/temperaturecontrol/TemperatureControl.h"
+
 #include "libs/SlowTicker.h"
-
-#include "robot/arm_solutions/BaseSolution.h"
-#include "robot/arm_solutions/CartesianSolution.h"
-#include "robot/arm_solutions/LinearDeltaSolution.h"
-#include "robot/arm_solutions/RotaryDeltaSolution.h"
-#include "robot/arm_solutions/HBotSolution.h"
-#include "robot/arm_solutions/CoreXZSolution.h"
-#include "robot/arm_solutions/MorganSCARASolution.h"
-
 #include "libs/OutputStream.h"
-#include "ActuatorCoordinates.h"
+#include "libs/StringUtils.h"
+#include "libs/StringUtils.h"
+
+
+
+#include "_hal/__hal.h"
 
 #include <math.h>
 #include <string>
@@ -50,6 +59,7 @@
 #define  save_wcs_key                   "save_wcs"
 
 // actuator keys
+#define actuator_type_key               "motor_type"
 #define step_pin_key                    "step_pin"
 #define dir_pin_key                     "dir_pin"
 #define en_pin_key                      "en_pin"
@@ -221,6 +231,11 @@ bool Robot::configure(ConfigReader& cr)
         if(s == ssm.end()) break; // actuator not found and they must be in contiguous order
 
         auto& mm = s->second; // map of actuator config values for this actuator
+
+        ActuatorType act_type(cr.get_string(mm,actuator_type_key,"stepper"));
+        //read actuator type from config.ini/[actuator].type
+
+
         Pin step_pin(cr.get_string(mm, step_pin_key, "nc"), Pin::AS_OUTPUT);
         Pin dir_pin( cr.get_string(mm, dir_pin_key,  "nc"), Pin::AS_OUTPUT);
         Pin en_pin(  cr.get_string(mm, en_pin_key,   "nc"), Pin::AS_OUTPUT);
@@ -237,13 +252,33 @@ bool Robot::configure(ConfigReader& cr)
         }
 
         // create the actuator
-        StepperMotor *sm = new StepperMotor(step_pin, dir_pin, en_pin);
+        Actuator* new_actuator;
+        // ServoMotor* new_servo = new ServoMotor(123);
 
+        int actuator_type = act_type.toInt();    //1 = stepper,  2= Servo,  3=Dc Motor
+        uint8_t regietered_count;
+        switch (actuator_type){
+            case 1:{     //stepper
+                StepperMotor *new_stepper = new StepperMotor(step_pin, dir_pin, en_pin);
+                new_actuator = new_stepper;
+                }
+                break;
+            case 2:{     // Servo
+                ServoMotor* new_servo = new ServoMotor(123);
+                new_actuator = new_servo;
+                }
+                break;
+            case 3:{     //Dc motor
+                DcMotor* new_dc = new DcMotor();
+                new_actuator = new_dc;
+                }
+                break;
+        }
         // register this actuator (NB This must be 0,1,2,...) of the actuators array
-        uint8_t n = register_actuator(sm);
-        if(n != a) {
+        regietered_count = register_actuator(new_actuator);
+        if(regietered_count != a) {
             // this is a fatal error as they must be contiguous
-            printf("FATAL:configure-robot: motor %d does not match index %d\n", n, a);
+            printf("FATAL:configure-robot: motor %d does not match index %d\n", regietered_count, a);
             return false;
         }
 
