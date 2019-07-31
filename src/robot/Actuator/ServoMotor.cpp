@@ -2,12 +2,13 @@
 #include "esp32-hal-ledc.h"
 #include "ServoMotor.h"
 
-const int SERVO_CHANNEL = 0;  // 0-15
 const int SERVO_FREQ = 250;    // 50Hz  20ms 
-const int SERVO_RES = 16;     // 16 bit resolution
+const int PWM_RESOLUTION_BITS = 16;     // 16 bit resolution
 
 const int MIN_PULSE = 1000; // 
 const int MAX_PULSE = 75000; //
+
+static uint8_t pwm_channel = 0;
 
 
 ServoMotor::ServoMotor(Pin pin):Actuator(){
@@ -16,9 +17,10 @@ ServoMotor::ServoMotor(Pin pin):Actuator(){
 
 void ServoMotor::setup(Pin pin){
     __gpio_pin_number = pin.get_gpiopin();
-    ledcSetup(SERVO_CHANNEL, SERVO_FREQ, SERVO_RES);
-    ledcAttachPin(__gpio_pin_number,SERVO_CHANNEL);
-    ledcWrite(SERVO_CHANNEL, 0);
+    ledcSetup(pwm_channel, SERVO_FREQ, PWM_RESOLUTION_BITS);
+    ledcAttachPin(__gpio_pin_number,pwm_channel);
+    ledcWrite(pwm_channel, 0);
+    pwm_channel++;
 }
 
 bool ServoMotor::step() {
@@ -31,7 +33,7 @@ bool ServoMotor::step() {
 void ServoMotor::goto_position(float angle) // ,unit = DEGREE)
 {
     int pwm = __map(angle * 100, 0, 36000, MIN_PULSE, MAX_PULSE); 
-    ledcWrite(SERVO_CHANNEL, pwm);
+    ledcWrite(pwm_channel, pwm);
     // Serial.print ("    ");
     // Serial.print(val);
     // Serial.print ("    ");
