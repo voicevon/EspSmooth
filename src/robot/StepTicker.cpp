@@ -318,7 +318,7 @@ bool StepTicker::start_next_block()
 
 
 // returns index of the stepper motor in the array and bitset
-int StepTicker::register_actuator(StepperMotor* m)
+int StepTicker::register_actuator(Actuator* m)
 {
     motor[num_motors++] = m;
     return num_motors - 1;
