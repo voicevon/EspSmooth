@@ -118,7 +118,7 @@ void setup(){
     // setup_log();
     //setup_spiffs_writting();
     //setup_spiffs_reading();
-    setup_smooth();
+    setup_smooth(); 
 }
 
 
