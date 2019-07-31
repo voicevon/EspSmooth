@@ -3,7 +3,7 @@
 #include "robot/arm_solutions/BaseSolution.h"
 #include "smoothie/ConfigReader.h"
 #include "robot/Robot.h"
-#include "robot/StepperMotor.h"
+#include "robot/Actuator/StepperMotor.h"
 #include "startup.h"
 #include "smoothie/GCode.h"
 #include "robot/Conveyor.h"

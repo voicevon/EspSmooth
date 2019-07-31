@@ -75,7 +75,7 @@
 
 #include "robot/Robot.h"
 #include "robot/Conveyor.h"
-#include "robot/StepperMotor.h"
+#include "robot/Actuator/StepperMotor.h"
 #include "robot/arm_solutions/BaseSolution.h"
 #include "ZProbe.h"
 #include "smoothie/GCode.h"

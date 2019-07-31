@@ -1,7 +1,7 @@
 #include "StepTicker.h"
 
 #include "smoothie/AxisDefns.h"
-#include "StepperMotor.h"
+#include "Actuator/StepperMotor.h"
 #include "Block.h"
 #include "Conveyor.h"
 #include "smoothie/Module.h"
