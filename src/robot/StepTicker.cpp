@@ -326,6 +326,6 @@ int StepTicker::register_actuator(StepperMotor* m)
 int StepTicker::register_servo_motor(ServoMotor* servo_motor)
 {
     __num_servo_motors++;
-    servo_motor[__num_servo_motors] = servo_motor;
+    servo_motors[__num_servo_motors] = servo_motor;
     return __num_servo_motors - 1; 
 }

@@ -1,7 +1,6 @@
 
 #include "esp32-hal-ledc.h"
 #include "ServoMotor.h"
-#include "StepTicker.h"
 
 const int SERVO_CHANNEL = 0;  // 0-15
 const int SERVO_FREQ = 250;    // 50Hz  20ms 
@@ -37,7 +36,7 @@ void ServoMotor::goto_position(float angle) // ,unit = DEGREE)
     // Serial.print ("    ");
 }
 
-  long ServoMotor::__map(long x, long in_min, long in_max, long out_min, long out_max){
+long ServoMotor::__map(long x, long in_min, long in_max, long out_min, long out_max){
             return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
         }
 
