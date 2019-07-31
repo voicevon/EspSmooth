@@ -2,7 +2,7 @@
 #include "Block.h"
 #include "PlannerQueue.h"
 #include "smoothie/ConfigReader.h"
-#include "StepperMotor.h"
+#include "Actuator/StepperMotor.h"
 #include "smoothie/AxisDefns.h"
 #include "StepTicker.h"
 #include "Robot.h"
@@ -19,7 +19,7 @@
 #define minimum_planner_speed_key "minimum_planner_speed"
 #define planner_queue_size_key    "planner_queue_size"
 
-#include "HardwareSerial.h"
+#include "Arduino.h"
 
 
 Planner *Planner::instance= nullptr;

@@ -6,7 +6,7 @@
 #include "libs/OutputStream.h"
 #include "smoothie/Dispatcher.h"
 #include "robot/Robot.h"
-#include "robot/StepperMotor.h"
+#include "robot/Actuator/StepperMotor.h"
 
 #include <string>
 #include <map>

@@ -7,10 +7,8 @@
 #include <atomic>
 
 #include "ActuatorCoordinates.h"
-#include "ServoMotor.h"
-//#include "ServoMotor.h"
+
 class StepperMotor;
-// class ServoMotor;
 class Block;
 
 // handle 2.62 Fixed point
@@ -33,7 +31,6 @@ public:
     void set_frequency( float frequency );
     void set_unstep_time( float microseconds );
     int register_actuator(StepperMotor* motor);
-    int register_servo_motor(ServoMotor* servo_motor);
     float get_frequency() const { return frequency; }
     const Block *get_current_block() const { return current_block; }
 
@@ -59,9 +56,6 @@ private:
 
     std::array<StepperMotor*, k_max_actuators> motor;
 
-//    std::array<ServoMotor*,k_max_actuators> servo_motors;
-    ServoMotor* servo_motors[5];
-    
     uint32_t unstep{0}; // one bit set per motor to indicayte step pin needs to be unstepped
     uint32_t missed_unsteps{0};
 
@@ -73,7 +67,6 @@ private:
     uint32_t current_tick{0};
 
     uint8_t num_motors{0};
-    uint8_t __num_servo_motors = 0;
 
     volatile bool running{false};
     bool started{false};

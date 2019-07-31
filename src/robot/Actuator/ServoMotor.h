@@ -3,8 +3,9 @@
 // #ifndef _SERVO_MOTOR_H_
 // #define _SERVO_MOTOR_H_
 #include "_hal/Pin.h"
+#include "Actuator.h"
 
-class ServoMotor{
+class ServoMotor:public Actuator{
     public:
         ServoMotor();
         ~ServoMotor();

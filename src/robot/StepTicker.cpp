@@ -1,7 +1,7 @@
 #include "StepTicker.h"
 
 #include "smoothie/AxisDefns.h"
-#include "StepperMotor.h"
+#include "Actuator/StepperMotor.h"
 #include "Block.h"
 #include "Conveyor.h"
 #include "smoothie/Module.h"
@@ -225,15 +225,15 @@ void StepTicker::step_tick (void)
             // we stepped so schedule an unstep
             unstep |= (1<<m);
 
-            Serial.print("  ");
-            Serial.print(current_block->tick_info[m].step_count);
-            Serial.print("-");
-            Serial.print(current_block->tick_info[m].steps_to_move);
+            // Serial.print("  ");
+            // Serial.print(current_block->tick_info[m].step_count);
+            // Serial.print("-");
+            // Serial.print(current_block->tick_info[m].steps_to_move);
 
             if(m == 2){
                 float servo_angle = 500 + (-1) * current_block->tick_info[m].step_count;  //block_start_pos + dir * block.step_count
                 servo_angle  /= 123456;
-                servo_motors[m]->goto_position(servo_angle);
+                // servo_motors[m]->goto_position(servo_angle);
             }
             if(!ismoving || current_block->tick_info[m].step_count == current_block->tick_info[m].steps_to_move) {
                 // done
@@ -323,9 +323,9 @@ int StepTicker::register_actuator(StepperMotor* m)
     motor[num_motors++] = m;
     return num_motors - 1;
 }
-int StepTicker::register_servo_motor(ServoMotor* servo_motor)
-{
-    __num_servo_motors++;
-    servo_motors[__num_servo_motors] = servo_motor;
-    return __num_servo_motors - 1; 
-}
+// int StepTicker::register_servo_motor(ServoMotor* servo_motor)
+// {
+//     __num_servo_motors++;
+//     servo_motors[__num_servo_motors] = servo_motor;
+//     return __num_servo_motors - 1; 
+// }

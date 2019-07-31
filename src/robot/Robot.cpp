@@ -1,20 +1,17 @@
 #include "Robot.h"
 #include "Planner.h"
 #include "Conveyor.h"
-#include "startup.h"
-#include "StepTicker.h"
-#include "StepperMotor.h"
+#include "smoothie/Dispatcher.h"
 //#include "Pin.h"
 #include "_hal/__hal.h"
-
-#include "libs/StringUtils.h"
-#include "libs/SlowTicker.h"
-#include "libs/OutputStream.h"
-
-#include "smoothie/Dispatcher.h"
-#include "modules/tools/temperaturecontrol/TemperatureControl.h"
+#include "Actuator/StepperMotor.h"
 #include "smoothie/GCode.h"
+#include "StepTicker.h"
 #include "smoothie/ConfigReader.h"
+#include "libs/StringUtils.h"
+#include "startup.h"
+#include "modules/tools/temperaturecontrol/TemperatureControl.h"
+#include "libs/SlowTicker.h"
 
 #include "robot/arm_solutions/BaseSolution.h"
 #include "robot/arm_solutions/CartesianSolution.h"
@@ -24,13 +21,14 @@
 #include "robot/arm_solutions/CoreXZSolution.h"
 #include "robot/arm_solutions/MorganSCARASolution.h"
 
+#include "libs/OutputStream.h"
 #include "ActuatorCoordinates.h"
 
 #include <math.h>
 #include <string>
 #include <algorithm>
 
-#include "HardwareSerial.h"
+#include "Arduino.h"
 
 #define hypotf(a, b) (sqrtf(((a)*(a)) + ((b)*(b))))
 
@@ -1514,7 +1512,18 @@ void Robot::reset_axis_position(float position, int axis)
     }
 }
 
+// similar to reset_axis_position but directly sets the actuator positions in actuators units (eg mm for cartesian, degrees for rotary delta)
+// then sets the axis positions to match. currently only called from Endstops.cpp and RotaryDeltaCalibration.cpp
+void Robot::reset_actuator_position(const ActuatorCoordinates &ac)
+{
+    for (size_t i = X_AXIS; i <= Z_AXIS; i++) {
+        // FIXME we cannot use isnan anymore
+        if(!isnan(ac[i])) actuators[i]->change_last_milestone(ac[i]);
+    }
 
+    // now correct axis positions then recorrect actuator to account for rounding
+    reset_position_from_current_actuator_position();
+}
 
 // Use FK to find out where actuator is and reset to match
 // TODO maybe we should only reset axis that are being homed unless this is due to a ON_HALT
@@ -2149,16 +2158,3 @@ void Robot::get_query_string(std::string& str) const
     str.append(">\n");
 }
 
-#include "Arduino.h"
-// similar to reset_axis_position but directly sets the actuator positions in actuators units (eg mm for cartesian, degrees for rotary delta)
-// then sets the axis positions to match. currently only called from Endstops.cpp and RotaryDeltaCalibration.cpp
-void Robot::reset_actuator_position(const ActuatorCoordinates &ac)
-{
-    for (size_t i = X_AXIS; i <= Z_AXIS; i++) {
-        // FIXME we cannot use isnan anymore
-        if(!isnan(ac[i])) actuators[i]->change_last_milestone(ac[i]);
-    }
-
-    // now correct axis positions then recorrect actuator to account for rounding
-    reset_position_from_current_actuator_position();
-}
