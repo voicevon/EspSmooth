@@ -9,18 +9,13 @@ const int SERVO_RES = 16;     // 16 bit resolution
 const int MIN_PULSE = 1000; // 
 const int MAX_PULSE = 75000; //
 
-ServoMotor::ServoMotor(){
 
-}
-ServoMotor::~ServoMotor(){
-
-}
-ServoMotor::ServoMotor(int pin_number):Actuator(){
-    setup(pin_number);
+ServoMotor::ServoMotor(Pin pin):Actuator(){
+    setup(pin);
 }
 
-void ServoMotor::setup(int pin_number){
-    __gpio_pin_number = pin_number;
+void ServoMotor::setup(Pin pin){
+    __gpio_pin_number = pin.get_gpiopin();
     ledcSetup(SERVO_CHANNEL, SERVO_FREQ, SERVO_RES);
     ledcAttachPin(__gpio_pin_number,SERVO_CHANNEL);
     ledcWrite(SERVO_CHANNEL, 0);

@@ -7,10 +7,8 @@
 
 class ServoMotor:public Actuator{
     public:
-        ServoMotor();
-        ~ServoMotor();
-        ServoMotor(int pin_numer);
-        void setup(int pin_number);
+        ServoMotor(Pin pin);
+        void setup(Pin pin);
         void goto_position(float angle);
 
         virtual bool step() override;
