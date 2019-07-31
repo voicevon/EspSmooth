@@ -13,6 +13,8 @@ class ServoMotor:public Actuator{
         void setup(int pin_number);
         void goto_position(float angle);
 
+        virtual bool step() override;
+
     private:
         // void __test();
         // Pin out;

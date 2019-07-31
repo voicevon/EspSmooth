@@ -8,7 +8,8 @@
 
 #include "ActuatorCoordinates.h"
 
-class StepperMotor;
+// class StepperMotor;
+class Actuator;
 class Block;
 
 // handle 2.62 Fixed point
@@ -30,7 +31,8 @@ public:
 
     void set_frequency( float frequency );
     void set_unstep_time( float microseconds );
-    int register_actuator(StepperMotor* motor);
+    // int register_actuator(StepperMotor* motor);
+    int register_actuator(Actuator* motor);
     float get_frequency() const { return frequency; }
     const Block *get_current_block() const { return current_block; }
 
@@ -54,7 +56,8 @@ private:
     static void step_timer_handler(void);
     static void unstep_timer_handler(void);
 
-    std::array<StepperMotor*, k_max_actuators> motor;
+    // std::array<StepperMotor*, k_max_actuators> motor;
+    std::array<Actuator*, k_max_actuators> motor;
 
     uint32_t unstep{0}; // one bit set per motor to indicayte step pin needs to be unstepped
     uint32_t missed_unsteps{0};

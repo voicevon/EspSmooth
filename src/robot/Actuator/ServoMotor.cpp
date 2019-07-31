@@ -26,6 +26,12 @@ void ServoMotor::setup(int pin_number){
     ledcWrite(SERVO_CHANNEL, 0);
 }
 
+bool ServoMotor::step() {
+    //Calculate and goto target_position
+    float target_angle = get_current_position();
+    goto_position (target_angle);
+}
+
 // #include "HardwareSerial.h"
 void ServoMotor::goto_position(float angle) // ,unit = DEGREE)
 {
