@@ -8,7 +8,7 @@
 class ServoMotor:public Actuator{
     public:
         ServoMotor(Pin pin);
-        void setup(Pin pin);
+        // void setup(Pin pin);
         void goto_position(float angle);
 
         virtual bool step() override;
@@ -17,6 +17,8 @@ class ServoMotor:public Actuator{
         // void __test();
         // Pin out;
         int __gpio_pin_number;  //TODO  Remove this.
+        uint8_t __pwm_channel;
+        Pin __pin;
         long __map(long x, long in_min, long in_max, long out_min, long out_max);
 };
 

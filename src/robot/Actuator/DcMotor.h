@@ -9,8 +9,9 @@ public:
     virtual bool step() override;
 
 private:
-
-
+    Pin __pin_dir;
+    Pin __pin_pwm;
+    uint8_t __pwm_channel;
 };
 
 

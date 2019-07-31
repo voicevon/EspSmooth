@@ -12,16 +12,21 @@ static uint8_t pwm_channel = 0;
 
 
 ServoMotor::ServoMotor(Pin pin):Actuator(){
-    setup(pin);
-}
-
-void ServoMotor::setup(Pin pin){
-    __gpio_pin_number = pin.get_gpiopin();
+//    setup(pin);
+    // __gpio_pin_number = pin.get_gpiopin();
     ledcSetup(pwm_channel, SERVO_FREQ, PWM_RESOLUTION_BITS);
-    ledcAttachPin(__gpio_pin_number,pwm_channel);
+    ledcAttachPin(__pin.get_gpiopin(),__pwm_channel);
     ledcWrite(pwm_channel, 0);
     pwm_channel++;
 }
+
+// void ServoMotor::setup(Pin pin){
+//     __gpio_pin_number = pin.get_gpiopin();
+//     ledcSetup(pwm_channel, SERVO_FREQ, PWM_RESOLUTION_BITS);
+//     ledcAttachPin(__gpio_pin_number,pwm_channel);
+//     ledcWrite(pwm_channel, 0);
+//     pwm_channel++;
+// }
 
 bool ServoMotor::step() {
     //Calculate and goto target_position
