@@ -2,8 +2,7 @@
 #define _ACTUATOR_H_
 
 
-#include "_hal/Pin.h"
-
+#include "stdint.h"
 
 class Actuator
 {
@@ -20,7 +19,7 @@ class Actuator
         virtual void unstep() {}
         // called from step ticker ISR
         virtual void set_direction(bool f) {}
-        
+
         // Does a manual step pulse, used for direct encoder control of a stepper
         // NOTE manual step is experimental and may change and/or be removed in the future, it is an unsupported feature.
         // use at your own risk

@@ -44,6 +44,9 @@ int32_t Actuator::steps_to_target(float target)
     return target_steps - last_milestone_steps;
 }
 
+// Does a manual step pulse, used for direct encoder control of a stepper
+// NOTE manual step is experimental and may change and/or be removed in the future, it is an unsupported feature.
+// use at your own risk
 
 
 
