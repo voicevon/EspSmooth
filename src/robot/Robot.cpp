@@ -499,7 +499,8 @@ void Robot::enable_all_motors(bool flg)
     }
 }
 
-uint8_t Robot::register_actuator(StepperMotor *motor)
+// uint8_t Robot::register_actuator(StepperMotor *motor)
+uint8_t Robot::register_actuator(Actuator *motor)
 {
     // register this motor with the step ticker
     StepTicker::getInstance()->register_actuator(motor);
