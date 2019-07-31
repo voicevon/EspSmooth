@@ -231,9 +231,9 @@ void StepTicker::step_tick (void)
             Serial.print(current_block->tick_info[m].steps_to_move);
 
             if(m == 2){
-                float angle = 500 + (-1) * current_block->tick_info[m].step_count;  //block_start_pos + dir * block.step_count
-                angle  /= 123456;
-                servo_motors[m]->goto_position(angle);
+                float servo_angle = 500 + (-1) * current_block->tick_info[m].step_count;  //block_start_pos + dir * block.step_count
+                servo_angle  /= 123456;
+                servo_motors[m]->goto_position(servo_angle);
             }
             if(!ismoving || current_block->tick_info[m].step_count == current_block->tick_info[m].steps_to_move) {
                 // done
