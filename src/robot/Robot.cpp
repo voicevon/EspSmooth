@@ -60,6 +60,9 @@
 
 // actuator keys
 #define actuator_type_key               "motor_type"
+#define servo_pin_key                   "servo_pin"
+#define dc_pwm_pin_key                  "dc_pwm_pin"
+#define dc_dir_pin_key                  "dc_dir_pin"
 #define step_pin_key                    "step_pin"
 #define dir_pin_key                     "dir_pin"
 #define en_pin_key                      "en_pin"
@@ -235,12 +238,13 @@ bool Robot::configure(ConfigReader& cr)
         ActuatorType act_type(cr.get_string(mm,actuator_type_key,"stepper"));
         //read actuator type from config.ini/[actuator].type
 
-
+        Pin servo_pin(cr.get_string(mm,servo_pin_key,"nc"),Pin::AS_OUTPUT);
+        Pin dc_pwm_pin(cr.get_string(mm,dc_pwm_pin_key,"nc"),Pin::AS_OUTPUT);
+        Pin dc_dir_pin(cr.get_string(mm,dc_dir_pin_key,"nc"),Pin::AS_INPUT);
         Pin step_pin(cr.get_string(mm, step_pin_key, "nc"), Pin::AS_OUTPUT);
         Pin dir_pin( cr.get_string(mm, dir_pin_key,  "nc"), Pin::AS_OUTPUT);
         Pin en_pin(  cr.get_string(mm, en_pin_key,   "nc"), Pin::AS_OUTPUT);
 
-        printf("DEBUG:configure-robot: for actuator %s pins: %s, %s, %s\n", s->first.c_str(), step_pin.to_string().c_str(), dir_pin.to_string().c_str(), en_pin.to_string().c_str());
 
         if(!step_pin.connected() || !dir_pin.connected()) { // step and dir must be defined, but enable is optional
             if(a <= Z_AXIS) {
@@ -259,17 +263,20 @@ bool Robot::configure(ConfigReader& cr)
         uint8_t regietered_count;
         switch (actuator_type){
             case 1:{     //stepper
+                printf("[D][robot]  for actuator %s pins: step= %s, dir= %s, en= %s\n", s->first.c_str(), step_pin.to_string().c_str(), dir_pin.to_string().c_str(), en_pin.to_string().c_str());
                 StepperMotor *new_stepper = new StepperMotor(step_pin, dir_pin, en_pin);
                 new_actuator = new_stepper;
                 }
                 break;
             case 2:{     // Servo
-                ServoMotor* new_servo = new ServoMotor(123);
+                printf("[D][robot]  for actuator %s pins: servo= %s\n", s->first.c_str(), servo_pin.to_string().c_str());
+                ServoMotor* new_servo = new ServoMotor(servo_pin);
                 new_actuator = new_servo;
                 }
                 break;
             case 3:{     //Dc motor
-                DcMotor* new_dc = new DcMotor();
+                printf("[D][robot]  for actuator %s pins: dc_dir= %s, dc_pwm= %s\n", s->first.c_str(), dc_dir_pin.to_string().c_str(),dc_pwm_pin.to_string().c_str());
+                DcMotor* new_dc = new DcMotor(dc_dir_pin,dc_pwm_pin);
                 new_actuator = new_dc;
                 }
                 break;
