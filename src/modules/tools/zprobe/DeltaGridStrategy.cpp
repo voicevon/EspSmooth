@@ -70,7 +70,7 @@
 #include "robot/Conveyor.h"
 #include "ZProbe.h"
 #include "smoothie/Dispatcher.h"
-#include "robot/StepperMotor.h"
+#include "robot/Actuator/StepperMotor.h"
 #include "robot/arm_solutions/BaseSolution.h"
 #include "libs/StringUtils.h"
 #include "libs/OutputStream.h"

@@ -4,7 +4,7 @@
 #include "smoothie/Dispatcher.h"
 //#include "Pin.h"
 #include "_hal/__hal.h"
-#include "StepperMotor.h"
+#include "Actuator/StepperMotor.h"
 #include "smoothie/GCode.h"
 #include "StepTicker.h"
 #include "smoothie/ConfigReader.h"

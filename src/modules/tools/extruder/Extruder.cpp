@@ -2,7 +2,7 @@
 
 #include "robot/Conveyor.h"
 #include "Block.h"
-#include "robot/StepperMotor.h"
+#include "robot/Actuator/StepperMotor.h"
 #include "smoothie/ConfigReader.h"
 #include "robot/Robot.h"
 #include "smoothie/GCode.h"

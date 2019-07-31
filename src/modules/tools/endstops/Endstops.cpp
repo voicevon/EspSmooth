@@ -3,7 +3,7 @@
 #include "robot/Conveyor.h"
 #include "robot/ActuatorCoordinates.h"
 #include "_hal/__hal.h"
-#include "robot/StepperMotor.h"
+#include "robot/Actuator/StepperMotor.h"
 #include "robot/Robot.h"
 #include "libs/SlowTicker.h"
 #include "robot/Planner.h"

@@ -5,7 +5,7 @@
 #include "libs/StringUtils.h"
 #include "robot/Robot.h"
 #include "libs/AutoPushPop.h"
-#include "robot/StepperMotor.h"
+#include "robot/Actuator/StepperMotor.h"
 #include "startup.h"
 #include "modules/tools/temperaturecontrol/TemperatureControl.h"
 #include "ConfigWriter.h"
