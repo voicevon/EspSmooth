@@ -7,7 +7,7 @@
 #include <atomic>
 
 #include "ActuatorCoordinates.h"
-#include "ServoMotor.h"
+#include "Actuator/ServoMotor.h"
 //#include "ServoMotor.h"
 class StepperMotor;
 // class ServoMotor;

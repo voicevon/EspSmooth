@@ -8,7 +8,7 @@
 #include "smoothie/Module.h"
 #include "ActuatorCoordinates.h"
 #include "smoothie/AxisDefns.h"
-#include "ServoMotor.h"
+#include "Actuator/ServoMotor.h"
 
 class GCode;
 class BaseSolution;

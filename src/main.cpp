@@ -113,7 +113,7 @@ void setup_smooth(){
     // vTaskStartScheduler();    Don't call vTaskStartScheduler()     https://esp32.com/viewtopic.php?t=1336
 }
 
-#include "robot/ServoMotor.h"
+#include "robot/Actuator/ServoMotor.h"
 
 void test_servo_motor(){
     ServoMotor sm(12);
