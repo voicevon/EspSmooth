@@ -3,8 +3,12 @@
 
 #include <math.h>
 
-StepperMotor::StepperMotor(Pin &step, Pin &dir, Pin &en) : step_pin(step), dir_pin(dir), en_pin(en)
+StepperMotor::StepperMotor(Pin &step, Pin &dir, Pin &en):Actuator()
 {
+    step_pin = Pin(step);
+    dir_pin = Pin(dir);
+    en_pin = Pin(en);
+
     if(en.connected()) {
         //set_high_on_debug(en.port_number, en.pin);
     }

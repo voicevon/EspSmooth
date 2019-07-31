@@ -1,5 +1,12 @@
 #include "Actuator.h"
-#include "robot/StepTicker.h"
 
 #include <math.h>
+
+Actuator::Actuator()
+{
+
+}
+Actuator::~Actuator(){
+
+}
 

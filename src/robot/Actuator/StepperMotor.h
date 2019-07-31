@@ -1,20 +1,19 @@
 #pragma once
 
 #include "_hal/Pin.h"
+#include "Actuator.h"
 
 class TMC26X;
 class ConfigReader;
 class OutputStream;
-class GCode;
 
-class StepperMotor
+class StepperMotor:public Actuator
 {
     public:
         StepperMotor(Pin& step, Pin& dir, Pin& en);
         ~StepperMotor();
 
-        void set_motor_id(uint8_t id) { motor_id= id; }
-        uint8_t get_motor_id() const { return motor_id; }
+
 
         // called from step ticker ISR
         inline bool step() { step_pin.set(1); current_position_steps += (direction?-1:1); return moving; }
@@ -69,13 +68,7 @@ class StepperMotor
         int32_t last_milestone_steps;
         float   last_milestone_mm;
 
-        volatile struct {
-            uint8_t motor_id:8;
-            volatile bool direction:1;
-            volatile bool moving:1;
-            bool selected:1;
-            bool extruder:1;
-        };
+
 
 #ifdef BOARD_PRIMEALPHA
     public:
