@@ -276,7 +276,7 @@ bool Robot::configure(ConfigReader& cr)
                 break;
             case 3:{     //Dc motor
                 printf("[D][robot]  for actuator %s pins: dc_dir= %s, dc_pwm= %s\n", s->first.c_str(), dc_dir_pin.to_string().c_str(),dc_pwm_pin.to_string().c_str());
-                DcMotor* new_dc = new DcMotor();
+                DcMotor* new_dc = new DcMotor(dc_dir_pin,dc_pwm_pin);
                 new_actuator = new_dc;
                 }
                 break;
