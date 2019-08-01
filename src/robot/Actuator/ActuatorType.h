@@ -6,18 +6,20 @@
 
 class ActuatorType{
 
-    enum ACTUATOR_TYPE_T {STEPPER_MOTOR,SERVO_MOTOR,XUEFENG_MOTOR,DC_MOTOR};
-
     public:
+
+        enum ACTUATOR_TYPE_T {STEPPER_MOTOR, SERVO_MOTOR, XUEFENG_MOTOR, DC_MOTOR};
+
         ActuatorType(const char* type_description);
         ~ActuatorType(){}
 
         ActuatorType* from_string(const char*  type_description);
 
-        uint8_t toInt();
+        ACTUATOR_TYPE_T get_type() { return id; }
 
     private:
-        uint8_t id;
+        ACTUATOR_TYPE_T id;
+
 };
 
 #endif

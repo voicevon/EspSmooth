@@ -152,12 +152,10 @@ static const char* const actuator_keys[] = {
 
 bool Robot::configure(ConfigReader& cr)
 {
-    Serial.println("11111111111111111111");
     ConfigReader::section_map_t m;
     if(!cr.get_section("motion control", m)) {
         printf("WARNING:configure-robot: no 'motion control' section found, defaults used\n");
     }
-    Serial.println("22222222222222222222");
 
     // Arm solutions are used to convert machine positions in millimeters into actuator positions in millimeters.
     // While for a cartesian arm solution, this is a simple multiplication, in other, less simple cases, there is some serious math to be done.
@@ -191,7 +189,6 @@ bool Robot::configure(ConfigReader& cr)
     } else {
         this->arm_solution = new CartesianSolution(cr);
     }
-    Serial.println("33333333333333333333");
 
     this->feed_rate = cr.get_float(m, default_feed_rate_key, 4000.0F); // mm/min
     this->seek_rate = default_seek_rate = cr.get_float(m, default_seek_rate_key, 4000.0F); // mm/min
@@ -214,7 +211,6 @@ bool Robot::configure(ConfigReader& cr)
     this->save_wcs            = cr.get_bool(m, save_wcs_key, false);
     this->save_g92            = cr.get_bool(m, save_g92_key, false);
     const char *g92           = cr.get_string(m, set_g92_key, "");
-    Serial.println("444444444444444");
 
     if(strlen(g92) > 0) {
         // optional setting for a fixed G92 offset
@@ -232,7 +228,6 @@ bool Robot::configure(ConfigReader& cr)
         printf("ERROR:configure-robot-actuator: no actuator section found\n");
         return false;
     }
-    Serial.println("555555555555555555555");
 
     // make each motor
     for (size_t a = 0; a < MAX_ROBOT_ACTUATORS; a++) {
@@ -241,8 +236,7 @@ bool Robot::configure(ConfigReader& cr)
 
         auto& mm = s->second; // map of actuator config values for this actuator
 
-        ActuatorType act_type(cr.get_string(mm,actuator_type_key,"stepper"));      
-        //read actuator type from config.ini/[actuator].type
+
 
         PwmPin servo_pin(cr.get_string(mm, servo_pin_key, "nc"));
         PwmPin dc_pwm_pin(cr.get_string(mm, dc_pwm_pin_key, "nc"));
@@ -251,7 +245,7 @@ bool Robot::configure(ConfigReader& cr)
         OutputPin dir_pin(cr.get_string(mm, dir_pin_key, "nc"));
         OutputPin en_pin(cr.get_string(mm, en_pin_key, "nc"));
 
-    Serial.println("6666666666666666");
+
 
         // PinHelper* helper = new PinHelper();
         // PwmPin* servo_pin_test = (PwmPin*) helper->create_pin(cr.get_string(mm,servo_pin_key,"nc"), PinHelper::AS_INPUT);
@@ -274,32 +268,35 @@ bool Robot::configure(ConfigReader& cr)
         
         // create the actuator
         Actuator* new_actuator;
-        // ServoMotor* new_servo = new ServoMotor(123);
 
-        int actuator_type = act_type.toInt();    //1 = stepper,  2= Servo,  3=Dc Motor
+        ActuatorType act_type(cr.get_string(mm,actuator_type_key,"stepper"));      
         uint8_t regietered_count;
-        switch (actuator_type){
-            case 1:{     //stepper
+        switch (act_type.get_type()) {
+            case ActuatorType::STEPPER_MOTOR: {     //stepper
                 printf("[D][robot.config]  for stepper motor %s pins: step= %s, dir= %s, en= %s\n", s->first.c_str(), step_pin.to_string().c_str(), dir_pin.to_string().c_str(), en_pin.to_string().c_str());
                 StepperMotor *new_stepper = new StepperMotor(step_pin, dir_pin, en_pin);
                 // regietered_count = register_actuator(new_stepper);  Is this way better?
                 new_actuator = new_stepper;
                 }
                 break;
-            case 2:{     // Servo
+            case ActuatorType::SERVO_MOTOR: {     // Servo
                 printf("[D][robot.config]  for servo motor %s pins: servo= %s\n", s->first.c_str(), servo_pin.to_string().c_str());
                 ServoMotor* new_servo = new ServoMotor(servo_pin);
                 new_actuator = new_servo;
                 }
                 break;
-            case 3:{     //Dc motor
+            case ActuatorType::XUEFENG_MOTOR: {     //Xuefeng motor
+
+                }
+                break;
+
+            case ActuatorType::DC_MOTOR: {    //Dc motor
                 printf("[D][robot.config]  for dc motor %s pins: dc_dir= %s, dc_pwm= %s\n", s->first.c_str(), dc_dir_pin.to_string().c_str(),dc_pwm_pin.to_string().c_str());
                 DcMotor* new_dc = new DcMotor(dc_dir_pin,dc_pwm_pin);
                 new_actuator = new_dc;
                 }
                 break;
         }
-        Serial.println("7777777777777777777");
 
         // register this actuator (NB This must be 0,1,2,...) of the actuators array
         regietered_count = register_actuator(new_actuator);
@@ -308,7 +305,6 @@ bool Robot::configure(ConfigReader& cr)
             printf("FATAL:configure-robot: motor %d does not match index %d\n", regietered_count, a);
             return false;
         }
-        Serial.println("888888888888888888888888");
 
 #ifdef BOARD_MINIALPHA
         // set microstepping if enabled, use default x16 if not specified but pins exist
@@ -387,7 +383,9 @@ bool Robot::configure(ConfigReader& cr)
         actuators[a]->change_steps_per_mm(cr.get_float(mm, steps_per_mm_key, a == Z_AXIS ? 2560.0F : 80.0F));
         actuators[a]->set_max_rate(cr.get_float(mm, max_rate_key, 30000.0F) / 60.0F); // it is in mm/min and converted to mm/sec
         actuators[a]->set_acceleration(cr.get_float(mm, acceleration_key, -1)); // mm/secs² if -1 it uses the default acceleration
+        // Serial.println("9999999999999999999999");
     }
+    // Serial.println("1111111111111111111");
 
     check_max_actuator_speeds(); // check the configs are sane
 
