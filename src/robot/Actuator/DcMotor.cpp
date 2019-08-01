@@ -19,7 +19,7 @@ DcMotor::DcMotor(Pin dir, Pin pwm){
 
 }
 //My goal B:
-// DcMotor::DcMotor(OutputPin dir_pin, PwmPin pwm_pin){
+DcMotor::DcMotor(OutputPin dir_pin, PwmPin pwm_pin){
     // dir_pin.init();
 
     // pwm_pin.init(channel=auto_get,frequency = 500);
@@ -28,7 +28,7 @@ DcMotor::DcMotor(Pin dir, Pin pwm){
 
     // pwm_pin.start(pwm_value = 1234);
     // pwm_pin.stop();   //set as input;
-// }
+}
 
 bool DcMotor::step(){
     // pwm_pin.set_value(this->get_current_position());
