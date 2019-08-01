@@ -1,9 +1,7 @@
 #include "PinHelper.h"
 
 
-
-
-Pin* create_pin(const char* pin_description, PinHelper::PIN_TYPE_T pin_type){
+Pin* PinHelper::create_pin(const char* pin_description, PinHelper::PIN_TYPE_T pin_type){
     switch (pin_type)
     {
     case 1:

@@ -8,6 +8,8 @@
 #include "Actuator/StepperMotor.h"
 #include "Actuator/ServoMotor.h"
 #include "Actuator/DcMotor.h"
+#include "_hal/__hal.h"
+#include "_hal/Pin/PinHelper.h"
 
 #include "arm_solutions/BaseSolution.h"
 #include "arm_solutions/CartesianSolution.h"
@@ -31,7 +33,6 @@
 
 
 
-#include "_hal/__hal.h"
 
 #include <math.h>
 #include <string>
@@ -237,6 +238,14 @@ bool Robot::configure(ConfigReader& cr)
 
         ActuatorType act_type(cr.get_string(mm,actuator_type_key,"stepper"));
         //read actuator type from config.ini/[actuator].type
+
+                
+        PinHelper* helper = new PinHelper();
+        const char* sss= cr.get_string(mm,servo_pin_key,"nc");
+        helper->create_pin(sss, PinHelper::AS_INPUT);
+
+        helper->~PinHelper();
+
 
         Pin servo_pin(cr.get_string(mm,servo_pin_key,"nc"),Pin::AS_OUTPUT);
         Pin dc_pwm_pin(cr.get_string(mm,dc_pwm_pin_key,"nc"),Pin::AS_OUTPUT);
