@@ -40,7 +40,7 @@ public:
 
     // we need to do this inline due to ISR being in SRAM not FLASH   
     // Right now, it's not in SRAM ! ForHighSpeed demand, Please call digitalRead(), and do inverting yourself.  By Xuming Jun2019
-    inline bool get() const
+    virtual inline bool get() const
     {
         if (!this->valid) return false;
         if(this->gpio_pin_num <= MAX_MCU_GPIO_INDEX) {
@@ -53,7 +53,7 @@ public:
 
     // we need to do this inline due to ISR being in SRAM not FLASH
     // Right now, it's not in SRAM !   By Xuming Jun 2019
-    inline void set(bool value)
+    virtual inline void set(bool value)
     {
         if (!this->valid) return;
         if(this->gpio_pin_num <= MAX_MCU_GPIO_INDEX){
@@ -72,7 +72,7 @@ public:
     bool is_inverting() const { return inverting; }
     void set_inverting(bool f) { inverting = f; }
 
-private:
+protected:
 
     static bool set_allocated(uint8_t, bool set= true);
 
