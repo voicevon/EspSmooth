@@ -807,15 +807,22 @@ void smoothie_startup(void *)
         Robot *robot = new Robot();
 
         setup_section_genenal(cr);
+        Serial.println("AAAAAAAAAAAAAAAAAAA\n");
         planner->configure(cr);
+        Serial.println("bbbbbbbbbbbbb\n");
         conveyor->configure(cr);
+        Serial.println("ccccccccccccccccccccc\n");
         if(!robot->configure(cr)) {
             printf("ERROR: Configuring robot failed\n");
             break;
         }
+        Serial.println("ddddddddddddddddddddd\n");
         setup_section_core(cr);
+        Serial.println("eeeeeeeeeeeeeeeeeeeeee\n");
         setup_section_extruder(cr);
+        Serial.println("ffffffffffffffffffffffff\n");
         setup_section_temperature_control(cr);
+        Serial.println("gggggggggggggggggggggg\n");
         
 
         // create all registered modules, the addresses are stored in a known location in flash

@@ -152,10 +152,12 @@ static const char* const actuator_keys[] = {
 
 bool Robot::configure(ConfigReader& cr)
 {
+    Serial.println("11111111111111111111");
     ConfigReader::section_map_t m;
     if(!cr.get_section("motion control", m)) {
         printf("WARNING:configure-robot: no 'motion control' section found, defaults used\n");
     }
+    Serial.println("22222222222222222222");
 
     // Arm solutions are used to convert machine positions in millimeters into actuator positions in millimeters.
     // While for a cartesian arm solution, this is a simple multiplication, in other, less simple cases, there is some serious math to be done.
@@ -189,6 +191,7 @@ bool Robot::configure(ConfigReader& cr)
     } else {
         this->arm_solution = new CartesianSolution(cr);
     }
+    Serial.println("33333333333333333333");
 
     this->feed_rate = cr.get_float(m, default_feed_rate_key, 4000.0F); // mm/min
     this->seek_rate = default_seek_rate = cr.get_float(m, default_seek_rate_key, 4000.0F); // mm/min
@@ -211,6 +214,7 @@ bool Robot::configure(ConfigReader& cr)
     this->save_wcs            = cr.get_bool(m, save_wcs_key, false);
     this->save_g92            = cr.get_bool(m, save_g92_key, false);
     const char *g92           = cr.get_string(m, set_g92_key, "");
+    Serial.println("444444444444444");
 
     if(strlen(g92) > 0) {
         // optional setting for a fixed G92 offset
@@ -228,6 +232,7 @@ bool Robot::configure(ConfigReader& cr)
         printf("ERROR:configure-robot-actuator: no actuator section found\n");
         return false;
     }
+    Serial.println("555555555555555555555");
 
     // make each motor
     for (size_t a = 0; a < MAX_ROBOT_ACTUATORS; a++) {
@@ -246,6 +251,7 @@ bool Robot::configure(ConfigReader& cr)
         OutputPin dir_pin(cr.get_string(mm, dir_pin_key, "nc"));
         OutputPin en_pin(cr.get_string(mm, en_pin_key, "nc"));
 
+    Serial.println("6666666666666666");
 
         // PinHelper* helper = new PinHelper();
         // PwmPin* servo_pin_test = (PwmPin*) helper->create_pin(cr.get_string(mm,servo_pin_key,"nc"), PinHelper::AS_INPUT);
@@ -293,6 +299,8 @@ bool Robot::configure(ConfigReader& cr)
                 }
                 break;
         }
+        Serial.println("7777777777777777777");
+
         // register this actuator (NB This must be 0,1,2,...) of the actuators array
         regietered_count = register_actuator(new_actuator);
         if(regietered_count != a) {
@@ -300,6 +308,7 @@ bool Robot::configure(ConfigReader& cr)
             printf("FATAL:configure-robot: motor %d does not match index %d\n", regietered_count, a);
             return false;
         }
+        Serial.println("888888888888888888888888");
 
 #ifdef BOARD_MINIALPHA
         // set microstepping if enabled, use default x16 if not specified but pins exist
