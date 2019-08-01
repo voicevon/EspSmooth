@@ -8,7 +8,7 @@
 #include "libs/SigmaDeltaPwm.h"
 // #include "Pwm.h"
 #include "_hal/__hal.h"
-#include "_hal/Pin/Pwm.h"
+#include "_hal/Pin/PwmPin.h"
 #include "smoothie/GCodeProcessor.h"
 #include "smoothie/Dispatcher.h"
 #include "startup.h"
@@ -125,7 +125,7 @@ bool Switch::configure(ConfigReader& cr, ConfigReader::section_map_t& m)
 
     } else if(type == "hwpwm") {
         this->output_type = HWPWM;
-        pwm_pin = new Pwm(output_pin.c_str());
+        pwm_pin = new PwmPin(output_pin.c_str());
         if(failsafe == 1) {
             //set_high_on_debug(pin->port_number, pin->pin);
         } else {

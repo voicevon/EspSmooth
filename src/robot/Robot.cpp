@@ -239,14 +239,6 @@ bool Robot::configure(ConfigReader& cr)
         ActuatorType act_type(cr.get_string(mm,actuator_type_key,"stepper"));
         //read actuator type from config.ini/[actuator].type
 
-                
-        PinHelper* helper = new PinHelper();
-        const char* sss= cr.get_string(mm,servo_pin_key,"nc");
-        helper->create_pin(sss, PinHelper::AS_INPUT);
-
-        helper->~PinHelper();
-
-
         Pin servo_pin(cr.get_string(mm,servo_pin_key,"nc"),Pin::AS_OUTPUT);
         Pin dc_pwm_pin(cr.get_string(mm,dc_pwm_pin_key,"nc"),Pin::AS_OUTPUT);
         Pin dc_dir_pin(cr.get_string(mm,dc_dir_pin_key,"nc"),Pin::AS_INPUT);
@@ -254,6 +246,12 @@ bool Robot::configure(ConfigReader& cr)
         Pin dir_pin( cr.get_string(mm, dir_pin_key,  "nc"), Pin::AS_OUTPUT);
         Pin en_pin(  cr.get_string(mm, en_pin_key,   "nc"), Pin::AS_OUTPUT);
 
+
+        PinHelper* helper = new PinHelper();
+        PwmPin* servo_pin_test = (PwmPin*) helper->create_pin(cr.get_string(mm,servo_pin_key,"nc"), PinHelper::AS_INPUT);
+
+
+        helper->~PinHelper();
 
         if(!step_pin.connected() || !dir_pin.connected()) { // step and dir must be defined, but enable is optional
             if(a <= Z_AXIS) {

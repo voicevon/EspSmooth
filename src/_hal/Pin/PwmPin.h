@@ -4,12 +4,12 @@
 #include <stdint.h>
 
 
-class Pwm: public Pin
+class PwmPin: public Pin
 {
 public:
-	Pwm();
-	~Pwm(){};
-	Pwm(const char* pin);
+	PwmPin();
+	~PwmPin(){};
+	PwmPin(const char* pin);
 	// bool from_string(const char *pin);
 	bool is_valid() const { return valid; }
 	// set duty cycle 0-1

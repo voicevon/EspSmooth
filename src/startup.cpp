@@ -34,8 +34,8 @@
 #include "_hal/__hal.h"
 #include "_hal/board.h"
 #include "_hal/uart.h"
-#include "_hal/Pin/Adc.h"
-#include "_hal/Pin/Pwm.h"
+#include "_hal/Pin/AdcPin.h"
+#include "_hal/Pin/PwmPin.h"
 #include "_hal/stopwatch.h"
 
 static const char *TAG = "espsmooth.main";
@@ -630,7 +630,7 @@ extern "C" bool setup_sdmmc();
 #endif
 
 // voltage monitors
-static std::map<std::string, Adc*> voltage_monitors;
+static std::map<std::string, AdcPin*> voltage_monitors;
 
 float get_voltage_monitor(const char* name)
 {
@@ -692,7 +692,7 @@ void setup_section_core(ConfigReader cr){
     if(cr.get_section("pwm", m)) {
         freq = cr.get_int(m, "frequency", freq);
     }
-    Pwm::setup(freq);
+    PwmPin::setup(freq);
     printf("INFO: PWM frequency set to %d Hz\n", freq);
 }
 
@@ -706,7 +706,7 @@ void setup_section_extruder(ConfigReader cr){
 }
 
 void setup_section_temperature_control(ConfigReader cr){
-    if(Adc::setup()) {
+    if(AdcPin::setup()) {
         // this creates any configured temperature controls
         if(!TemperatureControl::load_controls(cr)) {
             printf("INFO: no Temperature Controls loaded\n");
@@ -726,7 +726,7 @@ void setup_section_voltage_monitors(ConfigReader cr){
             std::string k = s.first;
             std::string v = s.second;
 
-            Adc *padc= new Adc;
+            AdcPin *padc= new AdcPin;
             if(padc->from_string(v.c_str()) == nullptr) {
                 printf("WARNING: Failed to create %s voltage monitor\n", k.c_str());
                 delete padc;
@@ -885,7 +885,7 @@ void smoothie_startup(void *)
             printf("Error: failed to start StepTicker\n");
         }
 
-        if(!Adc::start()) {
+        if(!AdcPin::start()) {
             printf("Error: failed to start ADC\n");
         }
 

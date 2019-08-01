@@ -3,7 +3,7 @@
 #include "smoothie/Module.h"
 #include "smoothie/ConfigReader.h"
 #include "_hal/Pin/Pin.h"
-
+#include "_hal/Pin/PwmPin.h"
 
 #include <string>
 #include <atomic>
@@ -41,7 +41,7 @@ class Switch : public Module {
         union {
             Pin *digital_pin;
             SigmaDeltaPwm *sigmadelta_pin;
-            Pwm *pwm_pin;
+            PwmPin *pwm_pin;
         };
         std::string    output_on_command;
         std::string    output_off_command;

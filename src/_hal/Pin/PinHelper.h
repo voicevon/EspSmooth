@@ -1,6 +1,9 @@
 #pragma once
 
 #include "InputPin.h"
+#include "OutputPin.h"
+#include "PwmPin.h"
+#include "AdcPin.h"
 
 class PinHelper{
 

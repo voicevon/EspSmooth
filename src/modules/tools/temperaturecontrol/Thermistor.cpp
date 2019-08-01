@@ -6,7 +6,7 @@
 #include "stdio.h"
 // #include "Adc.h"
 #include "_hal/__hal.h"
-#include "_hal/Pin/Adc.h"
+#include "_hal/Pin/AdcPin.h"
 
 // a const list of predefined thermistors
 #include "predefined_thermistors.h"
@@ -114,7 +114,7 @@ bool Thermistor::configure(ConfigReader& cr, ConfigReader::section_map_t& m)
     this->r2 = cr.get_float(m, r2_key, this->r2);
 
     // Thermistor pin for ADC readings
-    thermistor_pin= new Adc(); // returns a sub instance of the Adc Singleton
+    thermistor_pin= new AdcPin(); // returns a sub instance of the Adc Singleton
     if(!thermistor_pin->is_created()) {
         delete thermistor_pin;
         printf("config-thermistor: Thermistor pin not created\n");
@@ -260,7 +260,7 @@ float Thermistor::get_temperature()
 void Thermistor::get_raw(OutputStream& os)
 {
     int adc_value = new_thermistor_reading();
-    const uint32_t max_adc_value = Adc::get_max_value();
+    const uint32_t max_adc_value = AdcPin::get_max_value();
 
     // resistance of the thermistor in ohms
     float r = r2 / (((float)max_adc_value / adc_value) - 1.0F);
@@ -291,7 +291,7 @@ void Thermistor::get_raw(OutputStream& os)
 
 float Thermistor::adc_value_to_temperature(uint32_t adc_value)
 {
-    const uint32_t max_adc_value = Adc::get_max_value();
+    const uint32_t max_adc_value = AdcPin::get_max_value();
     if ((adc_value >= max_adc_value) || (adc_value == 0))
         return std::numeric_limits<float>::infinity();
 

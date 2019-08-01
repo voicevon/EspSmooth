@@ -1,7 +1,7 @@
 // Only thermistor inputs are supersampled
 // TODO allow non thermistor instances to be created
 
-#include "Adc.h"
+#include "AdcPin.h"
 // #include "SlowTicker.h"
 
 #include <string>
@@ -42,19 +42,19 @@ const int CHANNEL_LUT[] = {
     7                 /**< ADC channel 7 */
 };
 
-Adc *Adc::instances[Adc::num_channels] = {nullptr};
-std::set<int> Adc::allocated_channels;
-int Adc::ninstances = 0;
-bool Adc::running = false;
-int Adc::slowticker_n = -1;
+AdcPin *AdcPin::instances[AdcPin::num_channels] = {nullptr};
+std::set<int> AdcPin::allocated_channels;
+int AdcPin::ninstances = 0;
+bool AdcPin::running = false;
+int AdcPin::slowticker_n = -1;
 
 // static ADC_CLOCK_SETUP_T ADCSetup;
 static int ADCSetup;
 
 // NOTE we cannot create these once ADC is running
-Adc::Adc()
+AdcPin::AdcPin()
 {
-    if(ninstances < Adc::num_channels && !running) {
+    if(ninstances < AdcPin::num_channels && !running) {
         instance_idx = ninstances++;
         instances[instance_idx] = this;
     }
@@ -62,7 +62,7 @@ Adc::Adc()
     enabled = false;
 }
 
-Adc::~Adc()
+AdcPin::~AdcPin()
 {
     if(channel == -1 || instance_idx < 0) return;
     allocated_channels.erase(channel);
@@ -87,7 +87,7 @@ Adc::~Adc()
     }
 }
 
-bool Adc::setup()
+bool AdcPin::setup()
 {
     // ADC Init
     // Chip_ADC_Init(_LPC_ADC_ID, &ADCSetup);
@@ -117,7 +117,7 @@ bool Adc::setup()
     return true;
 }
 
-bool Adc::start()
+bool AdcPin::start()
 {
 #ifndef NO_ADC_INTERRUPTS
     // setup to interrupt
@@ -140,7 +140,7 @@ bool Adc::start()
     return true;
 }
 
-void Adc::on_tick()
+void AdcPin::on_tick()
 {
 #ifndef NO_ADC_INTERRUPTS
     if(running) {
@@ -156,7 +156,7 @@ void Adc::on_tick()
 #endif
 }
 
-bool Adc::stop()
+bool AdcPin::stop()
 {
     running = false;
 #ifndef NO_ADC_INTERRUPTS
@@ -171,7 +171,7 @@ bool Adc::stop()
 // TODO only ADC0_0 to ADC0_7 handled at the moment
 // figure out channel from name (ADC0_1, ADC0_4, ...)
 // or Pin P4_3
-Adc* Adc::from_string(const char *name)
+AdcPin* AdcPin::from_string(const char *name)
 {
     if(enabled) return nullptr; // aready setup
     if(instance_idx < 0) return nullptr; // too many instances
@@ -260,10 +260,10 @@ extern "C" _ramfunc_ void ADC0_IRQHandler(void)
 //_ramfunc_
 // As this calls non ram based funcs there is no point in it being in ram
 // in interrupt mode this will be called once for each active channel
-void Adc::sample_isr()
+void AdcPin::sample_isr()
 {
     for (int i = 0; i < ninstances; ++i) {
-        Adc *adc = Adc::getInstance(i);
+        AdcPin *adc = AdcPin::getInstance(i);
         if(adc == nullptr || !adc->enabled) continue; // not setup
 
         int ch = adc->channel;
@@ -282,7 +282,7 @@ void Adc::sample_isr()
 // Keeps the last 32 values for each channel
 // This is called in an ISR, so sample_buffer needs to be accessed atomically
 //_ramfunc_
-void Adc::new_sample(uint32_t value)
+void AdcPin::new_sample(uint32_t value)
 {
     // Shuffle down and add new value to the end
     // FIXME memmove appears to not be inline, so in an interrupt in SPIFI it is too slow
@@ -295,7 +295,7 @@ void Adc::new_sample(uint32_t value)
 
 //#define USE_MEDIAN_FILTER
 // gets called 20 times a second from a timer
-uint32_t Adc::read()
+uint32_t AdcPin::read()
 {
     uint16_t median_buffer[num_samples];
 
@@ -366,7 +366,7 @@ static unsigned int quick_median(uint16_t data[], unsigned int n)
     return k;
 }
 
-float Adc::read_voltage()
+float AdcPin::read_voltage()
 {
     // just return the voltage on the pin
     uint16_t median_buffer[num_samples];
