@@ -20,9 +20,10 @@ DcMotor::DcMotor(Pin dir, Pin pwm){
 }
 //My goal B:
 DcMotor::DcMotor(OutputPin dir_pin, PwmPin pwm_pin){
-    // dir_pin.init();
+    dir_pin.init();
 
-    // pwm_pin.init(channel=auto_get,frequency = 500);
+    //pwm_pin.init(channel=auto_get,frequency = 500);
+    pwm_pin.set_frequency_auto_channel(50);
     // pwm_pin.init(channel=auto_get,frequency = 500, min = 10, max = 359);
     // pwm_pin.init(channel=auto_get,frequency = 500, min = 10, max = 359, start_pwm_value = 10);
 

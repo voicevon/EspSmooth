@@ -7,6 +7,8 @@
 #include <vector>
 #include <cmath>
 
+static const int PWM_RESOLUTION_BITS = 16;     // 16 bit resolution
+
 // #include "board.h"
 
 uint32_t PwmPin::frequency= 0;
@@ -22,25 +24,21 @@ Pin  a, b, COUT#, Function
 
 // };
 
-bool PwmPin::lookup_pin(uint8_t port, uint8_t pin, uint8_t& ctout, uint8_t& func)
-{
+// bool PwmPin::lookup_pin(uint8_t port, uint8_t pin, uint8_t& ctout, uint8_t& func)
+// {
 
 
-    return false;
-}
+//     return false;
+// }
 
 // static
-int PwmPin::pwm_index= 1;
-int PwmPin::map_pin_to_pwm(const char *name)
-{
-    return 0;
-}
+// int PwmPin::pwm_index= 1;
+// int PwmPin::map_pin_to_pwm(const char *name)
+// {
+//     return 0;
+// }
 
-PwmPin::PwmPin()
-{
-	valid= false;
-	index= 0;
-}
+
 
 PwmPin::PwmPin(const char *pin)
 {
@@ -54,21 +52,19 @@ bool PwmPin::setup(uint32_t freq)
 	return true;
 }
 
-// bool Pwm::from_string(const char *pin)
-// {
-// 	int xind= map_pin_to_pwm(pin);
-//     if(xind > 0){
-//     	valid= true;
-//     	index= xind;
-//     	return true;
-//     }
+bool PwmPin::set_frequency_auto_channel(double frequency){
+	__pwm_channel = take_pwm_channel();
+	ledcSetup(__pwm_channel, frequency, PWM_RESOLUTION_BITS);
+    ledcAttachPin(this->get_gpio_num(), __pwm_channel);
+	return true;
+}
 
-//  	valid= false;
-//  	index= 0;
-//  	return false;
-// }
 
 void PwmPin::set(float v)
 {
-	value= v;
+	pwm_value= v;
+}
+
+uint8_t PwmPin::take_pwm_channel(){
+	return 0;
 }

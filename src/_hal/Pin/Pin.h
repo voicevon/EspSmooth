@@ -29,10 +29,8 @@ public:
     Pin* from_string(std::string value);
     std::string to_string() const;
 
-    bool connected() const
-    {
-        return this->valid;
-    }
+    bool is_valid() const { return this->valid; }
+    bool connected() const { return this->valid; }
 
 
 

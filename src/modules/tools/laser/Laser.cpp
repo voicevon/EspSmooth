@@ -62,8 +62,9 @@ bool Laser::configure(ConfigReader& cr)
         return false;
     }
 
-    pwm_pin= new PwmPin();
-    pwm_pin->from_string(cr.get_string(m, pwm_pin_key, "nc"));
+    // pwm_pin= new PwmPin();
+    // pwm_pin->from_string(cr.get_string(m, pwm_pin_key, "nc"));
+    pwm_pin= new PwmPin(cr.get_string(m, pwm_pin_key, "nc"));
 
     if(!pwm_pin->is_valid()) {
         printf("Error: laser-config: Specified pin is not a valid PWM pin.\n");
