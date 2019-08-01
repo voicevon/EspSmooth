@@ -10,9 +10,7 @@ public:
 	PwmPin();
 	~PwmPin(){};
 	PwmPin(const char* pin);
-	// bool from_string(const char *pin);
 	bool is_valid() const { return valid; }
-	// set duty cycle 0-1
 	void set(float v);
 	float get_pwm() const { return value; }
 	static uint32_t get_frequency() { return frequency; }
