@@ -10,7 +10,6 @@ public:
 	PwmPin();
 	~PwmPin(){};
 	PwmPin(const char* pin);
-	// bool is_valid() const { return valid; }
 	void set(float v);
 	float get_pwm() const { return pwm_value; }
 	static uint32_t get_frequency() { return frequency; }
@@ -23,7 +22,6 @@ private:
 	static int pwm_index;
 	static uint32_t frequency;
 	float pwm_value;
-	// bool valid{false};
 	uint8_t index;
 
 };
