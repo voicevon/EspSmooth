@@ -13,7 +13,7 @@ static uint8_t pwm_channel = 0;
 
 ServoMotor::ServoMotor(Pin pin):Actuator(){
     ledcSetup(pwm_channel, SERVO_FREQ, PWM_RESOLUTION_BITS);
-    ledcAttachPin(__pin.get_gpiopin(),__pwm_channel);
+    ledcAttachPin(__pin.get_gpio_num(),__pwm_channel);
     ledcWrite(pwm_channel, 0);
     pwm_channel++;
 }

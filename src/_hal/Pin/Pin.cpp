@@ -1,6 +1,6 @@
 #include "Pin.h"
 #include "libs/StringUtils.h"
-
+#include "HardwareSerial.h"
 
 Pin::Pin()
 {
@@ -26,6 +26,8 @@ Pin::Pin(const char *s, TYPE_T t)
         switch(t) {
             case AS_INPUT: as_input(); break;
             case AS_OUTPUT: as_output(); break;
+            case AS_PWM: as_pwm();break;
+            case AS_ADC: as_adc();break;
         }
     }
 }
@@ -179,5 +181,24 @@ Pin* Pin::as_input()
     }
     return nullptr;
 }
+
+Pin* Pin::as_adc()
+{
+    return nullptr;
+}
+
+Pin* Pin::as_pwm()
+{
+    if(valid) {
+        if(this->gpio_pin_num <= MAX_MCU_GPIO_INDEX ){
+            pinMode(this->gpio_pin_num, INPUT);   //Wait for setup_pwm() to get more parameters.
+        }else{ //expaned gpio 
+            Serial.println("[W][Pin.AS_PWM]  we have no plan to support PWM on expanded IO ");
+
+        }
+    }
+    return nullptr;
+}
+
 
 

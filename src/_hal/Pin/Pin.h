@@ -35,6 +35,8 @@ public:
 
     Pin* as_output();
     Pin* as_input();
+    Pin* as_adc();
+    Pin* as_pwm();
 
     // we need to do this inline due to ISR being in SRAM not FLASH   
     // Right now, it's not in SRAM ! ForHighSpeed demand, Please call digitalRead(), and do inverting yourself.  By Xuming Jun2019
@@ -65,7 +67,7 @@ public:
         }
     }
 
-    inline uint16_t get_gpiopin() const { return this->gpio_pin_num; }
+    inline uint16_t get_gpio_num() const { return this->gpio_pin_num; }
 
     bool is_inverting() const { return inverting; }
     void set_inverting(bool f) { inverting = f; }

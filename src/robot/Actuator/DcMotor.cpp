@@ -10,7 +10,7 @@ DcMotor::DcMotor(Pin dir, Pin pwm){
     __pin_pwm = pwm;
     __pwm_channel = pwm_channel;
     ledcSetup(pwm_channel, SERVO_FREQ, PWM_RESOLUTION_BITS);
-    ledcAttachPin(__pin_pwm.get_gpiopin(), __pwm_channel);
+    ledcAttachPin(__pin_pwm.get_gpio_num(), __pwm_channel);
     ledcWrite(__pwm_channel, 0);
 
     // my goal: 
