@@ -34,8 +34,8 @@
 #include "_hal/__hal.h"
 #include "_hal/board.h"
 #include "_hal/uart.h"
-#include "_hal/Adc.h"
-#include "_hal/Pwm.h"
+#include "_hal/Pin/Adc.h"
+#include "_hal/Pin/Pwm.h"
 #include "_hal/stopwatch.h"
 
 static const char *TAG = "espsmooth.main";

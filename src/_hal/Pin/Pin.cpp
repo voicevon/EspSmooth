@@ -93,6 +93,10 @@ Pin* Pin::from_string(std::string value)
     // - = set pin to no pull up or down
     // default to pull up for input pins, neither for output
     // gpio |= PINCONF_PULLUP;
+
+    // p = pwm
+    // a = adc
+    // c = pulse counter
     for(char c : value.substr(7)) {
         switch(c) {
             case '!':

@@ -6,7 +6,7 @@
 #include "stdio.h"
 // #include "Adc.h"
 #include "_hal/__hal.h"
-#include "_hal/Adc.h"
+#include "_hal/Pin/Adc.h"
 
 // a const list of predefined thermistors
 #include "predefined_thermistors.h"

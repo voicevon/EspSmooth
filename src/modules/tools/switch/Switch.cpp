@@ -8,7 +8,7 @@
 #include "libs/SigmaDeltaPwm.h"
 // #include "Pwm.h"
 #include "_hal/__hal.h"
-#include "_hal/Pwm.h"
+#include "_hal/Pin/Pwm.h"
 #include "smoothie/GCodeProcessor.h"
 #include "smoothie/Dispatcher.h"
 #include "startup.h"

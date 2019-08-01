@@ -5,7 +5,7 @@
 #include "smoothie/Dispatcher.h"
 #include "libs/SlowTicker.h"
 #include "libs/FastTicker.h"
-#include "_hal/Pwm.h"
+#include "_hal/Pin/Pwm.h"
 #include "_hal/Pin/Pin.h"
 #include "_hal/__hal.h"
 #include "robot/StepTicker.h"
