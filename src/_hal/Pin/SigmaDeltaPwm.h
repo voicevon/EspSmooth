@@ -14,6 +14,8 @@ public:
     void     pwm(int);
     int      get_pwm() const { return _pwm; }
     void     set(bool);
+    void as_output(){}
+    
 
 private:
     int  _max;

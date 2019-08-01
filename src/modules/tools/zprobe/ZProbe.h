@@ -1,7 +1,7 @@
 #pragma once
 
 #include "smoothie/Module.h"
-#include "_hal/Pin/Pin.h"
+#include "_hal/Pin/InputPin.h"
 
 // defined here as they are used in multiple files
 #define leveling_strategy_key "leveling-strategy"
@@ -50,7 +50,7 @@ private:
     float max_travel;
     float dwell_before_probing;
 
-    Pin pin;
+    InputPin pin;
     ZProbeStrategy *leveling_strategy{nullptr};
     ZProbeStrategy *calibration_strategy{nullptr};
 

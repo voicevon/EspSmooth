@@ -1,8 +1,9 @@
 #include "PID_Autotuner.h"
 #include "TemperatureControl.h"
-#include "libs/SigmaDeltaPwm.h"
-#include "libs/OutputStream.h"
 #include "smoothie/GCode.h"
+
+#include "libs/OutputStream.h"
+#include "_hal/Pin/SigmaDeltaPwm.h"
 #include "startup.h"
 
 #include <cmath>        // std::abs
