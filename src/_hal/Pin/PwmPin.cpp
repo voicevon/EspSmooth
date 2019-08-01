@@ -70,5 +70,5 @@ bool PwmPin::setup(uint32_t freq)
 
 void PwmPin::set(float v)
 {
-	value= v;
+	pwm_value= v;
 }
