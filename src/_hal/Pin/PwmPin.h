@@ -7,7 +7,6 @@
 class PwmPin: public Pin
 {
 public:
-	PwmPin();
 	~PwmPin(){};
 	PwmPin(const char* pin);
 	void set(float v);
