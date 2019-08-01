@@ -1,6 +1,6 @@
 #pragma once
 
-#include "_hal/Pin.h"
+#include "_hal/Pin/Pin.h"
 
 class SigmaDeltaPwm : public Pin {
 public:
@@ -14,6 +14,8 @@ public:
     void     pwm(int);
     int      get_pwm() const { return _pwm; }
     void     set(bool);
+    void as_output(){}
+    
 
 private:
     int  _max;

@@ -1,9 +1,14 @@
 #pragma once
 
+
+// This is a m-code reconfigable class.
+//      means can control the gpio from m-code
+
 #include "smoothie/Module.h"
 #include "smoothie/ConfigReader.h"
-#include "_hal/Pin.h"
-
+#include "_hal/Pin/PwmPin.h"
+#include "_hal/Pin/InputPin.h"
+#include "_hal/Pin/OutputPin.h"
 
 #include <string>
 #include <atomic>
@@ -35,13 +40,13 @@ class Switch : public Module {
         bool match_input_on_gcode(const GCode& gcode) const;
         bool match_input_off_gcode(const GCode& gcode) const;
 
-        Pin       input_pin;
+        InputPin       input_pin;
         float     switch_value;
         OUTPUT_TYPE output_type;
         union {
-            Pin *digital_pin;
+            OutputPin *digital_pin;
             SigmaDeltaPwm *sigmadelta_pin;
-            Pwm *pwm_pin;
+            PwmPin *pwm_pin;
         };
         std::string    output_on_command;
         std::string    output_off_command;

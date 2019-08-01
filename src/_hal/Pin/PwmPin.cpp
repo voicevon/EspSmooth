@@ -1,4 +1,4 @@
-#include "Pwm.h"
+#include "PwmPin.h"
 
 #include <string>
 #include <cstring>
@@ -9,7 +9,7 @@
 
 // #include "board.h"
 
-uint32_t Pwm::frequency= 0;
+uint32_t PwmPin::frequency= 0;
 
 /* 43xx Pinmap for PWM to CTOUT and function
 Pin  a, b, COUT#, Function
@@ -22,7 +22,7 @@ Pin  a, b, COUT#, Function
 
 // };
 
-bool Pwm::lookup_pin(uint8_t port, uint8_t pin, uint8_t& ctout, uint8_t& func)
+bool PwmPin::lookup_pin(uint8_t port, uint8_t pin, uint8_t& ctout, uint8_t& func)
 {
 
 
@@ -30,45 +30,45 @@ bool Pwm::lookup_pin(uint8_t port, uint8_t pin, uint8_t& ctout, uint8_t& func)
 }
 
 // static
-int Pwm::pwm_index= 1;
-int Pwm::map_pin_to_pwm(const char *name)
+int PwmPin::pwm_index= 1;
+int PwmPin::map_pin_to_pwm(const char *name)
 {
     return 0;
 }
 
-Pwm::Pwm()
+PwmPin::PwmPin()
 {
 	valid= false;
 	index= 0;
 }
 
-Pwm::Pwm(const char *pin)
+PwmPin::PwmPin(const char *pin)
 {
 	from_string(pin);
 }
 
 // static
-bool Pwm::setup(uint32_t freq)
+bool PwmPin::setup(uint32_t freq)
 {
 
 	return true;
 }
 
-bool Pwm::from_string(const char *pin)
-{
-	int xind= map_pin_to_pwm(pin);
-    if(xind > 0){
-    	valid= true;
-    	index= xind;
-    	return true;
-    }
+// bool Pwm::from_string(const char *pin)
+// {
+// 	int xind= map_pin_to_pwm(pin);
+//     if(xind > 0){
+//     	valid= true;
+//     	index= xind;
+//     	return true;
+//     }
 
- 	valid= false;
- 	index= 0;
- 	return false;
-}
+//  	valid= false;
+//  	index= 0;
+//  	return false;
+// }
 
-void Pwm::set(float v)
+void PwmPin::set(float v)
 {
 	value= v;
 }

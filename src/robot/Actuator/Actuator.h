@@ -7,6 +7,7 @@
 class Actuator
 {
     public:
+
         Actuator();
         ~Actuator();
 
@@ -55,8 +56,10 @@ class Actuator
 
         int32_t steps_to_target(float);
 
-    protected:
+        // TYPE_T type_from_string(const char* type_description);
 
+
+    protected:
 
         float steps_per_second;
         float steps_per_mm;
@@ -66,8 +69,6 @@ class Actuator
         volatile int32_t current_position_steps;
         int32_t last_milestone_steps;
         float   last_milestone_mm;
-
-
 
         volatile struct {
             uint8_t motor_id:8;

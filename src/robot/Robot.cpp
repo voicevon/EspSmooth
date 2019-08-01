@@ -8,6 +8,8 @@
 #include "Actuator/StepperMotor.h"
 #include "Actuator/ServoMotor.h"
 #include "Actuator/DcMotor.h"
+#include "_hal/__hal.h"
+#include "_hal/Pin/PinHelper.h"
 
 #include "arm_solutions/BaseSolution.h"
 #include "arm_solutions/CartesianSolution.h"
@@ -31,7 +33,6 @@
 
 
 
-#include "_hal/__hal.h"
 
 #include <math.h>
 #include <string>
@@ -235,52 +236,68 @@ bool Robot::configure(ConfigReader& cr)
 
         auto& mm = s->second; // map of actuator config values for this actuator
 
-        ActuatorType act_type(cr.get_string(mm,actuator_type_key,"stepper"));
-        //read actuator type from config.ini/[actuator].type
-
-        Pin servo_pin(cr.get_string(mm,servo_pin_key,"nc"),Pin::AS_OUTPUT);
-        Pin dc_pwm_pin(cr.get_string(mm,dc_pwm_pin_key,"nc"),Pin::AS_OUTPUT);
-        Pin dc_dir_pin(cr.get_string(mm,dc_dir_pin_key,"nc"),Pin::AS_INPUT);
-        Pin step_pin(cr.get_string(mm, step_pin_key, "nc"), Pin::AS_OUTPUT);
-        Pin dir_pin( cr.get_string(mm, dir_pin_key,  "nc"), Pin::AS_OUTPUT);
-        Pin en_pin(  cr.get_string(mm, en_pin_key,   "nc"), Pin::AS_OUTPUT);
 
 
-        if(!step_pin.connected() || !dir_pin.connected()) { // step and dir must be defined, but enable is optional
-            if(a <= Z_AXIS) {
-                printf("FATAL:configure-robot: motor %c - %s is not defined in config\n", 'X' + a, s->first.c_str());
-                n_motors = a; // we only have this number of motors
-                return false;
-            }
-            break; // if any pin is not defined then the axis is not defined (and axis need to be defined in contiguous order)
-        }
+        PwmPin servo_pin(cr.get_string(mm, servo_pin_key, "nc"));
+        PwmPin dc_pwm_pin(cr.get_string(mm, dc_pwm_pin_key, "nc"));
+        OutputPin dc_dir_pin(cr.get_string(mm, dc_dir_pin_key, "nc"));
+        OutputPin step_pin(cr.get_string(mm, step_pin_key, "nc"));
+        OutputPin dir_pin(cr.get_string(mm, dir_pin_key, "nc"));
+        OutputPin en_pin(cr.get_string(mm, en_pin_key, "nc"));
 
+
+
+        // PinHelper* helper = new PinHelper();
+        // PwmPin* servo_pin_test = (PwmPin*) helper->create_pin(cr.get_string(mm,servo_pin_key,"nc"), PinHelper::AS_INPUT);
+        // PwmPin* servo_pin_test = (PwmPin*) helper->create_pin("GPIO_12p", PinHelper::AS_PWM);
+        // OutputPin output_pin("");
+        // PwmPin pwmtest("GPIO_12");
+
+        // helper->~PinHelper();
+
+        // if(!step_pin.connected() || !dir_pin.connected()) { // step and dir must be defined, but enable is optional
+        //     if(a <= Z_AXIS) {
+        //         printf("FATAL:configure-robot: motor %c - %s is not defined in config\n", 'X' + a, s->first.c_str());
+        //         n_motors = a; // we only have this number of motors
+        //         return false;
+        //     }
+        //     break; // if any pin is not defined then the axis is not defined (and axis need to be defined in contiguous order)
+        // }
+
+        // DcMotor* ddd = new DcMotor(output_pin,pwmtest);
+        
         // create the actuator
         Actuator* new_actuator;
-        // ServoMotor* new_servo = new ServoMotor(123);
 
-        int actuator_type = act_type.toInt();    //1 = stepper,  2= Servo,  3=Dc Motor
+        ActuatorType act_type(cr.get_string(mm,actuator_type_key,"stepper"));      
         uint8_t regietered_count;
-        switch (actuator_type){
-            case 1:{     //stepper
-                printf("[D][robot]  for actuator %s pins: step= %s, dir= %s, en= %s\n", s->first.c_str(), step_pin.to_string().c_str(), dir_pin.to_string().c_str(), en_pin.to_string().c_str());
+        switch (act_type.get_type()) {
+            case ActuatorType::STEPPER_MOTOR: {     //stepper
+                printf("[D][robot.config]  for stepper motor %s pins: step= %s, dir= %s, en= %s\n", s->first.c_str(), step_pin.to_string().c_str(), dir_pin.to_string().c_str(), en_pin.to_string().c_str());
                 StepperMotor *new_stepper = new StepperMotor(step_pin, dir_pin, en_pin);
+                // regietered_count = register_actuator(new_stepper);  Is this way better?
                 new_actuator = new_stepper;
                 }
                 break;
-            case 2:{     // Servo
-                printf("[D][robot]  for actuator %s pins: servo= %s\n", s->first.c_str(), servo_pin.to_string().c_str());
+            case ActuatorType::SERVO_MOTOR: {     // Servo
+                printf("[D][robot.config]  for servo motor %s pins: servo= %s\n", s->first.c_str(), servo_pin.to_string().c_str());
                 ServoMotor* new_servo = new ServoMotor(servo_pin);
                 new_actuator = new_servo;
                 }
                 break;
-            case 3:{     //Dc motor
-                printf("[D][robot]  for actuator %s pins: dc_dir= %s, dc_pwm= %s\n", s->first.c_str(), dc_dir_pin.to_string().c_str(),dc_pwm_pin.to_string().c_str());
+            case ActuatorType::XUEFENG_MOTOR: {     //Xuefeng motor
+
+                }
+                break;
+
+            case ActuatorType::DC_MOTOR: {    //Dc motor
+                printf("[D][robot.config]  for dc motor %s pins: dc_dir= %s, dc_pwm= %s\n", s->first.c_str(), dc_dir_pin.to_string().c_str(),dc_pwm_pin.to_string().c_str());
                 DcMotor* new_dc = new DcMotor(dc_dir_pin,dc_pwm_pin);
                 new_actuator = new_dc;
                 }
                 break;
         }
+
         // register this actuator (NB This must be 0,1,2,...) of the actuators array
         regietered_count = register_actuator(new_actuator);
         if(regietered_count != a) {
@@ -366,7 +383,9 @@ bool Robot::configure(ConfigReader& cr)
         actuators[a]->change_steps_per_mm(cr.get_float(mm, steps_per_mm_key, a == Z_AXIS ? 2560.0F : 80.0F));
         actuators[a]->set_max_rate(cr.get_float(mm, max_rate_key, 30000.0F) / 60.0F); // it is in mm/min and converted to mm/sec
         actuators[a]->set_acceleration(cr.get_float(mm, acceleration_key, -1)); // mm/secs² if -1 it uses the default acceleration
+        // Serial.println("9999999999999999999999");
     }
+    // Serial.println("1111111111111111111");
 
     check_max_actuator_speeds(); // check the configs are sane
 

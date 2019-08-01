@@ -1,6 +1,7 @@
 #pragma once
 
 #include "TempSensor.h"
+#include "_hal/Pin/AdcPin.h"
 
 #include <tuple>
 
@@ -51,7 +52,7 @@ class Thermistor : public TempSensor
             };
         };
 
-        Adc *thermistor_pin{nullptr};
+        AdcPin *thermistor_pin{nullptr};
 
         float min_temp, max_temp;
 

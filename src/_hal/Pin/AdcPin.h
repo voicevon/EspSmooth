@@ -10,20 +10,20 @@ class Pin;
 // 2 bits means the 12bit ADC is 14 bits of resolution
 #define OVERSAMPLE 2
 
-class Adc
+class AdcPin
 {
 public:
-    static Adc *getInstance(int n) { return instances[n]; }
+    static AdcPin *getInstance(int n) { return instances[n]; }
 
-    Adc();
-    virtual ~Adc();
+    AdcPin();
+    virtual ~AdcPin();
     static bool setup();
     static bool start();
     static bool stop();
     static void on_tick(void);
 
     // specific to each instance
-    Adc* from_string(const char *name);
+    AdcPin* from_string(const char *name);
     uint32_t read();
     float read_voltage();
     int get_channel() const { return channel; }
@@ -42,7 +42,7 @@ public:
 
 private:
     static const int num_channels= 8;
-    static Adc* instances[num_channels];
+    static AdcPin* instances[num_channels];
     static int ninstances;
     static std::set<int> allocated_channels;
 

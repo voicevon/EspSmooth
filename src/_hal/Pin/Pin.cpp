@@ -1,6 +1,6 @@
 #include "Pin.h"
 #include "libs/StringUtils.h"
-
+#include "HardwareSerial.h"
 
 Pin::Pin()
 {
@@ -17,18 +17,20 @@ Pin::Pin(const char *s)
     from_string(s);
 }
 
-Pin::Pin(const char *s, TYPE_T t)
-{
-    this->inverting = false;
-    this->valid = false;
-    this->open_drain = false;
-    if(from_string(s) != nullptr) {
-        switch(t) {
-            case AS_INPUT: as_input(); break;
-            case AS_OUTPUT: as_output(); break;
-        }
-    }
-}
+// Pin::Pin(const char *s, TYPE_T t)
+// {
+//     this->inverting = false;
+//     this->valid = false;
+//     this->open_drain = false;
+//     if(from_string(s) != nullptr) {
+//         switch(t) {
+//             case AS_INPUT: as_input(); break;
+//             case AS_OUTPUT: as_output(); break;
+//             case AS_PWM: as_pwm();break;
+//             case AS_ADC: as_adc();break;
+//         }
+//     }
+// }
 
 Pin::~Pin()
 {
@@ -93,6 +95,10 @@ Pin* Pin::from_string(std::string value)
     // - = set pin to no pull up or down
     // default to pull up for input pins, neither for output
     // gpio |= PINCONF_PULLUP;
+
+    // f = pwm frequency
+    // a = adc gain db
+    // c = pulse counter
     for(char c : value.substr(7)) {
         switch(c) {
             case '!':
@@ -139,41 +145,10 @@ std::string Pin::to_string() const
     }
 }
 
-Pin* Pin::as_output()
-{
-    if(valid) {
-        if(this->gpio_pin_num <= MAX_MCU_GPIO_INDEX){
-            if(this->open_drain){
-                pinMode(this->gpio_pin_num, OUTPUT_OPEN_DRAIN);
-                return this;
-            }
-            pinMode(this->gpio_pin_num, OUTPUT);
-        }else{  //expaned io
-            
-        }
-    }
 
-    return nullptr;
-}
 
-Pin* Pin::as_input()
-{
-    if(valid) {
-        if(this->gpio_pin_num <= MAX_MCU_GPIO_INDEX ){
-            if(this->is_pull_up) {
-                pinMode(this->gpio_pin_num, INPUT_PULLUP);
-                return this;
-            } 
-            if(this->is_pull_down){
-                pinMode(this->gpio_pin_num, INPUT_PULLDOWN);
-                return this;
-            }
-            pinMode(this->gpio_pin_num, INPUT);
-        }else{ //expaned gpio
 
-        }
-    }
-    return nullptr;
-}
+
+
 
 

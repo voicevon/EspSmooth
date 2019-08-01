@@ -5,8 +5,8 @@
 #include "smoothie/Dispatcher.h"
 #include "libs/SlowTicker.h"
 #include "libs/FastTicker.h"
-#include "_hal/Pwm.h"
-#include "_hal/Pin.h"
+#include "_hal/Pin/PwmPin.h"
+#include "_hal/Pin/Pin.h"
 #include "_hal/__hal.h"
 #include "robot/StepTicker.h"
 #include "smoothie/ConfigReader.h"
@@ -62,7 +62,7 @@ bool Laser::configure(ConfigReader& cr)
         return false;
     }
 
-    pwm_pin= new Pwm();
+    pwm_pin= new PwmPin();
     pwm_pin->from_string(cr.get_string(m, pwm_pin_key, "nc"));
 
     if(!pwm_pin->is_valid()) {
@@ -75,8 +75,10 @@ bool Laser::configure(ConfigReader& cr)
     this->pwm_inverting = cr.get_bool(m, inverted_key, false);
 
     // TTL settings
-    this->ttl_pin = new Pin();
-    ttl_pin->from_string( cr.get_string(m, ttl_pin_key, "nc" ))->as_output();
+    this->ttl_pin = new OutputPin(cr.get_string(m, ttl_pin_key, "nc" ));
+    // ttl_pin->from_string( cr.get_string(m, ttl_pin_key, "nc" ))->as_output();
+    this->ttl_pin->init();
+    
     this->ttl_used = ttl_pin->connected();
     this->ttl_inverting = ttl_pin->is_inverting();
     if (ttl_used) {
@@ -109,7 +111,7 @@ bool Laser::configure(ConfigReader& cr)
     THEDISPATCHER->add_handler(Dispatcher::MCODE_HANDLER, 221, std::bind(&Laser::handle_M221, this, _1, _2));
 
     // no point in updating the power more than the PWM frequency, but no more than 100Hz
-    uint32_t pwm_freq= Pwm::get_frequency();
+    uint32_t pwm_freq= PwmPin::get_frequency();
     uint32_t f= patch::min(100UL, pwm_freq);
     if(f >= FastTicker::get_min_frequency()) {
         printf("configure-temperature: WARNING update frequency is fast enough that ramfunc needs to be used\n");

@@ -1,6 +1,5 @@
 #include "startup.h"
 
-// #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -13,30 +12,28 @@
 #include <vector>
 #include <functional>
 
-//#include "FreeRTOS.h"
-
 #include "ff.h"
-//#include "freertos/semphr.h"
-
-// #include "uart_comms.h"
-// #include "uart3_comms.h"
-// #include "stopwatch.h"
 
 #include "smoothie/Module.h"
-#include "libs/OutputStream.h"
-#include "libs/MessageQueue.h"
 #include "smoothie/GCode.h"
 #include "smoothie/GCodeProcessor.h"
 #include "smoothie/Dispatcher.h"
+
 #include "robot/Robot.h"
-#include "libs/RingBuffer.h"
 #include "robot/Conveyor.h"
+
+#include "libs/OutputStream.h"
+#include "libs/MessageQueue.h"
+#include "libs/RingBuffer.h"
+
 #include "_hal/__hal.h"
 #include "_hal/board.h"
 #include "_hal/uart.h"
-#include "_hal/Adc.h"
-#include "_hal/Pwm.h"
+#include "_hal/Pin/AdcPin.h"
+#include "_hal/Pin/PwmPin.h"
+#include "_hal/Pin/OutputPin.h"
 #include "_hal/stopwatch.h"
+#include "_hal/spiffs_ext.h"
 
 static const char *TAG = "espsmooth.main";
 
@@ -630,7 +627,7 @@ extern "C" bool setup_sdmmc();
 #endif
 
 // voltage monitors
-static std::map<std::string, Adc*> voltage_monitors;
+static std::map<std::string, AdcPin*> voltage_monitors;
 
 float get_voltage_monitor(const char* name)
 {
@@ -657,7 +654,6 @@ void register_startup(StartupFunc_t sf)
     startup_fncs.push_back(sf);
 }
 
-#include "_hal/spiffs_ext.h"
 
 //get general system settings
 void setup_section_genenal(ConfigReader cr){
@@ -672,7 +668,7 @@ void setup_section_genenal(ConfigReader cr){
         rpi_baudrate= cr.get_int(m, "rpi_baudrate", 115200);
         printf("INFO: rpi port is %senabled, at baudrate: %lu\n", rpi_port_enabled ? "" : "not ", rpi_baudrate);
         std::string p = cr.get_string(m, "aux_play_led", "nc");
-        aux_play_led = new Pin(p.c_str(), Pin::AS_OUTPUT);
+        aux_play_led = new OutputPin(p.c_str());
         if(!aux_play_led->connected()) {
             delete aux_play_led;
             aux_play_led = nullptr;
@@ -692,7 +688,7 @@ void setup_section_core(ConfigReader cr){
     if(cr.get_section("pwm", m)) {
         freq = cr.get_int(m, "frequency", freq);
     }
-    Pwm::setup(freq);
+    PwmPin::setup(freq);
     printf("INFO: PWM frequency set to %d Hz\n", freq);
 }
 
@@ -706,7 +702,7 @@ void setup_section_extruder(ConfigReader cr){
 }
 
 void setup_section_temperature_control(ConfigReader cr){
-    if(Adc::setup()) {
+    if(AdcPin::setup()) {
         // this creates any configured temperature controls
         if(!TemperatureControl::load_controls(cr)) {
             printf("INFO: no Temperature Controls loaded\n");
@@ -726,7 +722,7 @@ void setup_section_voltage_monitors(ConfigReader cr){
             std::string k = s.first;
             std::string v = s.second;
 
-            Adc *padc= new Adc;
+            AdcPin *padc= new AdcPin;
             if(padc->from_string(v.c_str()) == nullptr) {
                 printf("WARNING: Failed to create %s voltage monitor\n", k.c_str());
                 delete padc;
@@ -885,7 +881,7 @@ void smoothie_startup(void *)
             printf("Error: failed to start StepTicker\n");
         }
 
-        if(!Adc::start()) {
+        if(!AdcPin::start()) {
             printf("Error: failed to start ADC\n");
         }
 

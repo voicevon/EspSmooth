@@ -2,11 +2,13 @@
 
 #include "smoothie/Module.h"
 #include "robot/Block.h"
+#include "_hal/Pin/PwmPin.h"
+#include "_hal/Pin/OutputPin.h"
 #include <stdint.h>
 #include <string>
 
 class Pin;
-class Pwm;
+class PwmPin;
 // class Block;
 class ConfigReader;
 class GCode;
@@ -36,8 +38,8 @@ class Laser : public Module
         bool get_laser_power(float& power) const;
         float current_speed_ratio(const Block *block) const;
 
-        Pwm *pwm_pin;    // PWM output to regulate the laser power
-        Pin *ttl_pin;				// TTL output to fire laser
+        PwmPin *pwm_pin;    // PWM output to regulate the laser power
+        OutputPin *ttl_pin;				// TTL output to fire laser
         float laser_maximum_power; // maximum allowed laser power to be output on the pwm pin
         float laser_minimum_power; // value used to tickle the laser on moves.  Also minimum value for auto-scaling
         float laser_maximum_s_value; // Value of S code that will represent max power

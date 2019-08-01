@@ -41,7 +41,9 @@ bool KillButton::configure(ConfigReader& cr)
     this->unkill_enable = cr.get_bool(m,  unkill_key , true);
     this->toggle_enable = cr.get_bool(m,  toggle_key , false);
 
-    this->kill_button.from_string( cr.get_string(m,  kill_button_pin_key , "nc"))->as_input();
+    // this->kill_button.from_string( cr.get_string(m,  kill_button_pin_key , "nc"))->as_input();
+    this->kill_button.from_string( cr.get_string(m,  kill_button_pin_key , "nc"));
+    this->kill_button.as_input();
 
     if(!this->kill_button.connected()) {
         return false;

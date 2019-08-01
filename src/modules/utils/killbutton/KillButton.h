@@ -1,7 +1,7 @@
 #pragma once
 
 #include "smoothie/Module.h"
-#include "_hal/Pin.h"
+#include "_hal/Pin/InputPin.h"
 
 class KillButton : public Module {
     public:
@@ -10,7 +10,7 @@ class KillButton : public Module {
         bool configure(ConfigReader& cr);
 
     private:
-        Pin kill_button;
+        InputPin kill_button;
         void button_tick();
 
         enum STATE {

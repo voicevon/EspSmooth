@@ -1,7 +1,7 @@
 #pragma once
 
 #include "smoothie/Module.h"
-#include "_hal/Pin.h"
+#include "_hal/Pin/InputPin.h"
 
 #include <bitset>
 #include <array>
@@ -46,7 +46,7 @@ class Endstops : public Module
 
         // per endstop settings
         using endstop_info_t = struct {
-            Pin pin;
+            InputPin pin;
             struct {
                 uint16_t debounce:16;
                 char axis:8; // one of XYZABC

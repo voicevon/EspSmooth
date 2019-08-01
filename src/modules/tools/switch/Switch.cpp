@@ -1,17 +1,21 @@
 #include "Switch.h"
 
+#include "startup.h"
+
+
 #include "smoothie/GCode.h"
-#include "libs/OutputStream.h"
 #include "smoothie/ConfigReader.h"
-#include "libs/SlowTicker.h"
-#include "libs/FastTicker.h"
-#include "libs/SigmaDeltaPwm.h"
-// #include "Pwm.h"
-#include "_hal/__hal.h"
-#include "_hal/Pwm.h"
 #include "smoothie/GCodeProcessor.h"
 #include "smoothie/Dispatcher.h"
-#include "startup.h"
+
+#include "libs/OutputStream.h"
+#include "libs/SlowTicker.h"
+#include "libs/FastTicker.h"
+
+#include "_hal/__hal.h"
+#include "_hal/Pin/OutputPin.h"
+#include "_hal/Pin/PwmPin.h"
+#include "_hal/Pin/SigmaDeltaPwm.h"
 
 #include <algorithm>
 #include <math.h>
@@ -71,7 +75,10 @@ Switch::Switch(const char *name) : Module("switch", name)
 
 bool Switch::configure(ConfigReader& cr, ConfigReader::section_map_t& m)
 {
-    this->input_pin.from_string( cr.get_string(m, input_pin_key, "nc") )->as_input();
+    // this->input_pin.from_string( cr.get_string(m, input_pin_key, "nc") )->as_input();
+    this->input_pin.from_string(cr.get_string(m,input_pin_key,"nc"));
+    this->input_pin.as_input();
+
     this->subcode = cr.get_int(m, command_subcode_key, 0);
     std::string input_on_command = cr.get_string(m, input_on_command_key, "");
     std::string input_off_command = cr.get_string(m, input_off_command_key, "");
@@ -92,7 +99,8 @@ bool Switch::configure(ConfigReader& cr, ConfigReader::section_map_t& m)
     if(type == "sigmadeltapwm") {
         this->output_type = SIGMADELTA;
         this->sigmadelta_pin = new SigmaDeltaPwm();
-        this->sigmadelta_pin->from_string(output_pin)->as_output();
+        this->sigmadelta_pin->from_string(output_pin);
+        this->sigmadelta_pin->as_output();
         if(this->sigmadelta_pin->connected()) {
             if(failsafe == 1) {
                 //set_high_on_debug(sigmadelta_pin->port_number, sigmadelta_pin->pin);
@@ -108,8 +116,10 @@ bool Switch::configure(ConfigReader& cr, ConfigReader::section_map_t& m)
 
     } else if(type == "digital") {
         this->output_type = DIGITAL;
-        this->digital_pin = new Pin();
-        this->digital_pin->from_string(output_pin)->as_output();
+        this->digital_pin = new OutputPin(output_pin.c_str());
+        // this->digital_pin->from_string(output_pin)->as_output();
+        // this->digital_pin->from_string(output_pin);
+        this->digital_pin->init();
         if(this->digital_pin->connected()) {
             if(failsafe == 1) {
                 //set_high_on_debug(digital_pin->port_number, digital_pin->pin);
@@ -125,7 +135,7 @@ bool Switch::configure(ConfigReader& cr, ConfigReader::section_map_t& m)
 
     } else if(type == "hwpwm") {
         this->output_type = HWPWM;
-        pwm_pin = new Pwm(output_pin.c_str());
+        pwm_pin = new PwmPin(output_pin.c_str());
         if(failsafe == 1) {
             //set_high_on_debug(pin->port_number, pin->pin);
         } else {
