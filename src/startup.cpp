@@ -1,6 +1,5 @@
 #include "startup.h"
 
-// #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -13,30 +12,28 @@
 #include <vector>
 #include <functional>
 
-//#include "FreeRTOS.h"
-
 #include "ff.h"
-//#include "freertos/semphr.h"
-
-// #include "uart_comms.h"
-// #include "uart3_comms.h"
-// #include "stopwatch.h"
 
 #include "smoothie/Module.h"
-#include "libs/OutputStream.h"
-#include "libs/MessageQueue.h"
 #include "smoothie/GCode.h"
 #include "smoothie/GCodeProcessor.h"
 #include "smoothie/Dispatcher.h"
+
 #include "robot/Robot.h"
-#include "libs/RingBuffer.h"
 #include "robot/Conveyor.h"
+
+#include "libs/OutputStream.h"
+#include "libs/MessageQueue.h"
+#include "libs/RingBuffer.h"
+
 #include "_hal/__hal.h"
 #include "_hal/board.h"
 #include "_hal/uart.h"
 #include "_hal/Pin/AdcPin.h"
 #include "_hal/Pin/PwmPin.h"
+#include "_hal/Pin/OutputPin.h"
 #include "_hal/stopwatch.h"
+#include "_hal/spiffs_ext.h"
 
 static const char *TAG = "espsmooth.main";
 
@@ -657,7 +654,6 @@ void register_startup(StartupFunc_t sf)
     startup_fncs.push_back(sf);
 }
 
-#include "_hal/spiffs_ext.h"
 
 //get general system settings
 void setup_section_genenal(ConfigReader cr){
@@ -672,7 +668,7 @@ void setup_section_genenal(ConfigReader cr){
         rpi_baudrate= cr.get_int(m, "rpi_baudrate", 115200);
         printf("INFO: rpi port is %senabled, at baudrate: %lu\n", rpi_port_enabled ? "" : "not ", rpi_baudrate);
         std::string p = cr.get_string(m, "aux_play_led", "nc");
-        aux_play_led = new Pin(p.c_str(), Pin::AS_OUTPUT);
+        aux_play_led = new OutputPin(p.c_str());
         if(!aux_play_led->connected()) {
             delete aux_play_led;
             aux_play_led = nullptr;

@@ -17,20 +17,20 @@ Pin::Pin(const char *s)
     from_string(s);
 }
 
-Pin::Pin(const char *s, TYPE_T t)
-{
-    this->inverting = false;
-    this->valid = false;
-    this->open_drain = false;
-    if(from_string(s) != nullptr) {
-        switch(t) {
-            case AS_INPUT: as_input(); break;
-            case AS_OUTPUT: as_output(); break;
-            case AS_PWM: as_pwm();break;
-            case AS_ADC: as_adc();break;
-        }
-    }
-}
+// Pin::Pin(const char *s, TYPE_T t)
+// {
+//     this->inverting = false;
+//     this->valid = false;
+//     this->open_drain = false;
+//     if(from_string(s) != nullptr) {
+//         switch(t) {
+//             case AS_INPUT: as_input(); break;
+//             case AS_OUTPUT: as_output(); break;
+//             case AS_PWM: as_pwm();break;
+//             case AS_ADC: as_adc();break;
+//         }
+//     }
+// }
 
 Pin::~Pin()
 {
@@ -96,8 +96,8 @@ Pin* Pin::from_string(std::string value)
     // default to pull up for input pins, neither for output
     // gpio |= PINCONF_PULLUP;
 
-    // p = pwm
-    // a = adc
+    // f = pwm frequency
+    // a = adc gain db
     // c = pulse counter
     for(char c : value.substr(7)) {
         switch(c) {

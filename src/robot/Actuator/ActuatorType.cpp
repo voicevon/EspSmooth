@@ -1,13 +1,14 @@
 #include "ActuatorType.h"
 
-ActuatorType::ActuatorType(std::string str){
-    from_string(str);
+ActuatorType::ActuatorType(const char* type_description){
+    from_string(type_description);
 }
 
-ActuatorType* ActuatorType::from_string(std::string str){
-    if(str == "stepper") this->id = 1;
-    if(str == "servo") this->id = 2;
-    if(str == "dc") this->id = 3;
+ActuatorType* ActuatorType::from_string(const char* type_description){
+    if(type_description == "stepper") this->id = 1;
+    if(type_description == "servo") this->id = 2;
+    if(type_description == "xuefeng") this->id = 3;
+    if(type_description == "dc") this->id = 4;
     return this;  
 }
 

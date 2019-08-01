@@ -5,12 +5,14 @@
 #include "stdint.h"
 
 class ActuatorType{
-    
+
+    enum ACTUATOR_TYPE_T {STEPPER_MOTOR,SERVO_MOTOR,XUEFENG_MOTOR,DC_MOTOR};
+
     public:
-        ActuatorType(std::string str);
+        ActuatorType(const char* type_description);
         ~ActuatorType(){}
 
-        ActuatorType* from_string(std::string str);
+        ActuatorType* from_string(const char*  type_description);
 
         uint8_t toInt();
 

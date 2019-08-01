@@ -1,19 +1,25 @@
+#include "startup.h"
 #include "CommandShell.h"
-#include "libs/OutputStream.h"
 #include "Dispatcher.h"
 #include "Module.h"
-#include "libs/StringUtils.h"
-#include "robot/Robot.h"
-#include "libs/AutoPushPop.h"
-#include "robot/Actuator/StepperMotor.h"
-#include "startup.h"
-#include "modules/tools/temperaturecontrol/TemperatureControl.h"
 #include "ConfigWriter.h"
-#include "robot/Conveyor.h"
 #include "version.h"
+
+#include "robot/Robot.h"
+#include "robot/StepTicker.h"
+#include "robot/Actuator/StepperMotor.h"
+#include "robot/Conveyor.h"
+
+#include "modules/tools/temperaturecontrol/TemperatureControl.h"
+
 #include "libs/ymodem.h"
 #include "libs/FastTicker.h"
-#include "robot/StepTicker.h"
+#include "libs/AutoPushPop.h"
+#include "libs/OutputStream.h"
+#include "libs/StringUtils.h"
+
+#include "_hal/Pin/OutputPin.h"
+#include "_hal/Pin/InputPin.h"
 
 #include "FreeRTOS.h"
 #include "freertos/task.h"
@@ -648,7 +654,7 @@ bool CommandShell::gpio_cmd(std::string& params, OutputStream& os)
 
     if(dir.empty() || dir == "in") {
         // read pin
-        Pin pin(gpio.c_str(), Pin::AS_INPUT);
+        InputPin pin(gpio.c_str());
         if(!pin.connected()) {
             os.printf("Not a valid GPIO\n");
             return true;
@@ -661,7 +667,7 @@ bool CommandShell::gpio_cmd(std::string& params, OutputStream& os)
     if(dir == "out") {
         std::string v = stringutils::shift_parameter( params );
         if(v.empty()) return false;
-        Pin pin(gpio.c_str(), Pin::AS_OUTPUT);
+        OutputPin pin(gpio.c_str());
         if(!pin.connected()) {
             os.printf("Not a valid GPIO\n");
             return true;

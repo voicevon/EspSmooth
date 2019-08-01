@@ -22,7 +22,7 @@ public:
     virtual ~Pin();
 
     enum TYPE_T {AS_INPUT, AS_OUTPUT, AS_PWM, AS_ADC};
-    Pin(const char *s, Pin::TYPE_T);
+    // Pin(const char *s, Pin::TYPE_T);
 
 
     Pin* from_string(std::string value);
