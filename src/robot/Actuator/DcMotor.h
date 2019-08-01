@@ -4,8 +4,10 @@
 #include "_hal/Pin/Pin.h"
 
 class DcMotor:public Actuator{
+
 public:
-    DcMotor(Pin dir, Pin pwm);
+     DcMotor(Pin dir, Pin pwm);
+    // DcMotor(OutputPin dir_pin, PwmPin pwm_pin);
     virtual bool step() override;
 
 private:

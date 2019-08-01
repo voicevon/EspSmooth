@@ -248,8 +248,9 @@ bool Robot::configure(ConfigReader& cr)
 
 
         PinHelper* helper = new PinHelper();
-        PwmPin* servo_pin_test = (PwmPin*) helper->create_pin(cr.get_string(mm,servo_pin_key,"nc"), PinHelper::AS_INPUT);
-
+        // PwmPin* servo_pin_test = (PwmPin*) helper->create_pin(cr.get_string(mm,servo_pin_key,"nc"), PinHelper::AS_INPUT);
+        PwmPin* servo_pin_test = (PwmPin*) helper->create_pin("GPIO_12", PinHelper::AS_PWM);
+        OutputPin* output_pin;
 
         helper->~PinHelper();
 
@@ -262,6 +263,8 @@ bool Robot::configure(ConfigReader& cr)
             break; // if any pin is not defined then the axis is not defined (and axis need to be defined in contiguous order)
         }
 
+        DcMotor* ddd = new DcMotor(output_pin,servo_pin_test);
+        
         // create the actuator
         Actuator* new_actuator;
         // ServoMotor* new_servo = new ServoMotor(123);
