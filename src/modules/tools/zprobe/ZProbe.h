@@ -1,7 +1,7 @@
 #pragma once
 
 #include "smoothie/Module.h"
-#include "_hal/Pin.h"
+#include "_hal/Pin/Pin.h"
 
 // defined here as they are used in multiple files
 #define leveling_strategy_key "leveling-strategy"

@@ -2,7 +2,7 @@
 
 // #ifndef _SERVO_MOTOR_H_
 // #define _SERVO_MOTOR_H_
-#include "_hal/Pin.h"
+#include "_hal/Pin/Pin.h"
 #include "Actuator.h"
 
 class ServoMotor:public Actuator{
@@ -14,9 +14,6 @@ class ServoMotor:public Actuator{
         virtual bool step() override;
 
     private:
-        // void __test();
-        // Pin out;
-        int __gpio_pin_number;  //TODO  Remove this.
         uint8_t __pwm_channel;
         Pin __pin;
         long __map(long x, long in_min, long in_max, long out_min, long out_max);

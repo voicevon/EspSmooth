@@ -21,7 +21,7 @@ public:
     Pin(const char *s);
     virtual ~Pin();
 
-    enum TYPE_T {AS_INPUT, AS_OUTPUT};
+    enum TYPE_T {AS_INPUT, AS_OUTPUT, AS_PWM, AS_ADC};
     Pin(const char *s, Pin::TYPE_T);
 
 
@@ -37,7 +37,7 @@ public:
     Pin* as_input();
 
     // we need to do this inline due to ISR being in SRAM not FLASH   
-    // Right now, it's not in SRAM !
+    // Right now, it's not in SRAM ! ForHighSpeed demand, Please call digitalRead(), and do inverting yourself.  By Xuming Jun2019
     inline bool get() const
     {
         if (!this->valid) return false;
@@ -47,7 +47,6 @@ public:
         }else { //expanded io
 
         }
-
     }
 
     // we need to do this inline due to ISR being in SRAM not FLASH

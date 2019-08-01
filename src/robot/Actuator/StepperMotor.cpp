@@ -1,6 +1,6 @@
 #include "StepperMotor.h"
 #include "_hal/stopwatch.h"
-#include "_hal/Pin.h"
+#include "_hal/Pin/Pin.h"
 
 
 // #include "robot/StepTicker.h"   //??

@@ -2,7 +2,7 @@
 
 #include "smoothie/Module.h"
 #include "smoothie/ConfigReader.h"
-#include "_hal/Pin.h"
+#include "_hal/Pin/Pin.h"
 
 
 #include <string>

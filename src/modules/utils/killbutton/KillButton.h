@@ -1,7 +1,7 @@
 #pragma once
 
 #include "smoothie/Module.h"
-#include "_hal/Pin.h"
+#include "_hal/Pin/Pin.h"
 
 class KillButton : public Module {
     public:

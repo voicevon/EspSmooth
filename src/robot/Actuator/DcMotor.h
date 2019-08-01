@@ -1,7 +1,7 @@
 #ifndef _DC_MOTOR_H_
 #define _DC_MOTOR_H_
 #include "Actuator.h"
-#include "_hal/Pin.h"
+#include "_hal/Pin/Pin.h"
 
 class DcMotor:public Actuator{
 public:

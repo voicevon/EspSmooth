@@ -1,6 +1,6 @@
 #pragma once
 
-#include "_hal/Pin.h"
+#include "_hal/Pin/Pin.h"
 #include "Actuator.h"
 
 class TMC26X;
