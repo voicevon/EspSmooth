@@ -19,7 +19,7 @@ PwmPin::PwmPin(const char *pin)
 }
 
 
-void PwmPin::set_all(double frequency,uint8_t resolution,uint32_t duty ){
+void PwmPin::init_all(double frequency,uint8_t resolution,uint32_t duty ){
 	__pwm_channel = take_pwm_channel();
 	if(__pwm_channel != 255){
 		__frequency = frequency;
