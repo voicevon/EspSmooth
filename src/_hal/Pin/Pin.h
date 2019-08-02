@@ -17,11 +17,9 @@
 class Pin
 {
 public:
-    Pin();
-    Pin(const char *s);
     virtual ~Pin();
 
-    Pin* from_string(std::string value);
+    Pin* from_string(std::string value);   //should be a protected member? 
     std::string to_string() const;
 
     virtual bool start(){ return false; }
@@ -65,6 +63,8 @@ public:
     void set_inverting(bool f) { __inverting = f; }
 
 protected:
+    Pin();
+    Pin(const char *s);
 
     static bool _set_allocated_pins(uint8_t, bool set= true);
 
