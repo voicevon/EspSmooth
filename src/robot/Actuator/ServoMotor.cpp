@@ -10,9 +10,16 @@ const int MAX_PULSE = 75000; //
 // static uint8_t pwm_channel = 0;
 
 
-ServoMotor::ServoMotor(PwmPin& pwm_pin):Actuator(){
-    __pwm_pin = PwmPin(pwm_pin);
+ServoMotor::ServoMotor(PwmPin &pwm_pin):Actuator(){
+    __pwm_pin = PwmPin(pwm_pin);   // Is PwmPin() cloning the object from pwm_pin to __pwm_pin ?
 }
+
+// Bin size of above: 641133 Bytes
+// Bin size of below: 641205 Bytes
+// Question: any different with the above and the below ? 
+// ServoMotor::ServoMotor(PwmPin pwm_pin):Actuator(){
+//     __pwm_pin = pwm_pin;
+// }
 
 
 bool ServoMotor::step() {
