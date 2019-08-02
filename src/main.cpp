@@ -115,19 +115,27 @@ void setup_smooth(){
 #include "robot/Robot.h"
 #include "robot/Actuator/Actuator.h"
 #include "robot/Actuator/ServoMotor.h"
+#include "robot/Actuator/StepperMotor.h"
 
 uint8_t xxx=0;
 float p[3];
-Actuator* a[3];
+Actuator* aa;
+float fff[3];
+
 void output_motors(){
     Robot* rr = Robot::getInstance();
     for(int i=0; i<3;i++){
-        a[i] = rr->actuators[i];
-        p[i] = a[i]->get_current_position();
+        aa = rr->actuators[i];
+        p[i] = aa->get_current_position();
     }
 
-    ServoMotor* ss = (ServoMotor*) (a[1]);
-
+    ServoMotor* ss1 = (ServoMotor*) (rr->actuators[1]);
+    fff[1]= ss1->get_current_position();
+    StepperMotor* ss0 = (StepperMotor*) (rr->actuators[0]);
+    fff[0] = ss0->get_current_position();
+    StepperMotor* ss2 = (StepperMotor*) (rr->actuators[2]);
+    fff[2] = ss2->get_current_position();
+    
     // p[1] = ss->get_current_position();
     // ss->goto_position(ff);
     // Serial.println(ff);
@@ -167,7 +175,7 @@ void loop(){
         last_time_stamp = esp_timer_get_time();
 
         output_motors();
-        printf("    [x,y,z]Pos= %d,  %d,  %d \n",p[0],p[1],p[2]);
+        printf("    [x,y,z]Pos= %f,  %f,  %f,  %f, %f  ,%f \n",p[0],p[1],p[2],fff[0],fff[1],fff[2]);
         // Serial.println(xxx);
     }
 
