@@ -10,7 +10,9 @@ class InputPin: public Pin{
     public:
         InputPin(){}   // for moduler
         InputPin(const char* description);
-        bool start();
+        virtual bool start() override;
+        virtual bool stop() override;
+        
     private:
 
 };

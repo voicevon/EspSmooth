@@ -4,14 +4,14 @@
 
 Pin::Pin()
 {
-    this->inverting = false;
+    this->__inverting = false;
     this->open_drain = false;
     this->__valid = false;
 }
 
 Pin::Pin(const char *s)
 {
-    this->inverting = false;
+    this->__inverting = false;
     this->open_drain = false;
     this->__valid = false;
     from_string(s);
@@ -52,7 +52,7 @@ bool Pin::_set_allocated_pins(uint8_t pin_number, bool set)
 Pin* Pin::from_string(std::string value)
 {
     __valid = false;
-    inverting = false;
+    __inverting = false;
     open_drain = false;
 
     if(value == "nc") return nullptr;
@@ -88,7 +88,7 @@ Pin* Pin::from_string(std::string value)
     for(char c : value.substr(7)) {
         switch(c) {
             case '!':
-                this->inverting = true;
+                this->__inverting = true;
                 break;
             case 'o':
                 this->open_drain= true; // we need to set pin to input when off for simulated opendrain
@@ -122,7 +122,7 @@ std::string Pin::to_string() const
         if(this->__gpio_id < 10)  str_pinnum += "0";
         str_pinnum += String(this->__gpio_id);
         if(this->open_drain) str_pinnum += 'o'; 
-        if(this->inverting) str_pinnum += "!";  
+        if(this->__inverting) str_pinnum += "!";  
 
         std::string std_str(str_pinnum.c_str());
         return std_str;

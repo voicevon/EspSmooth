@@ -14,7 +14,7 @@ public:
     void     pwm(int);
     int      get_pwm() const { return _pwm; }
     void     set(bool);
-    void as_output(){}
+    void    as_output(){}
     
 
 private:

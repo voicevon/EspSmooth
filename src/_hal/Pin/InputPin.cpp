@@ -23,3 +23,8 @@ bool InputPin::start()
     }
     return false;
 }
+
+// to do what? diable the pull-up, pull-down? 
+bool InputPin::stop(){
+    return false;
+}

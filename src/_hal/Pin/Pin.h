@@ -26,7 +26,7 @@ public:
 
     virtual bool start(){ return false; }
     virtual bool stop(){ return false; }
-    
+
     bool is_valid() const { return this->__valid; }
     bool connected() const { return this->__valid; }   // keep the name for SmoothieV2
 
@@ -37,7 +37,7 @@ public:
         if (!this->__valid) return false;
         if(this->__gpio_id <= MAX_MCU_GPIO_INDEX) {
             bool value = digitalRead(this->__gpio_id);
-            return value ^ this->inverting;
+            return value ^ this->__inverting;
         }else { //expanded io
 
         }
@@ -49,7 +49,7 @@ public:
     {
         if (!this->__valid) return;
         if(this->__gpio_id <= MAX_MCU_GPIO_INDEX){
-            uint8_t v= (this->inverting ^ value) ? 1 : 0;
+            uint8_t v= (this->__inverting ^ value) ? 1 : 0;
             digitalWrite(this->__gpio_id,v);
             if(open_drain) {
                 // simulates open drain by setting to input to turn off  ??
@@ -61,8 +61,8 @@ public:
 
     inline uint16_t get_gpio_id() const { return this->__gpio_id; }
 
-    bool is_inverting() const { return inverting; }
-    void set_inverting(bool f) { inverting = f; }
+    bool is_inverting() const { return __inverting; }
+    void set_inverting(bool f) { __inverting = f; }
 
 protected:
 
@@ -70,7 +70,7 @@ protected:
 
     struct {
         uint8_t __gpio_id: 8;
-        bool inverting: 1;
+        bool __inverting: 1;
         bool open_drain: 1;
         bool __valid: 1;
         bool is_pull_up: 1;
