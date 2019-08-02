@@ -22,7 +22,7 @@ ServoMotor::ServoMotor(PwmPin &pwm_pin):Actuator(){
 //     __pwm_pin = pwm_pin;
 // }
 
-
+//virtual override
 bool ServoMotor::step() {
     //Calculate and goto target_position
     static float last_angle = 0;
@@ -37,6 +37,10 @@ bool ServoMotor::step() {
         last_angle = target_angle;
     }
     return true;
+}
+//virtual override
+void ServoMotor::set_direction(bool f) { 
+    direction= f; 
 }
 
 void ServoMotor::goto_position(float angle) // ,unit = DEGREE)

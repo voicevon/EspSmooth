@@ -47,7 +47,7 @@ bool StepperMotor::step() {
 void StepperMotor::unstep() { 
     __step_pin.set(0); 
 }
-
+//virtual override
 void StepperMotor::set_direction(bool f) { 
     __dir_pin.set(f); 
     direction= f; 
