@@ -17,32 +17,33 @@ StepperMotor::StepperMotor(OutputPin &step, OutputPin &dir, OutputPin &en):Actua
     if(en.connected()) {
         //set_high_on_debug(en.port_number, en.pin);
     }
+    _init();
+    // steps_per_mm         = 1.0F;
+    // max_rate             = 50.0F;
 
-    steps_per_mm         = 1.0F;
-    max_rate             = 50.0F;
+    // last_milestone_steps = 0;
+    // last_milestone_mm    = 0.0F;
+    // current_position_steps= 0;
+    // moving= false;
+    // acceleration= NAN;
+    // selected= true;
+    // extruder= false;
 
-    last_milestone_steps = 0;
-    last_milestone_mm    = 0.0F;
-    current_position_steps= 0;
-    moving= false;
-    acceleration= NAN;
-    selected= true;
-    extruder= false;
-
-    enable(false);
-    unstep(); // initialize step pin
-    set_direction(false); // initialize dir pin
+    // enable(false);
+    // unstep(); // initialize step pin
+    // set_direction(false); // initialize dir pin
 }
 
 StepperMotor::~StepperMotor()
 {
 }
 
-
+//virtual override
 bool StepperMotor::step() { 
     __step_pin.set(1); 
     current_position_steps += (direction?-1:1); return moving; 
 }
+//virtual override
 void StepperMotor::unstep() { 
     __step_pin.set(0); 
 }
@@ -51,17 +52,17 @@ void StepperMotor::set_direction(bool f) {
     __dir_pin.set(f); 
     direction= f; 
 }
-
+//virtual override
 void StepperMotor::enable(bool state)
 {
     __en_pin.set(!state);
 }
-
+//virtual override
 bool StepperMotor::is_enabled() const
 {
     return !__en_pin.get();
 }
-
+//virtual override
 void StepperMotor::manual_step(bool dir)
 {
     if(!is_enabled()) enable(true);

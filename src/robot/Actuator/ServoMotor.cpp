@@ -11,6 +11,7 @@ const int MAX_PULSE = 75000; //
 
 ServoMotor::ServoMotor(PwmPin &pwm_pin):Actuator(){
     __pwm_pin = PwmPin(pwm_pin);   // Is PwmPin() cloning the object from pwm_pin to __pwm_pin ?
+
 }
 
 // Question here:
@@ -44,11 +45,12 @@ void ServoMotor::goto_position(float angle) // ,unit = DEGREE)
 void ServoMotor::enable(bool state) {
     if(state)
     {
-        // Serial.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         __pwm_pin.init_all(SERVO_FREQ,PWM_RESOLUTION_BITS,HOME_DUTY);    // TODO: Home_duty is configable!     
         __pwm_pin.start();
+        Serial.println("[D][ServoMotor]: enabled");
     }else{
         __pwm_pin.stop();
+        Serial.println("[D][ServoMotor]: disabled");
     }
 }
 

@@ -29,14 +29,18 @@ void PwmPin::init_all(double frequency,uint8_t resolution,uint32_t duty ){
 }
 
 bool PwmPin::start(){
-	if(__pwm_channel != 255){
+	if(__pwm_channel == 255){
 		ledcSetup(__pwm_channel, __frequency, __resolution );
 		ledcAttachPin(this->get_gpio_id(), __pwm_channel);
 		ledcWrite(this->get_gpio_id(),__duty);
 		__is_started = true;
-		Serial.print("[D][PwmPin] start pwm channel= ");
+		Serial.print("[D][PwmPin] start pwm_channel= ");
 		Serial.print(__pwm_channel);
-		Serial.print( ",  out put to  pin = ");
+		Serial.print(",   Frequency= ");
+		Serial.print(__frequency);
+		Serial.print(",  PWM_resolution bits= ");
+		Serial.print(__resolution);
+		Serial.print( ",  output_pin= ");
 		Serial.println(this->get_gpio_id());
 		return true;
 	}
@@ -47,18 +51,23 @@ bool PwmPin::start(){
  //set gpio to input mode. ??
 bool PwmPin::stop(){
 	__is_started =  false;   //rename to "__is_working" ?
+	return false;
 }
 
 void PwmPin::set_duty(uint32_t duty) { 
 	__duty = duty;
 	if(__is_started){
 		ledcWrite(this->get_gpio_id(),duty);
+	} else {
+		start();
+		ledcWrite(this->get_gpio_id(),duty);
 	}
+
 }
 
 
 uint8_t PwmPin::take_pwm_channel(){
-	bool sucessed = set_allocated_channels(__channel_index);
+	bool sucessed = _set_allocated_channels(__channel_index);
 	if (sucessed){
 		__channel_index++;
 		return __channel_index - 1;
@@ -71,14 +80,13 @@ uint8_t PwmPin::take_pwm_channel(){
 uint8_t PwmPin::__channel_index = 0;
 bool PwmPin::init() { 
 	__channel_index = 0;
-	// xx = 0;
 	return true;
 }
 
 // bitset to indicate a pin has been configured
 #include <bitset>
 static std::bitset<GPIO_PINS_COUNT> allocated_channels;   //default constructor :The object is initialized with zeros.
-bool PwmPin::set_allocated_channels(uint8_t channel_id, bool set)
+bool PwmPin::_set_allocated_channels(uint8_t channel_id, bool set)
 {
     if(!set) {
         // deallocate it

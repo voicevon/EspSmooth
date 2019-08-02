@@ -60,7 +60,7 @@ class Actuator
 
 
     protected:
-
+        void _init();
         float steps_per_second;
         float steps_per_mm;
         float max_rate; // this is not really rate it is in mm/sec, misnamed used in Robot and Extruder
