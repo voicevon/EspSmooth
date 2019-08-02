@@ -122,28 +122,31 @@ float p[3];
 Actuator* aa;
 float fff[3];
 
-void output_motors(){
-    Robot* rr = Robot::getInstance();
-    for(int i=0; i<3;i++){
-        aa = rr->actuators[i];
-        p[i] = aa->get_current_position();
-    }
+void output_motors(void*){
 
-    ServoMotor* ss1 = (ServoMotor*) (rr->actuators[1]);
-    fff[1]= ss1->get_current_position();
-    StepperMotor* ss0 = (StepperMotor*) (rr->actuators[0]);
-    fff[0] = ss0->get_current_position();
-    StepperMotor* ss2 = (StepperMotor*) (rr->actuators[2]);
-    fff[2] = ss2->get_current_position();
-    
-    ss1->goto_position(fff[1]);
-    // Serial.println(ff);
-    
+    while(true){
+        Robot* rr = Robot::getInstance();
+        for(int i=0; i<3;i++){
+            aa = rr->actuators[i];
+            p[i] = aa->get_current_position();
+        }
+
+        ServoMotor* ss1 = (ServoMotor*) (rr->actuators[1]);
+        fff[1]= ss1->get_current_position();
+        StepperMotor* ss0 = (StepperMotor*) (rr->actuators[0]);
+        fff[0] = ss0->get_current_position();
+        StepperMotor* ss2 = (StepperMotor*) (rr->actuators[2]);
+        fff[2] = ss2->get_current_position();
+        
+        ss1->goto_position(fff[1]);
+        // Serial.println(ff);
+        delay(200);
+    }
 }
 
 
 
-uint64_t rtos_report_inteval_second = 1 ;
+uint64_t rtos_report_inteval_second = 11 ;
 uint64_t cpu_idle_counter = 0;
 uint64_t last_time_stamp = 0;   //us
 uint64_t boot_timestamp = 0;
@@ -154,14 +157,15 @@ void setup(){
     //setup_spiffs_writting();
     //setup_spiffs_reading();
     setup_smooth(); 
+
     boot_timestamp = esp_timer_get_time();
+    delay(5000);
+    xTaskCreate(output_motors, "ServoMotor", 1500, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
 }
 
 // Actually, this is the lowest priority task.
 void loop(){
     cpu_idle_counter++;
-    if(esp_timer_get_time() - boot_timestamp < 5000000) return;
-    output_motors();
 
     if(esp_timer_get_time () - last_time_stamp >= rtos_report_inteval_second * 1000000){
         uint16_t passed_time = cpu_idle_counter / 10280 / rtos_report_inteval_second;
