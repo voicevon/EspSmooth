@@ -7,14 +7,14 @@
 
 class ServoMotor:public Actuator{
     public:
-        ServoMotor(PwmPin* pwm_pin);
+        ServoMotor(PwmPin& pwm_pin);
         void goto_position(float angle);
         virtual bool step() override;
 
         virtual void enable(bool state) override;
 
     private:
-        PwmPin* __pwm_pin;
+        PwmPin __pwm_pin;
         uint8_t __pwm_channel;
         float __map(long x, long in_min, long in_max, long out_min, long out_max);
 };

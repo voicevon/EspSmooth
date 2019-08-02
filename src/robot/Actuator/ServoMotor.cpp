@@ -10,8 +10,8 @@ const int MAX_PULSE = 75000; //
 // static uint8_t pwm_channel = 0;
 
 
-ServoMotor::ServoMotor(PwmPin* pwm_pin):Actuator(){
-    __pwm_pin = pwm_pin;
+ServoMotor::ServoMotor(PwmPin& pwm_pin):Actuator(){
+    __pwm_pin = PwmPin(pwm_pin);
 }
 
 
@@ -25,7 +25,7 @@ bool ServoMotor::step() {
 void ServoMotor::goto_position(float angle) // ,unit = DEGREE)
 {
     float duty =  __map(angle * 100, 0, 36000, MIN_PULSE, MAX_PULSE); 
-    __pwm_pin->set(duty);
+    __pwm_pin.set(duty);
     // ledcWrite(pwm_channel, pwm);
     // Serial.print ("    ");
     // Serial.print(val);
@@ -36,9 +36,9 @@ void ServoMotor::goto_position(float angle) // ,unit = DEGREE)
 void ServoMotor::enable(bool state) {
     if(state)
     {
-        __pwm_pin->start();
+        __pwm_pin.start();
     }else{
-        __pwm_pin->stop();
+        __pwm_pin.stop();
     }
 }
 

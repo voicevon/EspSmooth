@@ -8,14 +8,14 @@
 class DcMotor:public Actuator
 {
     public:
-        // DcMotor(Pin dir, Pin pwm);
-        DcMotor(OutputPin* dir_pin, PwmPin* pwm_pin);
+        
+        DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin);
         virtual bool step() override;
         virtual void enable(bool state) override;
 
     private:
-        OutputPin* __dir_pin;
-        PwmPin* __pwm_pin;
+        OutputPin __dir_pin;
+        PwmPin __pwm_pin;
         uint8_t __pwm_channel;
 };
 

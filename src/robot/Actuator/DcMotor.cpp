@@ -5,9 +5,9 @@ const int PWM_FREQ = 250;    // 50Hz  20ms
 const int PWM_RESOLUTION_BITS = 16;     // 16 bit resolution
 
 
-DcMotor::DcMotor(OutputPin* dir_pin, PwmPin* pwm_pin){
-    __dir_pin = dir_pin;
-    __pwm_pin = pwm_pin;
+DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin){
+    __dir_pin = OutputPin(dir_pin);
+    __pwm_pin = PwmPin(pwm_pin);
 }
 
 bool DcMotor::step(){
@@ -18,11 +18,11 @@ bool DcMotor::step(){
 //virtual  override
 void DcMotor::enable(bool state){
     if(state){
-        __dir_pin->start();
-        __pwm_pin->start();
+        __dir_pin.start();
+        __pwm_pin.start();
     } else {
-        __dir_pin->stop();
-        __pwm_pin->stop();
+        __dir_pin.stop();
+        __pwm_pin.stop();
     }
 }
 

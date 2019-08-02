@@ -6,6 +6,7 @@
 
 class PwmPin: public Pin{
 	public:
+		PwmPin(){};
 		~PwmPin(){};
 		PwmPin(const char* pin);
 		uint8_t take_pwm_channel();

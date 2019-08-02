@@ -280,7 +280,7 @@ bool Robot::configure(ConfigReader& cr)
                 break;
             case ActuatorType::SERVO_MOTOR: {     // Servo
                 printf("[D][robot.config][%s]  for servo motor pins: servo= %s\n",   s->first.c_str(), servo_pin.to_string().c_str());
-                ServoMotor* new_servo = new ServoMotor(&servo_pin);
+                ServoMotor* new_servo = new ServoMotor(servo_pin);
                 new_actuator = new_servo;
                 }
                 break;
@@ -291,7 +291,7 @@ bool Robot::configure(ConfigReader& cr)
 
             case ActuatorType::DC_MOTOR: {    //Dc motor
                 printf("[D][robot.config][%s]  for dc motor pins: dc_dir= %s, dc_pwm= %s\n", s->first.c_str(), dc_dir_pin.to_string().c_str(),dc_pwm_pin.to_string().c_str());
-                DcMotor* new_dc = new DcMotor(&dc_dir_pin, &dc_pwm_pin);
+                DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin);
                 new_actuator = new_dc;
                 }
                 break;
