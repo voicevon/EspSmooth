@@ -45,7 +45,7 @@ bool PwmPin::start(){
 }
 
  //set gpio to input mode. ??
-void PwmPin::stop(){
+bool PwmPin::stop(){
 	__is_started =  false;   //rename to "__is_working" ?
 }
 

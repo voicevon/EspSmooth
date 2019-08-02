@@ -26,7 +26,7 @@ Pin::~Pin()
 // bitset to indicate a pin has been configured
 #include <bitset>
 static std::bitset<GPIO_PINS_COUNT> allocated_pins;   //default constructor :The object is initialized with zeros.
-bool Pin::set_allocated_pins(uint8_t pin_number, bool set)
+bool Pin::_set_allocated_pins(uint8_t pin_number, bool set)
 {
     if(!set) {
         // deallocate it
@@ -68,7 +68,7 @@ Pin* Pin::from_string(std::string value)
         return nullptr;
     }
 
-    if(!set_allocated_pins(target_pin_id)) {
+    if(!_set_allocated_pins(target_pin_id)) {
         printf("WARNING: GPIO_[%d] has already been allocated\n",  target_pin_id);
     }
 

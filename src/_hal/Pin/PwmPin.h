@@ -17,8 +17,8 @@ class PwmPin: public Pin{
 		void set_frequency(uint32_t frequency){ __frequency = frequency; }
 		
 		void set_all(double frequency,uint8_t pwm_width_resolution, uint32_t home_duty );
-		bool start();
-		void stop();  
+		virtual bool start() override;
+		virtual bool stop() override;  
 	
 		static bool init(); 
 

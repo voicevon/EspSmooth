@@ -21,14 +21,12 @@ public:
     Pin(const char *s);
     virtual ~Pin();
 
-    // enum TYPE_T {AS_INPUT, AS_OUTPUT, AS_PWM, AS_ADC};
-    // Pin(const char *s, Pin::TYPE_T);
-
-    // virtual bool init(){return false;}
-
     Pin* from_string(std::string value);
     std::string to_string() const;
 
+    virtual bool start(){ return false; }
+    virtual bool stop(){ return false; }
+    
     bool is_valid() const { return this->__valid; }
     bool connected() const { return this->__valid; }   // keep the name for SmoothieV2
 
@@ -68,7 +66,7 @@ public:
 
 protected:
 
-    static bool set_allocated_pins(uint8_t, bool set= true);
+    static bool _set_allocated_pins(uint8_t, bool set= true);
 
     struct {
         uint8_t __gpio_id: 8;
