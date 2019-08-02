@@ -9,7 +9,22 @@ Actuator::Actuator()
 Actuator::~Actuator(){
 
 }
+void Actuator::_init(){
+    steps_per_mm         = 1.0F;
+    max_rate             = 50.0F;
 
+    last_milestone_steps = 0;
+    last_milestone_mm    = 0.0F;
+    current_position_steps= 0;
+    moving= false;
+    acceleration= NAN;
+    selected= true;
+    extruder= false;
+
+    enable(false);
+    unstep(); // initialize step pin
+    set_direction(false); // initialize dir pin
+}
 
 void Actuator::change_steps_per_mm(float new_steps)
 {

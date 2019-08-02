@@ -4,35 +4,26 @@
 const int PWM_FREQ = 250;    // 50Hz  20ms 
 const int PWM_RESOLUTION_BITS = 16;     // 16 bit resolution
 
-// static uint8_t pwm_channel = 0;
 
-// DcMotor::DcMotor(Pin dir, Pin pwm){
-//     __pin_dir = dir;
-//     __pin_pwm = pwm;
-//     __pwm_channel = pwm_channel;
-//     ledcSetup(pwm_channel, SERVO_FREQ, PWM_RESOLUTION_BITS);
-//     ledcAttachPin(__pin_pwm.get_gpio_num(), __pwm_channel);
-//     ledcWrite(__pwm_channel, 0);
-
-//     // my goal: 
-//     //__pwm_channel =  __pin_pwm.setup_pwm(frequency,resolution,init_value = 0); 
-
-// }
-//My goal B:
-DcMotor::DcMotor(OutputPin* dir_pin, PwmPin* pwm_pin){
-    __dir_pin = dir_pin;
-    __dir_pin->init();
-
-    __pwm_pin = pwm_pin;
-    // __pwm_pin->set_frequency_auto_channel(PWM_FREQ,PWM_RESOLUTION_BITS);
-
-    // pwm_pin.start(pwm_value = 1234);
-    // pwm_pin.stop();   //set as input;
+DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin){
+    __dir_pin = OutputPin(dir_pin);
+    __pwm_pin = PwmPin(pwm_pin);
 }
 
 bool DcMotor::step(){
     // pwm_pin.set_value(this->get_current_position());
     return true;
+}
+
+//virtual  override
+void DcMotor::enable(bool state){
+    if(state){
+        __dir_pin.start();
+        __pwm_pin.start();
+    } else {
+        __dir_pin.stop();
+        __pwm_pin.stop();
+    }
 }
 
 

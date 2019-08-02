@@ -143,7 +143,7 @@ bool Endstops::load_endstops(ConfigReader& cr)
         endstop_info_t *pin_info= new endstop_info_t;
         // pin_info->pin.from_string(cr.get_string(mm, pin_key, "nc" ))->as_input();
         pin_info->pin.from_string(cr.get_string(mm, pin_key, "nc" ));
-        pin_info->pin.as_input();
+        pin_info->pin.start();
         if(!pin_info->pin.connected()){
             // no pin defined try next
             printf("configure-endstop: no pin defined for %s\n", name.c_str());

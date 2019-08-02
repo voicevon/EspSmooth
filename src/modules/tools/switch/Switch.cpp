@@ -77,7 +77,7 @@ bool Switch::configure(ConfigReader& cr, ConfigReader::section_map_t& m)
 {
     // this->input_pin.from_string( cr.get_string(m, input_pin_key, "nc") )->as_input();
     this->input_pin.from_string(cr.get_string(m,input_pin_key,"nc"));
-    this->input_pin.as_input();
+    this->input_pin.start();
 
     this->subcode = cr.get_int(m, command_subcode_key, 0);
     std::string input_on_command = cr.get_string(m, input_on_command_key, "");
@@ -119,7 +119,7 @@ bool Switch::configure(ConfigReader& cr, ConfigReader::section_map_t& m)
         this->digital_pin = new OutputPin(output_pin.c_str());
         // this->digital_pin->from_string(output_pin)->as_output();
         // this->digital_pin->from_string(output_pin);
-        this->digital_pin->init();
+        this->digital_pin->start();
         if(this->digital_pin->connected()) {
             if(failsafe == 1) {
                 //set_high_on_debug(digital_pin->port_number, digital_pin->pin);

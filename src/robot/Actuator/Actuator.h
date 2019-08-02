@@ -27,7 +27,7 @@ class Actuator
         virtual void manual_step(bool dir) {}
 
         virtual void enable(bool state) {}
-        virtual bool is_enabled() const {return true;}
+        virtual bool is_enabled() const {return false;}
         bool is_moving() const { return moving; };
         void start_moving() { moving= true; }
         void stop_moving() { moving= false; }
@@ -60,7 +60,7 @@ class Actuator
 
 
     protected:
-
+        void _init();
         float steps_per_second;
         float steps_per_mm;
         float max_rate; // this is not really rate it is in mm/sec, misnamed used in Robot and Extruder

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "_hal/Pin/Pin.h"
+#include "_hal/Pin/OutputPin.h"
 #include "Actuator.h"
 
 class TMC26X;
@@ -10,7 +11,7 @@ class OutputStream;
 class StepperMotor:public Actuator
 {
     public:
-        StepperMotor(Pin& step, Pin& dir, Pin& en);
+        StepperMotor(OutputPin& step, OutputPin& dir, OutputPin& en);
         ~StepperMotor();
 
 
@@ -23,9 +24,9 @@ class StepperMotor:public Actuator
 
 
     private:
-        Pin step_pin;
-        Pin dir_pin;
-        Pin en_pin;
+        OutputPin __step_pin;
+        OutputPin __dir_pin;
+        OutputPin __en_pin;
       
 
 

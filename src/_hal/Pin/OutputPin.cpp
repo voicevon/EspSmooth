@@ -4,19 +4,24 @@ OutputPin::OutputPin(const char* pin_description):Pin(pin_description){
 
 }
 
-bool OutputPin::init()
+bool OutputPin::start()
 {
-    if(this->valid) {
-        if(this->gpio_pin_num <= MAX_MCU_GPIO_INDEX){
+    if(this->__valid) {
+        if(this->__gpio_id <= MAX_MCU_GPIO_INDEX){
             if(this->open_drain){                                   //need to check?
-                pinMode(this->gpio_pin_num, OUTPUT_OPEN_DRAIN);   
+                pinMode(this->__gpio_id, OUTPUT_OPEN_DRAIN);   
                 return true;
             }
-            pinMode(this->gpio_pin_num, OUTPUT);
+            pinMode(this->__gpio_id, OUTPUT);
         }else{  //expaned io
             
         }
     }
+    return false;
+}
+
+//Set as inpput?
+bool OutputPin::stop(){
     return false;
 }
 

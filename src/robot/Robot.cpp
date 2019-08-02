@@ -8,6 +8,7 @@
 #include "Actuator/StepperMotor.h"
 #include "Actuator/ServoMotor.h"
 #include "Actuator/DcMotor.h"
+#include "Actuator/XuefengMotot.h"
 #include "_hal/__hal.h"
 #include "_hal/Pin/PinHelper.h"
 
@@ -101,7 +102,7 @@
 #define is_grbl_mode() Dispatcher::getInstance()->is_grbl_mode()
 
 #define ARC_ANGULAR_TRAVEL_EPSILON 5E-7F // Float (radians)
-#define PI 3.14159265358979323846F // force to be float, do not use M_PI
+// #define PI 3.14159265358979323846F // force to be float, do not use M_PI
 
 Robot *Robot::instance = nullptr;
 
@@ -272,32 +273,34 @@ bool Robot::configure(ConfigReader& cr)
         uint8_t regietered_count;
         switch (act_type.get_type()) {
             case ActuatorType::STEPPER_MOTOR: {     //stepper
-                printf("[D][robot.config][%s]  for stepper motor pins: step= %s, dir= %s, en= %s\n", s->first.c_str(), step_pin.to_string().c_str(), dir_pin.to_string().c_str(), en_pin.to_string().c_str());
+                printf("[D][robot][config:%s]  for stepper motor pins: step= %s, dir= %s, en= %s\n", s->first.c_str(), step_pin.to_string().c_str(), dir_pin.to_string().c_str(), en_pin.to_string().c_str());
                 StepperMotor *new_stepper = new StepperMotor(step_pin, dir_pin, en_pin);
                 // regietered_count = register_actuator(new_stepper);  Is this way better?
                 new_actuator = new_stepper;
                 }
                 break;
             case ActuatorType::SERVO_MOTOR: {     // Servo
-                printf("[D][robot.config][%s]  for servo motor pins: servo= %s\n",   s->first.c_str(), servo_pin.to_string().c_str());
-                ServoMotor* new_servo = new ServoMotor(&servo_pin);
+                printf("[D][robot][config:%s]  for servo motor pins: servo= %s\n",   s->first.c_str(), servo_pin.to_string().c_str());
+                ServoMotor* new_servo = new ServoMotor(servo_pin);
                 new_actuator = new_servo;
                 }
                 break;
             case ActuatorType::XUEFENG_MOTOR: {     //Xuefeng motor
-
+                XuefengMotor* new_xuefeng = new XuefengMotor();
+                new_actuator = new_xuefeng;
                 }
                 break;
 
             case ActuatorType::DC_MOTOR: {    //Dc motor
-                printf("[D][robot.config][%s]  for dc motor pins: dc_dir= %s, dc_pwm= %s\n", s->first.c_str(), dc_dir_pin.to_string().c_str(),dc_pwm_pin.to_string().c_str());
-                DcMotor* new_dc = new DcMotor(&dc_dir_pin, &dc_pwm_pin);
+                printf("[D][robot][config:%s]  for dc motor pins: dc_dir= %s, dc_pwm= %s\n", s->first.c_str(), dc_dir_pin.to_string().c_str(),dc_pwm_pin.to_string().c_str());
+                DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin);
                 new_actuator = new_dc;
                 }
                 break;
         }
 
         // register this actuator (NB This must be 0,1,2,...) of the actuators array
+        new_actuator->enable(true);
         regietered_count = register_actuator(new_actuator);
         if(regietered_count != a) {
             // this is a fatal error as they must be contiguous
@@ -1631,7 +1634,8 @@ bool Robot::append_milestone(const float target[], float rate_mm_s)
     float deltas[n_motors];
     float transformed_target[n_motors]; // adjust target for bed compensation
     float unit_vec[N_PRIMARY_AXIS];
-
+    
+    Serial.println("[D][Robot][append_milestone] at entrance.");
     // unity transform by default
     memcpy(transformed_target, target, n_motors * sizeof(float));
 
@@ -1657,6 +1661,7 @@ bool Robot::append_milestone(const float target[], float rate_mm_s)
 
     // nothing moved
     if(!move) return false;
+    Serial.println("[D][Robot][append_milestone] at least one step to move.");
 
     // see if this is a primary axis move or not
     bool auxilliary_move = true;
@@ -1674,6 +1679,7 @@ bool Robot::append_milestone(const float target[], float rate_mm_s)
     // as the last milestone won't be updated we do not actually lose any moves as they will be accounted for in the next move
     if(!auxilliary_move && distance < 0.00001F) return false;
 
+    Serial.println("[D][Robot][append_milestone] distance is not zero.");
 
     if(!auxilliary_move) {
         for (size_t i = X_AXIS; i < N_PRIMARY_AXIS; i++) {
@@ -1729,6 +1735,7 @@ bool Robot::append_milestone(const float target[], float rate_mm_s)
         if(distance < 0.00001F) return false;
     }
 #endif
+    Serial.println("[D][Robot][append_milestone] distance need some steps.");
 
     // use default acceleration to start with
     float acceleration = default_acceleration;
@@ -1768,12 +1775,13 @@ bool Robot::append_milestone(const float target[], float rate_mm_s)
     // }
 
     // make sure the motors are enabled
+    Serial.println("[D][Robot][append_mileston()] enable_all_motor.");
     enable_all_motors(true);
 
     // Append the block to the planner
     // NOTE that distance here should be either the distance travelled by the XYZ axis, or the E mm travel if a solo E move
     // NOTE this call will bock until there is room in the block queue
-    Serial.println("[D][robot::append_milestone()] going to append block...");
+    Serial.println("[D][Robot][append_milestone()] going to append block...");
     if(Planner::getInstance()->append_block( actuator_pos, n_motors, rate_mm_s, distance, auxilliary_move ? nullptr : unit_vec, acceleration, s_value, is_g123)) {
         // this is the new compensated machine position
         memcpy(this->compensated_machine_position, transformed_target, n_motors * sizeof(float));
@@ -1815,7 +1823,7 @@ bool Robot::delta_move(const float *delta, float rate_mm_s, uint8_t naxis)
 // Append a move to the queue ( cutting it into segments if needed )
 bool Robot::append_line(GCode& gcode, const float target[], float rate_mm_s, float delta_e)
 {
-    Serial.println("[D][robot::append_line()] at entrance");
+    Serial.println("[D][robot][append_line()] at entrance");
     // catch negative or zero feed rates and return the same error as GRBL does
     if(rate_mm_s <= 0.0F) {
         gcode.set_error(rate_mm_s == 0 ? "Undefined feed rate" : "feed rate < 0");

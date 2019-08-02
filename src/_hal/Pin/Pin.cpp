@@ -4,33 +4,19 @@
 
 Pin::Pin()
 {
-    this->inverting = false;
+    this->__inverting = false;
     this->open_drain = false;
-    this->valid = false;
+    this->__valid = false;
 }
 
 Pin::Pin(const char *s)
 {
-    this->inverting = false;
+    this->__inverting = false;
     this->open_drain = false;
-    this->valid = false;
+    this->__valid = false;
     from_string(s);
 }
 
-// Pin::Pin(const char *s, TYPE_T t)
-// {
-//     this->inverting = false;
-//     this->valid = false;
-//     this->open_drain = false;
-//     if(from_string(s) != nullptr) {
-//         switch(t) {
-//             case AS_INPUT: as_input(); break;
-//             case AS_OUTPUT: as_output(); break;
-//             case AS_PWM: as_pwm();break;
-//             case AS_ADC: as_adc();break;
-//         }
-//     }
-// }
 
 Pin::~Pin()
 {
@@ -40,7 +26,7 @@ Pin::~Pin()
 // bitset to indicate a pin has been configured
 #include <bitset>
 static std::bitset<GPIO_PINS_COUNT> allocated_pins;   //default constructor :The object is initialized with zeros.
-bool Pin::set_allocated(uint8_t pin_number, bool set)
+bool Pin::_set_allocated_pins(uint8_t pin_number, bool set)
 {
     if(!set) {
         // deallocate it
@@ -65,25 +51,25 @@ bool Pin::set_allocated(uint8_t pin_number, bool set)
 //     For any number is greater than 35, It's an expanded io, is not a gpio on original chip.  for example, "gpio_56".
 Pin* Pin::from_string(std::string value)
 {
-    valid = false;
-    inverting = false;
+    __valid = false;
+    __inverting = false;
     open_drain = false;
 
     if(value == "nc") return nullptr;
 
     // uint16_t port = 0;
-    uint16_t target_pin_num = 0;
+    uint16_t target_pin_id = 0;
 
     if(stringutils::toUpper(value.substr(0, 5)) == "GPIO_") {
         String str_pos = value.substr(5,2).c_str();
-        target_pin_num = str_pos.toInt();
+        target_pin_id = str_pos.toInt();
         // printf("Target Pin number = %i\n", target_pin_num);
     } else {
         return nullptr;
     }
 
-    if(!set_allocated(target_pin_num)) {
-        printf("WARNING: GPIO_[%d] has already been allocated\n",  target_pin_num);
+    if(!_set_allocated_pins(target_pin_id)) {
+        printf("WARNING: GPIO_[%d] has already been allocated\n",  target_pin_id);
     }
 
 
@@ -102,7 +88,7 @@ Pin* Pin::from_string(std::string value)
     for(char c : value.substr(7)) {
         switch(c) {
             case '!':
-                this->inverting = true;
+                this->__inverting = true;
                 break;
             case 'o':
                 this->open_drain= true; // we need to set pin to input when off for simulated opendrain
@@ -123,20 +109,20 @@ Pin* Pin::from_string(std::string value)
     }
 
     // save the gpio port and pin (we can always get the pin number from this and the lut)
-    this->gpio_pin_num = target_pin_num;
-    this->valid = true;
+    this->__gpio_id = target_pin_id;
+    this->__valid = true;
     return this;
 }
 
 std::string Pin::to_string() const
 {
-    if(valid) {
+    if(__valid) {
         String str_pinnum = "GPIO_" ;
-        if(this->gpio_pin_num == 0 ) str_pinnum += "0";
-        if(this->gpio_pin_num < 10)  str_pinnum += "0";
-        str_pinnum += String(this->gpio_pin_num);
+        if(this->__gpio_id == 0 ) str_pinnum += "0";
+        if(this->__gpio_id < 10)  str_pinnum += "0";
+        str_pinnum += String(this->__gpio_id);
         if(this->open_drain) str_pinnum += 'o'; 
-        if(this->inverting) str_pinnum += "!";  
+        if(this->__inverting) str_pinnum += "!";  
 
         std::string std_str(str_pinnum.c_str());
         return std_str;
