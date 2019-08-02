@@ -25,15 +25,27 @@ ServoMotor::ServoMotor(PwmPin &pwm_pin):Actuator(){
 
 bool ServoMotor::step() {
     //Calculate and goto target_position
+    static float last_angle = 0;
+    // Serial.println("a");
+    current_position_steps += (direction?-1:1); return moving; 
+    return true;
     float target_angle = get_current_position();
-    goto_position (target_angle);
+    return true;
+
+    if(target_angle != last_angle){
+        goto_position (target_angle);
+        last_angle = target_angle;
+    }
     return true;
 }
 
 void ServoMotor::goto_position(float angle) // ,unit = DEGREE)
 {
+    Serial.println("mmmmmmmmmmmmmmm");
     float duty =  __map(angle * 100, 0, 36000, MIN_PULSE, MAX_PULSE); 
-    __pwm_pin.set_duty(duty);
+    // __pwm_pin.set_duty(duty);
+    Serial.println("qqqqqqqqqqqqqq");
+    __pwm_pin.set_duty(2000);
 
     // ledcWrite(pwm_channel, pwm);
     // Serial.print ("    ");

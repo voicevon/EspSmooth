@@ -106,6 +106,40 @@ void setup_smooth(){
     // vTaskStartScheduler();    Don't call vTaskStartScheduler()     https://esp32.com/viewtopic.php?t=1336
 }
 
+
+
+
+
+
+
+#include "robot/Robot.h"
+#include "robot/Actuator/Actuator.h"
+#include "robot/Actuator/ServoMotor.h"
+
+uint8_t xxx=0;
+float p[3];
+Actuator* a[3];
+void output_motors(){
+    Robot* rr = Robot::getInstance();
+    for(int i=0; i<3;i++){
+        a[i] = rr->actuators[i];
+        p[i] = a[i]->get_current_position();
+    }
+
+    ServoMotor* ss = (ServoMotor*) (a[1]);
+
+    // p[1] = ss->get_current_position();
+    // ss->goto_position(ff);
+    // Serial.println(ff);
+    
+}
+
+
+
+uint64_t rtos_report_inteval_second = 1 ;
+uint64_t cpu_idle_counter = 0;
+uint64_t last_time_stamp = 0;   //us
+uint64_t boot_timestamp = 0;
 void setup(){
     Serial.begin(115200);
     show_memory_allocate();
@@ -113,27 +147,28 @@ void setup(){
     //setup_spiffs_writting();
     //setup_spiffs_reading();
     setup_smooth(); 
+    boot_timestamp = esp_timer_get_time();
 }
-
-
-uint64_t rtos_report_inteval_second = 10 ;
-
-uint64_t cpu_idle_counter = 0;
-uint64_t last_time_stamp = 0;   //us
-
 void loop(){
+
+
     // Actually, this is the lowest priority task.
     cpu_idle_counter++;
+    if(esp_timer_get_time() - boot_timestamp < 5000000) return;
 
     if(esp_timer_get_time () - last_time_stamp >= rtos_report_inteval_second * 1000000){
-        uint16_t passed_time = cpu_idle_counter / 102800;
+        uint16_t passed_time = cpu_idle_counter / 10280 / rtos_report_inteval_second;
         uint16_t uptime_second = esp_timer_get_time() / 1000000;  
-        printf("uptime = %i seconds, cpu usage =  %i/%% \n",uptime_second, 100 - passed_time);
+        printf("uptime = %i seconds, cpu usage =  %i/%%  ",uptime_second, 100 - passed_time);
 
         //vTaskList(ptrTaskList);   vTaskList is not supportted?  Jun2019      https://github.com/espressif/esp-idf/issues/416
 
         cpu_idle_counter = 0;
         last_time_stamp = esp_timer_get_time();
+
+        output_motors();
+        printf("    [x,y,z]Pos= %d,  %d,  %d \n",p[0],p[1],p[2]);
+        // Serial.println(xxx);
     }
 
 }

@@ -55,8 +55,6 @@ void StepTicker::unstep_timer_handler(void)
 //TODO:  will use TIMER1 because TIMER0 is used by RTOS.   Xuming Jun 2019
 bool StepTicker::start()
 {
-    // Serial.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  stepTicker should use TMR1, because RTOS is using TIMER0.");
-    // Serial.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  and becare of fastTicker.start()");
     if(!started) {
 
         // setup the step tick timer, which handles step ticks and one off unstep interrupts
@@ -110,7 +108,7 @@ void StepTicker::set_unstep_time( float microseconds )
     uint32_t d= roundf(microseconds);
     uint32_t period= floorf(1000000.0F/frequency);
     if(d > period-1) { // within 1us of the period
-        printf("ERROR: cannot set stepticker unstep delay greater than or equal to step ticker period: %lu, %lu\n", delay, period);
+        printf("ERROR: cannot set stepticker unstep delay greater than or equal to step ticker period: %llu, %llu\n", delay, period);
         return;
     }
 
@@ -160,7 +158,7 @@ void StepTicker::step_tick (void)
     if(unstep != 0) {
         // this is a failsafe, if we get here it means we missed the unstep from a previous tick
         // so we need to unstep the pin now or it will remain high
-        Serial.print("^");
+        // Serial.print("^");
         unstep_tick();
         missed_unsteps++; // keep trck for diagnostics
     }
