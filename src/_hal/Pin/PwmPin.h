@@ -22,6 +22,7 @@ class PwmPin: public Pin{
 
 	private:
 		bool __is_started;
+    	static bool set_allocated_channels(uint8_t channel_id, bool set= true);
 
 		uint8_t __pwm_channel;
 		uint8_t __channel;

@@ -46,7 +46,7 @@ bool PwmPin::start(){
 
  //set gpio to input mode. ??
 void PwmPin::stop(){
-	__is_started =  false;
+	__is_started =  false;   //rename to "__is_working" ?
 }
 
 void PwmPin::set_duty(uint32_t duty) { 
@@ -59,4 +59,26 @@ void PwmPin::set_duty(uint32_t duty) {
 
 uint8_t PwmPin::take_pwm_channel(){
 	return 0;
+}
+
+
+// bitset to indicate a pin has been configured
+#include <bitset>
+static std::bitset<GPIO_PINS_COUNT> allocated_channels;   //default constructor :The object is initialized with zeros.
+bool PwmPin::set_allocated_channels(uint8_t channel_id, bool set)
+{
+    if(!set) {
+        // deallocate it
+        allocated_channels.reset(channel_id);
+        return true;
+    }
+
+    if(!allocated_channels[channel_id]) {
+        // if not set yet then set it
+        allocated_channels.set(channel_id);
+        return true;
+    }
+
+    // indicate it was already set
+    return false;
 }

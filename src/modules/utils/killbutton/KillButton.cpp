@@ -43,7 +43,7 @@ bool KillButton::configure(ConfigReader& cr)
 
     // this->kill_button.from_string( cr.get_string(m,  kill_button_pin_key , "nc"))->as_input();
     this->kill_button.from_string( cr.get_string(m,  kill_button_pin_key , "nc"));
-    this->kill_button.as_input();
+    this->kill_button.start();
 
     if(!this->kill_button.connected()) {
         return false;

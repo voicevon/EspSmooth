@@ -74,7 +74,7 @@ bool ZProbe::configure(ConfigReader& cr)
 
     // this->pin.from_string( cr.get_string(m, probe_pin_key, "nc" ))->as_input();
     this->pin.from_string( cr.get_string(m, probe_pin_key, "nc" ));
-    this->pin.as_input();
+    this->pin.start();
     if(!this->pin.connected()) {
         printf("ERROR: config-zprobe: no pin defined\n");
         return false;

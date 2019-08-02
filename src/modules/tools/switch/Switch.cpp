@@ -77,7 +77,7 @@ bool Switch::configure(ConfigReader& cr, ConfigReader::section_map_t& m)
 {
     // this->input_pin.from_string( cr.get_string(m, input_pin_key, "nc") )->as_input();
     this->input_pin.from_string(cr.get_string(m,input_pin_key,"nc"));
-    this->input_pin.as_input();
+    this->input_pin.start();
 
     this->subcode = cr.get_int(m, command_subcode_key, 0);
     std::string input_on_command = cr.get_string(m, input_on_command_key, "");
