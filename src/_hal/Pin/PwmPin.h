@@ -30,5 +30,6 @@ class PwmPin: public Pin{
 		uint32_t __resolution;
 		// uint32_t __home_duty;
 		float __duty;
+		static uint8_t __channel_index ;   //init value?
 
 };

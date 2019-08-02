@@ -1,5 +1,6 @@
 #include "PwmPin.h"
 // #include "esp32-hal-ledc.h"    //Why it still work?
+#include "HardwareSerial.h"
 
 #include <string>
 #include <cstring>
@@ -20,28 +21,33 @@ PwmPin::PwmPin(const char *pin)
 {
 	from_string(pin);
 	__is_started = false;
+	__pwm_channel = 255;
 }
 
-// // static
-// bool PwmPin::setup(uint32_t freq)
-// {
-
-// 	return true;
-// }
 
 void PwmPin::set_all(double frequency,uint8_t resolution,uint32_t duty ){
 	__pwm_channel = take_pwm_channel();
-	__frequency = frequency;
-	__resolution = resolution;
-	__duty = duty;
+	if(__pwm_channel != 255){
+		__frequency = frequency;
+		__resolution = resolution;
+		__duty = duty;
+	}
 }
 
 bool PwmPin::start(){
-	ledcSetup(__pwm_channel, __frequency, __resolution );
-    ledcAttachPin(this->get_gpio_num(), __pwm_channel);
-	ledcWrite(this->get_gpio_num(),__duty);
-	__is_started = true;
-	return true;
+	if(__pwm_channel != 255){
+		ledcSetup(__pwm_channel, __frequency, __resolution );
+		ledcAttachPin(this->get_gpio_id(), __pwm_channel);
+		ledcWrite(this->get_gpio_id(),__duty);
+		__is_started = true;
+		Serial.print("[D][PwmPin] start pwm channel= ");
+		Serial.print(__pwm_channel);
+		Serial.print( ",  out put to  pin = ");
+		Serial.println(this->get_gpio_id());
+		return true;
+	}
+	Serial.println("[E][PwmPin][start()] Have NOT got a channel");
+	return false;
 }
 
  //set gpio to input mode. ??
@@ -52,13 +58,19 @@ void PwmPin::stop(){
 void PwmPin::set_duty(uint32_t duty) { 
 	__duty = duty;
 	if(__is_started){
-		ledcWrite(this->get_gpio_num(),duty);
+		ledcWrite(this->get_gpio_id(),duty);
 	}
 }
 
 
 uint8_t PwmPin::take_pwm_channel(){
-	return 0;
+	bool sucessed = set_allocated_channels(__channel_index);
+	if (sucessed){
+		__channel_index++;
+		return __channel_index - 1;
+	}
+	Serial.println("[E][PwmPin][take_pwm_channel] the channel is allocated previous.");
+	return 255L;
 }
 
 

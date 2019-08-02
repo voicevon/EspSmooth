@@ -17,20 +17,6 @@ Pin::Pin(const char *s)
     from_string(s);
 }
 
-// Pin::Pin(const char *s, TYPE_T t)
-// {
-//     this->inverting = false;
-//     this->valid = false;
-//     this->open_drain = false;
-//     if(from_string(s) != nullptr) {
-//         switch(t) {
-//             case AS_INPUT: as_input(); break;
-//             case AS_OUTPUT: as_output(); break;
-//             case AS_PWM: as_pwm();break;
-//             case AS_ADC: as_adc();break;
-//         }
-//     }
-// }
 
 Pin::~Pin()
 {
