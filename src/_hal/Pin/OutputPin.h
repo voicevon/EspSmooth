@@ -7,6 +7,7 @@ class OutputPin: public Pin
     
         OutputPin(const char* pin_description);
         bool start();
+        bool stop();
 
     private:
 

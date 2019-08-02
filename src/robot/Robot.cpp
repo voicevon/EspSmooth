@@ -298,6 +298,7 @@ bool Robot::configure(ConfigReader& cr)
         }
 
         // register this actuator (NB This must be 0,1,2,...) of the actuators array
+        new_actuator->enable(true);
         regietered_count = register_actuator(new_actuator);
         if(regietered_count != a) {
             // this is a fatal error as they must be contiguous

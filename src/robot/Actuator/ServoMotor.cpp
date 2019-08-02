@@ -32,6 +32,16 @@ void ServoMotor::goto_position(float angle) // ,unit = DEGREE)
     // Serial.print ("    ");
 }
 
+//virtual override
+void ServoMotor::enable(bool state) {
+    if(state)
+    {
+        __pwm_pin->start();
+    }else{
+        __pwm_pin->stop();
+    }
+}
+
 float ServoMotor::__map(long x, long in_min, long in_max, long out_min, long out_max){
     long xx= (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     return float(xx);

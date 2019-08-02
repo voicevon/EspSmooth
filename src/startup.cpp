@@ -889,6 +889,7 @@ void smoothie_startup(void *)
         if(!AdcPin::start()) {
             printf("Error: failed to start ADC\n");
         }
+        
 
     } else {
         printf("[DEBUG][setup.ok] nnnnnnnnnnnnnnnnnnnnn \n");

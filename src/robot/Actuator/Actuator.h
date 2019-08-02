@@ -27,7 +27,7 @@ class Actuator
         virtual void manual_step(bool dir) {}
 
         virtual void enable(bool state) {}
-        virtual bool is_enabled() const {return true;}
+        virtual bool is_enabled() const {return false;}
         bool is_moving() const { return moving; };
         void start_moving() { moving= true; }
         void stop_moving() { moving= false; }

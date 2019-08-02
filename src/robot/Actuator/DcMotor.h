@@ -11,6 +11,7 @@ class DcMotor:public Actuator
         // DcMotor(Pin dir, Pin pwm);
         DcMotor(OutputPin* dir_pin, PwmPin* pwm_pin);
         virtual bool step() override;
+        virtual void enable(bool state) override;
 
     private:
         OutputPin* __dir_pin;

@@ -20,3 +20,8 @@ bool OutputPin::start()
     return false;
 }
 
+//Set as inpput?
+bool OutputPin::stop(){
+    return false;
+}
+
