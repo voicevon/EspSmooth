@@ -4,7 +4,7 @@ OutputPin::OutputPin(const char* pin_description):Pin(pin_description){
 
 }
 
-bool OutputPin::init()
+bool OutputPin::start()
 {
     if(this->__valid) {
         if(this->__gpio_id <= MAX_MCU_GPIO_INDEX){

@@ -24,15 +24,13 @@ public:
     // enum TYPE_T {AS_INPUT, AS_OUTPUT, AS_PWM, AS_ADC};
     // Pin(const char *s, Pin::TYPE_T);
 
-    virtual bool init(){return false;}
+    // virtual bool init(){return false;}
 
     Pin* from_string(std::string value);
     std::string to_string() const;
 
     bool is_valid() const { return this->__valid; }
-    bool connected() const { return this->__valid; }
-
-
+    bool connected() const { return this->__valid; }   // keep the name for SmoothieV2
 
     // we need to do this inline due to ISR being in SRAM not FLASH   
     // Right now, it's not in SRAM ! ForHighSpeed demand, Please call digitalRead(), and do inverting yourself.  By Xuming Jun2019

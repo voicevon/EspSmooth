@@ -119,7 +119,7 @@ bool Switch::configure(ConfigReader& cr, ConfigReader::section_map_t& m)
         this->digital_pin = new OutputPin(output_pin.c_str());
         // this->digital_pin->from_string(output_pin)->as_output();
         // this->digital_pin->from_string(output_pin);
-        this->digital_pin->init();
+        this->digital_pin->start();
         if(this->digital_pin->connected()) {
             if(failsafe == 1) {
                 //set_high_on_debug(digital_pin->port_number, digital_pin->pin);

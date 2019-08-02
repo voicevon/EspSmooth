@@ -21,7 +21,7 @@ const int PWM_RESOLUTION_BITS = 16;     // 16 bit resolution
 //My goal B:
 DcMotor::DcMotor(OutputPin* dir_pin, PwmPin* pwm_pin){
     __dir_pin = dir_pin;
-    __dir_pin->init();
+    __dir_pin->start();
 
     __pwm_pin = pwm_pin;
     // __pwm_pin->set_frequency_auto_channel(PWM_FREQ,PWM_RESOLUTION_BITS);
