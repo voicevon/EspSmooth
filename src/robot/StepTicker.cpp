@@ -160,7 +160,7 @@ void StepTicker::step_tick (void)
     if(unstep != 0) {
         // this is a failsafe, if we get here it means we missed the unstep from a previous tick
         // so we need to unstep the pin now or it will remain high
-        // Serial.print("^");
+        Serial.print("^");
         unstep_tick();
         missed_unsteps++; // keep trck for diagnostics
     }

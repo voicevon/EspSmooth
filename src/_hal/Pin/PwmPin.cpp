@@ -15,49 +15,55 @@ PwmPin::PwmPin(const char *pin)
 {
 	from_string(pin);
 	__is_started = false;
-	__pwm_channel = 255;
 }
 
+// Normal process:  init() -> start() -> stop() ->init()
+//                                    |
+// Branch process:                    |-> init() ---cause a auto stop, need to start again. ---    
 void PwmPin::init(double frequency,uint8_t resolution,uint32_t duty ){
+	if(__is_started) this->stop();
+
 	__pwm_channel = __take_pwm_channel();
-	if(__pwm_channel != 255){
-		__frequency = frequency;
-		__resolution = resolution;
-		__duty = duty;
-	}
+	__frequency = frequency;
+	__resolution = resolution;
+	__duty = duty;
 }
 
+#define MAX_PWM_CHANNEL_ID 15
+//virtual override   will never return false here.
 bool PwmPin::start(){
-	if(__pwm_channel == 255){
-		ledcSetup(__pwm_channel, __frequency, __resolution );
-		ledcAttachPin(this->get_gpio_id(), __pwm_channel);
-		ledcWrite(this->get_gpio_id(),__duty);
-		__is_started = true;
-		Serial.print("[D][PwmPin] start pwm_channel= ");
-		Serial.print(__pwm_channel);
-		Serial.print(",   Frequency= ");
-		Serial.print(__frequency);
-		Serial.print(",  PWM_resolution bits= ");
-		Serial.print(__resolution);
-		Serial.print( ",  output_pin= ");
-		Serial.println(this->get_gpio_id());
-		return true;
-	}
-	Serial.println("[E][PwmPin][start()] Have NOT got a channel");
-	return false;
+	if(__is_started) return true;
+
+	ledcSetup(__pwm_channel, __frequency, __resolution );
+	ledcAttachPin(this->get_gpio_id(), __pwm_channel);
+	ledcWrite(this->get_gpio_id(),__duty);
+	__is_started = true;
+	Serial.print("[D][PwmPin] start pwm_channel= ");
+	Serial.print(__pwm_channel);
+	Serial.print(",   Frequency= ");
+	Serial.print(__frequency);
+	Serial.print(",  PWM_resolution bits= ");
+	Serial.print(__resolution);
+	Serial.print( ",  output_pin= ");
+	Serial.println(this->get_gpio_id());
+	return true;
 }
 
+//virtual override  . Always return true here.
  //set gpio to input mode. ??
 bool PwmPin::stop(){
 	__is_started =  false;   //rename to "__is_working" ?
-	return false;
+	__set_allocated_channels(__channel_index,false);
+	return true;
 }
 
 void PwmPin::set_duty(uint32_t duty) { 
 	__duty = duty;
 	if(__is_started){
+		Serial.println("5555555555555555");
 		ledcWrite(this->get_gpio_id(),duty);
 	} else {
+		Serial.println("6666666666666666");
 		start();
 		ledcWrite(this->get_gpio_id(),duty);
 	}
@@ -66,7 +72,7 @@ void PwmPin::set_duty(uint32_t duty) {
 
 // static
 uint8_t PwmPin::__take_pwm_channel(){
-	bool sucessed = __set_allocated_channels(__channel_index);
+	bool sucessed = __set_allocated_channels(__channel_index,true);
 	if (sucessed){
 		__channel_index++;
 		return __channel_index - 1;
