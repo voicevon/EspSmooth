@@ -136,8 +136,7 @@ void output_motors(){
     StepperMotor* ss2 = (StepperMotor*) (rr->actuators[2]);
     fff[2] = ss2->get_current_position();
     
-    // p[1] = ss->get_current_position();
-    // ss->goto_position(ff);
+    ss1->goto_position(fff[1]);
     // Serial.println(ff);
     
 }
@@ -162,6 +161,7 @@ void setup(){
 void loop(){
     cpu_idle_counter++;
     if(esp_timer_get_time() - boot_timestamp < 5000000) return;
+    output_motors();
 
     if(esp_timer_get_time () - last_time_stamp >= rtos_report_inteval_second * 1000000){
         uint16_t passed_time = cpu_idle_counter / 10280 / rtos_report_inteval_second;
@@ -173,7 +173,6 @@ void loop(){
         cpu_idle_counter = 0;
         last_time_stamp = esp_timer_get_time();
 
-        output_motors();
         printf("    [x,y,z]Pos= %f,  %f,  %f, ---  %f, %f  ,%f \n",p[0],p[1],p[2],fff[0],fff[1],fff[2]);
     }
 

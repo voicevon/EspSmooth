@@ -45,11 +45,9 @@ void ServoMotor::set_direction(bool f) {
 
 void ServoMotor::goto_position(float angle) // ,unit = DEGREE)
 {
-    Serial.println("mmmmmmmmmmmmmmm");
     float duty =  __map(angle * 100, 0, 36000, MIN_PULSE, MAX_PULSE); 
-    // __pwm_pin.set_duty(duty);
-    Serial.println("qqqqqqqqqqqqqq");
-    __pwm_pin.set_duty(2000);
+    __pwm_pin.set_duty(duty);
+    // __pwm_pin.set_duty(2000);
 
     // ledcWrite(pwm_channel, pwm);
     // Serial.print ("    ");
