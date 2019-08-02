@@ -39,6 +39,7 @@ public:
         }else { //expanded io
 
         }
+        return false;
     }
 
     // we need to do this inline due to ISR being in SRAM not FLASH

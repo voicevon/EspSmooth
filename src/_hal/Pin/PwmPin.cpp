@@ -18,9 +18,8 @@ PwmPin::PwmPin(const char *pin)
 	__pwm_channel = 255;
 }
 
-
-void PwmPin::init_all(double frequency,uint8_t resolution,uint32_t duty ){
-	__pwm_channel = take_pwm_channel();
+void PwmPin::init(double frequency,uint8_t resolution,uint32_t duty ){
+	__pwm_channel = __take_pwm_channel();
 	if(__pwm_channel != 255){
 		__frequency = frequency;
 		__resolution = resolution;
@@ -65,9 +64,9 @@ void PwmPin::set_duty(uint32_t duty) {
 
 }
 
-
-uint8_t PwmPin::take_pwm_channel(){
-	bool sucessed = _set_allocated_channels(__channel_index);
+// static
+uint8_t PwmPin::__take_pwm_channel(){
+	bool sucessed = __set_allocated_channels(__channel_index);
 	if (sucessed){
 		__channel_index++;
 		return __channel_index - 1;
@@ -76,9 +75,9 @@ uint8_t PwmPin::take_pwm_channel(){
 	return 255L;
 }
 
-//static
+// static
 uint8_t PwmPin::__channel_index = 0;
-bool PwmPin::init() { 
+bool PwmPin::init_channel_flags() { 
 	__channel_index = 0;
 	return true;
 }
@@ -86,7 +85,7 @@ bool PwmPin::init() {
 // bitset to indicate a pin has been configured
 #include <bitset>
 static std::bitset<GPIO_PINS_COUNT> allocated_channels;   //default constructor :The object is initialized with zeros.
-bool PwmPin::_set_allocated_channels(uint8_t channel_id, bool set)
+bool PwmPin::__set_allocated_channels(uint8_t channel_id, bool set)
 {
     if(!set) {
         // deallocate it

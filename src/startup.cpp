@@ -35,7 +35,7 @@
 #include "_hal/stopwatch.h"
 #include "_hal/spiffs_ext.h"
 
-static const char *TAG = "espsmooth.main";
+// static const char *TAG = "StartUp";
 
 static bool system_running= false;
 static bool rpi_port_enabled= false;
@@ -105,7 +105,7 @@ static bool load_config_override(OutputStream& os)
             for(auto& i : gcodes) {
                 if(i.get_code() >= 500 && i.get_code() <= 503) continue; // avoid recursion death
                 if(!THEDISPATCHER->dispatch(i, nullos)) {
-                    os.printf("WARNING: load_config_override: this line was not handled: %s\n", s.c_str());
+                    os.printf("[W][Startup]WARNING: load_config_override: this line was not handled: %s\n", s.c_str());
                 }
             }
         }
@@ -681,7 +681,7 @@ void setup_section_genenal(ConfigReader cr){
 
 // configure core modules here
 void setup_section_core(ConfigReader cr){
-    PwmPin::init();
+    PwmPin::init_channel_flags();
     // PwmPin::xxx = 0;
     // Pwm needs to be initialized, there can only be one frequency
     // needs to be done before any module that could use it

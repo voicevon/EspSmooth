@@ -28,12 +28,13 @@ bool ServoMotor::step() {
     float target_angle = get_current_position();
     // Serial.println(target_angle);
     goto_position (target_angle);
+    return true;
 }
 
 void ServoMotor::goto_position(float angle) // ,unit = DEGREE)
 {
     float duty =  __map(angle * 100, 0, 36000, MIN_PULSE, MAX_PULSE); 
-    __pwm_pin.set(duty);
+    __pwm_pin.set_duty(duty);
     // ledcWrite(pwm_channel, pwm);
     // Serial.print ("    ");
     // Serial.print(val);
@@ -45,7 +46,7 @@ void ServoMotor::goto_position(float angle) // ,unit = DEGREE)
 void ServoMotor::enable(bool state) {
     if(state)
     {
-        __pwm_pin.init_all(SERVO_FREQ,PWM_RESOLUTION_BITS,HOME_DUTY);    // TODO: Home_duty is configable!     
+        __pwm_pin.init(SERVO_FREQ, PWM_RESOLUTION_BITS, HOME_DUTY);    // TODO: Home_duty is configable!     
         __pwm_pin.start();
         Serial.println("[D][ServoMotor]: enabled");
     }else{
