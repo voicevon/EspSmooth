@@ -1,4 +1,5 @@
 #include "PwmPin.h"
+// #include "esp32-hal-ledc.h"    //Why it still work?
 
 #include <string>
 #include <cstring>
@@ -7,63 +8,54 @@
 #include <vector>
 #include <cmath>
 
-static const int PWM_RESOLUTION_BITS = 16;     // 16 bit resolution
-
-// #include "board.h"
-
-uint32_t PwmPin::frequency= 0;
-
-/* 43xx Pinmap for PWM to CTOUT and function
-Pin  a, b, COUT#, Function
-*/
-// static const std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint8_t>> lut {
-//     {0x01, 1,  7,  1},
-//     {0x01, 2,  6,  1},
-//     {0x01, 3,  8,  1},
-//     {0x01, 4,  9,  1},
-
-// };
-
-// bool PwmPin::lookup_pin(uint8_t port, uint8_t pin, uint8_t& ctout, uint8_t& func)
-// {
+// static const int PWM_RESOLUTION_BITS = 16;     // 16 bit resolution
 
 
-//     return false;
-// }
+// uint32_t PwmPin::frequency= 0;
 
-// static
-// int PwmPin::pwm_index= 1;
-// int PwmPin::map_pin_to_pwm(const char *name)
-// {
-//     return 0;
-// }
 
 
 
 PwmPin::PwmPin(const char *pin)
 {
 	from_string(pin);
+	__is_started = false;
 }
 
-// static
-bool PwmPin::setup(uint32_t freq)
-{
+// // static
+// bool PwmPin::setup(uint32_t freq)
+// {
 
-	return true;
-}
+// 	return true;
+// }
 
-bool PwmPin::set_frequency_auto_channel(double frequency){
+void PwmPin::set_all(double frequency,uint8_t resolution,uint32_t duty ){
 	__pwm_channel = take_pwm_channel();
-	ledcSetup(__pwm_channel, frequency, PWM_RESOLUTION_BITS);
+	__frequency = frequency;
+	__resolution = resolution;
+	__duty = duty;
+}
+
+bool PwmPin::start(){
+	ledcSetup(__pwm_channel, __frequency, __resolution );
     ledcAttachPin(this->get_gpio_num(), __pwm_channel);
+	ledcWrite(this->get_gpio_num(),__duty);
+	__is_started = true;
 	return true;
 }
 
-
-void PwmPin::set(float v)
-{
-	pwm_value= v;
+ //set gpio to input mode. ??
+void PwmPin::stop(){
+	__is_started =  false;
 }
+
+void PwmPin::set_duty(uint32_t duty) { 
+	__duty = duty;
+	if(__is_started){
+		ledcWrite(this->get_gpio_num(),duty);
+	}
+}
+
 
 uint8_t PwmPin::take_pwm_channel(){
 	return 0;

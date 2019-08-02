@@ -4,28 +4,30 @@
 #include <stdint.h>
 
 
-class PwmPin: public Pin
-{
-public:
-	~PwmPin(){};
-	PwmPin(const char* pin);
-	void set(float v);
-	float get_pwm() const { return pwm_value; }
-	static uint32_t get_frequency() { return frequency; }
-	static bool setup(uint32_t freq);
+class PwmPin: public Pin{
+	public:
+		~PwmPin(){};
+		PwmPin(const char* pin);
+		uint8_t take_pwm_channel();
 
-	
-	bool set_frequency_auto_channel(double frequency);
-	// bool init(uint8_t frequency,uint8_t channel);
-private:
-	// bool lookup_pin(uint8_t port, uint8_t pin, uint8_t& ctout, uint8_t& func);
-	// int map_pin_to_pwm(const char *name);
+		uint32_t get_duty() const { return __duty; }
+		void set_duty(uint32_t duty);
 
-	// static int pwm_index;
-	static uint32_t frequency;
-	float pwm_value;
-	// uint8_t index;
+		uint32_t get_frequency() { return __frequency; }
+		void set_frequency(uint32_t frequency){ __frequency = frequency; }
+		
+		void set_all(double frequency,uint8_t pwm_width_resolution, uint32_t home_duty );
+		bool start();
+		void stop();  
 
-	uint8_t __pwm_channel;
-	uint8_t take_pwm_channel();
+	private:
+		bool __is_started;
+
+		uint8_t __pwm_channel;
+		uint8_t __channel;
+		uint32_t __frequency;
+		uint32_t __resolution;
+		// uint32_t __home_duty;
+		float __duty;
+
 };

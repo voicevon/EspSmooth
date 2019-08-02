@@ -683,13 +683,16 @@ void setup_section_genenal(ConfigReader cr){
 void setup_section_core(ConfigReader cr){
     // Pwm needs to be initialized, there can only be one frequency
     // needs to be done before any module that could use it
-    uint32_t freq = 10000; // default is 10KHz
-    ConfigReader::section_map_t m;
-    if(cr.get_section("pwm", m)) {
-        freq = cr.get_int(m, "frequency", freq);
-    }
-    PwmPin::setup(freq);
-    printf("INFO: PWM frequency set to %d Hz\n", freq);
+    // uint32_t freq = 10000; // default is 10KHz
+    // ConfigReader::section_map_t m;
+    // if(cr.get_section("pwm", m)) {
+    //     freq = cr.get_int(m, "frequency", freq);
+    // }
+
+    //Xuming Aug 2019
+    //Esp32 pwm channels are working at different frequency. It will be handled by individual channel.
+    // PwmPin::setup(freq);
+    // printf("INFO: PWM frequency set to %d Hz\n", freq);
 }
 
 void setup_section_extruder(ConfigReader cr){

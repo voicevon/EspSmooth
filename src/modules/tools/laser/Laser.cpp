@@ -112,7 +112,7 @@ bool Laser::configure(ConfigReader& cr)
     THEDISPATCHER->add_handler(Dispatcher::MCODE_HANDLER, 221, std::bind(&Laser::handle_M221, this, _1, _2));
 
     // no point in updating the power more than the PWM frequency, but no more than 100Hz
-    uint32_t pwm_freq= PwmPin::get_frequency();
+    uint32_t pwm_freq= this->pwm_pin->get_frequency();
     uint32_t f= patch::min(100UL, pwm_freq);
     if(f >= FastTicker::get_min_frequency()) {
         printf("configure-temperature: WARNING update frequency is fast enough that ramfunc needs to be used\n");
