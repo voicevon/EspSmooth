@@ -19,6 +19,8 @@ class PwmPin: public Pin{
 		void set_all(double frequency,uint8_t pwm_width_resolution, uint32_t home_duty );
 		bool start();
 		void stop();  
+	
+		static bool init(); 
 
 	private:
 		bool __is_started;
@@ -30,6 +32,8 @@ class PwmPin: public Pin{
 		uint32_t __resolution;
 		// uint32_t __home_duty;
 		float __duty;
-		static uint8_t __channel_index ;   //init value?
+
+		static uint8_t __channel_index;   
+
 
 };

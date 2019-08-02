@@ -681,6 +681,8 @@ void setup_section_genenal(ConfigReader cr){
 
 // configure core modules here
 void setup_section_core(ConfigReader cr){
+    PwmPin::init();
+    // PwmPin::xxx = 0;
     // Pwm needs to be initialized, there can only be one frequency
     // needs to be done before any module that could use it
     // uint32_t freq = 10000; // default is 10KHz

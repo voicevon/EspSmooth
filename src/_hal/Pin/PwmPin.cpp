@@ -9,12 +9,6 @@
 #include <vector>
 #include <cmath>
 
-// static const int PWM_RESOLUTION_BITS = 16;     // 16 bit resolution
-
-
-// uint32_t PwmPin::frequency= 0;
-
-
 
 
 PwmPin::PwmPin(const char *pin)
@@ -73,6 +67,13 @@ uint8_t PwmPin::take_pwm_channel(){
 	return 255L;
 }
 
+//static
+uint8_t PwmPin::__channel_index = 0;
+bool PwmPin::init() { 
+	__channel_index = 0;
+	// xx = 0;
+	return true;
+}
 
 // bitset to indicate a pin has been configured
 #include <bitset>
