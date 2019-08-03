@@ -8,6 +8,7 @@ const int PWM_RESOLUTION_BITS = 16;     // 16 bit resolution
 DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin){
     __dir_pin = OutputPin(dir_pin);
     __pwm_pin = PwmPin(pwm_pin);
+    _motor_type = ACTUATOR_TYPE_T::DC_MOTOR;
 }
 
 bool DcMotor::step(){

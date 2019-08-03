@@ -7,6 +7,7 @@
 class Actuator
 {
     public:
+        enum ACTUATOR_TYPE_T {STEPPER_MOTOR, SERVO_MOTOR, XUEFENG_MOTOR, DC_MOTOR};
 
         Actuator();
         ~Actuator();
@@ -57,7 +58,7 @@ class Actuator
         int32_t steps_to_target(float);
 
         // TYPE_T type_from_string(const char* type_description);
-
+        ACTUATOR_TYPE_T get_motor_type() const { return _motor_type; }
 
     protected:
         void _init();
@@ -77,6 +78,7 @@ class Actuator
             bool selected:1;
             bool extruder:1;
         };
+        ACTUATOR_TYPE_T _motor_type;
     private:
 
 

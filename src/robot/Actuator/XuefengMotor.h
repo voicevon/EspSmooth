@@ -4,7 +4,7 @@
 class XuefengMotor:public Actuator{
     public:
 
-        XuefengMotor(){};
+        XuefengMotor();
     
     private:
 

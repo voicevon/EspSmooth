@@ -117,29 +117,36 @@ void setup_smooth(){
 #include "robot/Actuator/ServoMotor.h"
 #include "robot/Actuator/StepperMotor.h"
 
-uint8_t xxx=0;
-float p[3];
-Actuator* aa;
-float fff[3];
+// uint8_t xxx=0;
+// float p[3];
+// Actuator* aa;
+// float fff[3];
 
 void output_motors(void*){
-
+    ServoMotor* servoMotor;
     while(true){
-        Robot* rr = Robot::getInstance();
+        Robot* robot = Robot::getInstance();
         for(int i=0; i<3;i++){
-            aa = rr->actuators[i];
-            p[i] = aa->get_current_position();
-        }
+            Actuator* actuator = robot->actuators[i];
+            float target_position = actuator->get_current_position();
+            switch (actuator->get_motor_type())
+            {
+            case Actuator::SERVO_MOTOR:
+                servoMotor = (ServoMotor*) actuator; 
+                servoMotor->goto_position(target_position);
+                break;
+            case Actuator::DC_MOTOR:
+                break;
+            case Actuator::XUEFENG_MOTOR:
+                break;          
+            case Actuator::STEPPER_MOTOR:
+                //Do nothing.
 
-        ServoMotor* ss1 = (ServoMotor*) (rr->actuators[1]);
-        fff[1]= ss1->get_current_position();
-        StepperMotor* ss0 = (StepperMotor*) (rr->actuators[0]);
-        fff[0] = ss0->get_current_position();
-        StepperMotor* ss2 = (StepperMotor*) (rr->actuators[2]);
-        fff[2] = ss2->get_current_position();
-        
-        ss1->goto_position(fff[1]);
-        // Serial.println(ff);
+                break;
+            default:
+                break;
+            }
+        }   
         delay(200);
     }
 }
@@ -160,6 +167,8 @@ void setup(){
 
     boot_timestamp = esp_timer_get_time();
     delay(5000);
+
+    //TODO: create a timer task. freq = 50Hz
     xTaskCreate(output_motors, "ServoMotor", 1500, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
 }
 
@@ -177,7 +186,7 @@ void loop(){
         cpu_idle_counter = 0;
         last_time_stamp = esp_timer_get_time();
 
-        printf("    [x,y,z]Pos= %f,  %f,  %f, ---  %f, %f  ,%f \n",p[0],p[1],p[2],fff[0],fff[1],fff[2]);
+        // printf("    [x,y,z]Pos= %f,  %f,  %f, ---  %f, %f  ,%f \n",p[0],p[1],p[2],fff[0],fff[1],fff[2]);
     }
 
 }
