@@ -22,7 +22,7 @@ class DcMotor:public Actuator
         uint8_t __pwm_channel;
         MotorPidController __pid_controller;
         esphome::ads1115::ADS1115Component* qq;
-        // esphome::ads1115::ADS1115Sensor __ads1115(qq);
+        esphome::ads1115::ADS1115Sensor* __ads1115;
         float __read_sensor();
         void __goto_position(float target_position,float sensor_position);
 };

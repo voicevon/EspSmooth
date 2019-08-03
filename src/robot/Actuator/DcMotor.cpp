@@ -9,6 +9,8 @@ DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin){
     __dir_pin = OutputPin(dir_pin);
     __pwm_pin = PwmPin(pwm_pin);
     _motor_type = ACTUATOR_TYPE_T::DC_MOTOR;
+
+     __ads1115 = new esphome::ads1115::ADS1115Sensor(qq); 
 }
 
 bool DcMotor::step(){
