@@ -153,7 +153,7 @@ void output_motors(void*){
 
 
 
-uint64_t rtos_report_inteval_second = 11 ;
+uint64_t rtos_report_inteval_second = 5 ;
 uint64_t cpu_idle_counter = 0;
 uint64_t last_time_stamp = 0;   //us
 uint64_t boot_timestamp = 0;
@@ -179,7 +179,7 @@ void loop(){
     if(esp_timer_get_time () - last_time_stamp >= rtos_report_inteval_second * 1000000){
         uint16_t passed_time = cpu_idle_counter / 10280 / rtos_report_inteval_second;
         uint16_t uptime_second = esp_timer_get_time() / 1000000;  
-        printf("uptime = %i seconds, cpu usage =  %i/%%  ",uptime_second, 100 - passed_time);
+        printf("uptime = %i seconds, cpu usage =  %i/%%  \n",uptime_second, 100 - passed_time);
 
         //vTaskList(ptrTaskList);   vTaskList is not supportted?  Jun2019      https://github.com/espressif/esp-idf/issues/416
 

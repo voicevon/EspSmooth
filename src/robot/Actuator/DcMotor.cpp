@@ -27,9 +27,16 @@ void DcMotor::enable(bool state){
     }
 }
 
+float DcMotor::read_sensor(){
+    return 1234.45;
+}
 
-const int MIN_PULSE = 1000; // 
-const int MAX_PULSE = 75000; //
+void DcMotor::goto_position(float target_position,float sensor_position){
+    float duty = __pid_controller.get_output_value(target_position,sensor_position);
+    __pwm_pin.set_duty(duty);
+}
+
+
 
 
 
