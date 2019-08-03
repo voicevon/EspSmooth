@@ -29,14 +29,12 @@ class PwmPin: public Pin{
     	static bool __set_allocated_channels(uint8_t channel_id, bool set);
 		uint8_t __take_pwm_channel();
 
-		uint8_t __pwm_channel;
 		uint8_t __channel;
 		uint32_t __frequency;
 		uint32_t __resolution;
-		// uint32_t __home_duty;
-		float __duty;
+		uint32_t __duty;
 
-		static uint8_t __channel_index;   
+		static uint8_t __channel_index_wizard;   
 
 
 };

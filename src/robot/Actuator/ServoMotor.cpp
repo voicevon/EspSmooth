@@ -6,7 +6,7 @@ const int SERVO_FREQ = 250;    // 50Hz  20ms
 const int PWM_RESOLUTION_BITS = 16;     // 16 bit resolution
 
 const int MIN_PULSE = 1000; // 
-const int MAX_PULSE = 75000; //
+const int MAX_PULSE = 65535; // 
 
 
 ServoMotor::ServoMotor(PwmPin &pwm_pin):Actuator(){
@@ -45,14 +45,10 @@ void ServoMotor::set_direction(bool f) {
 
 void ServoMotor::goto_position(float angle) // ,unit = DEGREE)
 {
-    float duty =  __map(angle * 100, 0, 36000, MIN_PULSE, MAX_PULSE); 
+    // float duty =  __map(angle * 100, 0, 36000, MIN_PULSE, MAX_PULSE); 
+    float duty =  angle /360 * 65535; 
     __pwm_pin.set_duty(duty);
     // __pwm_pin.set_duty(2000);
-
-    // ledcWrite(pwm_channel, pwm);
-    // Serial.print ("    ");
-    // Serial.print(val);
-    // Serial.print ("    ");
 }
 
 //virtual override

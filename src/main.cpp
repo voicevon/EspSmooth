@@ -122,7 +122,7 @@ void setup_smooth(){
 // float p[3];
 // Actuator* aa;
 // float fff[3];
-
+float fff;
 void output_motors(void*){
     ServoMotor* servoMotor;
     DcMotor* dcMotor;
@@ -137,6 +137,7 @@ void output_motors(void*){
             case Actuator::SERVO_MOTOR:
                 servoMotor = (ServoMotor*) actuator; 
                 servoMotor->goto_position(target_position);
+                fff = target_position;
                 break;
             case Actuator::DC_MOTOR:
                 dcMotor =(DcMotor*) actuator;
@@ -186,14 +187,15 @@ void loop(){
     if(esp_timer_get_time () - last_time_stamp >= rtos_report_inteval_second * 1000000){
         uint16_t passed_time = cpu_idle_counter / 10280 / rtos_report_inteval_second;
         uint16_t uptime_second = esp_timer_get_time() / 1000000;  
-        printf("uptime = %i seconds, cpu usage =  %i/%%  \n",uptime_second, 100 - passed_time);
+        printf("uptime = %i seconds, cpu usage =  %i/%%  ",uptime_second, 100 - passed_time);
 
         //vTaskList(ptrTaskList);   vTaskList is not supportted?  Jun2019      https://github.com/espressif/esp-idf/issues/416
 
         cpu_idle_counter = 0;
         last_time_stamp = esp_timer_get_time();
 
-        // printf("    [x,y,z]Pos= %f,  %f,  %f, ---  %f, %f  ,%f \n",p[0],p[1],p[2],fff[0],fff[1],fff[2]);
+        printf("    Y Pos= %f", fff);
+        printf("\n");
     }
 
 }
