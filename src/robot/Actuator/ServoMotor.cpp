@@ -10,8 +10,9 @@ const int MAX_PULSE = 65535; //
 
 
 ServoMotor::ServoMotor(PwmPin &pwm_pin):Actuator(){
-    __pwm_pin = PwmPin(pwm_pin);   // Is PwmPin() cloning the object from pwm_pin to __pwm_pin ?
     _motor_type = ACTUATOR_TYPE_T::SERVO_MOTOR;
+    __pwm_pin = PwmPin(pwm_pin);   // Is PwmPin() cloning the object from pwm_pin to __pwm_pin ?
+    __enabled = false;
 }
 
 // Question here:
