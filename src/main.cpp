@@ -106,21 +106,9 @@ void setup_smooth(){
     // vTaskStartScheduler();    Don't call vTaskStartScheduler()     https://esp32.com/viewtopic.php?t=1336
 }
 
-
-
-
-
-
-
-
-
 extern float float_value;
-extern void output_motors(void*);
+extern void ControlMotors(TimerHandle_t xTimer);
 
-uint64_t rtos_report_inteval_second = 5 ;
-uint64_t cpu_idle_counter = 0;
-uint64_t last_time_stamp = 0;   //us
-uint64_t boot_timestamp = 0;
 void setup(){
     Serial.begin(115200);
     show_memory_allocate();
@@ -129,13 +117,18 @@ void setup(){
     //setup_spiffs_reading();
     setup_smooth(); 
 
-    boot_timestamp = esp_timer_get_time();
-    delay(5000);
-
-    //TODO: create a timer task. freq = 50Hz
-    xTaskCreate(output_motors, "ServoMotor", 1500, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
+    delay(5000);   //Keep uartTx empty for Printrun handshaking.
+    int interval = 20;
+    int id = 1;
+    TimerHandle_t tmr = xTimerCreate("ControlMotors", pdMS_TO_TICKS(interval), pdTRUE, ( void * )id, &ControlMotors);
+    if( xTimerStart(tmr, 10 ) != pdPASS ) {
+        printf("Timer for ControlMotors  start error \n");
+    }
 }
 
+uint64_t rtos_report_inteval_second = 5 ;
+uint64_t cpu_idle_counter = 0;
+uint64_t last_time_stamp = 0;   //us
 // Actually, this is the lowest priority task.
 void loop(){
     cpu_idle_counter++;

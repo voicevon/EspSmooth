@@ -9,7 +9,7 @@
 // Actuator* aa;
 // float fff[3];
 float float_value;
-void output_motors(void*){
+void ControlMotors(TimerHandle_t xTimer){
     ServoMotor* servoMotor;
     DcMotor* dcMotor;
     XuefengMotor* xuefengMotor;
