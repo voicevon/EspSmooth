@@ -112,56 +112,10 @@ void setup_smooth(){
 
 
 
-#include "robot/Robot.h"
-#include "robot/Actuator/Actuator.h"
-#include "robot/Actuator/ServoMotor.h"
-#include "robot/Actuator/StepperMotor.h"
-#include "robot/Actuator/DcMotor.h"
-#include "robot/Actuator/XuefengMotor.h"
-// uint8_t xxx=0;
-// float p[3];
-// Actuator* aa;
-// float fff[3];
-float fff;
-void output_motors(void*){
-    ServoMotor* servoMotor;
-    DcMotor* dcMotor;
-    XuefengMotor* xuefengMotor;
-    while(true){
-        Robot* robot = Robot::getInstance();
-        for(int i=0; i<3;i++){
-            Actuator* actuator = robot->actuators[i];
-            float target_position = actuator->get_current_position();
-            switch (actuator->get_motor_type())
-            {
-            case Actuator::SERVO_MOTOR:
-                servoMotor = (ServoMotor*) actuator; 
-                servoMotor->goto_position(target_position);
-                fff = target_position;
-                break;
-            case Actuator::DC_MOTOR:
-                dcMotor =(DcMotor*) actuator;
-                dcMotor->goto_position(target_position);
-                break;
-            case Actuator::XUEFENG_MOTOR:
-                xuefengMotor = (XuefengMotor*) actuator;
-                xuefengMotor->goto_position(target_position);
-                break;          
-            case Actuator::STEPPER_MOTOR:
-                //Do nothing.
-
-                break;
-            default:
-                break;
-            }
-        }   
-        // without this, will  reboot. Why? Aug 2019 Xuming 
-        // possible reason1: previous PWM writing is not finished. 
-        delay(100);  //Can be shorter? faster? smoothier?
-    }
-}
 
 
+extern float float_value;
+extern void output_motors(void*);
 
 uint64_t rtos_report_inteval_second = 5 ;
 uint64_t cpu_idle_counter = 0;
@@ -196,7 +150,7 @@ void loop(){
         cpu_idle_counter = 0;
         last_time_stamp = esp_timer_get_time();
 
-        printf("    Y Pos= %f", fff);
+        printf("    Y Pos= %f", float_value);
         printf("\n");
     }
 

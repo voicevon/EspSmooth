@@ -1,5 +1,6 @@
 #include "Actuator.h"
-
+#include "libs/StringUtils.h"
+#include "HardwareSerial.h"
 #include <math.h>
 
 Actuator::Actuator()
@@ -25,7 +26,20 @@ void Actuator::_init(){
     unstep(); // initialize step pin
     set_direction(false); // initialize dir pin
 }
+    //static
+Actuator::ACTUATOR_TYPE_T Actuator::get_type_from_string(const char* type_description){
+    std::string upper = stringutils::toUpper(type_description);
+    if(upper == "STEPPER") { return STEPPER_MOTOR; } 
+    if(upper == "SERVO") { return SERVO_MOTOR; }
+    if(upper == "XUEFENG") { return XUEFENG_MOTOR; }
+    if(upper == "DC") { return DC_MOTOR; }
 
+    
+    Serial.print("[E][ActuatorType][from_string()] type_description= >");
+    Serial.print(type_description);
+    Serial.println("<    Forced to set as STEPPER_MOTOR");
+    return STEPPER_MOTOR;  
+}
 void Actuator::change_steps_per_mm(float new_steps)
 {
     steps_per_mm = new_steps;
