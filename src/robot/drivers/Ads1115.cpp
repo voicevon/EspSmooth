@@ -75,9 +75,9 @@ void ADS1115::initialize() {
  * Make sure the device is connected and responds as expected.
  * @return True if connection is valid, false otherwise
  */
-bool ADS1115::testConnection() {
-    return I2Cdev::readWord(devAddr, ADS1115_RA_CONVERSION, buffer) == 1;
-}
+// bool ADS1115::testConnection() {
+//     return I2Cdev::readWord(devAddr, ADS1115_RA_CONVERSION, buffer) == 1;
+// }
 
 /** Poll the operational status bit until the conversion is finished
  * Retry at most 'max_retries' times
@@ -129,14 +129,14 @@ bool ADS1115::pollConversion(uint16_t max_retries) {
  * @see ADS1115_MUX_P2_NG
  * @see ADS1115_MUX_P3_NG
  */
-int16_t ADS1115::getConversion(bool triggerAndPoll) {
-    if (triggerAndPoll && devMode == ADS1115_MODE_SINGLESHOT) {
-      triggerConversion();
-      pollConversion(I2CDEV_DEFAULT_READ_TIMEOUT);
-    }
-    I2Cdev::readWord(devAddr, ADS1115_RA_CONVERSION, buffer);
-    return buffer[0];
-}
+// int16_t ADS1115::getConversion(bool triggerAndPoll) {
+//     if (triggerAndPoll && devMode == ADS1115_MODE_SINGLESHOT) {
+//       triggerConversion();
+//       pollConversion(I2CDEV_DEFAULT_READ_TIMEOUT);
+//     }
+//     I2Cdev::readWord(devAddr, ADS1115_RA_CONVERSION, buffer);
+//     return buffer[0];
+// }
 /** Get AIN0/N1 differential.
  * This changes the MUX setting to AIN0/N1 if necessary, triggers a new
  * measurement (also only if necessary), then gets the differential value
@@ -541,10 +541,10 @@ void ADS1115::setComparatorQueueMode(uint8_t mode) {
  * @return Current low threshold value
  * @see ADS1115_RA_LO_THRESH
  */
-int16_t ADS1115::getLowThreshold() {
-    I2Cdev::readWord(devAddr, ADS1115_RA_LO_THRESH, buffer);
-    return buffer[0];
-}
+// int16_t ADS1115::getLowThreshold() {
+//     I2Cdev::readWord(devAddr, ADS1115_RA_LO_THRESH, buffer);
+//     return buffer[0];
+// }
 /** Set low threshold value.
  * @param threshold New low threshold value
  * @see ADS1115_RA_LO_THRESH
@@ -556,10 +556,10 @@ void ADS1115::setLowThreshold(int16_t threshold) {
  * @return Current high threshold value
  * @see ADS1115_RA_HI_THRESH
  */
-int16_t ADS1115::getHighThreshold() {
-    I2Cdev::readWord(devAddr, ADS1115_RA_HI_THRESH, buffer);
-    return buffer[0];
-}
+// int16_t ADS1115::getHighThreshold() {
+//     I2Cdev::readWord(devAddr, ADS1115_RA_HI_THRESH, buffer);
+//     return buffer[0];
+// }
 /** Set high threshold value.
  * @param threshold New high threshold value
  * @see ADS1115_RA_HI_THRESH
@@ -602,8 +602,8 @@ uint16_t getValueFromBits(uint16_t extractFrom, int high, int length) {
 /** Show all the config register settings
  */
 void ADS1115::showConfigRegister() {
-    I2Cdev::readWord(devAddr, ADS1115_RA_CONFIG, buffer);
-    uint16_t configRegister =buffer[0];    
+    // I2Cdev::readWord(devAddr, ADS1115_RA_CONFIG, buffer);
+    // uint16_t configRegister =buffer[0];    
     
     
     #ifdef ADS1115_SERIAL_DEBUG

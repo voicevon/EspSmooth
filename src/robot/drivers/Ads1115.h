@@ -191,7 +191,7 @@ class ADS1115 {
 
     private:
         uint8_t devAddr;
-        uint16_t buffer[2];
+        uint8_t buffer[2];
         bool    devMode;
         uint8_t muxMode;
         uint8_t pgaMode;
