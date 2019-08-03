@@ -62,11 +62,11 @@ bool PwmPin::stop(){
 void PwmPin::set_duty(uint32_t duty) { 
 	__duty = duty;
 	if(__is_started){
-		Serial.print("[V][PwmPin] set_duty() GPIO= ");
-		Serial.print(this->get_gpio_id());
-		Serial.print("  duty= ");
-		Serial.print(duty);
-		Serial.println(" ");
+		// Serial.print("[V][PwmPin] set_duty() GPIO= ");
+		// Serial.print(this->get_gpio_id());
+		// Serial.print("  duty= ");
+		// Serial.print(duty);
+		// Serial.println(" ");
 		ledcWrite(__channel, __duty);
 	} else {
 		start();

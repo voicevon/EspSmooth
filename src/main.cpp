@@ -155,7 +155,9 @@ void output_motors(void*){
                 break;
             }
         }   
-        delay(200);
+        // without this, will  reboot. Why? Aug 2019 Xuming 
+        // possible reason1: previous PWM writing is not finished. 
+        delay(100);  //Can be shorter? faster? smoothier?
     }
 }
 

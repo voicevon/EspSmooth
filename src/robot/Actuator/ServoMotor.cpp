@@ -54,15 +54,19 @@ void ServoMotor::goto_position(float angle) // ,unit = DEGREE)
 //virtual override
 #define HOME_DUTY 0
 void ServoMotor::enable(bool state) {
+    if(__enabled) return;
+    
     Serial.println("[D][ServoMotor] enable() at entrance.");
     if(state)
     {
         __pwm_pin.init(SERVO_FREQ, PWM_RESOLUTION_BITS, HOME_DUTY);    // TODO: Home_duty is configable!     
         __pwm_pin.start();
         Serial.println("[D][ServoMotor]: enabled");
+        __enabled = true;
     }else{
         __pwm_pin.stop();
         Serial.println("[D][ServoMotor]: disabled");
+        __enabled = false;
     }
 }
 
