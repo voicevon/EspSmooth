@@ -46,8 +46,8 @@ THE SOFTWARE.
 
 /** Default constructor.
  */
-I2Cdev::I2Cdev() {
-}
+// I2Cdev::I2Cdev() {
+// }
 
 /** Initialize I2C0
  */

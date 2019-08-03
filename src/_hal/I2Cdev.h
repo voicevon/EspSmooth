@@ -50,7 +50,7 @@ THE SOFTWARE.
 
 class I2Cdev {
     public:
-        I2Cdev();
+        // I2Cdev();
 
         static void initialize();
         static void enable(bool isEnabled);
