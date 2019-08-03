@@ -306,7 +306,7 @@ float ADS1115::getMvPerCount() {
  * @see ADS1115_CFG_OS_BIT
  */
 bool ADS1115::isConversionReady() {
-    I2Cdev::readBitW(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_OS_BIT, buffer);
+    I2Cdev::readBit(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_OS_BIT, buffer);
     return buffer[0];
 }
 /** Trigger a new conversion.
@@ -315,7 +315,7 @@ bool ADS1115::isConversionReady() {
  * @see ADS1115_CFG_OS_BIT
  */
 void ADS1115::triggerConversion() {
-    I2Cdev::writeBitW(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_OS_BIT, 1);
+    I2Cdev::writeBit(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_OS_BIT, 1);
 }
 /** Get multiplexer connection.
  * @return Current multiplexer connection setting
@@ -324,7 +324,7 @@ void ADS1115::triggerConversion() {
  * @see ADS1115_CFG_MUX_LENGTH
  */
 uint8_t ADS1115::getMultiplexer() {
-    I2Cdev::readBitsW(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_MUX_BIT, ADS1115_CFG_MUX_LENGTH, buffer);
+    I2Cdev::readBits(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_MUX_BIT, ADS1115_CFG_MUX_LENGTH, buffer);
     muxMode = (uint8_t)buffer[0];
     return muxMode;
 }
@@ -345,7 +345,7 @@ uint8_t ADS1115::getMultiplexer() {
  * @see ADS1115_CFG_MUX_LENGTH
  */
 void ADS1115::setMultiplexer(uint8_t mux) {
-    if (I2Cdev::writeBitsW(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_MUX_BIT, ADS1115_CFG_MUX_LENGTH, mux)) {
+    if (I2Cdev::writeBits(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_MUX_BIT, ADS1115_CFG_MUX_LENGTH, mux)) {
         muxMode = mux;
         if (devMode == ADS1115_MODE_CONTINUOUS) {
           // Force a stop/start
@@ -363,7 +363,7 @@ void ADS1115::setMultiplexer(uint8_t mux) {
  * @see ADS1115_CFG_PGA_LENGTH
  */
 uint8_t ADS1115::getGain() {
-    I2Cdev::readBitsW(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_PGA_BIT, ADS1115_CFG_PGA_LENGTH, buffer);
+    I2Cdev::readBits(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_PGA_BIT, ADS1115_CFG_PGA_LENGTH, buffer);
     pgaMode=(uint8_t)buffer[0];
     return pgaMode;
 }
@@ -383,7 +383,7 @@ uint8_t ADS1115::getGain() {
  * @see ADS1115_CFG_PGA_LENGTH
  */
 void ADS1115::setGain(uint8_t gain) {
-    if (I2Cdev::writeBitsW(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_PGA_BIT, ADS1115_CFG_PGA_LENGTH, gain)) {
+    if (I2Cdev::writeBits(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_PGA_BIT, ADS1115_CFG_PGA_LENGTH, gain)) {
       pgaMode = gain;
          if (devMode == ADS1115_MODE_CONTINUOUS) {
             // Force a stop/start
@@ -401,7 +401,7 @@ void ADS1115::setGain(uint8_t gain) {
  * @see ADS1115_CFG_MODE_BIT
  */
 bool ADS1115::getMode() {
-    I2Cdev::readBitW(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_MODE_BIT, buffer);
+    I2Cdev::readBit(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_MODE_BIT, buffer);
     devMode = buffer[0];
     return devMode;
 }
@@ -413,7 +413,7 @@ bool ADS1115::getMode() {
  * @see ADS1115_CFG_MODE_BIT
  */
 void ADS1115::setMode(bool mode) {
-    if (I2Cdev::writeBitW(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_MODE_BIT, mode)) {
+    if (I2Cdev::writeBit(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_MODE_BIT, mode)) {
         devMode = mode;
     }
 }
@@ -424,7 +424,7 @@ void ADS1115::setMode(bool mode) {
  * @see ADS1115_CFG_DR_LENGTH
  */
 uint8_t ADS1115::getRate() {
-    I2Cdev::readBitsW(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_DR_BIT, ADS1115_CFG_DR_LENGTH, buffer);
+    I2Cdev::readBits(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_DR_BIT, ADS1115_CFG_DR_LENGTH, buffer);
     return (uint8_t)buffer[0];
 }
 /** Set data rate.
@@ -442,7 +442,7 @@ uint8_t ADS1115::getRate() {
  * @see ADS1115_CFG_DR_LENGTH
  */
 void ADS1115::setRate(uint8_t rate) {
-    I2Cdev::writeBitsW(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_DR_BIT, ADS1115_CFG_DR_LENGTH, rate);
+    I2Cdev::writeBits(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_DR_BIT, ADS1115_CFG_DR_LENGTH, rate);
 }
 /** Get comparator mode.
  * @return Current comparator mode
@@ -452,7 +452,7 @@ void ADS1115::setRate(uint8_t rate) {
  * @see ADS1115_CFG_COMP_MODE_BIT
  */
 bool ADS1115::getComparatorMode() {
-    I2Cdev::readBitW(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_COMP_MODE_BIT, buffer);
+    I2Cdev::readBit(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_COMP_MODE_BIT, buffer);
     return buffer[0];
 }
 /** Set comparator mode.
@@ -463,7 +463,7 @@ bool ADS1115::getComparatorMode() {
  * @see ADS1115_CFG_COMP_MODE_BIT
  */
 void ADS1115::setComparatorMode(bool mode) {
-    I2Cdev::writeBitW(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_COMP_MODE_BIT, mode);
+    I2Cdev::writeBit(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_COMP_MODE_BIT, mode);
 }
 /** Get comparator polarity setting.
  * @return Current comparator polarity setting
@@ -473,7 +473,7 @@ void ADS1115::setComparatorMode(bool mode) {
  * @see ADS1115_CFG_COMP_POL_BIT
  */
 bool ADS1115::getComparatorPolarity() {
-    I2Cdev::readBitW(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_COMP_POL_BIT, buffer);
+    I2Cdev::readBit(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_COMP_POL_BIT, buffer);
     return buffer[0];
 }
 /** Set comparator polarity setting.
@@ -484,7 +484,7 @@ bool ADS1115::getComparatorPolarity() {
  * @see ADS1115_CFG_COMP_POL_BIT
  */
 void ADS1115::setComparatorPolarity(bool polarity) {
-    I2Cdev::writeBitW(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_COMP_POL_BIT, polarity);
+    I2Cdev::writeBit(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_COMP_POL_BIT, polarity);
 }
 /** Get comparator latch enabled value.
  * @return Current comparator latch enabled value
@@ -494,7 +494,7 @@ void ADS1115::setComparatorPolarity(bool polarity) {
  * @see ADS1115_CFG_COMP_LAT_BIT
  */
 bool ADS1115::getComparatorLatchEnabled() {
-    I2Cdev::readBitW(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_COMP_LAT_BIT, buffer);
+    I2Cdev::readBit(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_COMP_LAT_BIT, buffer);
     return buffer[0];
 }
 /** Set comparator latch enabled value.
@@ -505,7 +505,7 @@ bool ADS1115::getComparatorLatchEnabled() {
  * @see ADS1115_CFG_COMP_LAT_BIT
  */
 void ADS1115::setComparatorLatchEnabled(bool enabled) {
-    I2Cdev::writeBitW(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_COMP_LAT_BIT, enabled);
+    I2Cdev::writeBit(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_COMP_LAT_BIT, enabled);
 }
 /** Get comparator queue mode.
  * @return Current comparator queue mode
@@ -518,7 +518,7 @@ void ADS1115::setComparatorLatchEnabled(bool enabled) {
  * @see ADS1115_CFG_COMP_QUE_LENGTH
  */
 uint8_t ADS1115::getComparatorQueueMode() {
-    I2Cdev::readBitsW(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_COMP_QUE_BIT, ADS1115_CFG_COMP_QUE_LENGTH, buffer);
+    I2Cdev::readBits(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_COMP_QUE_BIT, ADS1115_CFG_COMP_QUE_LENGTH, buffer);
     return (uint8_t)buffer[0];
 }
 /** Set comparator queue mode.
@@ -532,7 +532,7 @@ uint8_t ADS1115::getComparatorQueueMode() {
  * @see ADS1115_CFG_COMP_QUE_LENGTH
  */
 void ADS1115::setComparatorQueueMode(uint8_t mode) {
-    I2Cdev::writeBitsW(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_COMP_QUE_BIT, ADS1115_CFG_COMP_QUE_LENGTH, mode);
+    I2Cdev::writeBits(devAddr, ADS1115_RA_CONFIG, ADS1115_CFG_COMP_QUE_BIT, ADS1115_CFG_COMP_QUE_LENGTH, mode);
 }
 
 // *_THRESH registers
@@ -574,8 +574,8 @@ void ADS1115::setHighThreshold(int16_t threshold) {
  *  Note: ALERT/RDY pin requires a pull up resistor.
  */
 void ADS1115::setConversionReadyPinMode() {
-    I2Cdev::writeBitW(devAddr, ADS1115_RA_HI_THRESH, 15, 1);
-    I2Cdev::writeBitW(devAddr, ADS1115_RA_LO_THRESH, 15, 0);
+    I2Cdev::writeBit(devAddr, ADS1115_RA_HI_THRESH, 15, 1);
+    I2Cdev::writeBit(devAddr, ADS1115_RA_LO_THRESH, 15, 0);
     setComparatorPolarity(0);
     setComparatorQueueMode(0);
 }

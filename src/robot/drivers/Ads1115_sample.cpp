@@ -42,7 +42,8 @@ ADS1115 -->  UNO
 
 */
 
-#include "Ads1115.h"
+#include "ADS1115.h"
+#include "Arduino.h"
 
 ADS1115 adc0(ADS1115_DEFAULT_ADDRESS);
 
@@ -50,8 +51,8 @@ ADS1115 adc0(ADS1115_DEFAULT_ADDRESS);
 const int alertReadyPin = 2;
 
 void setup_ads1115() {    
-    //I2Cdev::begin();  // join I2C bus
-    Wire.begin();
+    //I2Cdev::begin();  // join I2C bus   ????
+    // Wire.begin();
     Serial.begin(115200); // initialize serial communication 
     
     Serial.println("Testing device connections...");
