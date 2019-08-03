@@ -1,17 +1,20 @@
 #include "ZProbe.h"
+#include "ZProbeStrategy.h"
+
 
 #include "robot/arm_solutions/BaseSolution.h"
-#include "smoothie/ConfigReader.h"
 #include "robot/Robot.h"
 #include "robot/Actuator/StepperMotor.h"
-#include "startup.h"
-#include "smoothie/GCode.h"
+#include "robot/RobotStarter.h"
 #include "robot/Conveyor.h"
-#include "libs/SlowTicker.h"
 #include "robot/Planner.h"
-#include "ZProbeStrategy.h"
 #include "robot/StepTicker.h"
+
+#include "smoothie/GCode.h"
+#include "smoothie/ConfigReader.h"
 #include "smoothie/Dispatcher.h"
+
+#include "libs/SlowTicker.h"
 #include "libs/OutputStream.h"
 
 // strategies we know about

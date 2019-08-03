@@ -24,7 +24,7 @@
 #include "smoothie/Dispatcher.h"
 #include "smoothie/GCode.h"
 
-#include "startup.h"
+#include "RobotStarter.h"
 #include "modules/tools/temperaturecontrol/TemperatureControl.h"
 
 #include "libs/SlowTicker.h"

@@ -1,6 +1,6 @@
 #include "Switch.h"
 
-#include "startup.h"
+#include "robot/RobotStarter.h"
 
 
 #include "smoothie/GCode.h"

@@ -1,14 +1,16 @@
 #include "Planner.h"
 #include "Block.h"
 #include "PlannerQueue.h"
-#include "smoothie/ConfigReader.h"
-#include "Actuator/StepperMotor.h"
-#include "smoothie/AxisDefns.h"
 #include "StepTicker.h"
 #include "Robot.h"
 #include "Conveyor.h"
-#include "startup.h"
 #include "smoothie/Module.h"
+#include "RobotStarter.h"
+
+#include "smoothie/ConfigReader.h"
+#include "smoothie/AxisDefns.h"
+#include "Actuator/StepperMotor.h"
+
 
 #include <math.h>
 #include <algorithm>

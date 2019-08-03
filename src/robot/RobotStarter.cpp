@@ -1,4 +1,6 @@
-#include "startup.h"
+#include "RobotStarter.h"
+#include "Robot.h"
+#include "Conveyor.h"
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -11,16 +13,12 @@
 #include <fstream>
 #include <vector>
 #include <functional>
-
 #include "ff.h"
 
 #include "smoothie/Module.h"
 #include "smoothie/GCode.h"
 #include "smoothie/GCodeProcessor.h"
 #include "smoothie/Dispatcher.h"
-
-#include "robot/Robot.h"
-#include "robot/Conveyor.h"
 
 #include "libs/OutputStream.h"
 #include "libs/MessageQueue.h"

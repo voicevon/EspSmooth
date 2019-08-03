@@ -1,4 +1,3 @@
-#include "startup.h"
 #include "CommandShell.h"
 #include "Dispatcher.h"
 #include "Module.h"
@@ -6,6 +5,7 @@
 #include "version.h"
 
 #include "robot/Robot.h"
+#include "robot/RobotStarter.h"
 #include "robot/StepTicker.h"
 #include "robot/Actuator/StepperMotor.h"
 #include "robot/Conveyor.h"

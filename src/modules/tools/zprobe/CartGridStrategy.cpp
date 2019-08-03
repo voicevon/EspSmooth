@@ -83,7 +83,7 @@
 #include "smoothie/ConfigReader.h"
 #include "libs/StringUtils.h"
 #include "libs/OutputStream.h"
-#include "startup.h"
+#include "robot/RobotStarter.h"
 
 #include <string>
 #include <algorithm>

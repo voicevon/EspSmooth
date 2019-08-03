@@ -12,7 +12,7 @@
 #include "libs/FastTicker.h"
 #include "libs/OutputStream.h"
 
-#include "startup.h"
+#include "robot/RobotStarter.h"
 
 // Temp sensor implementations:
 //#include "max31855.h"

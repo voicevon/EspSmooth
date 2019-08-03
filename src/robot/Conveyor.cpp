@@ -1,15 +1,17 @@
 #include "Conveyor.h"
-
-#include "smoothie/AxisDefns.h"
-#include "smoothie/GCode.h"
+#include "Block.h"
 #include "Block.h"
 #include "Planner.h"
-#include "smoothie/ConfigReader.h"
 #include "StepTicker.h"
 #include "Robot.h"
 #include "Actuator/StepperMotor.h"
 #include "PlannerQueue.h"
-#include "startup.h"
+#include "RobotStarter.h"
+
+#include "smoothie/AxisDefns.h"
+#include "smoothie/GCode.h"
+#include "smoothie/ConfigReader.h"
+
 
 #include "FreeRTOS.h"
 #include "freertos/task.h"

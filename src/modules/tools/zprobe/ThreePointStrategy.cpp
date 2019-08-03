@@ -52,14 +52,17 @@
 */
 
 #include "ThreePointStrategy.h"
-#include "smoothie/ConfigReader.h"
-#include "robot/Robot.h"
-#include "startup.h"
-#include "smoothie/GCode.h"
-#include "robot/Conveyor.h"
 #include "ZProbe.h"
 #include "Plane3D.h"
+
+#include "smoothie/ConfigReader.h"
 #include "smoothie/Dispatcher.h"
+#include "smoothie/GCode.h"
+
+#include "robot/Robot.h"
+#include "robot/RobotStarter.h"
+#include "robot/Conveyor.h"
+
 #include "libs/OutputStream.h"
 
 #include <string>

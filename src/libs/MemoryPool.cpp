@@ -265,7 +265,7 @@ uint32_t MemoryPool::available()
 }
 
 // convenience routines to allow alloc/dealloc in _RAMx from C
-#include "startup.h"
+#include "robot/RobotStarter.h"
 
 extern "C" void *AllocRAM2(size_t size) { return _RAM2->alloc(size); }
 extern "C" void DeallocRAM2(void *mem) { _RAM2->dealloc(mem); }
