@@ -27,11 +27,15 @@ void DcMotor::enable(bool state){
     }
 }
 
-float DcMotor::read_sensor(){
+float DcMotor::__read_sensor(){
     return 1234.45;
 }
+void DcMotor::goto_position(float target_position){
+    float sensor_position = __read_sensor();
+    __goto_position(target_position,sensor_position);
+}
 
-void DcMotor::goto_position(float target_position,float sensor_position){
+void DcMotor::__goto_position(float target_position,float sensor_position){
     float duty = __pid_controller.get_output_value(target_position,sensor_position);
     __pwm_pin.set_duty(duty);
 }

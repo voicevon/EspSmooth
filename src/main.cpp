@@ -116,7 +116,8 @@ void setup_smooth(){
 #include "robot/Actuator/Actuator.h"
 #include "robot/Actuator/ServoMotor.h"
 #include "robot/Actuator/StepperMotor.h"
-
+#include "robot/Actuator/DcMotor.h"
+#include "robot/Actuator/XuefengMotor.h"
 // uint8_t xxx=0;
 // float p[3];
 // Actuator* aa;
@@ -124,6 +125,8 @@ void setup_smooth(){
 
 void output_motors(void*){
     ServoMotor* servoMotor;
+    DcMotor* dcMotor;
+    XuefengMotor* xuefengMotor;
     while(true){
         Robot* robot = Robot::getInstance();
         for(int i=0; i<3;i++){
@@ -136,8 +139,12 @@ void output_motors(void*){
                 servoMotor->goto_position(target_position);
                 break;
             case Actuator::DC_MOTOR:
+                dcMotor =(DcMotor*) actuator;
+                dcMotor->goto_position(target_position);
                 break;
             case Actuator::XUEFENG_MOTOR:
+                xuefengMotor = (XuefengMotor*) actuator;
+                xuefengMotor->goto_position(target_position);
                 break;          
             case Actuator::STEPPER_MOTOR:
                 //Do nothing.
