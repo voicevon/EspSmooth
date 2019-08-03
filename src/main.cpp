@@ -1,5 +1,4 @@
 #include "HardwareSerial.h"
-#include "esp32-hal-log.h"
 #include "SPIFFS.h"     // ESP class
 
 #include "_hal/board.h"
@@ -65,22 +64,25 @@ void setup_spiffs_reading(){
     file.close();
 }
 
+// #include "esp32-hal-log.h"
+#include "esp_log.h"
+#define LOG_LOCAL_LEVEL ESP_LOG_VERBOSE
 void setup_log(){
     Serial.println("==============================================");
 
-    esp_log_level_set("*", ESP_LOG_INFO);  
-    ESP_LOGE("TAG", "1Error");
-    ESP_LOGW("TAG", "1Warning");
-    ESP_LOGI("TAG", "1Info");
-    ESP_LOGD("TAG", "1Debug");
-    ESP_LOGV("TAG", "1Verbose");
+    // esp_log_level_set("*", ESP_LOG_INFO);  
+    ESP_LOGE(TAG, "1Error");
+    ESP_LOGW(TAG, "1Warning");
+    ESP_LOGI(TAG, "1Info");
+    ESP_LOGD(TAG, "1Debug");
+    ESP_LOGV(TAG, "1Verbose");
 
-    esp_log_level_set(TAG,ESP_LOG_VERBOSE);  
-    ESP_LOGE("TAG", "Error");
-    ESP_LOGW("TAG", "Warning");
-    ESP_LOGI("TAG", "Info");
-    ESP_LOGD("TAG", "Debug");
-    ESP_LOGV("TAG", "Verbose");
+    // esp_log_level_set(TAG,ESP_LOG_VERBOSE);  
+    ESP_LOGE(TAG, "Error");
+    ESP_LOGW(TAG, "Warning");
+    ESP_LOGI(TAG, "Info");
+    ESP_LOGD(TAG, "Debug");
+    ESP_LOGV(TAG, "Verbose");
 }
 
 
@@ -112,7 +114,10 @@ extern void ControlMotors(TimerHandle_t xTimer);
 void setup(){
     Serial.begin(115200);
     show_memory_allocate();
-    // setup_log();
+    setup_log();
+    do {
+
+    }while(1);
     //setup_spiffs_writting();
     //setup_spiffs_reading();
     setup_smooth(); 

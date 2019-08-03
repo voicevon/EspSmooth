@@ -28,6 +28,9 @@ void DcMotor::enable(bool state){
 }
 
 float DcMotor::__read_sensor(){
+    //uint32_t adc_value = __ads1115.read_adc(channel=0);
+    //adc_value to position
+    // float angle = adc_value * 123 / 456;
     return 1234.45;
 }
 void DcMotor::goto_position(float target_position){
