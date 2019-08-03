@@ -36,7 +36,7 @@ bool PwmPin::start(){
 
 	ledcSetup(__channel, __frequency, __resolution );
 	ledcAttachPin(this->get_gpio_id(), __channel);
-	ledcWrite(this->get_gpio_id(),__duty);
+	ledcWrite(__channel,__duty);
 	__is_started = true;
 	Serial.print("[D][PwmPin] start pwm_channel= ");
 	Serial.print(__channel);
@@ -67,10 +67,10 @@ void PwmPin::set_duty(uint32_t duty) {
 		Serial.print("  duty= ");
 		Serial.print(duty);
 		Serial.println(" ");
-		ledcWrite(this->get_gpio_id(), __duty);
+		ledcWrite(__channel, __duty);
 	} else {
 		start();
-		ledcWrite(this->get_gpio_id(), __duty);
+		ledcWrite(__channel, __duty);
 	}
 
 }
