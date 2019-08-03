@@ -4,6 +4,7 @@
 #include "_hal/Pin/Pin.h"
 #include "_hal/Pin/OutputPin.h"
 #include "_hal/Pin/PwmPin.h"
+#include "libs/MotorPidController.h"
 
 class DcMotor:public Actuator
 {
@@ -12,11 +13,15 @@ class DcMotor:public Actuator
         DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin);
         virtual bool step() override;
         virtual void enable(bool state) override;
+        void goto_position(float target_position);
 
     private:
         OutputPin __dir_pin;
         PwmPin __pwm_pin;
         uint8_t __pwm_channel;
+        MotorPidController __pid_controller;
+        float __read_sensor();
+        void __goto_position(float target_position,float sensor_position);
 };
 
 

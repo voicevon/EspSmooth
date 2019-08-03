@@ -4,8 +4,8 @@
 class XuefengMotor:public Actuator{
     public:
 
-        XuefengMotor(){};
-    
+        XuefengMotor();
+        void goto_position(float);
     private:
 
     

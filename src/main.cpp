@@ -116,37 +116,54 @@ void setup_smooth(){
 #include "robot/Actuator/Actuator.h"
 #include "robot/Actuator/ServoMotor.h"
 #include "robot/Actuator/StepperMotor.h"
-
-uint8_t xxx=0;
-float p[3];
-Actuator* aa;
-float fff[3];
-
+#include "robot/Actuator/DcMotor.h"
+#include "robot/Actuator/XuefengMotor.h"
+// uint8_t xxx=0;
+// float p[3];
+// Actuator* aa;
+// float fff[3];
+float fff;
 void output_motors(void*){
-
+    ServoMotor* servoMotor;
+    DcMotor* dcMotor;
+    XuefengMotor* xuefengMotor;
     while(true){
-        Robot* rr = Robot::getInstance();
+        Robot* robot = Robot::getInstance();
         for(int i=0; i<3;i++){
-            aa = rr->actuators[i];
-            p[i] = aa->get_current_position();
-        }
+            Actuator* actuator = robot->actuators[i];
+            float target_position = actuator->get_current_position();
+            switch (actuator->get_motor_type())
+            {
+            case Actuator::SERVO_MOTOR:
+                servoMotor = (ServoMotor*) actuator; 
+                servoMotor->goto_position(target_position);
+                fff = target_position;
+                break;
+            case Actuator::DC_MOTOR:
+                dcMotor =(DcMotor*) actuator;
+                dcMotor->goto_position(target_position);
+                break;
+            case Actuator::XUEFENG_MOTOR:
+                xuefengMotor = (XuefengMotor*) actuator;
+                xuefengMotor->goto_position(target_position);
+                break;          
+            case Actuator::STEPPER_MOTOR:
+                //Do nothing.
 
-        ServoMotor* ss1 = (ServoMotor*) (rr->actuators[1]);
-        fff[1]= ss1->get_current_position();
-        StepperMotor* ss0 = (StepperMotor*) (rr->actuators[0]);
-        fff[0] = ss0->get_current_position();
-        StepperMotor* ss2 = (StepperMotor*) (rr->actuators[2]);
-        fff[2] = ss2->get_current_position();
-        
-        ss1->goto_position(fff[1]);
-        // Serial.println(ff);
-        delay(200);
+                break;
+            default:
+                break;
+            }
+        }   
+        // without this, will  reboot. Why? Aug 2019 Xuming 
+        // possible reason1: previous PWM writing is not finished. 
+        delay(100);  //Can be shorter? faster? smoothier?
     }
 }
 
 
 
-uint64_t rtos_report_inteval_second = 11 ;
+uint64_t rtos_report_inteval_second = 5 ;
 uint64_t cpu_idle_counter = 0;
 uint64_t last_time_stamp = 0;   //us
 uint64_t boot_timestamp = 0;
@@ -160,6 +177,8 @@ void setup(){
 
     boot_timestamp = esp_timer_get_time();
     delay(5000);
+
+    //TODO: create a timer task. freq = 50Hz
     xTaskCreate(output_motors, "ServoMotor", 1500, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
 }
 
@@ -177,7 +196,8 @@ void loop(){
         cpu_idle_counter = 0;
         last_time_stamp = esp_timer_get_time();
 
-        printf("    [x,y,z]Pos= %f,  %f,  %f, ---  %f, %f  ,%f \n",p[0],p[1],p[2],fff[0],fff[1],fff[2]);
+        printf("    Y Pos= %f", fff);
+        printf("\n");
     }
 
 }

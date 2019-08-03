@@ -8,7 +8,7 @@
 #include "Actuator/StepperMotor.h"
 #include "Actuator/ServoMotor.h"
 #include "Actuator/DcMotor.h"
-#include "Actuator/XuefengMotot.h"
+#include "Actuator/XuefengMotor.h"
 #include "_hal/__hal.h"
 #include "_hal/Pin/PinHelper.h"
 

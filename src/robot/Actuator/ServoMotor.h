@@ -5,6 +5,8 @@
 #include "_hal/Pin/PwmPin.h"
 #include "Actuator.h"
 
+
+
 class ServoMotor:public Actuator{
     public:
         ServoMotor(PwmPin& pwm_pin);
@@ -17,6 +19,7 @@ class ServoMotor:public Actuator{
     private:
         PwmPin __pwm_pin;
         uint8_t __pwm_channel;
+        bool __enabled;
         float __map(long x, long in_min, long in_max, long out_min, long out_max);
 };
 
