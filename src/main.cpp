@@ -115,9 +115,7 @@ void setup(){
     Serial.begin(115200);
     show_memory_allocate();
     setup_log();
-    do {
 
-    }while(1);
     //setup_spiffs_writting();
     //setup_spiffs_reading();
     setup_smooth(); 

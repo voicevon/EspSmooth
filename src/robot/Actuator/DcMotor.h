@@ -5,7 +5,7 @@
 #include "_hal/Pin/OutputPin.h"
 #include "_hal/Pin/PwmPin.h"
 #include "libs/MotorPidController.h"
-#include "robot/drivers/ADS1115.h"
+#include "component/ads1115.h"
 
 class DcMotor:public Actuator
 {
@@ -21,7 +21,8 @@ class DcMotor:public Actuator
         PwmPin __pwm_pin;
         uint8_t __pwm_channel;
         MotorPidController __pid_controller;
-        ADS1115 __ads1115;
+        esphome::ads1115::ADS1115Component* qq;
+        // esphome::ads1115::ADS1115Sensor __ads1115(qq);
         float __read_sensor();
         void __goto_position(float target_position,float sensor_position);
 };
