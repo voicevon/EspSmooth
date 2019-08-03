@@ -11,7 +11,7 @@ class Actuator
 
         Actuator();
         ~Actuator();
-
+        static ACTUATOR_TYPE_T get_type_from_string(const char* type_description);
         void set_motor_id(uint8_t id) { motor_id = id; }
         uint8_t get_motor_id() const { return motor_id; }
         

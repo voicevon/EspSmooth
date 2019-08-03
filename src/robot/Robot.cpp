@@ -4,7 +4,7 @@
 #include "StepTicker.h"
 #include "ActuatorCoordinates.h"
 
-#include "Actuator/ActuatorType.h"
+// #include "Actuator/ActuatorType.h"
 #include "Actuator/StepperMotor.h"
 #include "Actuator/ServoMotor.h"
 #include "Actuator/DcMotor.h"
@@ -269,29 +269,29 @@ bool Robot::configure(ConfigReader& cr)
         // create the actuator
         Actuator* new_actuator;
 
-        ActuatorType act_type(cr.get_string(mm,actuator_type_key,"stepper"));      
+        Actuator::ACTUATOR_TYPE_T motor_type = Actuator::get_type_from_string(cr.get_string(mm,actuator_type_key,"stepper"));      
         uint8_t regietered_count;
-        switch (act_type.get_type()) {
-            case ActuatorType::STEPPER_MOTOR: {     //stepper
+        switch (motor_type) {
+            case Actuator::STEPPER_MOTOR: {     //stepper
                 printf("[D][robot][config:%s]  for stepper motor pins: step= %s, dir= %s, en= %s\n", s->first.c_str(), step_pin.to_string().c_str(), dir_pin.to_string().c_str(), en_pin.to_string().c_str());
                 StepperMotor *new_stepper = new StepperMotor(step_pin, dir_pin, en_pin);
                 // regietered_count = register_actuator(new_stepper);  Is this way better?
                 new_actuator = new_stepper;
                 }
                 break;
-            case ActuatorType::SERVO_MOTOR: {     // Servo
+            case Actuator::SERVO_MOTOR: {     // Servo
                 printf("[D][robot][config:%s]  for servo motor pins: servo= %s\n",   s->first.c_str(), servo_pin.to_string().c_str());
                 ServoMotor* new_servo = new ServoMotor(servo_pin);
                 new_actuator = new_servo;
                 }
                 break;
-            case ActuatorType::XUEFENG_MOTOR: {     //Xuefeng motor
+            case Actuator::XUEFENG_MOTOR: {     //Xuefeng motor
                 XuefengMotor* new_xuefeng = new XuefengMotor();
                 new_actuator = new_xuefeng;
                 }
                 break;
 
-            case ActuatorType::DC_MOTOR: {    //Dc motor
+            case Actuator::DC_MOTOR: {    //Dc motor
                 printf("[D][robot][config:%s]  for dc motor pins: dc_dir= %s, dc_pwm= %s\n", s->first.c_str(), dc_dir_pin.to_string().c_str(),dc_pwm_pin.to_string().c_str());
                 DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin);
                 new_actuator = new_dc;

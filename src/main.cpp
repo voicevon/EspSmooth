@@ -1,5 +1,4 @@
 #include "HardwareSerial.h"
-#include "esp32-hal-log.h"
 #include "SPIFFS.h"     // ESP class
 
 #include "_hal/board.h"
@@ -65,22 +64,25 @@ void setup_spiffs_reading(){
     file.close();
 }
 
+// #include "esp32-hal-log.h"
+#include "esp_log.h"
+#define LOG_LOCAL_LEVEL ESP_LOG_VERBOSE
 void setup_log(){
     Serial.println("==============================================");
 
-    esp_log_level_set("*", ESP_LOG_INFO);  
-    ESP_LOGE("TAG", "1Error");
-    ESP_LOGW("TAG", "1Warning");
-    ESP_LOGI("TAG", "1Info");
-    ESP_LOGD("TAG", "1Debug");
-    ESP_LOGV("TAG", "1Verbose");
+    // esp_log_level_set("*", ESP_LOG_INFO);  
+    ESP_LOGE(TAG, "1Error");
+    ESP_LOGW(TAG, "1Warning");
+    ESP_LOGI(TAG, "1Info");
+    ESP_LOGD(TAG, "1Debug");
+    ESP_LOGV(TAG, "1Verbose");
 
-    esp_log_level_set(TAG,ESP_LOG_VERBOSE);  
-    ESP_LOGE("TAG", "Error");
-    ESP_LOGW("TAG", "Warning");
-    ESP_LOGI("TAG", "Info");
-    ESP_LOGD("TAG", "Debug");
-    ESP_LOGV("TAG", "Verbose");
+    // esp_log_level_set(TAG,ESP_LOG_VERBOSE);  
+    ESP_LOGE(TAG, "Error");
+    ESP_LOGW(TAG, "Warning");
+    ESP_LOGI(TAG, "Info");
+    ESP_LOGD(TAG, "Debug");
+    ESP_LOGV(TAG, "Verbose");
 }
 
 
@@ -106,82 +108,32 @@ void setup_smooth(){
     // vTaskStartScheduler();    Don't call vTaskStartScheduler()     https://esp32.com/viewtopic.php?t=1336
 }
 
+extern float float_value;
+extern void ControlMotors(TimerHandle_t xTimer);
 
-
-
-
-
-
-#include "robot/Robot.h"
-#include "robot/Actuator/Actuator.h"
-#include "robot/Actuator/ServoMotor.h"
-#include "robot/Actuator/StepperMotor.h"
-#include "robot/Actuator/DcMotor.h"
-#include "robot/Actuator/XuefengMotor.h"
-// uint8_t xxx=0;
-// float p[3];
-// Actuator* aa;
-// float fff[3];
-float fff;
-void output_motors(void*){
-    ServoMotor* servoMotor;
-    DcMotor* dcMotor;
-    XuefengMotor* xuefengMotor;
-    while(true){
-        Robot* robot = Robot::getInstance();
-        for(int i=0; i<3;i++){
-            Actuator* actuator = robot->actuators[i];
-            float target_position = actuator->get_current_position();
-            switch (actuator->get_motor_type())
-            {
-            case Actuator::SERVO_MOTOR:
-                servoMotor = (ServoMotor*) actuator; 
-                servoMotor->goto_position(target_position);
-                fff = target_position;
-                break;
-            case Actuator::DC_MOTOR:
-                dcMotor =(DcMotor*) actuator;
-                dcMotor->goto_position(target_position);
-                break;
-            case Actuator::XUEFENG_MOTOR:
-                xuefengMotor = (XuefengMotor*) actuator;
-                xuefengMotor->goto_position(target_position);
-                break;          
-            case Actuator::STEPPER_MOTOR:
-                //Do nothing.
-
-                break;
-            default:
-                break;
-            }
-        }   
-        // without this, will  reboot. Why? Aug 2019 Xuming 
-        // possible reason1: previous PWM writing is not finished. 
-        delay(100);  //Can be shorter? faster? smoothier?
-    }
-}
-
-
-
-uint64_t rtos_report_inteval_second = 5 ;
-uint64_t cpu_idle_counter = 0;
-uint64_t last_time_stamp = 0;   //us
-uint64_t boot_timestamp = 0;
 void setup(){
     Serial.begin(115200);
     show_memory_allocate();
-    // setup_log();
+    setup_log();
+    do {
+
+    }while(1);
     //setup_spiffs_writting();
     //setup_spiffs_reading();
     setup_smooth(); 
 
-    boot_timestamp = esp_timer_get_time();
-    delay(5000);
-
-    //TODO: create a timer task. freq = 50Hz
-    xTaskCreate(output_motors, "ServoMotor", 1500, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
+    delay(5000);   //Keep uartTx empty for Printrun handshaking.
+    int interval = 20;
+    int id = 1;
+    TimerHandle_t tmr = xTimerCreate("ControlMotors", pdMS_TO_TICKS(interval), pdTRUE, ( void * )id, &ControlMotors);
+    if( xTimerStart(tmr, 10 ) != pdPASS ) {
+        printf("Timer for ControlMotors  start error \n");
+    }
 }
 
+uint64_t rtos_report_inteval_second = 5 ;
+uint64_t cpu_idle_counter = 0;
+uint64_t last_time_stamp = 0;   //us
 // Actually, this is the lowest priority task.
 void loop(){
     cpu_idle_counter++;
@@ -196,7 +148,7 @@ void loop(){
         cpu_idle_counter = 0;
         last_time_stamp = esp_timer_get_time();
 
-        printf("    Y Pos= %f", fff);
+        printf("    Y Pos= %f", float_value);
         printf("\n");
     }
 
