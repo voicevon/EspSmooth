@@ -55,6 +55,7 @@ class ADS1115Sensor : public sensor::Sensor, public PollingComponent, public vol
  public:
   ADS1115Sensor(){}
   ADS1115Sensor(ADS1115Component *parent) : parent_(parent) {}
+  void init(ADS1115Component* parent){ parent_ =  parent; }
   void update() override;
   void set_multiplexer(ADS1115Multiplexer multiplexer) { multiplexer_ = multiplexer; }
   void set_gain(ADS1115Gain gain) { gain_ = gain; }

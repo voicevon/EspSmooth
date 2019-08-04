@@ -293,8 +293,17 @@ bool Robot::configure(ConfigReader& cr)
 
             case Actuator::DC_MOTOR: {    //Dc motor
                 printf("[D][robot][config:%s]  for dc motor pins: dc_dir= %s, dc_pwm= %s\n", s->first.c_str(), dc_dir_pin.to_string().c_str(),dc_pwm_pin.to_string().c_str());
+                
+                //question here: what is differents with below two lines?
                 // esphome::ads1115::ADS1115Sensor ads1115_sensor();
                 esphome::ads1115::ADS1115Sensor ads1115_sensor = esphome::ads1115::ADS1115Sensor();
+                // ads1115_sensor.set_icon
+                esphome::ads1115::ADS1115Component* ads1115_component = new esphome::ads1115::ADS1115Component();
+                ads1115_component->setup();
+                
+                ads1115_component->set_i2c_address(0x48);
+
+                ads1115_sensor.init(ads1115_component);
                 DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin,ads1115_sensor);
                 new_actuator = new_dc;
                 }
