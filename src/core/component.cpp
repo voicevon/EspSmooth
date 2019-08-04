@@ -1,6 +1,6 @@
 #include "core/component.h"
 #include "core/helpers.h"
-#include "core/esphal.h"
+// #include "core/esphal.h"
 #include "core/log.h"
 // #include "core/application.h"
 
