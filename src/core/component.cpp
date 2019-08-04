@@ -1,8 +1,8 @@
 #include "core/component.h"
 #include "core/helpers.h"
-#include "core/esphal.h"
+// #include "core/esphal.h"
 #include "core/log.h"
-#include "core/application.h"
+// #include "core/application.h"
 
 namespace esphome {
 
@@ -115,11 +115,11 @@ bool Component::status_has_warning() { return this->component_state_ & STATUS_LE
 bool Component::status_has_error() { return this->component_state_ & STATUS_LED_ERROR; }
 void Component::status_set_warning() {
   this->component_state_ |= STATUS_LED_WARNING;
-  App.app_state_ |= STATUS_LED_WARNING;
+  // App.app_state_ |= STATUS_LED_WARNING;
 }
 void Component::status_set_error() {
   this->component_state_ |= STATUS_LED_ERROR;
-  App.app_state_ |= STATUS_LED_ERROR;
+  // App.app_state_ |= STATUS_LED_ERROR;
 }
 void Component::status_clear_warning() { this->component_state_ &= ~STATUS_LED_WARNING; }
 void Component::status_clear_error() { this->component_state_ &= ~STATUS_LED_ERROR; }

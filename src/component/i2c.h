@@ -116,10 +116,10 @@ class I2CComponent : public Component {
   bool raw_receive_16(uint8_t address, uint16_t *data, uint8_t len);
 
   /// Setup the i2c. bus
-  void setup() override;
-  void dump_config() override;
+  void setup() ;
+  void dump_config() ;
   /// Set a very high setup priority to make sure it's loaded before all other hardware.
-  float get_setup_priority() const override;
+  // float get_setup_priority() const override;
 
  protected:
   TwoWire *wire_;

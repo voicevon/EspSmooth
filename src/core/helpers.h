@@ -7,7 +7,7 @@
 #include <type_traits>
 
 #include "core/optional.h"
-#include "core/esphal.h"
+// #include "core/esphal.h"
 
 #ifdef CLANG_TIDY
 #undef ICACHE_RAM_ATTR
