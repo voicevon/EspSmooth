@@ -20,6 +20,7 @@ class DcMotor:public Actuator
         OutputPin __dir_pin;
         PwmPin __pwm_pin;
         uint8_t __pwm_channel;
+        bool __enabled;
         MotorPidController __pid_controller;
         esphome::ads1115::ADS1115Component* ads1115_component;
         esphome::ads1115::ADS1115Sensor __ads1115;

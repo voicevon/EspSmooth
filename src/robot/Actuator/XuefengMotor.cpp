@@ -2,7 +2,7 @@
 
 
 XuefengMotor::XuefengMotor():Actuator(){
-    _motor_type = ACTUATOR_TYPE_T::XUEFENG_MOTOR;
+    motor_type_ = ACTUATOR_TYPE_T::XUEFENG_MOTOR;
     
 }
 

@@ -10,6 +10,7 @@
 
 StepperMotor::StepperMotor(OutputPin &step, OutputPin &dir, OutputPin &en):Actuator()
 {
+    motor_type_ = ACTUATOR_TYPE_T::STEPPER_MOTOR;
     __step_pin = OutputPin(step);
     __dir_pin = OutputPin(dir);
     __en_pin = OutputPin(en);
@@ -17,7 +18,6 @@ StepperMotor::StepperMotor(OutputPin &step, OutputPin &dir, OutputPin &en):Actua
     if(en.connected()) {
         //set_high_on_debug(en.port_number, en.pin);
     }
-    _motor_type = ACTUATOR_TYPE_T::STEPPER_MOTOR;
     _init();
     // steps_per_mm         = 1.0F;
     // max_rate             = 50.0F;

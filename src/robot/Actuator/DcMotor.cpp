@@ -3,15 +3,16 @@
 
 const int PWM_FREQ = 250;    // 50Hz  20ms 
 const int PWM_RESOLUTION_BITS = 16;     // 16 bit resolution
-
+const int HOME_DUTY = 0;
 
 DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin,esphome::ads1115::ADS1115Sensor& ads1115_sensor){
+    motor_type_ = ACTUATOR_TYPE_T::DC_MOTOR;
+    __enabled = false;
+
     __dir_pin = OutputPin(dir_pin);
     __pwm_pin = PwmPin(pwm_pin);
-    _motor_type = ACTUATOR_TYPE_T::DC_MOTOR;
 
      __ads1115 = ads1115_sensor; 
-     printf("[D][DcMotor] pwm_channel= %i\n",__pwm_pin.get_channel());
 }
 
 bool DcMotor::step(){
@@ -21,13 +22,24 @@ bool DcMotor::step(){
 
 //virtual  override
 void DcMotor::enable(bool state){
-    if(state){
+    if(__enabled) return;
+    
+    Serial.println("[D][DcMotor] enable() at entrance.");
+    if(state)
+    {
         __dir_pin.start();
+        __pwm_pin.init(PWM_FREQ, PWM_RESOLUTION_BITS, HOME_DUTY);    // TODO: Home_duty is configable!     
         __pwm_pin.start();
-    } else {
+        Serial.println("[D][DcMotor]: enabled");
+        __enabled = true;
+    }else{
         __dir_pin.stop();
         __pwm_pin.stop();
+        Serial.println("[D][DcMotor]: disabled");
+        __enabled = false;
     }
+
+
 }
 
 float DcMotor::__read_sensor(){
