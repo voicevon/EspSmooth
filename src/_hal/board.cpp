@@ -10,7 +10,6 @@ uint32_t SystemCoreClock;  // System Clock Frequency (Core Clock)
 #define BUILID_IN_LED_PIN  1   
 
 void Board_Init(void){
-    Serial.begin(115200);
 };
 void Board_LED_Toggle(uint8_t LEDNumber){};
 void Board_LED_Set(uint8_t LEDNumber, bool On){

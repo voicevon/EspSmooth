@@ -231,6 +231,15 @@ bool Robot::configure(ConfigReader& cr)
             printf("Warning:configure-robot: g92_offset config is bad\n");
         }
     }
+    // configure the board: i2c, spi, s2c, etc...
+    ConfigReader::sub_section_map_t ss_board;
+    if(!cr.get_sub_sections("board", ss_board)) {
+        printf("ERROR:configure-board: no board section found\n");
+        return false;
+    }
+    OutputPin dc_sensor_sck_pin(cr.get_string(ss_board, dc_sensor_clk_pin_key, "nc"));
+    InputPin dc_sensor_sda_pin(cr.get_string(ss_board, dc_sensor_sda_pin_key, "nc"));
+
 
     // configure the actuators
     ConfigReader::sub_section_map_t ssm;
