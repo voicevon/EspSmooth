@@ -19,7 +19,7 @@ class Pin
 public:
     virtual ~Pin();
 
-    Pin* from_string(std::string value);   //should be a protected member? 
+    Pin* from_string(std::string value);   //should be a protected member? Can NOT!
     std::string to_string() const;
 
     virtual bool start(){ return false; }

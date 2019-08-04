@@ -316,13 +316,13 @@ bool Robot::configure(ConfigReader& cr)
                     i2c_component->set_frequency(400000);
                     i2c_component->set_scan(false);
                     i2c_component->setup();
-                    printf("11111111111111111111\n");
+                    printf("-----I2CComponent\n");
                     // ads1115_sensor.set_icon
                     esphome::ads1115::ADS1115Component* ads1115_component = new esphome::ads1115::ADS1115Component();
                     ads1115_component->set_i2c_parent(i2c_component);
                     ads1115_component->set_i2c_address(0x48);
                     ads1115_component->setup();
-                    printf("2222222222222222\n");
+                    printf("-----ADS1115Component\n");
                     //question here: what is the essencial differents with below two lines?
                     // esphome::ads1115::ADS1115Sensor ads1115_sensor();
                     esphome::ads1115::ADS1115Sensor ads1115_sensor = esphome::ads1115::ADS1115Sensor();
@@ -330,7 +330,7 @@ bool Robot::configure(ConfigReader& cr)
                     ads1115_sensor.setup();
                     DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin,ads1115_sensor);
                     new_actuator = new_dc;
-                    printf("3333333333333\n");
+                    printf("-----ADS1115Sensor\n");
                 }
                 break;
         }
