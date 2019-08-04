@@ -64,6 +64,9 @@
 #define actuator_type_key               "motor_type"
 #define servo_pin_key                   "servo_pin"
 #define dc_pwm_pin_key                  "dc_pwm_pin"
+#define dc_sensor_clk_pin_key           "dc_sensor_clk_pin"
+#define dc_sensor_sda_pin_key           "dc_sensor_sda_pin"
+
 #define dc_dir_pin_key                  "dc_dir_pin"
 #define step_pin_key                    "step_pin"
 #define dir_pin_key                     "dir_pin"
@@ -237,16 +240,6 @@ bool Robot::configure(ConfigReader& cr)
 
         auto& mm = s->second; // map of actuator config values for this actuator
 
-
-
-        PwmPin servo_pin(cr.get_string(mm, servo_pin_key, "nc"));
-        PwmPin dc_pwm_pin(cr.get_string(mm, dc_pwm_pin_key, "nc"));
-        OutputPin dc_dir_pin(cr.get_string(mm, dc_dir_pin_key, "nc"));
-        OutputPin step_pin(cr.get_string(mm, step_pin_key, "nc"));
-        OutputPin dir_pin(cr.get_string(mm, dir_pin_key, "nc"));
-        OutputPin en_pin(cr.get_string(mm, en_pin_key, "nc"));
-
-
         // PinHelper* helper = new PinHelper();
         // PwmPin* servo_pin_test = (PwmPin*) helper->create_pin(cr.get_string(mm,servo_pin_key,"nc"), PinHelper::AS_INPUT);
         // PwmPin* servo_pin_test = (PwmPin*) helper->create_pin("GPIO_12p", PinHelper::AS_PWM);
@@ -273,39 +266,53 @@ bool Robot::configure(ConfigReader& cr)
         uint8_t regietered_count;
         switch (motor_type) {
             case Actuator::STEPPER_MOTOR: {     //stepper
-                printf("[D][robot][config:%s]  for stepper motor pins: step= %s, dir= %s, en= %s\n", s->first.c_str(), step_pin.to_string().c_str(), dir_pin.to_string().c_str(), en_pin.to_string().c_str());
-                StepperMotor *new_stepper = new StepperMotor(step_pin, dir_pin, en_pin);
-                // regietered_count = register_actuator(new_stepper);  Is this way better?
-                new_actuator = new_stepper;
+                    OutputPin step_pin(cr.get_string(mm, step_pin_key, "nc"));
+                    OutputPin dir_pin(cr.get_string(mm, dir_pin_key, "nc"));
+                    OutputPin en_pin(cr.get_string(mm, en_pin_key, "nc"));
+                    printf("[D][robot][config:%s]  for stepper motor pins: step= %s, dir= %s, en= %s\n", s->first.c_str(), step_pin.to_string().c_str(), dir_pin.to_string().c_str(), en_pin.to_string().c_str());
+                    StepperMotor *new_stepper = new StepperMotor(step_pin, dir_pin, en_pin);
+                    // regietered_count = register_actuator(new_stepper);  Is this way better?
+                    new_actuator = new_stepper;
                 }
                 break;
             case Actuator::SERVO_MOTOR: {     // Servo
-                printf("[D][robot][config:%s]  for servo motor pins: servo= %s\n",   s->first.c_str(), servo_pin.to_string().c_str());
-                ServoMotor* new_servo = new ServoMotor(servo_pin);
-                new_actuator = new_servo;
+                    PwmPin servo_pin(cr.get_string(mm, servo_pin_key, "nc"));
+                    printf("[D][robot][config:%s]  for servo motor pins: servo= %s\n",   s->first.c_str(), servo_pin.to_string().c_str());
+                    ServoMotor* new_servo = new ServoMotor(servo_pin);
+                    new_actuator = new_servo;
                 }
                 break;
             case Actuator::XUEFENG_MOTOR: {     //Xuefeng motor
-                XuefengMotor* new_xuefeng = new XuefengMotor();
-                new_actuator = new_xuefeng;
+                    XuefengMotor* new_xuefeng = new XuefengMotor();
+                    new_actuator = new_xuefeng;
                 }
                 break;
 
             case Actuator::DC_MOTOR: {    //Dc motor
-                printf("[D][robot][config:%s]  for dc motor pins: dc_dir= %s, dc_pwm= %s\n", s->first.c_str(), dc_dir_pin.to_string().c_str(),dc_pwm_pin.to_string().c_str());
-                
-                //question here: what is differents with below two lines?
-                // esphome::ads1115::ADS1115Sensor ads1115_sensor();
-                esphome::ads1115::ADS1115Sensor ads1115_sensor = esphome::ads1115::ADS1115Sensor();
-                // ads1115_sensor.set_icon
-                esphome::ads1115::ADS1115Component* ads1115_component = new esphome::ads1115::ADS1115Component();
-                ads1115_component->setup();
-                
-                ads1115_component->set_i2c_address(0x48);
+                    OutputPin dc_dir_pin(cr.get_string(mm, dc_dir_pin_key, "nc"));
+                    PwmPin dc_pwm_pin(cr.get_string(mm, dc_pwm_pin_key, "nc"));
+                    OutputPin dc_sensor_sck_pin(cr.get_string(mm, dc_sensor_clk_pin_key, "nc"));
+                    InputPin dc_sensor_sda_pin(cr.get_string(mm, dc_sensor_sda_pin_key, "nc"));printf("[D][robot][config:%s]  for dc motor pins: dc_dir= %s, dc_pwm= %s\n", s->first.c_str(), dc_dir_pin.to_string().c_str(),dc_pwm_pin.to_string().c_str());
+                    
+                    esphome::i2c::I2CComponent* i2c_component =new esphome::i2c::I2CComponent();
+                    i2c_component->set_scl_pin(dc_sensor_sck_pin.get_gpio_id());
+                    i2c_component->set_sda_pin(dc_sensor_sda_pin.get_gpio_id());
+                    i2c_component->set_frequency(400000);
+                    i2c_component->set_scan(false);
+                    i2c_component->setup();
 
-                ads1115_sensor.init(ads1115_component);
-                DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin,ads1115_sensor);
-                new_actuator = new_dc;
+                    // ads1115_sensor.set_icon
+                    esphome::ads1115::ADS1115Component* ads1115_component = new esphome::ads1115::ADS1115Component();
+                    ads1115_component->set_i2c_parent(i2c_component);
+                    ads1115_component->set_i2c_address(0x48);
+                    ads1115_component->setup();
+                    //question here: what is the essencial differents with below two lines?
+                    // esphome::ads1115::ADS1115Sensor ads1115_sensor();
+                    esphome::ads1115::ADS1115Sensor ads1115_sensor = esphome::ads1115::ADS1115Sensor();
+                    ads1115_sensor.init(ads1115_component);
+                    ads1115_sensor.setup();
+                    DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin,ads1115_sensor);
+                    new_actuator = new_dc;
                 }
                 break;
         }
