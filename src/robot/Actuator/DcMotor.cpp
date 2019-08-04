@@ -5,10 +5,14 @@ const int PWM_FREQ = 250;    // 50Hz  20ms
 const int PWM_RESOLUTION_BITS = 16;     // 16 bit resolution
 
 
-DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin){
+DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin,esphome::ads1115::ADS1115Sensor& ads1115){
+    _motor_type = ACTUATOR_TYPE_T::DC_MOTOR;
+
     __dir_pin = OutputPin(dir_pin);
     __pwm_pin = PwmPin(pwm_pin);
-    _motor_type = ACTUATOR_TYPE_T::DC_MOTOR;
+    __ads1115 = ads1115;
+    // __ads1115_component = new esphome::ads1115::ADS1115Component();
+    // __ads1115 = new esphome::ads1115::ADS1115Sensor(__ads1115_component);
 }
 
 bool DcMotor::step(){

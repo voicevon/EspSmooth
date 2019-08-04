@@ -32,9 +32,6 @@
 #include "libs/StringUtils.h"
 #include "libs/StringUtils.h"
 
-
-
-
 #include <math.h>
 #include <string>
 #include <algorithm>
@@ -293,7 +290,10 @@ bool Robot::configure(ConfigReader& cr)
 
             case Actuator::DC_MOTOR: {    //Dc motor
                 printf("[D][robot][config:%s]  for dc motor pins: dc_dir= %s, dc_pwm= %s\n", s->first.c_str(), dc_dir_pin.to_string().c_str(),dc_pwm_pin.to_string().c_str());
-                DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin);
+                // C++ question, what different with these two lines?
+                esphome::ads1115::ADS1115Sensor ads1115 = esphome::ads1115::ADS1115Sensor();
+                // esphome::ads1115::ADS1115Sensor ads1115 ();
+                DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin,ads1115);
                 new_actuator = new_dc;
                 }
                 break;
