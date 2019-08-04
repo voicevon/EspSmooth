@@ -23,6 +23,7 @@ class PwmPin: public Pin{
 		virtual bool stop() override;  
 	
 		static bool init_channel_flags(); 
+		uint8_t get_channel(){ return __channel; } 
 
 	private:
 		bool __is_started;

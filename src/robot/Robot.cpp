@@ -169,29 +169,35 @@ bool Robot::configure(ConfigReader& cr)
 
     bool is_delta= false;
     std::string solution = cr.get_string(m, arm_solution_key, "cartesian");
-
+    
     if(solution == hbot_key || solution == corexy_key) {
         this->arm_solution = new HBotSolution(cr);
-
+        printf("arm_solution = HBotSolution\n");
     } else if(solution == corexz_key) {
         this->arm_solution = new CoreXZSolution(cr);
+        printf("arm_solution = CoreXZSolution\n");
 
     } else if(solution == rostock_key || solution == kossel_key || solution == delta_key || solution ==  linear_delta_key) {
         this->arm_solution = new LinearDeltaSolution(cr);
         is_delta= true;
+        printf("arm_solution = LinearDeltaSolution\n");
 
     } else if(solution == rotary_delta_key) {
         this->arm_solution = new RotaryDeltaSolution(cr);
         is_delta= true;
+        printf("arm_solution = RotaryDeltaSolution\n");
 
     } else if(solution == morgan_key) {
         this->arm_solution = new MorganSCARASolution(cr);
+        printf("arm_solution = MorganSCARASolution\n");
 
     } else if(solution == cartesian_key) {
         this->arm_solution = new CartesianSolution(cr);
+        printf("arm_solution = CartesianSolution\n");
 
     } else {
         this->arm_solution = new CartesianSolution(cr);
+        printf("arm_solution = CartesianSolution\n");
     }
 
     this->feed_rate = cr.get_float(m, default_feed_rate_key, 4000.0F); // mm/min
@@ -232,7 +238,7 @@ bool Robot::configure(ConfigReader& cr)
         printf("ERROR:configure-robot-actuator: no actuator section found\n");
         return false;
     }
-
+    printf("[D][Robot] Going to set actuators one bye one.\n");
     // make each motor
     for (size_t a = 0; a < MAX_ROBOT_ACTUATORS; a++) {
         auto s = ssm.find(actuator_keys[a]);
@@ -264,12 +270,14 @@ bool Robot::configure(ConfigReader& cr)
 
         Actuator::ACTUATOR_TYPE_T motor_type = Actuator::get_type_from_string(cr.get_string(mm,actuator_type_key,"stepper"));      
         uint8_t regietered_count;
+        printf("  [D][Robot] motor_type id=%i\n",motor_type);
         switch (motor_type) {
             case Actuator::STEPPER_MOTOR: {     //stepper
+                    printf("    [D][Robot] Configure stepper-motor\n");
                     OutputPin step_pin(cr.get_string(mm, step_pin_key, "nc"));
                     OutputPin dir_pin(cr.get_string(mm, dir_pin_key, "nc"));
                     OutputPin en_pin(cr.get_string(mm, en_pin_key, "nc"));
-                    printf("[D][robot][config:%s]  for stepper motor pins: step= %s, dir= %s, en= %s\n", s->first.c_str(), step_pin.to_string().c_str(), dir_pin.to_string().c_str(), en_pin.to_string().c_str());
+                    printf("    [D][robot][config:%s]  for stepper motor pins: step= %s, dir= %s, en= %s\n", s->first.c_str(), step_pin.to_string().c_str(), dir_pin.to_string().c_str(), en_pin.to_string().c_str());
                     StepperMotor *new_stepper = new StepperMotor(step_pin, dir_pin, en_pin);
                     // regietered_count = register_actuator(new_stepper);  Is this way better?
                     new_actuator = new_stepper;
@@ -277,7 +285,7 @@ bool Robot::configure(ConfigReader& cr)
                 break;
             case Actuator::SERVO_MOTOR: {     // Servo
                     PwmPin servo_pin(cr.get_string(mm, servo_pin_key, "nc"));
-                    printf("[D][robot][config:%s]  for servo motor pins: servo= %s\n",   s->first.c_str(), servo_pin.to_string().c_str());
+                    printf("    [D][robot][config:%s]  for servo motor pins: servo= %s\n",   s->first.c_str(), servo_pin.to_string().c_str());
                     ServoMotor* new_servo = new ServoMotor(servo_pin);
                     new_actuator = new_servo;
                 }
@@ -289,10 +297,18 @@ bool Robot::configure(ConfigReader& cr)
                 break;
 
             case Actuator::DC_MOTOR: {    //Dc motor
+                    printf("    [D][Robot] Configure DC-motor\n");
+
                     OutputPin dc_dir_pin(cr.get_string(mm, dc_dir_pin_key, "nc"));
                     PwmPin dc_pwm_pin(cr.get_string(mm, dc_pwm_pin_key, "nc"));
                     OutputPin dc_sensor_sck_pin(cr.get_string(mm, dc_sensor_clk_pin_key, "nc"));
-                    InputPin dc_sensor_sda_pin(cr.get_string(mm, dc_sensor_sda_pin_key, "nc"));printf("[D][robot][config:%s]  for dc motor pins: dc_dir= %s, dc_pwm= %s\n", s->first.c_str(), dc_dir_pin.to_string().c_str(),dc_pwm_pin.to_string().c_str());
+                    InputPin dc_sensor_sda_pin(cr.get_string(mm, dc_sensor_sda_pin_key, "nc"));
+                    printf("    [D][robot][config:%s]  for dc motor pins: dir= %s, pwm= %s, sck= %s, sda= %s \n", 
+                                            s->first.c_str(), dc_dir_pin.to_string().c_str(),
+                                                                dc_pwm_pin.to_string().c_str(),
+                                                                dc_sensor_sck_pin.to_string().c_str(),
+                                                                dc_sensor_sda_pin.to_string().c_str()
+                                                                );
                     
                     esphome::i2c::I2CComponent* i2c_component =new esphome::i2c::I2CComponent();
                     i2c_component->set_scl_pin(dc_sensor_sck_pin.get_gpio_id());
@@ -300,12 +316,13 @@ bool Robot::configure(ConfigReader& cr)
                     i2c_component->set_frequency(400000);
                     i2c_component->set_scan(false);
                     i2c_component->setup();
-
+                    printf("11111111111111111111\n");
                     // ads1115_sensor.set_icon
                     esphome::ads1115::ADS1115Component* ads1115_component = new esphome::ads1115::ADS1115Component();
                     ads1115_component->set_i2c_parent(i2c_component);
                     ads1115_component->set_i2c_address(0x48);
                     ads1115_component->setup();
+                    printf("2222222222222222\n");
                     //question here: what is the essencial differents with below two lines?
                     // esphome::ads1115::ADS1115Sensor ads1115_sensor();
                     esphome::ads1115::ADS1115Sensor ads1115_sensor = esphome::ads1115::ADS1115Sensor();
@@ -313,6 +330,7 @@ bool Robot::configure(ConfigReader& cr)
                     ads1115_sensor.setup();
                     DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin,ads1115_sensor);
                     new_actuator = new_dc;
+                    printf("3333333333333\n");
                 }
                 break;
         }

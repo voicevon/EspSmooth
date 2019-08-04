@@ -11,6 +11,7 @@ DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin,esphome::ads1115::ADS1115Se
     _motor_type = ACTUATOR_TYPE_T::DC_MOTOR;
 
      __ads1115 = ads1115_sensor; 
+     printf("[D][DcMotor] pwm_channel= %i\n",__pwm_pin.get_channel());
 }
 
 bool DcMotor::step(){
