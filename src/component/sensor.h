@@ -2,7 +2,6 @@
 
 #include "core/component.h"
 #include "core/helpers.h"
-// #include "component/filter.h"
 
 namespace esphome {
 namespace sensor {
@@ -10,12 +9,8 @@ namespace sensor {
 #define LOG_SENSOR(prefix, type, obj) \
   if (obj != nullptr) { \
     ESP_LOGCONFIG(TAG, prefix type " '%s'", obj->get_name().c_str()); \
-    ESP_LOGCONFIG(TAG, prefix "  Unit of Measurement: '%s'", obj->get_unit_of_measurement().c_str()); \
     ESP_LOGCONFIG(TAG, prefix "  Accuracy Decimals: %d", obj->get_accuracy_decimals()); \
-    if (!obj->get_icon().empty()) { \
-      ESP_LOGCONFIG(TAG, prefix "  Icon: '%s'", obj->get_icon().c_str()); \
-    } \
-    if (!obj->unique_id().empty()) { \
+      if (!obj->unique_id().empty()) { \
       ESP_LOGV(TAG, prefix "  Unique ID: '%s'", obj->unique_id().c_str()); \
     } \
   }
@@ -36,11 +31,6 @@ class Sensor : public Nameable {
    */
   void set_unit_of_measurement(const std::string &unit_of_measurement);
 
-  /** Manually set the icon of this sensor. By default the sensor's default defined by icon() is used.
-   *
-   * @param icon The icon, for example "mdi:flash". "" to disable.
-   */
-  void set_icon(const std::string &icon);
 
   /** Manually set the accuracy in decimals for this sensor. By default, the sensor's default defined by
    * accuracy_decimals() is used.
@@ -82,11 +72,8 @@ class Sensor : public Nameable {
   /// Get the accuracy in decimals. Uses the manual override if specified or the default value instead.
   int8_t get_accuracy_decimals();
 
-  /// Get the unit of measurement. Uses the manual override if specified or the default value instead.
-  std::string get_unit_of_measurement();
 
-  /// Get the Home Assistant Icon. Uses the manual override if specified or the default value instead.
-  std::string get_icon();
+
 
   /** Publish a new state to the front-end.
    *
@@ -143,22 +130,7 @@ class Sensor : public Nameable {
   void internal_send_state_to_frontend(float state);
 
  protected:
-  /** Override this to set the Home Assistant unit of measurement for this sensor.
-   *
-   * Return "" to disable this feature.
-   *
-   * @return The icon of this sensor, for example "°C".
-   */
-  virtual std::string unit_of_measurement();  // NOLINT
-
-  /** Override this to set the Home Assistant icon for this sensor.
-   *
-   * Return "" to disable this feature.
-   *
-   * @return The icon of this sensor, for example "mdi:battery".
-   */
-  virtual std::string icon();  // NOLINT
-
+ 
   /// Return the accuracy in decimals for this sensor.
   virtual int8_t accuracy_decimals();  // NOLINT
 
@@ -166,10 +138,6 @@ class Sensor : public Nameable {
 
   CallbackManager<void(float)> raw_callback_;  ///< Storage for raw state callbacks.
   CallbackManager<void(float)> callback_;      ///< Storage for filtered state callbacks.
-  /// Override the unit of measurement
-  optional<std::string> unit_of_measurement_;
-  /// Override the icon advertised to Home Assistant, otherwise sensor's icon will be used.
-  optional<std::string> icon_;
   /// Override the accuracy in decimals, otherwise the sensor's values will be used.
   optional<int8_t> accuracy_decimals_;
   // Filter *filter_list_{nullptr};  ///< Store all active filters.

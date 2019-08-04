@@ -50,7 +50,7 @@ bool Planner::configure(ConfigReader& cr)
     }else{
         printf("WARNING: configure-planner: no planner section found. defaults loaded\n");
     }
-
+    printf("[D][Planner]  configure is ok\n");
     return true;
 }
 

@@ -47,6 +47,7 @@ bool Conveyor::configure(ConfigReader& cr)
     if(cr.get_section("conveyor", m)) {
         queue_delay_time_ms = cr.get_int(m, queue_delay_time_ms_key, 100);
     }
+    printf("[D][Converyor] configure is ok.\n");
     return true;
 }
 
