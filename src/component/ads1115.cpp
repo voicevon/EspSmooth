@@ -14,7 +14,7 @@ void ADS1115Component::setup() {
   ESP_LOGCONFIG(TAG, "Setting up ADS1115...");
   uint16_t value;
   if (!this->read_byte_16(ADS1115_REGISTER_CONVERSION, &value)) {
-    this->mark_failed();
+     this->mark_failed();
     return;
   }
   uint16_t config = 0;

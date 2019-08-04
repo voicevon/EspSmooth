@@ -293,7 +293,9 @@ bool Robot::configure(ConfigReader& cr)
 
             case Actuator::DC_MOTOR: {    //Dc motor
                 printf("[D][robot][config:%s]  for dc motor pins: dc_dir= %s, dc_pwm= %s\n", s->first.c_str(), dc_dir_pin.to_string().c_str(),dc_pwm_pin.to_string().c_str());
-                DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin);
+                // esphome::ads1115::ADS1115Sensor ads1115_sensor();
+                esphome::ads1115::ADS1115Sensor ads1115_sensor = esphome::ads1115::ADS1115Sensor();
+                DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin,ads1115_sensor);
                 new_actuator = new_dc;
                 }
                 break;
