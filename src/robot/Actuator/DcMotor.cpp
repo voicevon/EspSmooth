@@ -30,13 +30,15 @@ void DcMotor::enable(bool state){
         __dir_pin.start();
         __pwm_pin.init(PWM_FREQ, PWM_RESOLUTION_BITS, HOME_DUTY);    // TODO: Home_duty is configable!     
         __pwm_pin.start();
-        Serial.println("[D][DcMotor]: enabled");
         __enabled = true;
+        Serial.print("[D][DcMotor]: enabled pwm_channel= ");
+        Serial.print(__pwm_pin.get_channel());
+        Serial.println("");
     }else{
         __dir_pin.stop();
         __pwm_pin.stop();
-        Serial.println("[D][DcMotor]: disabled");
         __enabled = false;
+        Serial.println("[D][DcMotor]: disabled");
     }
 
 

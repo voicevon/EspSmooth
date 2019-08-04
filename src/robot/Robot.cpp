@@ -270,6 +270,7 @@ bool Robot::configure(ConfigReader& cr)
 
         Actuator::ACTUATOR_TYPE_T motor_type = Actuator::get_type_from_string(cr.get_string(mm,actuator_type_key,"stepper"));      
         uint8_t regietered_count;
+        printf("  -------------------------------------------------------------------------------\n");
         printf("  [D][Robot] motor_type id=%i\n",motor_type);
         switch (motor_type) {
             case Actuator::STEPPER_MOTOR: {     //stepper
