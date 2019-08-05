@@ -10,9 +10,6 @@ namespace sensor {
   if (obj != nullptr) { \
     ESP_LOGCONFIG(TAG, prefix type " '%s'", obj->get_name().c_str()); \
     ESP_LOGCONFIG(TAG, prefix "  Accuracy Decimals: %d", obj->get_accuracy_decimals()); \
-      if (!obj->unique_id().empty()) { \
-      ESP_LOGV(TAG, prefix "  Unique ID: '%s'", obj->unique_id().c_str()); \
-    } \
   }
 
 /** Base-class for all sensors.
@@ -59,20 +56,6 @@ class Sensor : public Nameable {
    */
   void push_new_value(float state) ESPDEPRECATED("push_new_value is deprecated. Please use .publish_state instead");
 
-  // ========== INTERNAL METHODS ==========
-  // (In most use cases you won't need these)
-  /// Add a callback that will be called every time a filtered value arrives.
-  // void add_on_state_callback(std::function<void(float)> &&callback);
-  /// Add a callback that will be called every time the sensor sends a raw value.
-  // void add_on_raw_state_callback(std::function<void(float)> &&callback);
-
-  /** This member variable stores the last state that has passed through all filters.
-   *
-   * On startup, when no state is available yet, this is NAN (not-a-number) and the validity
-   * can be checked using has_state().
-   *
-   * This is exposed through a member variable for ease of use in esphome lambdas.
-   */
   float state;
 
   /** This member variable stores the current raw state of the sensor. Unlike .state,
@@ -83,18 +66,8 @@ class Sensor : public Nameable {
   /// Return whether this sensor has gotten a full state (that passed through all filters) yet.
   bool has_state() const;
 
-  /** A unique ID for this sensor, empty for no unique id. See unique ID requirements:
-   * https://developers.home-assistant.io/docs/en/entity_registry_index.html#unique-id-requirements
-   *
-   * @return The unique id as a string.
-   */
-  virtual std::string unique_id();
-
   /// Return with which interval the sensor is polled. Return 0 for non-polling mode.
   virtual uint32_t update_interval();
-
-  /// Calculate the expected update interval for values that pass through all filters.
-  // uint32_t calculate_expected_filter_update_interval();
 
   void internal_send_state_to_frontend(float state);
 
@@ -103,12 +76,9 @@ class Sensor : public Nameable {
   /// Return the accuracy in decimals for this sensor.
   virtual int8_t accuracy_decimals();  // NOLINT
 
-  // uint32_t hash_base() override;
-
-  CallbackManager<void(float)> raw_callback_;  ///< Storage for raw state callbacks.
-  CallbackManager<void(float)> callback_;      ///< Storage for filtered state callbacks.
+  
   /// Override the accuracy in decimals, otherwise the sensor's values will be used.
-  optional<int8_t> accuracy_decimals_;
+  // optional<int8_t> accuracy_decimals_;
   // Filter *filter_list_{nullptr};  ///< Store all active filters.
   bool has_state_{false};
 };
