@@ -1,10 +1,20 @@
 #include "OutputPin.h"
 #include "HardwareSerial.h"
 
+static const uint8_t __GPIO_RANGE[20]= {0,2,4,5,13,14,15,16,17,18,19,21,22,23,25,26,27,32,33};
+// static const uint8_t __GPIO_RANGE[20];
 OutputPin::OutputPin(const char* pin_description){
 	from_string(pin_description);
 	__is_started = false;   // to be a procted variable?
-	//check range in output {0,1,2,3,4,5,12,13,14,15,16,17,18,19,21,22,23,25,26,27,32,33}
+	return;
+	// TODO:
+	//check if the input pin_number is in the avaliable range.
+	// for(int i=0; i<20; i++){
+	// 	if(__GPIO_RANGE[i] == get_gpio_id()){
+	// 		return;
+	// 	}
+	// }
+	printf("[E][OutputPin] GPIO_ i% is NOT suitable for output.\n");
 }
 
 bool OutputPin::start()

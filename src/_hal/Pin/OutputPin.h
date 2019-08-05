@@ -13,4 +13,5 @@ class OutputPin: public Pin
 
     private:
         bool __is_started;
+        static uint8_t __GPIO_RANGE; 
 };

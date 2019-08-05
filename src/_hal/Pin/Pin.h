@@ -63,7 +63,7 @@ public:
         }
     }
 
-    inline uint16_t get_gpio_id() const { return this->gpio_id_; }
+    inline uint8_t get_gpio_id() const { return this->gpio_id_; }
 
     bool is_inverting() const { return inverting_; }
     void set_inverting(bool f) { inverting_ = f; }
