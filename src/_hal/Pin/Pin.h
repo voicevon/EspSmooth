@@ -19,7 +19,7 @@ class Pin
 public:
     virtual ~Pin();
 
-    Pin* from_string(std::string value);   //should be a protected member? Can NOT!
+    Pin* from_string(std::string value);   //should be a protected member? Can NOT do it directly!
     std::string to_string() const;
 
     virtual bool start(){ return false; }
@@ -67,7 +67,7 @@ protected:
     Pin();
     Pin(const char *s);
 
-    static bool _set_allocated_pins(uint8_t, bool set= true);
+    static bool set_allocated_pins_(uint8_t, bool set= true);
 
     struct {
         uint8_t gpio_id_: 8;

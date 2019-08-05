@@ -737,8 +737,7 @@ void setup_section_bus(ConfigReader cr){
 
     auto& this_i2c = target_i2c->second; // map of ic2 config values for this i2c
     OutputPin dc_sensor_sck_pin(cr.get_string(this_i2c, clk_pin_key, "nc"));
-    InputPin dc_sensor_sda_pin(cr.get_string(this_i2c, clk_pin_key, "nc"));
-
+    InputPin dc_sensor_sda_pin(cr.get_string(this_i2c, sda_pin_key, "nc"));
 
     esphome::i2c::I2CComponent* i2c_component =new esphome::i2c::I2CComponent();
     i2c_component->set_scl_pin(dc_sensor_sck_pin.get_gpio_id());
@@ -842,6 +841,7 @@ void smoothie_startup(void *)
         std::stringstream std_string_stream(std_string);
         ConfigReader cr(std_string_stream);
 #endif
+        printf(" *************************** loading from config.ini *************************** \n");
         setup_section_bus(cr);
 
         Planner *planner = new Planner();

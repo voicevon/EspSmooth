@@ -68,9 +68,9 @@ void setup_spiffs_reading(){
 #include "esp_log.h"
 #define LOG_LOCAL_LEVEL ESP_LOG_VERBOSE
 void setup_log(){
-    Serial.println("==============================================");
+    Serial.println(" ================ test log ================ ");
 
-     esp_log_level_set("*", ESP_LOG_INFO);  
+    esp_log_level_set("*", ESP_LOG_INFO);  
     ESP_LOGE(TAG, "test1 Error");
     ESP_LOGW(TAG, "test1 Warning");
     ESP_LOGI(TAG, "test1 Info");
@@ -83,6 +83,7 @@ void setup_log(){
     ESP_LOGI(TAG, "test2 Info");
     ESP_LOGD(TAG, "test2 Debug");
     ESP_LOGV(TAG, "test2 Verbose");
+    Serial.println(" ================ end of  test log ================ ");
 }
 
 
