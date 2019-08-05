@@ -603,12 +603,12 @@ void safe_sleep(uint32_t ms)
 
 //float get_pll1_clk();
 
-//#define CONFIG_SOURCE_SD 1
+#define CONFIG_SOURCE_SD 1
 #define CONFIG_SOURCE_SPIFFS 2
-// #define CONFIG_SOURCE_CODED_STRING 3
+#define CONFIG_SOURCE_CODED_STRING 3
+#define CONFIG_SOURCE 2
 
-
-#ifdef CONFIG_SOURCE_CODED_STRING
+#if CONFIG_SOURCE == CONFIG_SOURCE_CODED_STRING
 //Xuming>>>
 #include STRING_CONFIG_H    //not impliment in origin SmoothieV2
 static std::string str(string_config);
@@ -616,11 +616,11 @@ static std::stringstream ss(str);
 //<<<Xuming
 #endif
 
-#ifdef CONFIG_SOURCE_SD
+#if CONFIG_SOURCE == CONFIG_SOURCE_SD
 extern "C" bool setup_sdmmc();
 #endif
 
-#ifdef CONFIG_SOURCE_SPIFFS
+#if CONFIG_SOURCE == CONFIG_SOURCE_SPIFFS
 
 #endif
 
@@ -768,7 +768,7 @@ void smoothie_startup(void *)
     bool ok = false;
     // open the config file
     do {
-#ifdef CONFIG_SOURCE_SD
+#if CONFIG_SOURCE == CONFIG_SOURCE_SD
         static FATFS fatfs; /* File system object */
         if(!setup_sdmmc()) {
             std::cout << "Error: setting up sdmmc\n";
@@ -795,11 +795,11 @@ void smoothie_startup(void *)
         ConfigReader cr(fs);
         printf("DEBUG: Starting configuration of modules from sdcard...\n");
 #endif
-#ifdef CONFIG_SOURCE_CODED_STRING
+#if CONFIG_SOURCE == CONFIG_SOURCE_CODED_STRING
         ConfigReader cr(ss);
         printf("DEBUG: Starting configuration of modules from memory...\n");
 #endif
-#ifdef CONFIG_SOURCE_SPIFFS
+#if CONFIG_SOURCE == CONFIG_SOURCE_SPIFFS
         std::string std_string = spiffs_reading();
         std::stringstream std_string_stream(std_string);
         ConfigReader cr(std_string_stream);
@@ -843,7 +843,7 @@ void smoothie_startup(void *)
 
         setup_section_voltage_monitors(cr);
         
-#ifdef CONFIG_SOURCE_SD
+#if CONFIG_SOURCE == CONFIG_SOURCE_SD
         // close the file stream
         fs.close();
 
