@@ -62,9 +62,9 @@ class Sensor : public Nameable {
   // ========== INTERNAL METHODS ==========
   // (In most use cases you won't need these)
   /// Add a callback that will be called every time a filtered value arrives.
-  void add_on_state_callback(std::function<void(float)> &&callback);
+  // void add_on_state_callback(std::function<void(float)> &&callback);
   /// Add a callback that will be called every time the sensor sends a raw value.
-  void add_on_raw_state_callback(std::function<void(float)> &&callback);
+  // void add_on_raw_state_callback(std::function<void(float)> &&callback);
 
   /** This member variable stores the last state that has passed through all filters.
    *
@@ -94,7 +94,7 @@ class Sensor : public Nameable {
   virtual uint32_t update_interval();
 
   /// Calculate the expected update interval for values that pass through all filters.
-  uint32_t calculate_expected_filter_update_interval();
+  // uint32_t calculate_expected_filter_update_interval();
 
   void internal_send_state_to_frontend(float state);
 

@@ -61,7 +61,7 @@ void DcMotor::__goto_position(float target_position,float sensor_position){
 }
 
 float DcMotor::get_sensor_position(){
-    return __ads1115.get_raw_value();
+    return __ads1115.get_raw_state();
 }
 
 
