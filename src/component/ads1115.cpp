@@ -84,6 +84,7 @@ void ADS1115Component::dump_config() {
   }
 }
 float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
+  // printf("[D][ADS1115Component] request_measurement at entrance.\n");
   uint16_t config = this->prev_config_;
   // Multiplexer
   //        0bxBBBxxxxxxxxxxxx
@@ -123,9 +124,10 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
 
   uint16_t raw_conversion;
   if (!this->read_byte_16(ADS1115_REGISTER_CONVERSION, &raw_conversion)) {
-    this->status_set_warning();
+    printf("[E][ADS1115Component] read raw_conversion wrong.\n");
     return NAN;
   }
+
   auto signed_conversion = static_cast<int16_t>(raw_conversion);
 
   float millivolts;
@@ -149,11 +151,12 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
       millivolts = signed_conversion * 0.007813f;
       break;
     default:
+      printf("[E][ADS1115Component] request_measurement() wrong setting gain_=%i  \n",sensor->get_gain());
       millivolts = NAN;
   }
 
   this->status_clear_warning();
-  return millivolts / 1e3f;
+  return millivolts / 1000.0f;
 }
 
 float ADS1115Sensor::sample() { return this->parent_->request_measurement(this); }

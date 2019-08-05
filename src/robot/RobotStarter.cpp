@@ -751,6 +751,7 @@ void setup_section_bus(ConfigReader cr){
     ads1115_component = new esphome::ads1115::ADS1115Component();
     ads1115_component->set_i2c_parent(i2c_component);
     ads1115_component->set_i2c_address(0x48);
+    // ads1115_component->set_continuous_mode(true);
     ads1115_component->setup();
     printf("-----ADS1115Component\n");
 
