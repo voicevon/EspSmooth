@@ -318,6 +318,7 @@ bool Robot::configure(ConfigReader& cr)
                     // esphome::ads1115::ADS1115Sensor ads1115_sensor();
                     esphome::ads1115::ADS1115Sensor ads1115_sensor = esphome::ads1115::ADS1115Sensor();
                     ads1115_sensor.init(ads1115_component);
+                    ads1115_sensor.set_gain(esphome::ads1115::ADS1115_GAIN_0P256);
                     ads1115_sensor.setup();
                     DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin,ads1115_sensor);
                     new_actuator = new_dc;
