@@ -232,18 +232,21 @@ bool Robot::configure(ConfigReader& cr)
         }
     }
 
+
+    #define clk_pin_key "clk_pin"
+    #define sda_pin_key "sda_pin"
     // configure the board: i2c, spi, s2c, etc...
     ConfigReader::sub_section_map_t sub_section_bus;
     if(!cr.get_sub_sections("bus", sub_section_bus)) {
         printf("ERROR:configure-bus: no bus section found\n");
         return false;
     }
-    auto sub_section_map = sub_section_bus.find("bus");
-    if(sub_section_map == sub_section_bus.end()) return false; // actuator not found and they must be in contiguous order
+    auto target_i2c = sub_section_bus.find("i2c_ads1115");
+    if(target_i2c == sub_section_bus.end()) return false; // actuator not found and they must be in contiguous order
 
-    auto& sub_section_map_lines = sub_section_map->second; // map of actuator config values for this actuator
-    OutputPin dc_sensor_sck_pin(cr.get_string(sub_section_map_lines, dc_sensor_clk_pin_key, "nc"));
-    InputPin dc_sensor_sda_pin(cr.get_string(sub_section_map_lines, dc_sensor_sda_pin_key, "nc"));
+    auto& this_i2c = target_i2c->second; // map of ic2 config values for this i2c
+    OutputPin dc_sensor_sck_pin(cr.get_string(this_i2c, clk_pin_key, "nc"));
+    InputPin dc_sensor_sda_pin(cr.get_string(this_i2c, clk_pin_key, "nc"));
 
 
     // configure the actuators
