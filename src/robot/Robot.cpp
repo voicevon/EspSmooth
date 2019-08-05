@@ -317,8 +317,9 @@ bool Robot::configure(ConfigReader& cr)
                     //question here: what is the essencial differents with below two lines?
                     // esphome::ads1115::ADS1115Sensor ads1115_sensor();
                     esphome::ads1115::ADS1115Sensor ads1115_sensor = esphome::ads1115::ADS1115Sensor();
-                    ads1115_sensor.init(ads1115_component);
-                    ads1115_sensor.set_gain(esphome::ads1115::ADS1115_GAIN_0P256);
+                    ads1115_sensor.set_parent(ads1115_component);
+                    ads1115_sensor.set_multiplexer(esphome::ads1115::ADS1115_MULTIPLEXER_P1_NG);
+                    ads1115_sensor.set_gain(esphome::ads1115::ADS1115_GAIN_6P144);
                     ads1115_sensor.setup();
                     DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin,ads1115_sensor);
                     new_actuator = new_dc;
