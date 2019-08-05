@@ -160,13 +160,7 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
 }
 
 float ADS1115Sensor::sample() { return this->parent_->request_measurement(this); }
-void ADS1115Sensor::update() {
-  float v = this->parent_->request_measurement(this);
-  if (!isnan(v)) {
-    ESP_LOGD(TAG, "'%s': Got Voltage=%fV", this->get_name().c_str(), v);
-    this->publish_state(v);
-  }
-}
+
 
 }  // namespace ads1115
 }  // namespace esphome
