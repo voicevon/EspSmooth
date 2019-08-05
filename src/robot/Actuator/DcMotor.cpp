@@ -12,7 +12,7 @@ DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin,esphome::ads1115::ADS1115Se
     __dir_pin = OutputPin(dir_pin);
     __pwm_pin = PwmPin(pwm_pin);
 
-     __ads1115 = ads1115_sensor; 
+    //  __ads1115 = ads1115_sensor; 
 }
 
 bool DcMotor::step(){
@@ -31,6 +31,7 @@ void DcMotor::enable(bool state){
         __pwm_pin.init(PWM_FREQ, PWM_RESOLUTION_BITS, HOME_DUTY);    // TODO: Home_duty is configable!     
         __pwm_pin.start();
         __enabled = true;
+
         Serial.print("[D][DcMotor]: enabled pwm_channel= ");
         Serial.print(__pwm_pin.get_channel());
         Serial.println("");
@@ -40,23 +41,19 @@ void DcMotor::enable(bool state){
         __enabled = false;
         Serial.println("[D][DcMotor]: disabled");
     }
-
-
 }
 
-float DcMotor::read_sensor_position(){
-    __sensor_position = __ads1115.sample();
-    return __sensor_position;
-}
+// float DcMotor::read_sensor_position(){
+//     __sensor_position = __ads1115.sample();
+//     return __sensor_position;
+// }
 
 void DcMotor::goto_position(float target_position){
-    __goto_position(target_position,__sensor_position);
+    // float duty = __pid_controller.get_output_value(target_position,__sensor_position);
+    __pwm_pin.set_duty(123);
 }
 
-void DcMotor::__goto_position(float target_position,float sensor_position){
-    float duty = __pid_controller.get_output_value(target_position,sensor_position);
-    __pwm_pin.set_duty(duty);
-}
+
 
 
 

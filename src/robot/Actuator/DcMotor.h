@@ -15,18 +15,17 @@ class DcMotor:public Actuator
         virtual bool step() override;
         virtual void enable(bool state) override;
         void goto_position(float target_position);
-        float read_sensor_position();
+        // float read_sensor_position();
 
     private:
         OutputPin __dir_pin;
         PwmPin __pwm_pin;
         uint8_t __pwm_channel;
         bool __enabled;
-        float __sensor_position;
-        MotorPidController __pid_controller;
-        esphome::ads1115::ADS1115Component* ads1115_component;
-        esphome::ads1115::ADS1115Sensor __ads1115;
-        void __goto_position(float target_position,float sensor_position);
+        // float __sensor_position;
+        // MotorPidController __pid_controller;
+        // esphome::ads1115::ADS1115Component* ads1115_component;
+        // esphome::ads1115::ADS1115Sensor __ads1115;
 };
 
 
