@@ -154,6 +154,7 @@ static const char* const actuator_keys[] = {
 #endif
 };
 
+extern esphome::ads1115::ADS1115Component* ads1115_component;
 bool Robot::configure(ConfigReader& cr)
 {
     ConfigReader::section_map_t m;
@@ -231,24 +232,7 @@ bool Robot::configure(ConfigReader& cr)
             printf("Warning:configure-robot: g92_offset config is bad\n");
         }
     }
-
-
-    #define clk_pin_key "clk_pin"
-    #define sda_pin_key "sda_pin"
-    // configure the board: i2c, spi, s2c, etc...
-    ConfigReader::sub_section_map_t sub_section_bus;
-    if(!cr.get_sub_sections("bus", sub_section_bus)) {
-        printf("ERROR:configure-bus: no bus section found\n");
-        return false;
-    }
-    auto target_i2c = sub_section_bus.find("i2c_ads1115");
-    if(target_i2c == sub_section_bus.end()) return false; // actuator not found and they must be in contiguous order
-
-    auto& this_i2c = target_i2c->second; // map of ic2 config values for this i2c
-    OutputPin dc_sensor_sck_pin(cr.get_string(this_i2c, clk_pin_key, "nc"));
-    InputPin dc_sensor_sda_pin(cr.get_string(this_i2c, clk_pin_key, "nc"));
-
-
+    
     // configure the actuators
     ConfigReader::sub_section_map_t ssm;
     if(!cr.get_sub_sections("actuator", ssm)) {
@@ -328,19 +312,7 @@ bool Robot::configure(ConfigReader& cr)
                                                                 dc_sensor_sda_pin.to_string().c_str()
                                                                 );
                     
-                    esphome::i2c::I2CComponent* i2c_component =new esphome::i2c::I2CComponent();
-                    i2c_component->set_scl_pin(dc_sensor_sck_pin.get_gpio_id());
-                    i2c_component->set_sda_pin(dc_sensor_sda_pin.get_gpio_id());
-                    i2c_component->set_frequency(400000);
-                    i2c_component->set_scan(false);
-                    i2c_component->setup();
-                    printf("-----I2CComponent\n");
-                    // ads1115_sensor.set_icon
-                    esphome::ads1115::ADS1115Component* ads1115_component = new esphome::ads1115::ADS1115Component();
-                    ads1115_component->set_i2c_parent(i2c_component);
-                    ads1115_component->set_i2c_address(0x48);
-                    ads1115_component->setup();
-                    printf("-----ADS1115Component\n");
+                    
                     //question here: what is the essencial differents with below two lines?
                     // esphome::ads1115::ADS1115Sensor ads1115_sensor();
                     esphome::ads1115::ADS1115Sensor ads1115_sensor = esphome::ads1115::ADS1115Sensor();

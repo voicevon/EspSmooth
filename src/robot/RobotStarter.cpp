@@ -32,7 +32,8 @@
 #include "_hal/Pin/OutputPin.h"
 #include "_hal/stopwatch.h"
 #include "_hal/spiffs_ext.h"
-
+#include "component/i2c.h"
+#include "component/ads1115.h"
 // static const char *TAG = "StartUp";
 
 static bool system_running= false;
@@ -704,6 +705,7 @@ void setup_section_extruder(ConfigReader cr){
     }
 }
 
+esphome::ads1115::ADS1115Component* ads1115_component;
 void setup_section_temperature_control(ConfigReader cr){
     if(AdcPin::setup()) {
         // this creates any configured temperature controls
@@ -715,6 +717,38 @@ void setup_section_temperature_control(ConfigReader cr){
         printf("ERROR: ADC failed to setup\n");
     }
     //  printf ("[OK][setup.temperature.controls] bbbbbbbbbbbbbbbbbbb\n");
+}
+
+// configure the board: i2c, spi, s2c, etc...
+void setup_section_bus(ConfigReader cr){
+    #define clk_pin_key "clk_pin"
+    #define sda_pin_key "sda_pin"
+    ConfigReader::sub_section_map_t sub_section_bus;
+    if(!cr.get_sub_sections("bus", sub_section_bus)) {
+        printf("ERROR:configure-bus: no bus section found\n");
+        return;
+    }
+    auto target_i2c = sub_section_bus.find("i2c_ads1115");
+    if(target_i2c == sub_section_bus.end()) return; // actuator not found and they must be in contiguous order
+
+    auto& this_i2c = target_i2c->second; // map of ic2 config values for this i2c
+    OutputPin dc_sensor_sck_pin(cr.get_string(this_i2c, clk_pin_key, "nc"));
+    InputPin dc_sensor_sda_pin(cr.get_string(this_i2c, clk_pin_key, "nc"));
+
+
+    esphome::i2c::I2CComponent* i2c_component =new esphome::i2c::I2CComponent();
+    i2c_component->set_scl_pin(dc_sensor_sck_pin.get_gpio_id());
+    i2c_component->set_sda_pin(dc_sensor_sda_pin.get_gpio_id());
+    i2c_component->set_frequency(400000);
+    i2c_component->set_scan(false);
+    i2c_component->setup();
+    printf("-----I2CComponent\n");
+    // ads1115_sensor.set_icon
+    ads1115_component = new esphome::ads1115::ADS1115Component();
+    ads1115_component->set_i2c_parent(i2c_component);
+    ads1115_component->set_i2c_address(0x48);
+    ads1115_component->setup();
+    printf("-----ADS1115Component\n");
 }
 
 // configure voltage monitors if any
@@ -819,7 +853,7 @@ void smoothie_startup(void *)
         setup_section_core(cr);
         setup_section_extruder(cr);
         setup_section_temperature_control(cr);
-        
+        setup_section_bus(cr);
 
         // create all registered modules, the addresses are stored in a known location in flash
         //Xuming>>>
