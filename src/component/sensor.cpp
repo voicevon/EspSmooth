@@ -36,7 +36,6 @@ int8_t Sensor::get_accuracy_decimals() {
   return this->accuracy_decimals();
 }
 
-float Sensor::get_value() const { return this->state; }
 float Sensor::get_state() const { return this->state; }
 float Sensor::get_raw_value() const { return this->raw_state; }
 float Sensor::get_raw_state() const { return this->raw_state; }

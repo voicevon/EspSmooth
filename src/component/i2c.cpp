@@ -20,14 +20,10 @@ I2CComponent::I2CComponent() {
 }
 
 void I2CComponent::setup() {
-  // this->dump_config();
-  printf("setup() sck= %i\n",this->scl_pin_);
-  printf("setup() sda= %i\n",this->sda_pin_);
-
   this->wire_->begin(this->sda_pin_, this->scl_pin_);
-  printf("  wire avilable  %i\n",this->wire_->available()  );
   this->wire_->setClock(this->frequency_);
-  printf("[D][I2CComponent] setup is ending...\n");
+  printf("[D][I2CComponent] on bus_num=%i,  scl_pin= GPIO_%i, sda_pin= GPIO_%i\n", 
+                          this->wire_->available(),scl_pin_,sda_pin_);
 }
 void I2CComponent::dump_config() {
   ESP_LOGCONFIG(TAG, "I2C Bus:");

@@ -133,6 +133,9 @@ void setup(){
         printf("Timer for ControlMotors  start error \n");
     }
 }
+#include "robot/Robot.h"
+#include "robot/Actuator/DcMotor.h"
+
 
 uint64_t rtos_report_inteval_second = 5 ;
 uint64_t cpu_idle_counter = 0;
@@ -151,8 +154,13 @@ void loop(){
         cpu_idle_counter = 0;
         last_time_stamp = esp_timer_get_time();
 
-        printf("    Y Pos= %f", float_value);
+        DcMotor* dc =(DcMotor*) Robot::getInstance()->actuators[2];
+        float dc_angle = dc->get_sensor_position();
+
+        printf("    Y Pos= %f", dc_angle);
         printf("\n");
+
+        
     }
 
 }

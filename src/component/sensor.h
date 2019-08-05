@@ -24,14 +24,6 @@ class Sensor : public Nameable {
   explicit Sensor();
   explicit Sensor(const std::string &name);
 
-  /** Manually set the unit of measurement of this sensor. By default the sensor's default defined by
-   * unit_of_measurement() is used.
-   *
-   * @param unit_of_measurement The unit of measurement, "" to disable.
-   */
-  void set_unit_of_measurement(const std::string &unit_of_measurement);
-
-
   /** Manually set the accuracy in decimals for this sensor. By default, the sensor's default defined by
    * accuracy_decimals() is used.
    *
@@ -39,29 +31,6 @@ class Sensor : public Nameable {
    */
   void set_accuracy_decimals(int8_t accuracy_decimals);
 
-  /// Add a filter to the filter chain. Will be appended to the back.
-  // void add_filter(Filter *filter);
-
-  /** Add a list of vectors to the back of the filter chain.
-   *
-   * This may look like:
-   *
-   * sensor->add_filters({
-   *   LambdaFilter([&](float value) -> optional<float> { return 42/value; }),
-   *   OffsetFilter(1),
-   *   SlidingWindowMovingAverageFilter(15, 15), // average over last 15 values
-   * });
-   */
-  // void add_filters(const std::vector<Filter *> &filters);
-
-  // /// Clear the filters and replace them by filters.
-  // void set_filters(const std::vector<Filter *> &filters);
-
-  /// Clear the entire filter chain.
-  // void clear_filters();
-
-  /// Getter-syntax for .value. Please use .state instead.
-  float get_value() const ESPDEPRECATED(".value is deprecated, please use .state");
   /// Getter-syntax for .state.
   float get_state() const;
   /// Getter-syntax for .raw_value. Please use .raw_state instead.

@@ -744,9 +744,7 @@ void setup_section_bus(ConfigReader cr){
     i2c_component->set_sda_pin(adc1115_sda_pin.get_gpio_id());
     i2c_component->set_frequency(400000);
     i2c_component->set_scan(false);
-    i2c_component->dump_config();
-
-    printf("ggggggggggggggggg\n");
+    i2c_component->dump_config();   //Doesn't work!
     i2c_component->setup();
     printf("-----I2CComponent\n");
     // ads1115_sensor.set_icon
@@ -755,6 +753,7 @@ void setup_section_bus(ConfigReader cr){
     ads1115_component->set_i2c_address(0x48);
     ads1115_component->setup();
     printf("-----ADS1115Component\n");
+
 }
 
 // configure voltage monitors if any
