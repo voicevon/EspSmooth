@@ -61,7 +61,7 @@ uint32_t Sensor::calculate_expected_filter_update_interval() {
 
   // return this->filter_list_->calculate_remaining_interval(interval);
 }
-uint32_t Sensor::hash_base() { return 2455723294UL; }
+// uint32_t Sensor::hash_base() { return 2455723294UL; }
 
 PollingSensorComponent::PollingSensorComponent(const std::string &name, uint32_t update_interval)
     : PollingComponent(update_interval), Sensor(name) {}
