@@ -108,7 +108,11 @@ void setup_smooth(){
     
     // vTaskStartScheduler();    Don't call vTaskStartScheduler()     https://esp32.com/viewtopic.php?t=1336
 }
-
+// #include "Wire.h"
+// void test_i2c(){
+//     Wire.begin(14,15);
+//     printf("=====================\n");
+// }
 extern float float_value;
 extern void ControlMotors(TimerHandle_t xTimer);
 
@@ -116,7 +120,7 @@ void setup(){
     Serial.begin(115200);
     show_memory_allocate();
     setup_log();
-
+    // test_i2c();
     //setup_spiffs_writting();
     //setup_spiffs_reading();
     setup_smooth(); 

@@ -721,7 +721,7 @@ void setup_section_temperature_control(ConfigReader cr){
 
 // configure the board: i2c, spi, s2c, etc...
 void setup_section_bus(ConfigReader cr){
-    #define clk_pin_key "clk_pin"
+    #define scl_pin_key "scl_pin"
     #define sda_pin_key "sda_pin"
     
     ConfigReader::sub_section_map_t sub_section_bus;
@@ -736,14 +736,17 @@ void setup_section_bus(ConfigReader cr){
     }
 
     auto& this_i2c = target_i2c->second; // map of ic2 config values for this i2c
-    OutputPin dc_sensor_sck_pin(cr.get_string(this_i2c, clk_pin_key, "nc"));
-    InputPin dc_sensor_sda_pin(cr.get_string(this_i2c, sda_pin_key, "nc"));
+    OutputPin ads1115_scl_pin(cr.get_string(this_i2c, scl_pin_key, "nc"));
+    InputPin adc1115_sda_pin(cr.get_string(this_i2c, sda_pin_key, "nc"));
 
     esphome::i2c::I2CComponent* i2c_component =new esphome::i2c::I2CComponent();
-    i2c_component->set_scl_pin(dc_sensor_sck_pin.get_gpio_id());
-    i2c_component->set_sda_pin(dc_sensor_sda_pin.get_gpio_id());
+    i2c_component->set_scl_pin(ads1115_scl_pin.get_gpio_id());
+    i2c_component->set_sda_pin(adc1115_sda_pin.get_gpio_id());
     i2c_component->set_frequency(400000);
     i2c_component->set_scan(false);
+    i2c_component->dump_config();
+
+    printf("ggggggggggggggggg\n");
     i2c_component->setup();
     printf("-----I2CComponent\n");
     // ads1115_sensor.set_icon

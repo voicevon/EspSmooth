@@ -28,7 +28,7 @@ Pin::~Pin()
 static std::bitset<GPIO_PINS_COUNT> allocated_pins;   //default constructor :The object is initialized with zeros.
 bool Pin::set_allocated_pins_(uint8_t pin_number, bool set)
 {
-    printf("dddddddddddddddd %d\n",allocated_pins);
+    // printf("dddddddddddddddd %d\n",allocated_pins);
     if(!set) {
         // deallocate it
         allocated_pins.reset(pin_number);

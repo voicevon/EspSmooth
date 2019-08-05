@@ -1,5 +1,10 @@
 #pragma once
 
+
+//  Limitation of ESP32 GPIO
+//  https://randomnerdtutorials.com/esp32-pinout-reference-gpios/
+
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>

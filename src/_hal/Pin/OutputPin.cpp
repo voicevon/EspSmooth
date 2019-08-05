@@ -4,6 +4,7 @@
 OutputPin::OutputPin(const char* pin_description){
 	from_string(pin_description);
 	__is_started = false;   // to be a procted variable?
+	//check range in output {0,1,2,3,4,5,12,13,14,15,16,17,18,19,21,22,23,25,26,27,32,33}
 }
 
 bool OutputPin::start()
