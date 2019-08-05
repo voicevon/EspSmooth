@@ -4,16 +4,16 @@
 
 Pin::Pin()
 {
-    this->__inverting = false;
+    this->inverting_ = false;
     this->open_drain = false;
-    this->__valid = false;
+    this->valid_ = false;
 }
 
 Pin::Pin(const char *s)
 {
-    this->__inverting = false;
+    this->inverting_ = false;
     this->open_drain = false;
-    this->__valid = false;
+    this->valid_ = false;
     from_string(s);
 }
 
@@ -51,8 +51,8 @@ bool Pin::_set_allocated_pins(uint8_t pin_number, bool set)
 //     For any number is greater than 35, It's an expanded io, is not a gpio on original chip.  for example, "gpio_56".
 Pin* Pin::from_string(std::string value)
 {
-    __valid = false;
-    __inverting = false;
+    valid_ = false;
+    inverting_ = false;
     open_drain = false;
 
     if(value == "nc") return nullptr;
@@ -88,7 +88,7 @@ Pin* Pin::from_string(std::string value)
     for(char c : value.substr(7)) {
         switch(c) {
             case '!':
-                this->__inverting = true;
+                this->inverting_ = true;
                 break;
             case 'o':
                 this->open_drain= true; // we need to set pin to input when off for simulated opendrain
@@ -109,20 +109,20 @@ Pin* Pin::from_string(std::string value)
     }
 
     // save the gpio port and pin (we can always get the pin number from this and the lut)
-    this->__gpio_id = target_pin_id;
-    this->__valid = true;
+    this->gpio_id_ = target_pin_id;
+    this->valid_ = true;
     return this;
 }
 
 std::string Pin::to_string() const
 {
-    if(__valid) {
+    if(valid_) {
         String str_pinnum = "GPIO_" ;
-        if(this->__gpio_id == 0 ) str_pinnum += "0";
-        if(this->__gpio_id < 10)  str_pinnum += "0";
-        str_pinnum += String(this->__gpio_id);
+        if(this->gpio_id_ == 0 ) str_pinnum += "0";
+        if(this->gpio_id_ < 10)  str_pinnum += "0";
+        str_pinnum += String(this->gpio_id_);
         if(this->open_drain) str_pinnum += 'o'; 
-        if(this->__inverting) str_pinnum += "!";  
+        if(this->inverting_) str_pinnum += "!";  
 
         std::string std_str(str_pinnum.c_str());
         return std_str;

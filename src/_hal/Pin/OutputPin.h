@@ -10,5 +10,5 @@ class OutputPin: public Pin
         virtual bool stop() override;
 
     private:
-
+        bool __is_started;
 };

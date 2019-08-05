@@ -70,19 +70,19 @@ void setup_spiffs_reading(){
 void setup_log(){
     Serial.println("==============================================");
 
-    // esp_log_level_set("*", ESP_LOG_INFO);  
-    ESP_LOGE(TAG, "1Error");
-    ESP_LOGW(TAG, "1Warning");
-    ESP_LOGI(TAG, "1Info");
-    ESP_LOGD(TAG, "1Debug");
-    ESP_LOGV(TAG, "1Verbose");
+     esp_log_level_set("*", ESP_LOG_INFO);  
+    ESP_LOGE(TAG, "test1 Error");
+    ESP_LOGW(TAG, "test1 Warning");
+    ESP_LOGI(TAG, "test1 Info");
+    ESP_LOGD(TAG, "test1 Debug");
+    ESP_LOGV(TAG, "test1 Verbose");
 
     // esp_log_level_set(TAG,ESP_LOG_VERBOSE);  
-    ESP_LOGE(TAG, "Error");
-    ESP_LOGW(TAG, "Warning");
-    ESP_LOGI(TAG, "Info");
-    ESP_LOGD(TAG, "Debug");
-    ESP_LOGV(TAG, "Verbose");
+    ESP_LOGE(TAG, "test2 Error");
+    ESP_LOGW(TAG, "test2 Warning");
+    ESP_LOGI(TAG, "test2 Info");
+    ESP_LOGD(TAG, "test2 Debug");
+    ESP_LOGV(TAG, "test2 Verbose");
 }
 
 

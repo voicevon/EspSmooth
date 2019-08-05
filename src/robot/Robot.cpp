@@ -63,11 +63,11 @@
 // actuator keys
 #define actuator_type_key               "motor_type"
 #define servo_pin_key                   "servo_pin"
-#define dc_pwm_pin_key                  "dc_pwm_pin"
-#define dc_sensor_clk_pin_key           "dc_sensor_clk_pin"
-#define dc_sensor_sda_pin_key           "dc_sensor_sda_pin"
-
 #define dc_dir_pin_key                  "dc_dir_pin"
+#define dc_pwm_pin_key                  "dc_pwm_pin"
+#define ads1115_address_key           "dc_sensor_clk_pin"
+#define ads1115_channel_key           "dc_sensor_sda_pin"
+
 #define step_pin_key                    "step_pin"
 #define dir_pin_key                     "dir_pin"
 #define en_pin_key                      "en_pin"
@@ -303,14 +303,15 @@ bool Robot::configure(ConfigReader& cr)
 
                     OutputPin dc_dir_pin(cr.get_string(mm, dc_dir_pin_key, "nc"));
                     PwmPin dc_pwm_pin(cr.get_string(mm, dc_pwm_pin_key, "nc"));
-                    OutputPin dc_sensor_sck_pin(cr.get_string(mm, dc_sensor_clk_pin_key, "nc"));
-                    InputPin dc_sensor_sda_pin(cr.get_string(mm, dc_sensor_sda_pin_key, "nc"));
-                    printf("    [D][robot][config:%s]  for dc motor pins: dir= %s, pwm= %s, sck= %s, sda= %s \n", 
+                    int ads1115_addr = cr.get_int(mm,ads1115_address_key,0);
+                    int ads1115_channel = cr.get_int(mm,ads1115_channel_key,0);
+                    // OutputPin dc_sensor_sck_pin(cr.get_string(mm, dc_sensor_clk_pin_key, "nc"));
+                    // InputPin dc_sensor_sda_pin(cr.get_string(mm, dc_sensor_sda_pin_key, "nc"));
+
+                    printf("    [D][robot][config:%s]  for dc motor pins: dir= %s, pwm= %s, ads1115_addr= %i, ads1115_channel= %i \n", 
                                             s->first.c_str(), dc_dir_pin.to_string().c_str(),
                                                                 dc_pwm_pin.to_string().c_str(),
-                                                                dc_sensor_sck_pin.to_string().c_str(),
-                                                                dc_sensor_sda_pin.to_string().c_str()
-                                                                );
+                                                                ads1115_addr, ads1115_channel );
                     
                     
                     //question here: what is the essencial differents with below two lines?

@@ -723,13 +723,17 @@ void setup_section_temperature_control(ConfigReader cr){
 void setup_section_bus(ConfigReader cr){
     #define clk_pin_key "clk_pin"
     #define sda_pin_key "sda_pin"
+    
     ConfigReader::sub_section_map_t sub_section_bus;
     if(!cr.get_sub_sections("bus", sub_section_bus)) {
-        printf("ERROR:configure-bus: no bus section found\n");
+        printf("[E][RobotStart][Config][Bus] ERROR:configure-bus: no bus section found\n");
         return;
     }
     auto target_i2c = sub_section_bus.find("i2c_ads1115");
-    if(target_i2c == sub_section_bus.end()) return; // actuator not found and they must be in contiguous order
+    if(target_i2c == sub_section_bus.end()) {
+        printf("[E][RobotStart][setup_section_bus()] can't find i2c_ads1115.xxx\n");
+        return; 
+    }
 
     auto& this_i2c = target_i2c->second; // map of ic2 config values for this i2c
     OutputPin dc_sensor_sck_pin(cr.get_string(this_i2c, clk_pin_key, "nc"));
@@ -838,11 +842,11 @@ void smoothie_startup(void *)
         std::stringstream std_string_stream(std_string);
         ConfigReader cr(std_string_stream);
 #endif
+        setup_section_bus(cr);
 
         Planner *planner = new Planner();
         Conveyor *conveyor = new Conveyor();
         Robot *robot = new Robot();
-
         setup_section_genenal(cr);
         planner->configure(cr);
         conveyor->configure(cr);
@@ -853,7 +857,6 @@ void smoothie_startup(void *)
         setup_section_core(cr);
         setup_section_extruder(cr);
         setup_section_temperature_control(cr);
-        setup_section_bus(cr);
 
         // create all registered modules, the addresses are stored in a known location in flash
         //Xuming>>>

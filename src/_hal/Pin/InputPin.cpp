@@ -6,17 +6,17 @@ InputPin::InputPin(const char*  description): Pin(description){
 
 bool InputPin::start()
 {
-    if(__valid) {
-        if(this->__gpio_id <= MAX_MCU_GPIO_INDEX ){
+    if(valid_) {
+        if(this->gpio_id_ <= MAX_MCU_GPIO_INDEX ){
             if(this->is_pull_up) {
-                pinMode(this->__gpio_id, INPUT_PULLUP);
+                pinMode(this->gpio_id_, INPUT_PULLUP);
                 return true;
             } 
             if(this->is_pull_down){
-                pinMode(this->__gpio_id, INPUT_PULLDOWN);
+                pinMode(this->gpio_id_, INPUT_PULLDOWN);
                 return true;
             }
-            pinMode(this->__gpio_id, INPUT);
+            pinMode(this->gpio_id_, INPUT);
         }else{ //expaned gpio
 
         }
