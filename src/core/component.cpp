@@ -155,18 +155,18 @@ void PollingComponent::set_update_interval(uint32_t update_interval) { this->upd
 const std::string &Nameable::get_name() const { return this->name_; }
 void Nameable::set_name(const std::string &name) {
   this->name_ = name;
-  this->calc_object_id_();
+  // this->calc_object_id_();
 }
-Nameable::Nameable(const std::string &name) : name_(name) { this->calc_object_id_(); }
+Nameable::Nameable(const std::string &name) : name_(name) {  }
 
-const std::string &Nameable::get_object_id() { return this->object_id_; }
-bool Nameable::is_internal() const { return this->internal_; }
-void Nameable::set_internal(bool internal) { this->internal_ = internal; }
-void Nameable::calc_object_id_() {
-  this->object_id_ = sanitize_string_whitelist(to_lowercase_underscore(this->name_), HOSTNAME_CHARACTER_WHITELIST);
-  // FNV-1 hash
-  this->object_id_hash_ = fnv1_hash(this->object_id_);
-}
-uint32_t Nameable::get_object_id_hash() { return this->object_id_hash_; }
+// const std::string &Nameable::get_object_id() { return this->object_id_; }
+// bool Nameable::is_internal() const { return this->internal_; }
+// void Nameable::set_internal(bool internal) { this->internal_ = internal; }
+// void Nameable::calc_object_id_() {
+//   this->object_id_ = sanitize_string_whitelist(to_lowercase_underscore(this->name_), HOSTNAME_CHARACTER_WHITELIST);
+//   // FNV-1 hash
+//   this->object_id_hash_ = fnv1_hash(this->object_id_);
+// }
+// uint32_t Nameable::get_object_id_hash() { return this->object_id_hash_; }
 
 }  // namespace esphome

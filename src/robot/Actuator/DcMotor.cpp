@@ -60,6 +60,11 @@ void DcMotor::__goto_position(float target_position,float sensor_position){
     __pwm_pin.set_duty(duty);
 }
 
+float DcMotor::get_sensor_position(){
+    __ads1115.sample();
+    return __ads1115.get_raw_state();
+}
+
 
 
 

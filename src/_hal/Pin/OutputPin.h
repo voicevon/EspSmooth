@@ -1,6 +1,8 @@
 #pragma once
 #include "Pin.h"
 
+
+
 class OutputPin: public Pin 
 {
     public:
@@ -10,5 +12,6 @@ class OutputPin: public Pin
         virtual bool stop() override;
 
     private:
-
+        bool __is_started;
+        static uint8_t __GPIO_RANGE; 
 };

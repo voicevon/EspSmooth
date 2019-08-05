@@ -68,21 +68,22 @@ void setup_spiffs_reading(){
 #include "esp_log.h"
 #define LOG_LOCAL_LEVEL ESP_LOG_VERBOSE
 void setup_log(){
-    Serial.println("==============================================");
+    Serial.println(" ================ test log ================ ");
 
-    // esp_log_level_set("*", ESP_LOG_INFO);  
-    ESP_LOGE(TAG, "1Error");
-    ESP_LOGW(TAG, "1Warning");
-    ESP_LOGI(TAG, "1Info");
-    ESP_LOGD(TAG, "1Debug");
-    ESP_LOGV(TAG, "1Verbose");
+    esp_log_level_set("*", ESP_LOG_INFO);  
+    ESP_LOGE(TAG, "test1 Error");
+    ESP_LOGW(TAG, "test1 Warning");
+    ESP_LOGI(TAG, "test1 Info");
+    ESP_LOGD(TAG, "test1 Debug");
+    ESP_LOGV(TAG, "test1 Verbose");
 
     // esp_log_level_set(TAG,ESP_LOG_VERBOSE);  
-    ESP_LOGE(TAG, "Error");
-    ESP_LOGW(TAG, "Warning");
-    ESP_LOGI(TAG, "Info");
-    ESP_LOGD(TAG, "Debug");
-    ESP_LOGV(TAG, "Verbose");
+    ESP_LOGE(TAG, "test2 Error");
+    ESP_LOGW(TAG, "test2 Warning");
+    ESP_LOGI(TAG, "test2 Info");
+    ESP_LOGD(TAG, "test2 Debug");
+    ESP_LOGV(TAG, "test2 Verbose");
+    Serial.println(" ================ end of  test log ================ ");
 }
 
 
@@ -107,7 +108,11 @@ void setup_smooth(){
     
     // vTaskStartScheduler();    Don't call vTaskStartScheduler()     https://esp32.com/viewtopic.php?t=1336
 }
-
+// #include "Wire.h"
+// void test_i2c(){
+//     Wire.begin(14,15);
+//     printf("=====================\n");
+// }
 extern float float_value;
 extern void ControlMotors(TimerHandle_t xTimer);
 
@@ -115,7 +120,7 @@ void setup(){
     Serial.begin(115200);
     show_memory_allocate();
     setup_log();
-
+    // test_i2c();
     //setup_spiffs_writting();
     //setup_spiffs_reading();
     setup_smooth(); 
@@ -128,6 +133,9 @@ void setup(){
         printf("Timer for ControlMotors  start error \n");
     }
 }
+#include "robot/Robot.h"
+#include "robot/Actuator/DcMotor.h"
+
 
 uint64_t rtos_report_inteval_second = 5 ;
 uint64_t cpu_idle_counter = 0;
@@ -146,8 +154,13 @@ void loop(){
         cpu_idle_counter = 0;
         last_time_stamp = esp_timer_get_time();
 
-        printf("    Y Pos= %f", float_value);
+        DcMotor* dc =(DcMotor*) Robot::getInstance()->actuators[2];
+        float dc_angle = dc->get_sensor_position();
+
+        printf("    Y Pos= %f", dc_angle);
         printf("\n");
+
+        
     }
 
 }

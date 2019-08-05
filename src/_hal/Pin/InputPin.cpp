@@ -1,22 +1,23 @@
 #include "InputPin.h"
 
 InputPin::InputPin(const char*  description): Pin(description){
+	//check range in output {0,1,2,3,4,5,12,13,14,15,16,17,18,19,21,22,23,25,26,27,32,33,34,35,36,39}
 
 }
 
 bool InputPin::start()
 {
-    if(__valid) {
-        if(this->__gpio_id <= MAX_MCU_GPIO_INDEX ){
+    if(valid_) {
+        if(this->gpio_id_ <= MAX_MCU_GPIO_INDEX ){
             if(this->is_pull_up) {
-                pinMode(this->__gpio_id, INPUT_PULLUP);
+                pinMode(this->gpio_id_, INPUT_PULLUP);
                 return true;
             } 
             if(this->is_pull_down){
-                pinMode(this->__gpio_id, INPUT_PULLDOWN);
+                pinMode(this->gpio_id_, INPUT_PULLDOWN);
                 return true;
             }
-            pinMode(this->__gpio_id, INPUT);
+            pinMode(this->gpio_id_, INPUT);
         }else{ //expaned gpio
 
         }

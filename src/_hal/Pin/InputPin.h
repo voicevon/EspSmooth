@@ -14,5 +14,6 @@ class InputPin: public Pin{
         virtual bool stop() override;
         
     private:
+        static uint8_t __GPIO_RANGE; 
 
 };

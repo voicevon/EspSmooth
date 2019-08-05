@@ -63,11 +63,11 @@
 // actuator keys
 #define actuator_type_key               "motor_type"
 #define servo_pin_key                   "servo_pin"
-#define dc_pwm_pin_key                  "dc_pwm_pin"
-#define dc_sensor_clk_pin_key           "dc_sensor_clk_pin"
-#define dc_sensor_sda_pin_key           "dc_sensor_sda_pin"
-
 #define dc_dir_pin_key                  "dc_dir_pin"
+#define dc_pwm_pin_key                  "dc_pwm_pin"
+#define ads1115_address_key           "dc_sensor_clk_pin"
+#define ads1115_channel_key           "dc_sensor_sda_pin"
+
 #define step_pin_key                    "step_pin"
 #define dir_pin_key                     "dir_pin"
 #define en_pin_key                      "en_pin"
@@ -154,6 +154,7 @@ static const char* const actuator_keys[] = {
 #endif
 };
 
+extern esphome::ads1115::ADS1115Component* ads1115_component;
 bool Robot::configure(ConfigReader& cr)
 {
     ConfigReader::section_map_t m;
@@ -231,16 +232,7 @@ bool Robot::configure(ConfigReader& cr)
             printf("Warning:configure-robot: g92_offset config is bad\n");
         }
     }
-    // configure the board: i2c, spi, s2c, etc...
-    ConfigReader::sub_section_map_t ss_board;
-    if(!cr.get_sub_sections("board", ss_board)) {
-        printf("ERROR:configure-board: no board section found\n");
-        return false;
-    }
-    OutputPin dc_sensor_sck_pin(cr.get_string(ss_board, dc_sensor_clk_pin_key, "nc"));
-    InputPin dc_sensor_sda_pin(cr.get_string(ss_board, dc_sensor_sda_pin_key, "nc"));
-
-
+    
     // configure the actuators
     ConfigReader::sub_section_map_t ssm;
     if(!cr.get_sub_sections("actuator", ssm)) {
@@ -311,28 +303,17 @@ bool Robot::configure(ConfigReader& cr)
 
                     OutputPin dc_dir_pin(cr.get_string(mm, dc_dir_pin_key, "nc"));
                     PwmPin dc_pwm_pin(cr.get_string(mm, dc_pwm_pin_key, "nc"));
-                    OutputPin dc_sensor_sck_pin(cr.get_string(mm, dc_sensor_clk_pin_key, "nc"));
-                    InputPin dc_sensor_sda_pin(cr.get_string(mm, dc_sensor_sda_pin_key, "nc"));
-                    printf("    [D][robot][config:%s]  for dc motor pins: dir= %s, pwm= %s, sck= %s, sda= %s \n", 
+                    int ads1115_addr = cr.get_int(mm,ads1115_address_key,0);
+                    int ads1115_channel = cr.get_int(mm,ads1115_channel_key,0);
+                    // OutputPin dc_sensor_sck_pin(cr.get_string(mm, dc_sensor_clk_pin_key, "nc"));
+                    // InputPin dc_sensor_sda_pin(cr.get_string(mm, dc_sensor_sda_pin_key, "nc"));
+
+                    printf("    [D][robot][config:%s]  for dc motor pins: dir= %s, pwm= %s, ads1115_addr= %i, ads1115_channel= %i \n", 
                                             s->first.c_str(), dc_dir_pin.to_string().c_str(),
                                                                 dc_pwm_pin.to_string().c_str(),
-                                                                dc_sensor_sck_pin.to_string().c_str(),
-                                                                dc_sensor_sda_pin.to_string().c_str()
-                                                                );
+                                                                ads1115_addr, ads1115_channel );
                     
-                    esphome::i2c::I2CComponent* i2c_component =new esphome::i2c::I2CComponent();
-                    i2c_component->set_scl_pin(dc_sensor_sck_pin.get_gpio_id());
-                    i2c_component->set_sda_pin(dc_sensor_sda_pin.get_gpio_id());
-                    i2c_component->set_frequency(400000);
-                    i2c_component->set_scan(false);
-                    i2c_component->setup();
-                    printf("-----I2CComponent\n");
-                    // ads1115_sensor.set_icon
-                    esphome::ads1115::ADS1115Component* ads1115_component = new esphome::ads1115::ADS1115Component();
-                    ads1115_component->set_i2c_parent(i2c_component);
-                    ads1115_component->set_i2c_address(0x48);
-                    ads1115_component->setup();
-                    printf("-----ADS1115Component\n");
+                    
                     //question here: what is the essencial differents with below two lines?
                     // esphome::ads1115::ADS1115Sensor ads1115_sensor();
                     esphome::ads1115::ADS1115Sensor ads1115_sensor = esphome::ads1115::ADS1115Sensor();

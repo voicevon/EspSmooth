@@ -15,6 +15,7 @@ class DcMotor:public Actuator
         virtual bool step() override;
         virtual void enable(bool state) override;
         void goto_position(float target_position);
+        float get_sensor_position();
 
     private:
         OutputPin __dir_pin;

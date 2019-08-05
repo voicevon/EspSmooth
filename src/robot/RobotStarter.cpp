@@ -32,7 +32,8 @@
 #include "_hal/Pin/OutputPin.h"
 #include "_hal/stopwatch.h"
 #include "_hal/spiffs_ext.h"
-
+#include "component/i2c.h"
+#include "component/ads1115.h"
 // static const char *TAG = "StartUp";
 
 static bool system_running= false;
@@ -603,12 +604,12 @@ void safe_sleep(uint32_t ms)
 
 //float get_pll1_clk();
 
-//#define CONFIG_SOURCE_SD 1
+#define CONFIG_SOURCE_SD 1
 #define CONFIG_SOURCE_SPIFFS 2
-// #define CONFIG_SOURCE_CODED_STRING 3
+#define CONFIG_SOURCE_CODED_STRING 3
+#define CONFIG_SOURCE 2
 
-
-#ifdef CONFIG_SOURCE_CODED_STRING
+#if CONFIG_SOURCE == CONFIG_SOURCE_CODED_STRING
 //Xuming>>>
 #include STRING_CONFIG_H    //not impliment in origin SmoothieV2
 static std::string str(string_config);
@@ -616,11 +617,11 @@ static std::stringstream ss(str);
 //<<<Xuming
 #endif
 
-#ifdef CONFIG_SOURCE_SD
+#if CONFIG_SOURCE == CONFIG_SOURCE_SD
 extern "C" bool setup_sdmmc();
 #endif
 
-#ifdef CONFIG_SOURCE_SPIFFS
+#if CONFIG_SOURCE == CONFIG_SOURCE_SPIFFS
 
 #endif
 
@@ -704,6 +705,7 @@ void setup_section_extruder(ConfigReader cr){
     }
 }
 
+esphome::ads1115::ADS1115Component* ads1115_component;
 void setup_section_temperature_control(ConfigReader cr){
     if(AdcPin::setup()) {
         // this creates any configured temperature controls
@@ -715,6 +717,43 @@ void setup_section_temperature_control(ConfigReader cr){
         printf("ERROR: ADC failed to setup\n");
     }
     //  printf ("[OK][setup.temperature.controls] bbbbbbbbbbbbbbbbbbb\n");
+}
+
+// configure the board: i2c, spi, s2c, etc...
+void setup_section_bus(ConfigReader cr){
+    #define scl_pin_key "scl_pin"
+    #define sda_pin_key "sda_pin"
+    
+    ConfigReader::sub_section_map_t sub_section_bus;
+    if(!cr.get_sub_sections("bus", sub_section_bus)) {
+        printf("[E][RobotStart][Config][Bus] ERROR:configure-bus: no bus section found\n");
+        return;
+    }
+    auto target_i2c = sub_section_bus.find("i2c_ads1115");
+    if(target_i2c == sub_section_bus.end()) {
+        printf("[E][RobotStart][setup_section_bus()] can't find i2c_ads1115.xxx\n");
+        return; 
+    }
+
+    auto& this_i2c = target_i2c->second; // map of ic2 config values for this i2c
+    OutputPin ads1115_scl_pin(cr.get_string(this_i2c, scl_pin_key, "nc"));
+    InputPin adc1115_sda_pin(cr.get_string(this_i2c, sda_pin_key, "nc"));
+
+    esphome::i2c::I2CComponent* i2c_component =new esphome::i2c::I2CComponent();
+    i2c_component->set_scl_pin(ads1115_scl_pin.get_gpio_id());
+    i2c_component->set_sda_pin(adc1115_sda_pin.get_gpio_id());
+    i2c_component->set_frequency(400000);
+    i2c_component->set_scan(false);
+    i2c_component->dump_config();   //Doesn't work!
+    i2c_component->setup();
+    printf("-----I2CComponent\n");
+    // ads1115_sensor.set_icon
+    ads1115_component = new esphome::ads1115::ADS1115Component();
+    ads1115_component->set_i2c_parent(i2c_component);
+    ads1115_component->set_i2c_address(0x48);
+    ads1115_component->setup();
+    printf("-----ADS1115Component\n");
+
 }
 
 // configure voltage monitors if any
@@ -768,7 +807,7 @@ void smoothie_startup(void *)
     bool ok = false;
     // open the config file
     do {
-#ifdef CONFIG_SOURCE_SD
+#if CONFIG_SOURCE == CONFIG_SOURCE_SD
         static FATFS fatfs; /* File system object */
         if(!setup_sdmmc()) {
             std::cout << "Error: setting up sdmmc\n";
@@ -795,20 +834,21 @@ void smoothie_startup(void *)
         ConfigReader cr(fs);
         printf("DEBUG: Starting configuration of modules from sdcard...\n");
 #endif
-#ifdef CONFIG_SOURCE_CODED_STRING
+#if CONFIG_SOURCE == CONFIG_SOURCE_CODED_STRING
         ConfigReader cr(ss);
         printf("DEBUG: Starting configuration of modules from memory...\n");
 #endif
-#ifdef CONFIG_SOURCE_SPIFFS
+#if CONFIG_SOURCE == CONFIG_SOURCE_SPIFFS
         std::string std_string = spiffs_reading();
         std::stringstream std_string_stream(std_string);
         ConfigReader cr(std_string_stream);
 #endif
+        printf(" *************************** loading from config.ini *************************** \n");
+        setup_section_bus(cr);
 
         Planner *planner = new Planner();
         Conveyor *conveyor = new Conveyor();
         Robot *robot = new Robot();
-
         setup_section_genenal(cr);
         planner->configure(cr);
         conveyor->configure(cr);
@@ -819,7 +859,6 @@ void smoothie_startup(void *)
         setup_section_core(cr);
         setup_section_extruder(cr);
         setup_section_temperature_control(cr);
-        
 
         // create all registered modules, the addresses are stored in a known location in flash
         //Xuming>>>
@@ -843,7 +882,7 @@ void smoothie_startup(void *)
 
         setup_section_voltage_monitors(cr);
         
-#ifdef CONFIG_SOURCE_SD
+#if CONFIG_SOURCE == CONFIG_SOURCE_SD
         // close the file stream
         fs.close();
 

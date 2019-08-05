@@ -78,7 +78,7 @@ void ADS1115Component::dump_config() {
   }
 
   for (auto *sensor : this->sensors_) {
-    LOG_SENSOR("  ", "Sensor", sensor);
+    // LOG_SENSOR("  ", "Sensor", sensor);
     ESP_LOGCONFIG(TAG, "    Multiplexer: %u", sensor->get_multiplexer());
     ESP_LOGCONFIG(TAG, "    Gain: %u", sensor->get_gain());
   }
