@@ -1,6 +1,7 @@
 #include "DcMotor.h"
 #include "_hal/Pin/PinHelper.h"
 #include "stdio.h"
+#include "HardwareSerial.h"
 
 const int PWM_FREQ = 50;    // 50Hz  20ms 
 const int PWM_RESOLUTION_BITS = 16;     // 16 bit resolution
@@ -19,8 +20,10 @@ DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin,esphome::ads1115::ADS1115Se
 // Called by timer.
 void DcMotor::pid_loop(float target_position){
     if(!__enabled) return;   //??
+    Serial.print("*");
     __sensor_position = __ads1115.sample();
-    
+    return;
+
     if(isnan(__sensor_position)) return;  //??
     float duty = __pid_controller.get_output_value(target_position,__sensor_position);
     duty *= 10000.0f;

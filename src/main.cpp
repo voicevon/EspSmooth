@@ -126,11 +126,11 @@ void setup(){
     setup_smooth(); 
 
     delay(5000);   //Keep uartTx empty for Printrun handshaking.
-    int interval = 20;
+    int interval = 1000;
     int id = 1;
     TimerHandle_t tmr = xTimerCreate("ControlMotors", pdMS_TO_TICKS(interval), pdTRUE, ( void * )id, &ControlMotors);
     if( xTimerStart(tmr, 10 ) != pdPASS ) {
-        printf("Timer for ControlMotors  start error \n");
+        printf("[E][setup] Timer for ControlMotors  start error \n");
     }
 }
 #include "robot/Robot.h"

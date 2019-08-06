@@ -86,7 +86,7 @@ void ADS1115Component::dump_config() {
 
 
 float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
-  // printf("[D][ADS1115Component] request_measurement at entrance.\n");
+  printf("[D][ADS1115Component] request_measurement at entrance.\n");
   uint16_t config = this->prev_config_;
   // Multiplexer
   //        0bxBBBxxxxxxxxxxxx
@@ -102,10 +102,11 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
     // Start conversion
     config |= 0b1000000000000000;
   }
+  return 1.0f;
 
   if (!this->continuous_mode_ || this->prev_config_ != config) {
     if (!this->write_byte_16(ADS1115_REGISTER_CONFIG, config)) {
-      this->status_set_warning();
+      printf("[E][ADS1115Component] write_byte_16 error.\n");
       return NAN;
     }
     this->prev_config_ = config;
@@ -116,7 +117,7 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
     uint32_t start = millis();
     while (this->read_byte_16(ADS1115_REGISTER_CONFIG, &config) && (config >> 15) == 0) {
       if (millis() - start > 100) {
-        ESP_LOGW(TAG, "Reading ADS1115 timed out");
+        printf("[E][ADS1115Component] Reading ADS1115 timed out.\n");
         this->status_set_warning();
         return NAN;
       }

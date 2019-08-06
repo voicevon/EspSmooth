@@ -13,7 +13,8 @@ void ControlMotors(TimerHandle_t xTimer){
     ServoMotor* servoMotor;
     DcMotor* dcMotor;
     XuefengMotor* xuefengMotor;
-    while(true){
+    // while(true){
+        printf("[D][TimerTask][ControlMotors] at entrance.\n");
         Robot* robot = Robot::getInstance();
         for(int i=0; i<3;i++){
             Actuator* actuator = robot->actuators[i];
@@ -41,8 +42,9 @@ void ControlMotors(TimerHandle_t xTimer){
                 break;
             }
         }   
+        printf(">>>>>>>>>>>>>>>>>>>>>>>>>> exiting task>>>>>>>>>>>>\n");
         // without this, will  reboot. Why? Aug 2019 Xuming 
         // possible reason1: previous PWM writing is not finished. 
-        delay(100);  //Can be shorter? faster? smoothier?
-    }
+        // delay(100);  //Can be shorter? faster? smoothier?
+    // }
 }
