@@ -90,7 +90,7 @@ void ADS1115Component::dump_config() {
 
 
 float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
-  printf("[D][ADS1115Component] request_measurement at entrance.\n");
+  // printf("[D][ADS1115Component] request_measurement at entrance.\n");
   uint16_t config = this->prev_config_;
   // Multiplexer
   //        0bxBBBxxxxxxxxxxxx
@@ -111,6 +111,7 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
     printf("aaaaaaaaaaaaa\n");
     if (!this->write_byte_16(ADS1115_REGISTER_CONFIG, config)) {
       printf("[E][ADS1115Component] write_byte_16 error.\n");
+      return 1.0f;
       return NAN;
     }
     this->prev_config_ = config;
@@ -118,24 +119,26 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
     // about 1.6 ms with 860 samples per second
     delay(2);
     printf("bbbbbbbbbbbbb\n");
-    
-    return 1.0f;
+
 
     uint32_t start = millis();
     while (this->read_byte_16(ADS1115_REGISTER_CONFIG, &config) && (config >> 15) == 0) {
       if (millis() - start > 100) {
         printf("[E][ADS1115Component] Reading ADS1115 timed out.\n");
         this->status_set_warning();
+        return 1.5f;
         return NAN;
       }
       yield();
     }
   }
+  return 2.0f;
 
   uint16_t raw_conversion;
   if (!this->read_byte_16(ADS1115_REGISTER_CONVERSION, &raw_conversion)) {
     printf("[E][ADS1115Component] read raw_conversion wrong.\n");
-    return NAN;
+    // return NAN;
+    return 2.5f;
   }
 
   auto signed_conversion = static_cast<int16_t>(raw_conversion);
@@ -166,7 +169,7 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
   }
 
   this->status_clear_warning();
-  return millivolts / 1000.0f;
+  return millivolts ;
 }
 
 float ADS1115Sensor::sample() { return this->parent_->request_measurement(this); }

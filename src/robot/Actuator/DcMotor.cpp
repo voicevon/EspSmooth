@@ -22,11 +22,11 @@ void DcMotor::pid_loop(float target_position){
     if(!__enabled) return;   //??
     Serial.print("*");
     __sensor_position = __ads1115.sample();
-    return;
+    if(__sensor_position <10) return;    // there is an error.
 
     if(isnan(__sensor_position)) return;  //??
     float duty = __pid_controller.get_output_value(target_position,__sensor_position);
-    duty *= 10000.0f;
+    duty *= 10.0f;
     // printf("state =%i, target= %f, sensor = %f, duty= %f \n", __enabled, target_position, __sensor_position,duty);
     __pwm_pin.set_duty(duty);
 }

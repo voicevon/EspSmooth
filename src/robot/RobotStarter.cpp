@@ -739,7 +739,7 @@ void setup_section_bus(ConfigReader cr){
     OutputPin ads1115_scl_pin(cr.get_string(this_i2c, scl_pin_key, "nc"));
     InputPin adc1115_sda_pin(cr.get_string(this_i2c, sda_pin_key, "nc"));
 
-    esphome::i2c::I2CComponent* i2c_component =new esphome::i2c::I2CComponent();
+    esphome::i2c::I2CComponent* i2c_component = new esphome::i2c::I2CComponent();
     i2c_component->set_scl_pin(ads1115_scl_pin.get_gpio_id());
     i2c_component->set_sda_pin(adc1115_sda_pin.get_gpio_id());
     i2c_component->set_frequency(200000);
@@ -751,7 +751,7 @@ void setup_section_bus(ConfigReader cr){
     ads1115_component = new esphome::ads1115::ADS1115Component();
     ads1115_component->set_i2c_parent(i2c_component);
     ads1115_component->set_i2c_address(0x48);
-    // ads1115_component->set_continuous_mode(true);
+    ads1115_component->set_continuous_mode(true);
     ads1115_component->setup();
     printf("-----ADS1115Component\n");
 

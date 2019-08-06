@@ -154,7 +154,7 @@ static const char* const actuator_keys[] = {
 #endif
 };
 
-extern esphome::ads1115::ADS1115Component* ads1115_component;
+extern esphome::ads1115::ADS1115Component* ads1115_component;    //from RobotStart.cpp
 bool Robot::configure(ConfigReader& cr)
 {
     ConfigReader::section_map_t m;
