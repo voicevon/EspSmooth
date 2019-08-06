@@ -303,6 +303,9 @@ bool Robot::configure(ConfigReader& cr)
 
                     OutputPin dc_dir_pin(cr.get_string(mm, dc_dir_pin_key, "nc"));
                     PwmPin dc_pwm_pin(cr.get_string(mm, dc_pwm_pin_key, "nc"));
+                    DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin);
+                    new_actuator = new_dc;
+                    // read config, and get ads1115 configuration. create sensor.
                     int ads1115_addr = cr.get_int(mm,ads1115_address_key,0);
                     int ads1115_channel = cr.get_int(mm,ads1115_channel_key,0);
                     // OutputPin dc_sensor_sck_pin(cr.get_string(mm, dc_sensor_clk_pin_key, "nc"));
@@ -321,8 +324,8 @@ bool Robot::configure(ConfigReader& cr)
                     ads1115_sensor.set_multiplexer(esphome::ads1115::ADS1115_MULTIPLEXER_P1_NG);
                     ads1115_sensor.set_gain(esphome::ads1115::ADS1115_GAIN_6P144);
                     ads1115_sensor.setup();
-                    DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin,ads1115_sensor);
-                    new_actuator = new_dc;
+                    // create DcMotorController.
+                    // create task  for this controller.
                     printf("-----ADS1115Sensor\n");
                 }
                 break;

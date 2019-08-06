@@ -11,7 +11,7 @@ class DcMotor:public Actuator
 {
     public:
         
-        DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin,esphome::ads1115::ADS1115Sensor& ads1115_sensor);
+        DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin);
         virtual bool step() override;
         virtual void enable(bool state) override;
         void goto_position(float target_position);
