@@ -27,7 +27,7 @@ class DcMotor:public Actuator
         float __sensor_position;
         MotorPidController __pid_controller;
         esphome::ads1115::ADS1115Component* ads1115_component;
-        esphome::ads1115::ADS1115Sensor __ads1115;
+        // esphome::ads1115::ADS1115Sensor __ads1115;
         void __goto_position(float target_position,float sensor_position);
 };
 

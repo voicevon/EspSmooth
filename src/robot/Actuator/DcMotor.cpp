@@ -14,14 +14,14 @@ DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin,esphome::ads1115::ADS1115Se
     __dir_pin = OutputPin(dir_pin);
     __pwm_pin = PwmPin(pwm_pin);
 
-     __ads1115 = ads1115_sensor; 
+    //  __ads1115 = ads1115_sensor; 
 }
 
 // Called by timer.
 void DcMotor::pid_loop(float target_position){
     if(!__enabled) return;   //??
     Serial.print("*");
-    __sensor_position = __ads1115.sample();
+    // __sensor_position = __ads1115.sample();
     if(__sensor_position <10) return;    // there is an error.
 
     if(isnan(__sensor_position)) return;  //??
@@ -61,7 +61,7 @@ void DcMotor::enable(bool state){
 }
 
 float DcMotor::for_test_read_sensor_position(){
-    __sensor_position = __ads1115.sample();
+    // __sensor_position = __ads1115.sample();
     return __sensor_position;
 }
 

@@ -1,5 +1,5 @@
 #include "ads1115.h"
-#include "core2/log.h"
+#include "esphome/core/log.h"
 
 namespace esphome {
 namespace ads1115 {
