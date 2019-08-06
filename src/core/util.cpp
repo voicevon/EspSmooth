@@ -1,19 +1,18 @@
-#include "core2/util.h"
-// #include "core/defines.h"
-// #include "core/application.h"
-// #include "core/version.h"
-#define USE_WIFI
+#include "esphome/core/util.h"
+#include "esphome/core/defines.h"
+#include "esphome/core/application.h"
+#include "esphome/core/version.h"
 
 #ifdef USE_WIFI
-#include "component/wifi/wifi_component.h"
+#include "esphome/components/wifi/wifi_component.h"
 #endif
 
 #ifdef USE_API
-#include "components/api/api_server.h"
+#include "esphome/components/api/api_server.h"
 #endif
 
 #ifdef USE_ETHERNET
-#include "components/ethernet/ethernet_component.h"
+#include "esphome/components/ethernet/ethernet_component.h"
 #endif
 
 #ifdef ARDUINO_ARCH_ESP32
@@ -40,7 +39,7 @@ bool network_is_connected() {
 }
 
 void network_setup_mdns() {
-  // MDNS.begin(App.get_name().c_str());
+  MDNS.begin(App.get_name().c_str());
 #ifdef USE_API
   if (api::global_api_server != nullptr) {
     MDNS.addService("esphomelib", "tcp", api::global_api_server->get_port());
@@ -52,7 +51,7 @@ void network_setup_mdns() {
     // Publish "http" service if not using native API.
     // This is just to have *some* mDNS service so that .local resolution works
     MDNS.addService("http", "tcp", 80);
-    MDNS.addServiceTxt("http", "tcp", "version", "0.10");
+    MDNS.addServiceTxt("http", "tcp", "version", ESPHOME_VERSION);
 #ifdef USE_API
   }
 #endif

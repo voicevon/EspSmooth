@@ -3,20 +3,23 @@
 #ifdef ARDUINO_ARCH_ESP32
 #include <esp_wifi.h>
 #endif
+#ifdef ARDUINO_ARCH_ESP8266
+#include <user_interface.h>
+#endif
 
 #include <utility>
 #include <algorithm>
 #include "lwip/err.h"
 #include "lwip/dns.h"
 
-#include "core2/helpers.h"
-#include "core2/log.h"
-// #include "core/esphal.h"
-#include "core2/util.h"
-// #include "core/application.h"
+#include "esphome/core/helpers.h"
+#include "esphome/core/log.h"
+#include "esphome/core/esphal.h"
+#include "esphome/core/util.h"
+#include "esphome/core/application.h"
 
 #ifdef USE_CAPTIVE_PORTAL
-#include "components/captive_portal/captive_portal.h"
+#include "esphome/components/captive_portal/captive_portal.h"
 #endif
 
 namespace esphome {
@@ -27,8 +30,7 @@ static const char *TAG = "wifi";
 float WiFiComponent::get_setup_priority() const { return setup_priority::WIFI; }
 
 void WiFiComponent::setup() {
-  // printf("\nSetting up WiFi...");
-  printf("\nSetting up WiFi...");
+  ESP_LOGCONFIG(TAG, "Setting up WiFi...");
   this->last_connected_ = millis();
   this->wifi_pre_setup_();
 
@@ -36,8 +38,7 @@ void WiFiComponent::setup() {
     this->wifi_sta_pre_setup_();
 
     if (!this->wifi_apply_power_save_()) {
-      // ESP_LOGV(TAG, "Setting Power Save Option failed!");
-      printf( "Setting Power Save Option failed!");
+      ESP_LOGV(TAG, "Setting Power Save Option failed!");
     }
 
     if (this->fast_connect_) {
@@ -84,7 +85,7 @@ void WiFiComponent::loop() {
 
       case WIFI_COMPONENT_STATE_STA_CONNECTED: {
         if (!this->is_connected()) {
-          printf("\nWiFi Connection lost... Reconnecting...");
+          ESP_LOGW(TAG, "WiFi Connection lost... Reconnecting...");
           this->retry_connect();
         } else {
           this->status_clear_warning();
@@ -99,7 +100,7 @@ void WiFiComponent::loop() {
 
     if (this->has_ap() && !this->ap_setup_) {
       if (now - this->last_connected_ > this->ap_timeout_) {
-        printf("\nStarting fallback AP!");
+        ESP_LOGI(TAG, "Starting fallback AP!");
         this->setup_ap_config_();
 #ifdef USE_CAPTIVE_PORTAL
         captive_portal::global_captive_portal->start();
@@ -109,8 +110,8 @@ void WiFiComponent::loop() {
 
     if (!this->has_ap() && this->reboot_timeout_ != 0) {
       if (now - this->last_connected_ > this->reboot_timeout_) {
-        printf("\nCan't connect to WiFi, rebooting...");
-        // App.reboot();
+        ESP_LOGE(TAG, "Can't connect to WiFi, rebooting...");
+        App.reboot();
       }
     }
   }
@@ -132,7 +133,7 @@ IPAddress WiFiComponent::get_ip_address() {
 }
 std::string WiFiComponent::get_use_address() const {
   if (this->use_address_.empty()) {
-    // return App.get_name() + ".local";
+    return App.get_name() + ".local";
   }
   return this->use_address_;
 }
@@ -143,19 +144,19 @@ void WiFiComponent::setup_ap_config_() {
   if (this->ap_setup_)
     return;
 
-  printf("\nSetting up AP...");
+  ESP_LOGCONFIG(TAG, "Setting up AP...");
 
-  printf("\n  AP SSID: '%s'", this->ap_.get_ssid().c_str());
-  printf("\n  AP Password: '%s'", this->ap_.get_password().c_str());
+  ESP_LOGCONFIG(TAG, "  AP SSID: '%s'", this->ap_.get_ssid().c_str());
+  ESP_LOGCONFIG(TAG, "  AP Password: '%s'", this->ap_.get_password().c_str());
   if (this->ap_.get_manual_ip().has_value()) {
     auto manual = *this->ap_.get_manual_ip();
-    printf("\n  AP Static IP: '%s'", manual.static_ip.toString().c_str());
-    printf("\n  AP Gateway: '%s'", manual.gateway.toString().c_str());
-    printf("\n  AP Subnet: '%s'", manual.subnet.toString().c_str());
+    ESP_LOGCONFIG(TAG, "  AP Static IP: '%s'", manual.static_ip.toString().c_str());
+    ESP_LOGCONFIG(TAG, "  AP Gateway: '%s'", manual.gateway.toString().c_str());
+    ESP_LOGCONFIG(TAG, "  AP Subnet: '%s'", manual.subnet.toString().c_str());
   }
 
   this->ap_setup_ = this->wifi_start_ap_(this->ap_);
-  printf("\n  IP Address: %s", this->wifi_soft_ap_ip().toString().c_str());
+  ESP_LOGCONFIG(TAG, "  IP Address: %s", this->wifi_soft_ap_ip().toString().c_str());
 
   if (!this->has_sta()) {
     this->state_ = WIFI_COMPONENT_STATE_AP;
@@ -173,7 +174,7 @@ void WiFiComponent::set_sta(const WiFiAP &ap) {
 }
 
 void WiFiComponent::start_connecting(const WiFiAP &ap, bool two) {
-  printf("\nWiFi Connecting to '%s'...", ap.get_ssid().c_str());
+  ESP_LOGI(TAG, "WiFi Connecting to '%s'...", ap.get_ssid().c_str());
 #ifdef ESPHOME_LOG_HAS_VERBOSE
   ESP_LOGV(TAG, "Connection Params:");
   ESP_LOGV(TAG, "  SSID: '%s'", ap.get_ssid().c_str());
@@ -201,7 +202,7 @@ void WiFiComponent::start_connecting(const WiFiAP &ap, bool two) {
 #endif
 
   if (!this->wifi_sta_connect_(ap)) {
-    printf("\nwifi_sta_connect_ failed!");
+    ESP_LOGE(TAG, "wifi_sta_connect_ failed!");
     this->retry_connect();
     return;
   }
@@ -263,29 +264,28 @@ void WiFiComponent::print_connect_params_() {
   if (raw_bssid != nullptr)
     memcpy(bssid, raw_bssid, sizeof(bssid));
 
-  printf("\n  SSID: " LOG_SECRET("'%s'"), WiFi.SSID().c_str());
-  printf("\n  IP Address: %s", WiFi.localIP().toString().c_str());
-  printf("\n  BSSID: " LOG_SECRET("%02X:%02X:%02X:%02X:%02X:%02X"), bssid[0], bssid[1], bssid[2], bssid[3],
+  ESP_LOGCONFIG(TAG, "  SSID: " LOG_SECRET("'%s'"), WiFi.SSID().c_str());
+  ESP_LOGCONFIG(TAG, "  IP Address: %s", WiFi.localIP().toString().c_str());
+  ESP_LOGCONFIG(TAG, "  BSSID: " LOG_SECRET("%02X:%02X:%02X:%02X:%02X:%02X"), bssid[0], bssid[1], bssid[2], bssid[3],
                 bssid[4], bssid[5]);
-  // printf("\n  Hostname: '%s'", App.get_name().c_str());
+  ESP_LOGCONFIG(TAG, "  Hostname: '%s'", App.get_name().c_str());
   char signal_bars[50];
   int8_t rssi = WiFi.RSSI();
   print_signal_bars(rssi, signal_bars);
-  printf("\n  Signal strength: %d dB %s", rssi, signal_bars);
+  ESP_LOGCONFIG(TAG, "  Signal strength: %d dB %s", rssi, signal_bars);
   if (this->selected_ap_.get_bssid().has_value()) {
     ESP_LOGV(TAG, "  Priority: %.1f", this->get_sta_priority(*this->selected_ap_.get_bssid()));
   }
-  printf("\n  Channel: %d", WiFi.channel());
-  printf("\n  Subnet: %s", WiFi.subnetMask().toString().c_str());
-  printf("\n  Gateway: %s", WiFi.gatewayIP().toString().c_str());
-  printf("\n  DNS1: %s", WiFi.dnsIP(0).toString().c_str());
-  printf("\n  DNS2: %s", WiFi.dnsIP(1).toString().c_str());
+  ESP_LOGCONFIG(TAG, "  Channel: %d", WiFi.channel());
+  ESP_LOGCONFIG(TAG, "  Subnet: %s", WiFi.subnetMask().toString().c_str());
+  ESP_LOGCONFIG(TAG, "  Gateway: %s", WiFi.gatewayIP().toString().c_str());
+  ESP_LOGCONFIG(TAG, "  DNS1: %s", WiFi.dnsIP(0).toString().c_str());
+  ESP_LOGCONFIG(TAG, "  DNS2: %s", WiFi.dnsIP(1).toString().c_str());
 }
 
 void WiFiComponent::start_scanning() {
   this->action_started_ = millis();
   ESP_LOGD(TAG, "Starting scan...");
-  printf( "Starting scan...");
   this->wifi_scan_start_();
   this->state_ = WIFI_COMPONENT_STATE_STA_SCANNING;
 }
@@ -293,7 +293,7 @@ void WiFiComponent::start_scanning() {
 void WiFiComponent::check_scanning_finished() {
   if (!this->scan_done_) {
     if (millis() - this->action_started_ > 30000) {
-      printf("\nScan timeout!");
+      ESP_LOGE(TAG, "Scan timeout!");
       this->retry_connect();
     }
     return;
@@ -345,7 +345,7 @@ void WiFiComponent::check_scanning_finished() {
     print_signal_bars(res.get_rssi(), signal_bars);
 
     if (res.get_matches()) {
-      printf("\n- '%s' %s" LOG_SECRET("(%s) ") "%s", res.get_ssid().c_str(),
+      ESP_LOGI(TAG, "- '%s' %s" LOG_SECRET("(%s) ") "%s", res.get_ssid().c_str(),
                res.get_is_hidden() ? "(HIDDEN) " : "", bssid_s, signal_bars);
       ESP_LOGD(TAG, "    Channel: %u", res.get_channel());
       ESP_LOGD(TAG, "    RSSI: %d dB", res.get_rssi());
@@ -355,7 +355,7 @@ void WiFiComponent::check_scanning_finished() {
   }
 
   if (!this->scan_result_[0].get_matches()) {
-    printf("\nNo matching network found!");
+    ESP_LOGW(TAG, "No matching network found!");
     this->retry_connect();
     return;
   }
@@ -396,7 +396,7 @@ void WiFiComponent::check_scanning_finished() {
 }
 
 void WiFiComponent::dump_config() {
-  printf("\nWiFi:");
+  ESP_LOGCONFIG(TAG, "WiFi:");
   this->print_connect_params_();
 }
 
@@ -404,7 +404,7 @@ void WiFiComponent::check_connecting_finished() {
   wl_status_t status = this->wifi_sta_status_();
 
   if (status == WL_CONNECTED) {
-    printf("\nWiFi Connected!");
+    ESP_LOGI(TAG, "WiFi Connected!");
     this->print_connect_params_();
 
     if (this->has_ap()) {
@@ -423,13 +423,13 @@ void WiFiComponent::check_connecting_finished() {
 
   uint32_t now = millis();
   if (now - this->action_started_ > 30000) {
-    printf("\nTimeout while connecting to WiFi.");
+    ESP_LOGW(TAG, "Timeout while connecting to WiFi.");
     this->retry_connect();
     return;
   }
 
   if (this->error_from_callback_) {
-    printf("\nError while connecting to network.");
+    ESP_LOGW(TAG, "Error while connecting to network.");
     this->retry_connect();
     return;
   }
@@ -442,18 +442,18 @@ void WiFiComponent::check_connecting_finished() {
   }
 
   if (status == WL_NO_SSID_AVAIL) {
-    printf("\nWiFi network can not be found anymore.");
+    ESP_LOGW(TAG, "WiFi network can not be found anymore.");
     this->retry_connect();
     return;
   }
 
   if (status == WL_CONNECT_FAILED) {
-    printf("\nConnecting to WiFi network failed. Are the credentials wrong?");
+    ESP_LOGW(TAG, "Connecting to WiFi network failed. Are the credentials wrong?");
     this->retry_connect();
     return;
   }
 
-  printf("\nWiFi Unknown connection status %d", status);
+  ESP_LOGW(TAG, "WiFi Unknown connection status %d", status);
 }
 
 void WiFiComponent::retry_connect() {
@@ -466,7 +466,7 @@ void WiFiComponent::retry_connect() {
   delay(10);
   if (!this->is_captive_portal_active_() && (this->num_retried_ > 5 || this->error_from_callback_)) {
     // If retry failed for more than 5 times, let's restart STA
-    printf("\nRestarting WiFi adapter...");
+    ESP_LOGW(TAG, "Restarting WiFi adapter...");
     this->wifi_mode_(false, {});
     delay(100);
     this->num_retried_ = 0;

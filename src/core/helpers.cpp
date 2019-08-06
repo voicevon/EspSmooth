@@ -1,4 +1,4 @@
-#include "core2/helpers.h"
+#include "esphome/core/helpers.h"
 #include <cstdio>
 #include <algorithm>
 
@@ -8,8 +8,8 @@
 #include <Esp.h>
 #endif
 
-#include "core2/log.h"
-// #include "core/esphal.h"
+#include "esphome/core/log.h"
+#include "esphome/core/esphal.h"
 
 namespace esphome {
 

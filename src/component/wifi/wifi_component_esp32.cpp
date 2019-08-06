@@ -9,11 +9,11 @@
 #include "lwip/err.h"
 #include "lwip/dns.h"
 
-#include "core2/helpers.h"
-#include "core2/log.h"
-#include "core2/esphal.h"
-// #include "core/application.h"
-#include "core2/util.h"
+#include "esphome/core/helpers.h"
+#include "esphome/core/log.h"
+#include "esphome/core/esphal.h"
+#include "esphome/core/application.h"
+#include "esphome/core/util.h"
 
 namespace esphome {
 namespace wifi {
@@ -135,7 +135,7 @@ IPAddress WiFiComponent::wifi_sta_ip_() {
 }
 
 bool WiFiComponent::wifi_apply_hostname_() {
-  esp_err_t err = tcpip_adapter_set_hostname(TCPIP_ADAPTER_IF_STA, "App_name");
+  esp_err_t err = tcpip_adapter_set_hostname(TCPIP_ADAPTER_IF_STA, App.get_name().c_str());
   if (err != ESP_OK) {
     ESP_LOGV(TAG, "Setting hostname failed: %d", err);
     return false;

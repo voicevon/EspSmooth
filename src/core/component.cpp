@@ -1,8 +1,8 @@
-#include "core2/component.h"
-#include "core2/helpers.h"
-// #include "core/esphal.h"
-#include "core2/log.h"
-// #include "core/application.h"
+#include "esphome/core/component.h"
+#include "esphome/core/helpers.h"
+#include "esphome/core/esphal.h"
+#include "esphome/core/log.h"
+#include "esphome/core/application.h"
 
 namespace esphome {
 
@@ -43,19 +43,19 @@ void Component::setup() {}
 void Component::loop() {}
 
 void Component::set_interval(const std::string &name, uint32_t interval, std::function<void()> &&f) {  // NOLINT
-  // App.scheduler.set_interval(this, name, interval, std::move(f));
+  App.scheduler.set_interval(this, name, interval, std::move(f));
 }
 
 bool Component::cancel_interval(const std::string &name) {  // NOLINT
-  // return App.scheduler.cancel_interval(this, name);
+  return App.scheduler.cancel_interval(this, name);
 }
 
 void Component::set_timeout(const std::string &name, uint32_t timeout, std::function<void()> &&f) {  // NOLINT
-  // return App.scheduler.set_timeout(this, name, timeout, std::move(f));
+  return App.scheduler.set_timeout(this, name, timeout, std::move(f));
 }
 
 bool Component::cancel_timeout(const std::string &name) {  // NOLINT
-  // return App.scheduler.cancel_timeout(this, name);
+  return App.scheduler.cancel_timeout(this, name);
 }
 
 void Component::call_loop() { this->loop(); }
@@ -95,19 +95,19 @@ void Component::mark_failed() {
   this->status_set_error();
 }
 void Component::defer(std::function<void()> &&f) {  // NOLINT
-  // App.scheduler.set_timeout(this, "", 0, std::move(f));
+  App.scheduler.set_timeout(this, "", 0, std::move(f));
 }
 bool Component::cancel_defer(const std::string &name) {  // NOLINT
-  // return App.scheduler.cancel_timeout(this, name);
+  return App.scheduler.cancel_timeout(this, name);
 }
 void Component::defer(const std::string &name, std::function<void()> &&f) {  // NOLINT
-  // App.scheduler.set_timeout(this, name, 0, std::move(f));
+  App.scheduler.set_timeout(this, name, 0, std::move(f));
 }
 void Component::set_timeout(uint32_t timeout, std::function<void()> &&f) {  // NOLINT
-  // App.scheduler.set_timeout(this, "", timeout, std::move(f));
+  App.scheduler.set_timeout(this, "", timeout, std::move(f));
 }
 void Component::set_interval(uint32_t interval, std::function<void()> &&f) {  // NOLINT
-  // App.scheduler.set_timeout(this, "", interval, std::move(f));
+  App.scheduler.set_timeout(this, "", interval, std::move(f));
 }
 bool Component::is_failed() { return (this->component_state_ & COMPONENT_STATE_MASK) == COMPONENT_STATE_FAILED; }
 bool Component::can_proceed() { return true; }
@@ -115,11 +115,11 @@ bool Component::status_has_warning() { return this->component_state_ & STATUS_LE
 bool Component::status_has_error() { return this->component_state_ & STATUS_LED_ERROR; }
 void Component::status_set_warning() {
   this->component_state_ |= STATUS_LED_WARNING;
-  // App.app_state_ |= STATUS_LED_WARNING;
+  App.app_state_ |= STATUS_LED_WARNING;
 }
 void Component::status_set_error() {
   this->component_state_ |= STATUS_LED_ERROR;
-  // App.app_state_ |= STATUS_LED_ERROR;
+  App.app_state_ |= STATUS_LED_ERROR;
 }
 void Component::status_clear_warning() { this->component_state_ &= ~STATUS_LED_WARNING; }
 void Component::status_clear_error() { this->component_state_ &= ~STATUS_LED_ERROR; }
@@ -155,18 +155,18 @@ void PollingComponent::set_update_interval(uint32_t update_interval) { this->upd
 const std::string &Nameable::get_name() const { return this->name_; }
 void Nameable::set_name(const std::string &name) {
   this->name_ = name;
-  // this->calc_object_id_();
+  this->calc_object_id_();
 }
-Nameable::Nameable(const std::string &name) : name_(name) {  }
+Nameable::Nameable(const std::string &name) : name_(name) { this->calc_object_id_(); }
 
-// const std::string &Nameable::get_object_id() { return this->object_id_; }
-// bool Nameable::is_internal() const { return this->internal_; }
-// void Nameable::set_internal(bool internal) { this->internal_ = internal; }
-// void Nameable::calc_object_id_() {
-//   this->object_id_ = sanitize_string_whitelist(to_lowercase_underscore(this->name_), HOSTNAME_CHARACTER_WHITELIST);
-//   // FNV-1 hash
-//   this->object_id_hash_ = fnv1_hash(this->object_id_);
-// }
-// uint32_t Nameable::get_object_id_hash() { return this->object_id_hash_; }
+const std::string &Nameable::get_object_id() { return this->object_id_; }
+bool Nameable::is_internal() const { return this->internal_; }
+void Nameable::set_internal(bool internal) { this->internal_ = internal; }
+void Nameable::calc_object_id_() {
+  this->object_id_ = sanitize_string_whitelist(to_lowercase_underscore(this->name_), HOSTNAME_CHARACTER_WHITELIST);
+  // FNV-1 hash
+  this->object_id_hash_ = fnv1_hash(this->object_id_);
+}
+uint32_t Nameable::get_object_id_hash() { return this->object_id_hash_; }
 
 }  // namespace esphome

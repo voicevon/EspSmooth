@@ -4,7 +4,7 @@
 #include <functional>
 #include "Arduino.h"
 
-#include "core2/optional.h"
+#include "esphome/core/optional.h"
 
 namespace esphome {
 
@@ -246,21 +246,21 @@ class Nameable {
   const std::string &get_name() const;
   void set_name(const std::string &name);
   /// Get the sanitized name of this nameable as an ID. Caching it internally.
-  // const std::string &get_object_id();
-  // uint32_t get_object_id_hash();
+  const std::string &get_object_id();
+  uint32_t get_object_id_hash();
 
-  // bool is_internal() const;
-  // void set_internal(bool internal);
+  bool is_internal() const;
+  void set_internal(bool internal);
 
  protected:
-  // virtual uint32_t hash_base() = 0;
+  virtual uint32_t hash_base() = 0;
 
-  // void calc_object_id_();
+  void calc_object_id_();
 
   std::string name_;
-  // std::string object_id_;
-  // uint32_t object_id_hash_;
-  // bool internal_{false};
+  std::string object_id_;
+  uint32_t object_id_hash_;
+  bool internal_{false};
 };
 
 }  // namespace esphome

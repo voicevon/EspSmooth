@@ -6,8 +6,8 @@
 #include <memory>
 #include <type_traits>
 
-#include "core2/optional.h"
-// #include "core/esphal.h"
+#include "esphome/core/optional.h"
+#include "esphome/core/esphal.h"
 
 #ifdef CLANG_TIDY
 #undef ICACHE_RAM_ATTR

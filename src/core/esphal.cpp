@@ -1,9 +1,8 @@
-#include "core2/esphal.h"
-#include "core2/helpers.h"
-// #include "core/defines.h"
-#include "core2/log.h"
+#include "esphome/core/esphal.h"
+#include "esphome/core/helpers.h"
+#include "esphome/core/defines.h"
+#include "esphome/core/log.h"
 
-#define USE_WIFI
 #ifdef ARDUINO_ARCH_ESP8266
 extern "C" {
 typedef struct {        // NOLINT
@@ -24,10 +23,10 @@ GPIOPin::GPIOPin(uint8_t pin, uint8_t mode, bool inverted)
     : pin_(pin),
       mode_(mode),
       inverted_(inverted),
-// #ifdef ARDUINO_ARCH_ESP8266
-//       gpio_read_(pin < 16 ? &GPI : &GP16I),
-//       gpio_mask_(pin < 16 ? (1UL << pin) : 1)
-// #endif
+#ifdef ARDUINO_ARCH_ESP8266
+      gpio_read_(pin < 16 ? &GPI : &GP16I),
+      gpio_mask_(pin < 16 ? (1UL << pin) : 1)
+#endif
 #ifdef ARDUINO_ARCH_ESP32
           gpio_set_(pin < 32 ? &GPIO.out_w1ts : &GPIO.out1_w1ts.val),
       gpio_clear_(pin < 32 ? &GPIO.out_w1tc : &GPIO.out1_w1tc.val),
