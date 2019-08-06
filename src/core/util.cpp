@@ -2,9 +2,10 @@
 // #include "core/defines.h"
 // #include "core/application.h"
 // #include "core/version.h"
+#define USE_WIFI
 
 #ifdef USE_WIFI
-#include "components/wifi/wifi_component.h"
+#include "component/wifi/wifi_component.h"
 #endif
 
 #ifdef USE_API
@@ -39,7 +40,7 @@ bool network_is_connected() {
 }
 
 void network_setup_mdns() {
-  MDNS.begin(App.get_name().c_str());
+  // MDNS.begin(App.get_name().c_str());
 #ifdef USE_API
   if (api::global_api_server != nullptr) {
     MDNS.addService("esphomelib", "tcp", api::global_api_server->get_port());
@@ -51,7 +52,7 @@ void network_setup_mdns() {
     // Publish "http" service if not using native API.
     // This is just to have *some* mDNS service so that .local resolution works
     MDNS.addService("http", "tcp", 80);
-    MDNS.addServiceTxt("http", "tcp", "version", ESPHOME_VERSION);
+    MDNS.addServiceTxt("http", "tcp", "version", "0.10");
 #ifdef USE_API
   }
 #endif

@@ -268,7 +268,7 @@ void WiFiComponent::print_connect_params_() {
   ESP_LOGCONFIG(TAG, "  IP Address: %s", WiFi.localIP().toString().c_str());
   ESP_LOGCONFIG(TAG, "  BSSID: " LOG_SECRET("%02X:%02X:%02X:%02X:%02X:%02X"), bssid[0], bssid[1], bssid[2], bssid[3],
                 bssid[4], bssid[5]);
-  ESP_LOGCONFIG(TAG, "  Hostname: '%s'", App.get_name().c_str());
+  // ESP_LOGCONFIG(TAG, "  Hostname: '%s'", App.get_name().c_str());
   char signal_bars[50];
   int8_t rssi = WiFi.RSSI();
   print_signal_bars(rssi, signal_bars);

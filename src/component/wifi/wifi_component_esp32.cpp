@@ -12,7 +12,7 @@
 #include "core/helpers.h"
 #include "core/log.h"
 #include "core/esphal.h"
-#include "core/application.h"
+// #include "core/application.h"
 #include "core/util.h"
 
 namespace esphome {
@@ -135,7 +135,7 @@ IPAddress WiFiComponent::wifi_sta_ip_() {
 }
 
 bool WiFiComponent::wifi_apply_hostname_() {
-  esp_err_t err = tcpip_adapter_set_hostname(TCPIP_ADAPTER_IF_STA, App.get_name().c_str());
+  esp_err_t err = tcpip_adapter_set_hostname(TCPIP_ADAPTER_IF_STA, "App_name");
   if (err != ESP_OK) {
     ESP_LOGV(TAG, "Setting hostname failed: %d", err);
     return false;
