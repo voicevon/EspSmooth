@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "core/component.h"
+#include "core2/component.h"
 #include "component/sensor.h"
 #include "component/i2c.h"
 

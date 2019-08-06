@@ -1,9 +1,9 @@
 #pragma once
 
-#include "core/component.h"
+#include "core2/component.h"
 // #include "core/defines.h"
 // #include "core/automation.h"
-#include "core/helpers.h"
+#include "core2/helpers.h"
 #include <string>
 #include <IPAddress.h>
 

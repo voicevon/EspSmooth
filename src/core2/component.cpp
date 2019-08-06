@@ -1,7 +1,7 @@
-#include "core/component.h"
-#include "core/helpers.h"
+#include "core2/component.h"
+#include "core2/helpers.h"
 // #include "core/esphal.h"
-#include "core/log.h"
+#include "core2/log.h"
 // #include "core/application.h"
 
 namespace esphome {

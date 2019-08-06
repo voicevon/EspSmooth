@@ -4,7 +4,7 @@
 #include <functional>
 #include "Arduino.h"
 
-#include "core/optional.h"
+#include "core2/optional.h"
 
 namespace esphome {
 

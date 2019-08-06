@@ -1,5 +1,5 @@
 #include "i2c.h"
-#include "core/log.h"
+#include "core2/log.h"
 // #include "core/application.h"
 
 namespace esphome {

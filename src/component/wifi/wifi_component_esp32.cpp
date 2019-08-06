@@ -9,11 +9,11 @@
 #include "lwip/err.h"
 #include "lwip/dns.h"
 
-#include "core/helpers.h"
-#include "core/log.h"
-#include "core/esphal.h"
+#include "core2/helpers.h"
+#include "core2/log.h"
+#include "core2/esphal.h"
 // #include "core/application.h"
-#include "core/util.h"
+#include "core2/util.h"
 
 namespace esphome {
 namespace wifi {

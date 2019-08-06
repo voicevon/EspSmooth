@@ -1,5 +1,5 @@
 #include "sensor.h"
-#include "core/log.h"
+#include "core2/log.h"
 
 namespace esphome {
 namespace sensor {

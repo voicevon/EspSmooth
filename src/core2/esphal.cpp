@@ -1,7 +1,7 @@
-#include "core/esphal.h"
-#include "core/helpers.h"
+#include "core2/esphal.h"
+#include "core2/helpers.h"
 // #include "core/defines.h"
-#include "core/log.h"
+#include "core2/log.h"
 
 #define USE_WIFI
 #ifdef ARDUINO_ARCH_ESP8266
