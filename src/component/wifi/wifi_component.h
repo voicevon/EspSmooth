@@ -264,14 +264,14 @@ class WiFiComponent : public Component {
 
 extern WiFiComponent *global_wifi_component;
 
-template<typename... Ts> class WiFiConnectedCondition : public Condition<Ts...> {
- public:
-  bool check(Ts... x) override;
-};
+// template<typename... Ts> class WiFiConnectedCondition : public Condition<Ts...> {
+//  public:
+//   bool check(Ts... x) override;
+// };
 
-template<typename... Ts> bool WiFiConnectedCondition<Ts...>::check(Ts... x) {
-  return global_wifi_component->is_connected();
-}
+// template<typename... Ts> bool WiFiConnectedCondition<Ts...>::check(Ts... x) {
+//   return global_wifi_component->is_connected();
+// }
 
 }  // namespace wifi
 }  // namespace esphome
