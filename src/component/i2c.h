@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Wire.h>
-#include "core2/component.h"
-#include "core2/helpers.h"
+#include "core/component.h"
+#include "core/helpers.h"
 
 
 namespace esphome {
