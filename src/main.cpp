@@ -155,7 +155,7 @@ void loop(){
         last_time_stamp = esp_timer_get_time();
 
         DcMotor* dc =(DcMotor*) Robot::getInstance()->actuators[2];
-        float dc_angle = dc->read_sensor_position();
+        float dc_angle = dc->for_test_read_sensor_position();
 
         printf("    Y Pos= %f", dc_angle);
         printf("\n");

@@ -27,7 +27,7 @@ void ControlMotors(TimerHandle_t xTimer){
                 break;
             case Actuator::DC_MOTOR:
                 dcMotor =(DcMotor*) actuator;
-                dcMotor->goto_position(target_position);
+                dcMotor->pid_loop(target_position);
                 break;
             case Actuator::XUEFENG_MOTOR:
                 xuefengMotor = (XuefengMotor*) actuator;

@@ -15,6 +15,13 @@ DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin,esphome::ads1115::ADS1115Se
      __ads1115 = ads1115_sensor; 
 }
 
+// Called by timer.
+void DcMotor::pid_loop(float target_position){
+    __sensor_position = __ads1115.sample();
+    float duty = __pid_controller.get_output_value(target_position,__sensor_position);
+    __pwm_pin.set_duty(duty);
+}
+
 bool DcMotor::step(){
     // pwm_pin.set_value(this->get_current_position());
     return true;
@@ -44,12 +51,12 @@ void DcMotor::enable(bool state){
 
 }
 
-float DcMotor::read_sensor_position(){
+float DcMotor::for_test_read_sensor_position(){
     __sensor_position = __ads1115.sample();
     return __sensor_position;
 }
 
-void DcMotor::goto_position(float target_position){
+void DcMotor::for_test_goto_position(float target_position){
     __goto_position(target_position,__sensor_position);
 }
 
