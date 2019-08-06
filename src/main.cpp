@@ -113,13 +113,38 @@ void setup_smooth(){
 //     Wire.begin(14,15);
 //     printf("=====================\n");
 // }
+
+#include "component/wifi/wifi_component.h"
+esphome::wifi::WiFiComponent *wifi_wificomponent;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+
+void setup_wifi(){
+  wifi_wificomponent = new esphome::wifi::WiFiComponent();
+  wifi_wificomponent->set_use_address("water.local");
+  esphome::wifi::WiFiAP wifi_wifiap = esphome::wifi::WiFiAP();
+  wifi_wifiap.set_ssid("FuckGFW");
+  wifi_wifiap.set_password("refuckgfw");
+  wifi_wifiap.set_priority(0.000000f);
+  wifi_wificomponent->add_sta(wifi_wifiap);
+  wifi_wificomponent->set_reboot_timeout(900000);
+  wifi_wificomponent->set_power_save_mode(esphome::wifi::WIFI_POWER_SAVE_LIGHT);
+  wifi_wificomponent->set_fast_connect(false);
+  wifi_wificomponent->setup();
+  printf("1111111111111\n");
+}
+
 extern float float_value;
 extern void ControlMotors(TimerHandle_t xTimer);
-
 void setup(){
     Serial.begin(115200);
+    setup_wifi();
+    do{
+        wifi_wificomponent->loop();
+    }
+    while(! wifi_wificomponent->get_component_state() == WL_CONNECTED );
+
     show_memory_allocate();
     setup_log();
+
     // test_i2c();
     //setup_spiffs_writting();
     //setup_spiffs_reading();
