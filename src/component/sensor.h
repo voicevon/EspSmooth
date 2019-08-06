@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/component.h"
-#include "core/helpers.h"
+#include "esphome/core/component.h"
+#include "esphome/core/helpers.h"
 
 namespace esphome {
 namespace sensor {

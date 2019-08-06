@@ -1,5 +1,5 @@
 #include "log.h"
-// #include "defines.h"
+#include "defines.h"
 #include "helpers.h"
 
 #ifdef USE_LOGGER

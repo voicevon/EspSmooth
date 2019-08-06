@@ -154,7 +154,7 @@ static const char* const actuator_keys[] = {
 #endif
 };
 
-extern esphome::ads1115::ADS1115Component* ads1115_component;
+extern esphome::ads1115::ADS1115Component* ads1115_component;    //from RobotStart.cpp
 bool Robot::configure(ConfigReader& cr)
 {
     ConfigReader::section_map_t m;
@@ -316,13 +316,13 @@ bool Robot::configure(ConfigReader& cr)
                     
                     //question here: what is the essencial differents with below two lines?
                     // esphome::ads1115::ADS1115Sensor ads1115_sensor();
-                    esphome::ads1115::ADS1115Sensor ads1115_sensor = esphome::ads1115::ADS1115Sensor();
-                    ads1115_sensor.set_parent(ads1115_component);
-                    ads1115_sensor.set_multiplexer(esphome::ads1115::ADS1115_MULTIPLEXER_P1_NG);
-                    ads1115_sensor.set_gain(esphome::ads1115::ADS1115_GAIN_6P144);
-                    ads1115_sensor.setup();
-                    DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin,ads1115_sensor);
-                    new_actuator = new_dc;
+                    // esphome::ads1115::ADS1115Sensor ads1115_sensor = esphome::ads1115::ADS1115Sensor();
+                    // ads1115_sensor.set_parent(ads1115_component);
+                    // ads1115_sensor.set_multiplexer(esphome::ads1115::ADS1115_MULTIPLEXER_P1_NG);
+                    // ads1115_sensor.set_gain(esphome::ads1115::ADS1115_GAIN_6P144);
+                    // ads1115_sensor.setup();
+                    // DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin,ads1115_sensor);
+                    // new_actuator = new_dc;
                     printf("-----ADS1115Sensor\n");
                 }
                 break;
