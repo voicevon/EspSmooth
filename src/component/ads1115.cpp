@@ -61,6 +61,7 @@ void ADS1115Component::setup() {
 
   if (!this->write_byte_16(ADS1115_REGISTER_CONFIG, config)) {
     this->mark_failed();
+    printf("[E][ADS1115Component] Setup error.\n");
     return;
   }
   this->prev_config_ = config;
@@ -70,6 +71,9 @@ void ADS1115Component::setup() {
                        [this, sensor] { this->request_measurement(sensor); });
   }
 }
+
+
+
 void ADS1115Component::dump_config() {
   ESP_LOGCONFIG(TAG, "Setting up ADS1115...");
   LOG_I2C_DEVICE(this);
@@ -102,9 +106,9 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
     // Start conversion
     config |= 0b1000000000000000;
   }
-  return 1.0f;
 
   if (!this->continuous_mode_ || this->prev_config_ != config) {
+    printf("aaaaaaaaaaaaa\n");
     if (!this->write_byte_16(ADS1115_REGISTER_CONFIG, config)) {
       printf("[E][ADS1115Component] write_byte_16 error.\n");
       return NAN;
@@ -113,6 +117,9 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
 
     // about 1.6 ms with 860 samples per second
     delay(2);
+    printf("bbbbbbbbbbbbb\n");
+    
+    return 1.0f;
 
     uint32_t start = millis();
     while (this->read_byte_16(ADS1115_REGISTER_CONFIG, &config) && (config >> 15) == 0) {
