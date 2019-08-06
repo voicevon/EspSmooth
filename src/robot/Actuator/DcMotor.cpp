@@ -2,7 +2,7 @@
 #include "_hal/Pin/PinHelper.h"
 #include "stdio.h"
 
-const int PWM_FREQ = 250;    // 50Hz  20ms 
+const int PWM_FREQ = 50;    // 50Hz  20ms 
 const int PWM_RESOLUTION_BITS = 16;     // 16 bit resolution
 const int HOME_DUTY = 0;
 
@@ -19,11 +19,12 @@ DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin,esphome::ads1115::ADS1115Se
 // Called by timer.
 void DcMotor::pid_loop(float target_position){
     if(!__enabled) return;   //??
-
     __sensor_position = __ads1115.sample();
+    
+    if(isnan(__sensor_position)) return;  //??
     float duty = __pid_controller.get_output_value(target_position,__sensor_position);
-    printf("state =%i, target= %f, sensor = %f, duty= %f \n", __enabled, target_position, __sensor_position,duty);
     duty *= 10000.0f;
+    // printf("state =%i, target= %f, sensor = %f, duty= %f \n", __enabled, target_position, __sensor_position,duty);
     __pwm_pin.set_duty(duty);
 }
 

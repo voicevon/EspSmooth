@@ -83,6 +83,8 @@ void ADS1115Component::dump_config() {
     ESP_LOGCONFIG(TAG, "    Gain: %u", sensor->get_gain());
   }
 }
+
+
 float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
   // printf("[D][ADS1115Component] request_measurement at entrance.\n");
   uint16_t config = this->prev_config_;

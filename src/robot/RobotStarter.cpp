@@ -742,7 +742,7 @@ void setup_section_bus(ConfigReader cr){
     esphome::i2c::I2CComponent* i2c_component =new esphome::i2c::I2CComponent();
     i2c_component->set_scl_pin(ads1115_scl_pin.get_gpio_id());
     i2c_component->set_sda_pin(adc1115_sda_pin.get_gpio_id());
-    i2c_component->set_frequency(400000);
+    i2c_component->set_frequency(200000);
     i2c_component->set_scan(false);
     i2c_component->dump_config();   //Doesn't work!
     i2c_component->setup();

@@ -2,7 +2,7 @@
 #include "ServoMotor.h"
 #include "HardwareSerial.h" 
 
-const int SERVO_FREQ = 250;    // 50Hz  20ms 
+const int SERVO_FREQ = 50;    // 50Hz  20ms 
 const int PWM_RESOLUTION_BITS = 16;     // 16 bit resolution
 
 const int MIN_PULSE = 1000; // 
