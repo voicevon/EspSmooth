@@ -65,8 +65,8 @@
 #define servo_pin_key                   "servo_pin"
 #define dc_dir_pin_key                  "dc_dir_pin"
 #define dc_pwm_pin_key                  "dc_pwm_pin"
-#define ads1115_address_key           "dc_sensor_clk_pin"
-#define ads1115_channel_key           "dc_sensor_sda_pin"
+#define ads1115_address_key             "ads1115_address"
+#define ads1115_channel_key             "ads1115_channel"
 
 #define step_pin_key                    "step_pin"
 #define dir_pin_key                     "dir_pin"

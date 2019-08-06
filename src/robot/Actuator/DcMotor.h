@@ -14,9 +14,10 @@ class DcMotor:public Actuator
         DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin,esphome::ads1115::ADS1115Sensor& ads1115_sensor);
         virtual bool step() override;
         virtual void enable(bool state) override;
+        void pid_loop(float target_position);
+        
         void for_test_goto_position(float target_position);
         float for_test_read_sensor_position();
-        void pid_loop(float target_position);
 
     private:
         OutputPin __dir_pin;
