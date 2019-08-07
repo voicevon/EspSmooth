@@ -15,55 +15,11 @@ extern uint32_t SystemCoreClock;
 extern void smoothie_startup(void *);
 
 
-// class ESP  
-// https://techtutorialsx.com/2017/12/17/esp32-arduino-getting-the-free-heap/
-void show_memory_allocate(){
-    printf("--------------------------------------------------------------\n");
-    Serial.print("[power on][ESP.getFreeHeap()]      free heap size = ");
-    Serial.println(ESP.getFreeHeap());  
-    printf("[power on][esp_get_free_heap_size] free heap size = %d \n",esp_get_free_heap_size());   //Are they same? NO! WHY ?
-    printf("--------------------------------------------------------------\n");
-    delay(40);   //Wait for Serial/printf() is finished processing, seems serial sending is in a another thread/core cpu ?
-}
-
-
-
-
-// #include "esp32-hal-log.h"
-// #include "esp_log.h"
-// #define LOG_LOCAL_LEVEL ESP_LOG_VERBOSE
-// void setup_log(){
-//     Serial.println(" ================ test log ================ ");
-
-//     esp_log_level_set("*", ESP_LOG_INFO);  
-//     ESP_LOGE(TAG, "test1 Error");
-//     ESP_LOGW(TAG, "test1 Warning");
-//     ESP_LOGI(TAG, "test1 Info");
-//     ESP_LOGD(TAG, "test1 Debug");
-//     ESP_LOGV(TAG, "test1 Verbose");
-
-//     // esp_log_level_set(TAG,ESP_LOG_VERBOSE);  
-//     ESP_LOGE(TAG, "test2 Error");
-//     ESP_LOGW(TAG, "test2 Warning");
-//     ESP_LOGI(TAG, "test2 Info");
-//     ESP_LOGD(TAG, "test2 Debug");
-//     ESP_LOGV(TAG, "test2 Verbose");
-//     Serial.println(" ================ end of  test log ================ ");
-// }
-
-
 void smooth_setup(){
-    NVIC_SetPriorityGrouping( 0 );
-    SystemCoreClockUpdate();
-
-    Board_Init();
 
 #ifndef FLASH16BIT
     configureSPIFI(); // setup the winbond SPIFI to max speed
 #endif
-
-    printf("MCU clock rate= %lu Hz\n", SystemCoreClock);
-
     StopWatch_Init();
     printf("StopWatch clock rate= %lu Hz\n", StopWatch_TicksPerSecond());
 
@@ -87,16 +43,18 @@ void control_motor_setup(){
 }
 
 void setup(){
-    show_memory_allocate();
+    Board_report_cpu();
+    Board_report_memory();
+    Board_Init();
     esphome_setup();   //wifi setup must be in advance of starting a timer_interrupt. Even RTOS. 
-    show_memory_allocate();
+    Board_report_memory();
 
     smooth_setup(); 
     delay(5000);   //Keep uartTx empty for ProntFace handshaking.
     printf("\n\n"); 
     printf("Hi, Mr.ProntFace. You're online now. right?\n ");
     control_motor_setup();
-    show_memory_allocate();
+    Board_report_memory();
 }
 #include "smoothie/robot/Robot.h"
 #include "smoothie/robot/Actuator/DcMotor.h"
