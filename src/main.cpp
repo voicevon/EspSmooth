@@ -4,6 +4,7 @@
 #include "_hal/board.h"
 #include "_hal/stopwatch.h"
 
+#include "main.h"
 
 
 static const char *TAG = "espsmooth.main";
@@ -126,6 +127,7 @@ void setup(){
     if( xTimerStart(tmr, 10 ) != pdPASS ) {
         printf("[E][setup] Timer for ControlMotors  start error \n");
     }
+    esphome_setup();
 }
 #include "smoothie/robot/Robot.h"
 #include "smoothie/robot/Actuator/DcMotor.h"
@@ -136,7 +138,7 @@ uint64_t cpu_idle_counter = 0;
 uint64_t last_time_stamp = 0;   //us
 // Actually, this is the lowest priority task.
 void loop(){
-
+    esphome_loop();
     cpu_idle_counter++;
 
     if(esp_timer_get_time () - last_time_stamp >= rtos_report_inteval_second * 1000000){

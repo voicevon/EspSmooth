@@ -1,5 +1,6 @@
 #include "esphome.h"
-#include "main.h"
+#include "main_esphome.h"
+
 using namespace esphome;
 
 
