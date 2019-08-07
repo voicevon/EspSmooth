@@ -144,11 +144,11 @@ void setup_int_sensor_workingstate(){
   current_working_state_sensor = new ramsensor::RamSensorInt16();
   App.register_component(current_working_state_sensor);
   App.register_sensor(current_working_state_sensor);
-  current_working_state_sensor->set_name("working_state");
+  current_working_state_sensor->set_name("alpha_pos");
   current_working_state_sensor->set_unit_of_measurement("");
   current_working_state_sensor->set_icon("");
   current_working_state_sensor->set_accuracy_decimals(0);
-  current_working_state_sensor->set_int_source(&current_working_state);
+  current_working_state_sensor->set_int_source(&actuators_position[0]);
   mqtt_working_state_sensor = new mqtt::MQTTSensorComponent(current_working_state_sensor);
   App.register_component(mqtt_working_state_sensor);
 
