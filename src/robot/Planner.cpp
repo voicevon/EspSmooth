@@ -4,11 +4,11 @@
 #include "StepTicker.h"
 #include "Robot.h"
 #include "Conveyor.h"
-#include "smoothie/Module.h"
-#include "RobotStarter.h"
+#include "smoothie/smoothie/Module.h"
+#include "smoothie/RobotStarter.h"
 
-#include "smoothie/ConfigReader.h"
-#include "smoothie/AxisDefns.h"
+#include "smoothie/smoothie/ConfigReader.h"
+#include "smoothie/smoothie/AxisDefns.h"
 #include "Actuator/StepperMotor.h"
 
 

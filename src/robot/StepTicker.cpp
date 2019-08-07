@@ -1,10 +1,10 @@
 #include "StepTicker.h"
 
-#include "smoothie/AxisDefns.h"
+#include "smoothie/smoothie/AxisDefns.h"
 #include "Actuator/StepperMotor.h"
 #include "Block.h"
 #include "Conveyor.h"
-#include "smoothie/Module.h"
+#include "smoothie/smoothie/Module.h"
 // #include "tmr-setup.h"
 #include "_hal/timer.h"
 

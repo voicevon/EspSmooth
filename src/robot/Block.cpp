@@ -1,5 +1,5 @@
 #include "Block.h"
-#include "smoothie/AxisDefns.h"
+#include "smoothie/smoothie/AxisDefns.h"
 #include "StepTicker.h"
 #include <stdio.h>
 

@@ -20,11 +20,11 @@
 #include "arm_solutions/CoreXZSolution.h"
 #include "arm_solutions/MorganSCARASolution.h"
 
-#include "smoothie/ConfigReader.h"
-#include "smoothie/Dispatcher.h"
-#include "smoothie/GCode.h"
+#include "smoothie/smoothie/ConfigReader.h"
+#include "smoothie/smoothie/Dispatcher.h"
+#include "smoothie/smoothie/GCode.h"
 
-#include "RobotStarter.h"
+#include "smoothie/RobotStarter.h"
 #include "modules/tools/temperaturecontrol/TemperatureControl.h"
 
 #include "libs/SlowTicker.h"

@@ -3,7 +3,7 @@
 #include "lwip/api.h"
 #include "lwip/sockets.h"
 
-#include "robot/RobotStarter.h"
+#include "smoothie/RobotStarter.h"
 
 #include "libs/OutputStream.h"
 #include "libs/RingBuffer.h"

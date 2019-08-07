@@ -1,5 +1,5 @@
 #include "HBotSolution.h"
-#include "smoothie/AxisDefns.h"
+#include "smoothie/smoothie/AxisDefns.h"
 
 #include <math.h>
 

@@ -21,9 +21,9 @@
 // #include "arch/sys_arch.h"
 // #include "lpc_phy.h" /* For the PHY monitor support */
 
-#include "robot/RobotStarter.h"
-#include "smoothie/ConfigReader.h"
-#include "smoothie/Dispatcher.h"
+#include "smoothie/RobotStarter.h"
+#include "smoothie/smoothie/ConfigReader.h"
+#include "smoothie/smoothie/Dispatcher.h"
 // #include "OutputStream.h"
 
 #include "modules/utils/network/ftpd/ftpd.h"

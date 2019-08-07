@@ -5,7 +5,7 @@
 #include "version.h"
 
 #include "robot/Robot.h"
-#include "robot/RobotStarter.h"
+#include "smoothie/RobotStarter.h"
 #include "robot/StepTicker.h"
 #include "robot/Actuator/StepperMotor.h"
 #include "robot/Conveyor.h"

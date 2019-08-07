@@ -8,8 +8,8 @@ Author: Michael Hackney, mhackney@eclecticangler.com
 
 #include "TemperatureSwitch.h"
 #include "modules/tools/temperaturecontrol/TemperatureControl.h"
-#include "smoothie/GCode.h"
-#include "smoothie/Dispatcher.h"
+#include "smoothie/smoothie/GCode.h"
+#include "smoothie/smoothie/Dispatcher.h"
 #include "libs/OutputStream.h"
 
 #include "FreeRTOS.h"

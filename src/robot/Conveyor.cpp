@@ -6,11 +6,11 @@
 #include "Robot.h"
 #include "Actuator/StepperMotor.h"
 #include "PlannerQueue.h"
-#include "RobotStarter.h"
+#include "smoothie/RobotStarter.h"
 
-#include "smoothie/AxisDefns.h"
-#include "smoothie/GCode.h"
-#include "smoothie/ConfigReader.h"
+#include "smoothie/smoothie/AxisDefns.h"
+#include "smoothie/smoothie/GCode.h"
+#include "smoothie/smoothie/ConfigReader.h"
 
 
 #include "FreeRTOS.h"

@@ -1,6 +1,6 @@
-#include "RobotStarter.h"
-#include "Robot.h"
-#include "Conveyor.h"
+#include "smoothie/RobotStarter.h"
+#include "robot/Robot.h"
+#include "robot/Conveyor.h"
 
 #include <stdlib.h>
 #include <unistd.h>
