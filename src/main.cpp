@@ -4,6 +4,7 @@
 #include "_hal/board.h"
 #include "_hal/stopwatch.h"
 #include "smoothie/robot/Actuator/ActuatorTask.h"
+#include "smoothie/RobotStarter.h"
 #include "main.h"
 
 
@@ -14,23 +15,18 @@ extern void configureSPIFI();
 extern void smoothie_startup(void *);
 
 
-void smooth_setup(){
+// void smooth_setup(){
 
-#ifndef FLASH16BIT
-    configureSPIFI(); // setup the winbond SPIFI to max speed
-#endif
-    StopWatch_Init();
-    printf("StopWatch clock rate= %lu Hz\n", StopWatch_TicksPerSecond());
+//     StopWatch_Init();
+//     printf("StopWatch clock rate= %lu Hz\n", StopWatch_TicksPerSecond());
 
-    // launch the startup thread which will become the command thread that executes all incoming commands
-    // 10000 Bytes stack
-    xTaskCreate(smoothie_startup, "CommandThread", 30000, NULL, (tskIDLE_PRIORITY + 2UL), (TaskHandle_t *) NULL);
+//     // launch the startup thread which will become the command thread that executes all incoming commands
+//     // 10000 Bytes stack
+//     xTaskCreate(smoothie_startup, "CommandThread", 30000, NULL, (tskIDLE_PRIORITY + 2UL), (TaskHandle_t *) NULL);
     
-    // vTaskStartScheduler();    Don't call vTaskStartScheduler()     https://esp32.com/viewtopic.php?t=1336
-}
+// }
 
 extern float float_value;
-
 
 void setup(){
     Board_report_cpu();
@@ -39,7 +35,7 @@ void setup(){
     esphome_setup();   //wifi setup must be in advance of starting a timer_interrupt. Even RTOS. 
     Board_report_memory();
 
-    smooth_setup(); 
+    smoothie_setup(); 
     delay(5000);   //Keep uartTx empty for ProntFace handshaking.
     printf("\n\n"); 
     printf("Hi, Mr.ProntFace. You're online now. right?\n ");

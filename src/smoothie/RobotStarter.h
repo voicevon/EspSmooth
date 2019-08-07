@@ -5,6 +5,8 @@
 
 class OutputStream;
 
+void smoothie_setup();
+
 // sets a callback for all incoming data
 void set_capture(std::function<void(char)> cf);
 using StartupFunc_t = std::function<void()>;
