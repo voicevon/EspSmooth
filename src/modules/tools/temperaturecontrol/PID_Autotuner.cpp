@@ -1,10 +1,10 @@
 #include "PID_Autotuner.h"
 #include "TemperatureControl.h"
-#include "smoothie/GCode.h"
 
+#include "smoothie/RobotStarter.h"
+#include "smoothie/smoothie/GCode.h"
 #include "libs/OutputStream.h"
 #include "_hal/Pin/SigmaDeltaPwm.h"
-#include "robot/RobotStarter.h"
 
 #include <cmath>        // std::abs
 

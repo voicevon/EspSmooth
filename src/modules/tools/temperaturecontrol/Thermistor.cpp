@@ -1,6 +1,6 @@
 #include "Thermistor.h"
 
-#include "smoothie/ConfigReader.h"
+#include "smoothie/smoothie/ConfigReader.h"
 #include "libs/OutputStream.h"
 #include "libs/StringUtils.h"
 #include "stdio.h"
