@@ -3,6 +3,7 @@
 
 using namespace esphome;
 
+const char* TAG = "EspHome";
 
 float g_value_of_zero_mass = 8388608.0f;
 float g_slope = 0.000123;
@@ -16,10 +17,7 @@ void setup_logger(){
   logger_logger->pre_setup();
   // logger_logger->set_log_level("",ESPHOME_LOG_LEVEL_INFO);
   logger_logger->set_log_level("sensor", ESPHOME_LOG_LEVEL_INFO);
-  logger_logger->set_log_level("adc", ESPHOME_LOG_LEVEL_INFO);
   logger_logger->set_log_level("pulse_counter", ESPHOME_LOG_LEVEL_INFO);
-  logger_logger->set_log_level("switch", ESPHOME_LOG_LEVEL_INFO);
-  logger_logger->set_log_level("mqtt", ESPHOME_LOG_LEVEL_INFO);
   App.register_component(logger_logger);
 }
 
@@ -155,6 +153,8 @@ void setup_int_sensor_workingstate(){
 }
 
 void esphome_setup() {
+    Serial.println("aaaaaaaaaaaaaaaaaaaaaaa\n");
+    ESP_LOGV(TAG,"esphome_setup() at entrance...");
     App.pre_setup("smoothie", __DATE__ ", " __TIME__);
     setup_logger();
     setup_wifi();
@@ -164,6 +164,7 @@ void esphome_setup() {
     setup_sensor_mqtt_subscriber_working_mode();
     setup_int_sensor_workingstate();
     App.setup();
+    ESP_LOGV(TAG,"esphome_setup() is exiting...");
 }
 
 

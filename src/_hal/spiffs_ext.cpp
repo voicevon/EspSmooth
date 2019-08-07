@@ -40,3 +40,24 @@ spiffs_reading(void){
     file.close();
     return string_result;
 }
+
+
+void setup_spiffs_writting() {
+    if(!SPIFFS.begin(true)) {
+        Serial.println ("An eooro has occurred while mounting SPIFFS");
+        return;
+    }
+
+    File file =  SPIFFS.open("/config.ini",FILE_WRITE);
+    if(!file) {
+        Serial.println("There was an error opening the file for wrtting");
+        return;
+    }
+
+    if(!file.print("TEST")) {
+        Serial.println("File write failed");
+    }
+
+    file.close();
+
+}

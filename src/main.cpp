@@ -26,45 +26,8 @@ void show_memory_allocate(){
     delay(40);   //Wait for Serial/printf() is finished processing, seems serial sending is in a another thread/core cpu ?
 }
 
-void setup_spiffs_writting() {
-    if(!SPIFFS.begin(true)) {
-        Serial.println ("An eooro has occurred while mounting SPIFFS");
-        return;
-    }
 
-    File file =  SPIFFS.open("/config.ini",FILE_WRITE);
-    if(!file) {
-        Serial.println("There was an error opening the file for wrtting");
-        return;
-    }
 
-    if(!file.print("TEST")) {
-        Serial.println("File write failed");
-    }
-
-    file.close();
-
-}
-void setup_spiffs_reading(){
-    if(!SPIFFS.begin(true)) {
-        Serial.println("An error has occurred while mounting SPIFFS ");
-        return;
-    }
-
-    File file = SPIFFS.open ("/config.ini",FILE_READ);
-    if(!file) {
-        Serial.println("There was an error opening the file for reading");
-        return;
-    }
-
-    Serial.println("File content:");
-    while(file.available()) {
-        Serial.write (file.read());
-        //Serial.println();
-    }
-
-    file.close();
-}
 
 // #include "esp32-hal-log.h"
 // #include "esp_log.h"
@@ -89,7 +52,7 @@ void setup_spiffs_reading(){
 // }
 
 
-void setup_smooth(){
+void smooth_setup(){
     NVIC_SetPriorityGrouping( 0 );
     SystemCoreClockUpdate();
 
@@ -113,20 +76,21 @@ void setup_smooth(){
 
 extern float float_value;
 extern void ControlMotors(TimerHandle_t xTimer);
-void setup(){
-
-    show_memory_allocate();
-    // setup_spiffs_writting();
-    // setup_spiffs_reading();
-    setup_smooth(); 
-
-    delay(5000);   //Keep uartTx empty for Printrun handshaking.
+void control_motor_setup(){
     int interval = 1000;
     int id = 1;
     TimerHandle_t tmr = xTimerCreate("ControlMotors", pdMS_TO_TICKS(interval), pdTRUE, ( void * )id, &ControlMotors);
     if( xTimerStart(tmr, 10 ) != pdPASS ) {
-        printf("[E][setup] Timer for ControlMotors  start error \n");
+        printf("[E][setup] Timer for ControlMotors  start error. \n");
     }
+    printf("[D][main] Create xTimerTask COntrolMotors is started.\n" );
+}
+void setup(){
+    show_memory_allocate();
+    smooth_setup(); 
+
+    delay(5000);   //Keep uartTx empty for Printrun handshaking.
+    control_motor_setup();
     esphome_setup();
 }
 #include "smoothie/robot/Robot.h"
@@ -138,7 +102,7 @@ uint64_t cpu_idle_counter = 0;
 uint64_t last_time_stamp = 0;   //us
 // Actually, this is the lowest priority task.
 void loop(){
-    esphome_loop();
+    // esphome_loop();
     cpu_idle_counter++;
 
     if(esp_timer_get_time () - last_time_stamp >= rtos_report_inteval_second * 1000000){
