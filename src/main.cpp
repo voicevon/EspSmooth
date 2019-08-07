@@ -89,8 +89,10 @@ void setup(){
     show_memory_allocate();
     smooth_setup(); 
 
+    printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@ smoothie_setup is over.\n");
     delay(5000);   //Keep uartTx empty for Printrun handshaking.
-    control_motor_setup();
+    printf("Hi, Mr.ProntFace. You're online now. right?\n ");
+    // control_motor_setup();
     esphome_setup();
 }
 #include "smoothie/robot/Robot.h"
