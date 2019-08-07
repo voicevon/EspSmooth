@@ -11,7 +11,6 @@ static const char *TAG = "espsmooth.main";
 
 
 extern void configureSPIFI();
-extern uint32_t SystemCoreClock;
 extern void smoothie_startup(void *);
 
 
@@ -31,7 +30,7 @@ void smooth_setup(){
 }
 
 extern float float_value;
-extern void ControlMotors(TimerHandle_t xTimer);
+extern void ControlMotors(TimerHandle_t xTimer);   //@ smoothis/robot/Actuator/ActuatorTask.cpp
 void control_motor_setup(){
     int interval = 1000;
     int id = 1;
@@ -56,9 +55,9 @@ void setup(){
     control_motor_setup();
     Board_report_memory();
 }
+
 #include "smoothie/robot/Robot.h"
 #include "smoothie/robot/Actuator/DcMotor.h"
-
 
 uint64_t rtos_report_inteval_second = 5 ;
 uint64_t cpu_idle_counter = 0;
@@ -81,7 +80,6 @@ void loop(){
 
         printf("    Y Pos= %f", dc_angle);
         printf("\n");
-        actuators_position[0]= uptime_second;
         
     }
 
