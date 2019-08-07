@@ -1,3 +1,4 @@
+#include "HardwareSerial.h"
 #include "esphome.h"
 #include "main_esphome.h"
 
@@ -152,11 +153,13 @@ void setup_int_sensor_workingstate(){
   App.register_component(mqtt_working_state_sensor);
 }
 
-void esphome_setup() {
-    Serial.println("aaaaaaaaaaaaaaaaaaaaaaa\n");
-    ESP_LOGV(TAG,"esphome_setup() at entrance...");
+void esphome_pre_setup(){
     App.pre_setup("smoothie", __DATE__ ", " __TIME__);
     setup_logger();
+}
+void esphome_setup() {
+    // Serial.println("aaaaaaaaaaaaaaaaaaaaaaa\n");
+    ESP_LOGV(TAG,"esphome_setup() at entrance...");
     setup_wifi();
     setup_mqtt_broker();
     setup_wifi_signal();

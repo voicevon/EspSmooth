@@ -10,6 +10,7 @@ int16_t current_working_state;
 //defined in esphome.  be invoked out of esphome.
 #include "esphome/components/logger/logger.h"
 extern esphome::logger::Logger *logger_logger;
+extern void esphome_pre_setup();
 extern void esphome_setup();
 extern void esphome_loop();
 
