@@ -1,6 +1,7 @@
 #include "i2c.h"
 #include "esphome/core/log.h"
-// #include "core/application.h"
+#include "esphome/core/helpers.h"
+#include "esphome/core/application.h"
 
 namespace esphome {
 namespace i2c {
@@ -22,8 +23,6 @@ I2CComponent::I2CComponent() {
 void I2CComponent::setup() {
   this->wire_->begin(this->sda_pin_, this->scl_pin_);
   this->wire_->setClock(this->frequency_);
-  printf("[D][I2CComponent] on bus_num=%i,  scl_pin= GPIO_%i, sda_pin= GPIO_%i\n", 
-                          this->wire_->available(),scl_pin_,sda_pin_);
 }
 void I2CComponent::dump_config() {
   ESP_LOGCONFIG(TAG, "I2C Bus:");
@@ -51,7 +50,7 @@ void I2CComponent::dump_config() {
     }
   }
 }
-// float I2CComponent::get_setup_priority() const { return setup_priority::BUS; }
+float I2CComponent::get_setup_priority() const { return setup_priority::BUS; }
 
 void I2CComponent::raw_begin_transmission(uint8_t address) {
   ESP_LOGVV(TAG, "Beginning Transmission to 0x%02X:", address);
@@ -93,7 +92,7 @@ void HOT I2CComponent::raw_write(uint8_t address, const uint8_t *data, uint8_t l
   for (size_t i = 0; i < len; i++) {
     ESP_LOGVV(TAG, "    Writing 0b" BYTE_TO_BINARY_PATTERN " (0x%02X)", BYTE_TO_BINARY(data[i]), data[i]);
     this->wire_->write(data[i]);
-    // App.feed_wdt();
+    App.feed_wdt();
   }
 }
 void HOT I2CComponent::raw_write_16(uint8_t address, const uint16_t *data, uint8_t len) {
@@ -102,7 +101,7 @@ void HOT I2CComponent::raw_write_16(uint8_t address, const uint16_t *data, uint8
               BYTE_TO_BINARY(data[i] >> 8), BYTE_TO_BINARY(data[i]), data[i]);
     this->wire_->write(data[i] >> 8);
     this->wire_->write(data[i]);
-    // App.feed_wdt();
+    App.feed_wdt();
   }
 }
 
@@ -112,7 +111,7 @@ bool I2CComponent::raw_receive(uint8_t address, uint8_t *data, uint8_t len) {
   for (uint8_t i = 0; i < len; i++) {
     data[i] = this->wire_->read();
     ESP_LOGVV(TAG, "    Received 0b" BYTE_TO_BINARY_PATTERN " (0x%02X)", BYTE_TO_BINARY(data[i]), data[i]);
-    // App.feed_wdt();
+    App.feed_wdt();
   }
   return true;
 }

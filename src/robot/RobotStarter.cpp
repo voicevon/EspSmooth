@@ -32,8 +32,8 @@
 #include "_hal/Pin/OutputPin.h"
 #include "_hal/stopwatch.h"
 #include "_hal/spiffs_ext.h"
-#include "component/i2c.h"
-#include "component/ads1115.h"
+#include "esphome/components/i2c/i2c.h"
+#include "esphome/components/ads1115/ads1115.h"
 // static const char *TAG = "StartUp";
 
 static bool system_running= false;

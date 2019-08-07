@@ -14,7 +14,7 @@ void ADS1115Component::setup() {
   ESP_LOGCONFIG(TAG, "Setting up ADS1115...");
   uint16_t value;
   if (!this->read_byte_16(ADS1115_REGISTER_CONVERSION, &value)) {
-     this->mark_failed();
+    this->mark_failed();
     return;
   }
   uint16_t config = 0;
@@ -61,7 +61,6 @@ void ADS1115Component::setup() {
 
   if (!this->write_byte_16(ADS1115_REGISTER_CONFIG, config)) {
     this->mark_failed();
-    printf("[E][ADS1115Component] Setup error.\n");
     return;
   }
   this->prev_config_ = config;
@@ -71,9 +70,6 @@ void ADS1115Component::setup() {
                        [this, sensor] { this->request_measurement(sensor); });
   }
 }
-
-
-
 void ADS1115Component::dump_config() {
   ESP_LOGCONFIG(TAG, "Setting up ADS1115...");
   LOG_I2C_DEVICE(this);
@@ -82,15 +78,12 @@ void ADS1115Component::dump_config() {
   }
 
   for (auto *sensor : this->sensors_) {
-    // LOG_SENSOR("  ", "Sensor", sensor);
+    LOG_SENSOR("  ", "Sensor", sensor);
     ESP_LOGCONFIG(TAG, "    Multiplexer: %u", sensor->get_multiplexer());
     ESP_LOGCONFIG(TAG, "    Gain: %u", sensor->get_gain());
   }
 }
-
-
 float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
-  // printf("[D][ADS1115Component] request_measurement at entrance.\n");
   uint16_t config = this->prev_config_;
   // Multiplexer
   //        0bxBBBxxxxxxxxxxxx
@@ -108,39 +101,31 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
   }
 
   if (!this->continuous_mode_ || this->prev_config_ != config) {
-    printf("aaaaaaaaaaaaa\n");
     if (!this->write_byte_16(ADS1115_REGISTER_CONFIG, config)) {
-      printf("[E][ADS1115Component] write_byte_16 error.\n");
-      return 1.0f;
+      this->status_set_warning();
       return NAN;
     }
     this->prev_config_ = config;
 
     // about 1.6 ms with 860 samples per second
     delay(2);
-    printf("bbbbbbbbbbbbb\n");
-
 
     uint32_t start = millis();
     while (this->read_byte_16(ADS1115_REGISTER_CONFIG, &config) && (config >> 15) == 0) {
       if (millis() - start > 100) {
-        printf("[E][ADS1115Component] Reading ADS1115 timed out.\n");
+        ESP_LOGW(TAG, "Reading ADS1115 timed out");
         this->status_set_warning();
-        return 1.5f;
         return NAN;
       }
       yield();
     }
   }
-  return 2.0f;
 
   uint16_t raw_conversion;
   if (!this->read_byte_16(ADS1115_REGISTER_CONVERSION, &raw_conversion)) {
-    printf("[E][ADS1115Component] read raw_conversion wrong.\n");
-    // return NAN;
-    return 2.5f;
+    this->status_set_warning();
+    return NAN;
   }
-
   auto signed_conversion = static_cast<int16_t>(raw_conversion);
 
   float millivolts;
@@ -164,16 +149,21 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
       millivolts = signed_conversion * 0.007813f;
       break;
     default:
-      printf("[E][ADS1115Component] request_measurement() wrong setting gain_=%i  \n",sensor->get_gain());
       millivolts = NAN;
   }
 
   this->status_clear_warning();
-  return millivolts ;
+  return millivolts / 1e3f;
 }
 
 float ADS1115Sensor::sample() { return this->parent_->request_measurement(this); }
-
+void ADS1115Sensor::update() {
+  float v = this->parent_->request_measurement(this);
+  if (!isnan(v)) {
+    ESP_LOGD(TAG, "'%s': Got Voltage=%fV", this->get_name().c_str(), v);
+    this->publish_state(v);
+  }
+}
 
 }  // namespace ads1115
 }  // namespace esphome

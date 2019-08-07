@@ -5,7 +5,7 @@
 #include "_hal/Pin/OutputPin.h"
 #include "_hal/Pin/PwmPin.h"
 #include "libs/MotorPidController.h"
-#include "component/ads1115.h"
+#include "esphome/components/ads1115/ads1115.h"
 
 class DcMotor:public Actuator
 {
