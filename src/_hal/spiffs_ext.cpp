@@ -5,9 +5,11 @@
 #define FILE_SIZE 17000    // the real size is 15894 Bytes,  Jun 2019
 
 // TODO :  Add parameters:  File_name, file_size.
-std::string spiffs_reading(void){
-
+std::string 
+spiffs_reading(void){
+    Serial.printf("[V][spiffs_reading] starting...\n]");
     std::string err = "READ CONFIG ERROR!";
+    
     if(!SPIFFS.begin(true)) {
         Serial.println("An error has occurred while mounting SPIFFS ");
         return err;

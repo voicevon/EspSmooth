@@ -116,8 +116,8 @@ extern void ControlMotors(TimerHandle_t xTimer);
 void setup(){
 
     show_memory_allocate();
-    setup_spiffs_writting();
-    setup_spiffs_reading();
+    // setup_spiffs_writting();
+    // setup_spiffs_reading();
     setup_smooth(); 
 
     delay(5000);   //Keep uartTx empty for Printrun handshaking.
