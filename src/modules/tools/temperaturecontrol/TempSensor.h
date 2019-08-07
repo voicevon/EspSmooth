@@ -1,6 +1,6 @@
 #pragma once
 
-#include "smoothie/ConfigReader.h"
+#include "smoothie/smoothie/ConfigReader.h"
 
 #include <map>
 #include <stdint.h>

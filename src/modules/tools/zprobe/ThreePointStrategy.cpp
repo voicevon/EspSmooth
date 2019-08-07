@@ -55,13 +55,13 @@
 #include "ZProbe.h"
 #include "Plane3D.h"
 
-#include "smoothie/ConfigReader.h"
-#include "smoothie/Dispatcher.h"
-#include "smoothie/GCode.h"
+#include "smoothie/smoothie/ConfigReader.h"
+#include "smoothie/smoothie/Dispatcher.h"
+#include "smoothie/smoothie/GCode.h"
 
-#include "robot/Robot.h"
-#include "robot/RobotStarter.h"
-#include "robot/Conveyor.h"
+#include "smoothie/robot/Robot.h"
+#include "smoothie/RobotStarter.h"
+#include "smoothie/robot/Conveyor.h"
 
 #include "libs/OutputStream.h"
 

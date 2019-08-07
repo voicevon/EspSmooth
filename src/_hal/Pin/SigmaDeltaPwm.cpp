@@ -1,5 +1,5 @@
 #include "SigmaDeltaPwm.h"
-#include "robot/RobotStarter.h"
+#include "smoothie/RobotStarter.h"
 
 #define confine(value, min, max) (((value) < (min))?(min):(((value) > (max))?(max):(value)))
 

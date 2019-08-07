@@ -7,7 +7,7 @@
 #include "base64.h"
 
 #include "libs/OutputStream.h"
-#include "robot/RobotStarter.h"
+#include "smoothie/RobotStarter.h"
 
 #include <string>
 #include <map>

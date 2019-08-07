@@ -1,8 +1,8 @@
 #include "KillButton.h"
 
-#include "smoothie/ConfigReader.h"
+#include "smoothie/smoothie/ConfigReader.h"
 #include "libs/SlowTicker.h"
-#include "robot/RobotStarter.h"
+#include "smoothie/RobotStarter.h"
 
 #define kill_button_enable_key "enable"
 #define kill_button_pin_key "pin"

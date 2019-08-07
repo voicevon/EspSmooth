@@ -1,18 +1,20 @@
 #include "Laser.h"
 
-
-#include "robot/Robot.h"
-#include "smoothie/Dispatcher.h"
-#include "libs/SlowTicker.h"
-#include "libs/FastTicker.h"
 #include "_hal/Pin/PwmPin.h"
 #include "_hal/Pin/Pin.h"
 #include "_hal/__hal.h"
-#include "robot/StepTicker.h"
-#include "smoothie/ConfigReader.h"
-#include "smoothie/GCode.h"
+
+#include "smoothie/robot/StepTicker.h"
+#include "smoothie/robot/Robot.h"
+
+#include "smoothie/smoothie/Dispatcher.h"
+#include "smoothie/smoothie/ConfigReader.h"
+#include "smoothie/smoothie/GCode.h"
+
 #include "libs/OutputStream.h"
 #include "libs/StringUtils.h"
+#include "libs/SlowTicker.h"
+#include "libs/FastTicker.h"
 
 #include <algorithm>
 

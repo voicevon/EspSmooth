@@ -1,7 +1,7 @@
 #pragma once
 
-#include "smoothie/Module.h"
-#include "robot/Block.h"
+#include "smoothie/smoothie/Module.h"
+#include "smoothie/robot/Block.h"
 #include "_hal/Pin/PwmPin.h"
 #include "_hal/Pin/OutputPin.h"
 #include <stdint.h>

@@ -1,19 +1,25 @@
 #include "Endstops.h"
-#include "smoothie/GCode.h"
-#include "robot/Conveyor.h"
-#include "robot/ActuatorCoordinates.h"
-#include "_hal/__hal.h"
-#include "robot/Actuator/StepperMotor.h"
-#include "robot/Robot.h"
-#include "libs/SlowTicker.h"
-#include "robot/Planner.h"
-#include "libs/OutputStream.h"
-#include "robot/StepTicker.h"
-#include "smoothie/ConfigReader.h"
-#include "smoothie/Dispatcher.h"
-#include "robot/RobotStarter.h"
 
-#include "robot/arm_solutions/BaseSolution.h"
+
+#include "_hal/__hal.h"
+
+#include "libs/SlowTicker.h"
+#include "libs/OutputStream.h"
+
+#include "smoothie/robot/arm_solutions/BaseSolution.h"
+#include "smoothie/robot/Conveyor.h"
+#include "smoothie/robot/ActuatorCoordinates.h"
+#include "smoothie/robot/Actuator/StepperMotor.h"
+#include "smoothie/robot/Robot.h"
+#include "smoothie/robot/Planner.h"
+#include "smoothie/robot/StepTicker.h"
+
+#include "smoothie/RobotStarter.h"
+
+#include "smoothie/smoothie/ConfigReader.h"
+#include "smoothie/smoothie/Dispatcher.h"
+#include "smoothie/smoothie/GCode.h"
+
 
 #include <ctype.h>
 #include <algorithm>

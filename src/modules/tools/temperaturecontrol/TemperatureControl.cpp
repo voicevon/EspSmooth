@@ -3,16 +3,16 @@
 #include "Thermistor.h"
 #include "PID_Autotuner.h"
 
-#include "robot/Conveyor.h"
+#include "smoothie/robot/Conveyor.h"
 
-#include "smoothie/GCode.h"
-#include "smoothie/Dispatcher.h"
+#include "smoothie/smoothie/GCode.h"
+#include "smoothie/smoothie/Dispatcher.h"
+#include "smoothie/RobotStarter.h"
 
 #include "libs/SlowTicker.h"
 #include "libs/FastTicker.h"
 #include "libs/OutputStream.h"
 
-#include "robot/RobotStarter.h"
 
 // Temp sensor implementations:
 //#include "max31855.h"

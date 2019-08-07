@@ -1,12 +1,11 @@
 #include "Switch.h"
 
-#include "robot/RobotStarter.h"
+#include "smoothie/RobotStarter.h"
 
-
-#include "smoothie/GCode.h"
-#include "smoothie/ConfigReader.h"
-#include "smoothie/GCodeProcessor.h"
-#include "smoothie/Dispatcher.h"
+#include "smoothie/smoothie/GCode.h"
+#include "smoothie/smoothie/ConfigReader.h"
+#include "smoothie/smoothie/GCodeProcessor.h"
+#include "smoothie/smoothie/Dispatcher.h"
 
 #include "libs/OutputStream.h"
 #include "libs/SlowTicker.h"

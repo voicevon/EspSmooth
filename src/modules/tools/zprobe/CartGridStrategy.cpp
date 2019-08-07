@@ -72,18 +72,20 @@
 */
 
 #include "CartGridStrategy.h"
-
-#include "robot/Robot.h"
-#include "robot/Conveyor.h"
-#include "robot/Actuator/StepperMotor.h"
-#include "robot/arm_solutions/BaseSolution.h"
 #include "ZProbe.h"
-#include "smoothie/GCode.h"
-#include "smoothie/Dispatcher.h"
-#include "smoothie/ConfigReader.h"
+
+#include "smoothie/robot/Robot.h"
+#include "smoothie/robot/Conveyor.h"
+#include "smoothie/robot/Actuator/StepperMotor.h"
+#include "smoothie/robot/arm_solutions/BaseSolution.h"
+
+#include "smoothie/RobotStarter.h"
+#include "smoothie/smoothie/GCode.h"
+#include "smoothie/smoothie/Dispatcher.h"
+#include "smoothie/smoothie/ConfigReader.h"
+
 #include "libs/StringUtils.h"
 #include "libs/OutputStream.h"
-#include "robot/RobotStarter.h"
 
 #include <string>
 #include <algorithm>
