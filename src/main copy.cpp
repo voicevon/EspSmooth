@@ -26,7 +26,7 @@ wifi::WiFiComponent *wifi_wificomponent;
 
 void setup_wifi(){
   wifi_wificomponent = new wifi::WiFiComponent();
-  wifi_wificomponent->set_use_address("water.local");
+  wifi_wificomponent->set_use_address("smoothie.local");
   wifi::WiFiAP wifi_wifiap = wifi::WiFiAP();
   wifi_wifiap.set_ssid("FuckGFW");
   wifi_wifiap.set_password("refuckgfw");
@@ -49,27 +49,27 @@ void setup_mqtt_broker(){
   mqtt_mqttclientcomponent->set_username("von");
   mqtt_mqttclientcomponent->set_password("von1970");
   mqtt_mqttclientcomponent->set_discovery_info("homeassistant", true);
-  mqtt_mqttclientcomponent->set_topic_prefix("water");
+  mqtt_mqttclientcomponent->set_topic_prefix("smoothie");
   mqtt_mqttclientcomponent->set_birth_message(mqtt::MQTTMessage{
-      .topic = "water/status",
+      .topic = "smoothie/status",
       .payload = "online",
       .qos = 0,
       .retain = true,
   });
   mqtt_mqttclientcomponent->set_last_will(mqtt::MQTTMessage{
-      .topic = "water/status",
+      .topic = "smoothie/status",
       .payload = "offline",
       .qos = 0,
       .retain = true,
   });
   mqtt_mqttclientcomponent->set_shutdown_message(mqtt::MQTTMessage{
-      .topic = "water/status",
+      .topic = "smoothie/status",
       .payload = "offline",
       .qos = 0,
       .retain = true,
   });
   mqtt_mqttclientcomponent->set_log_message_template(mqtt::MQTTMessage{
-      .topic = "water/debug",
+      .topic = "smoothie/debug",
       .payload = "",
       .qos = 0,
       .retain = true,
@@ -133,7 +133,7 @@ void setup_sensor_mqtt_subscriber_working_mode(){
 
   
   working_mode_command->set_parent(mqtt_mqttclientcomponent);
-  working_mode_command->set_topic("water/working_mode/command");
+  working_mode_command->set_topic("smoothie/working_mode/command");
   working_mode_command->set_qos(0);
 }
 
@@ -154,7 +154,7 @@ void setup_int_sensor_workingstate(){
 }
 
 void setup() {
-    App.pre_setup("water", __DATE__ ", " __TIME__);
+    App.pre_setup("smoothie", __DATE__ ", " __TIME__);
     setup_logger();
     setup_wifi();
     setup_mqtt_broker();
