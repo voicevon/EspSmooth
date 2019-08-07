@@ -1,7 +1,7 @@
 #include "Player.h"
 
-#include "robot/Robot.h"
-#include "robot/Conveyor.h"
+#include "smoothie/robot/Robot.h"
+#include "smoothie/robot/Conveyor.h"
 
 #include "libs/OutputStream.h"
 #include "libs/StringUtils.h"

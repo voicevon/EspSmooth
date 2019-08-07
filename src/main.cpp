@@ -127,8 +127,8 @@ void setup(){
         printf("[E][setup] Timer for ControlMotors  start error \n");
     }
 }
-#include "robot/Robot.h"
-#include "robot/Actuator/DcMotor.h"
+#include "smoothie/robot/Robot.h"
+#include "smoothie/robot/Actuator/DcMotor.h"
 
 
 uint64_t rtos_report_inteval_second = 5 ;

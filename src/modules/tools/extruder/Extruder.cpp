@@ -2,9 +2,9 @@
 
 #include "Block.h"
 
-#include "robot/Conveyor.h"
-#include "robot/Actuator/StepperMotor.h"
-#include "robot/Robot.h"
+#include "smoothie/robot/Conveyor.h"
+#include "smoothie/robot/Actuator/StepperMotor.h"
+#include "smoothie/robot/Robot.h"
 
 #include "libs/OutputStream.h"
 

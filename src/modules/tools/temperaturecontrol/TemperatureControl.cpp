@@ -3,7 +3,7 @@
 #include "Thermistor.h"
 #include "PID_Autotuner.h"
 
-#include "robot/Conveyor.h"
+#include "smoothie/robot/Conveyor.h"
 
 #include "smoothie/smoothie/GCode.h"
 #include "smoothie/smoothie/Dispatcher.h"

@@ -5,8 +5,8 @@
 #include "smoothie/smoothie/GCode.h"
 #include "libs/OutputStream.h"
 #include "smoothie/smoothie/Dispatcher.h"
-#include "robot/Robot.h"
-#include "robot/Actuator/StepperMotor.h"
+#include "smoothie/robot/Robot.h"
+#include "smoothie/robot/Actuator/StepperMotor.h"
 
 #include <string>
 #include <map>

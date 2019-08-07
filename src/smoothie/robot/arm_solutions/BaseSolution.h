@@ -2,7 +2,7 @@
 #pragma once
 
 #include <map>
-#include "robot/ActuatorCoordinates.h"
+#include "smoothie/robot/ActuatorCoordinates.h"
 
 class ConfigReader;
 

@@ -4,11 +4,11 @@
 #include "ConfigWriter.h"
 #include "version.h"
 
-#include "robot/Robot.h"
+#include "smoothie/robot/Robot.h"
 #include "smoothie/RobotStarter.h"
-#include "robot/StepTicker.h"
-#include "robot/Actuator/StepperMotor.h"
-#include "robot/Conveyor.h"
+#include "smoothie/robot/StepTicker.h"
+#include "smoothie/robot/Actuator/StepperMotor.h"
+#include "smoothie/robot/Conveyor.h"
 
 #include "modules/tools/temperaturecontrol/TemperatureControl.h"
 

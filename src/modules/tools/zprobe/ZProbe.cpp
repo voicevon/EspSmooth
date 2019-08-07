@@ -2,13 +2,13 @@
 #include "ZProbeStrategy.h"
 
 
-#include "robot/arm_solutions/BaseSolution.h"
-#include "robot/Robot.h"
-#include "robot/Actuator/StepperMotor.h"
+#include "smoothie/robot/arm_solutions/BaseSolution.h"
+#include "smoothie/robot/Robot.h"
+#include "smoothie/robot/Actuator/StepperMotor.h"
 #include "smoothie/RobotStarter.h"
-#include "robot/Conveyor.h"
-#include "robot/Planner.h"
-#include "robot/StepTicker.h"
+#include "smoothie/robot/Conveyor.h"
+#include "smoothie/robot/Planner.h"
+#include "smoothie/robot/StepTicker.h"
 
 #include "smoothie/smoothie/GCode.h"
 #include "smoothie/smoothie/ConfigReader.h"

@@ -74,10 +74,10 @@
 #include "CartGridStrategy.h"
 #include "ZProbe.h"
 
-#include "robot/Robot.h"
-#include "robot/Conveyor.h"
-#include "robot/Actuator/StepperMotor.h"
-#include "robot/arm_solutions/BaseSolution.h"
+#include "smoothie/robot/Robot.h"
+#include "smoothie/robot/Conveyor.h"
+#include "smoothie/robot/Actuator/StepperMotor.h"
+#include "smoothie/robot/arm_solutions/BaseSolution.h"
 
 #include "smoothie/RobotStarter.h"
 #include "smoothie/smoothie/GCode.h"

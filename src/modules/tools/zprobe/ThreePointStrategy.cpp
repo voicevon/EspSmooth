@@ -59,9 +59,9 @@
 #include "smoothie/smoothie/Dispatcher.h"
 #include "smoothie/smoothie/GCode.h"
 
-#include "robot/Robot.h"
+#include "smoothie/robot/Robot.h"
 #include "smoothie/RobotStarter.h"
-#include "robot/Conveyor.h"
+#include "smoothie/robot/Conveyor.h"
 
 #include "libs/OutputStream.h"
 

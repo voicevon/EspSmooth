@@ -4,8 +4,8 @@
 #include "_hal/Pin/Pin.h"
 #include "_hal/__hal.h"
 
-#include "robot/StepTicker.h"
-#include "robot/Robot.h"
+#include "smoothie/robot/StepTicker.h"
+#include "smoothie/robot/Robot.h"
 
 #include "smoothie/smoothie/Dispatcher.h"
 #include "smoothie/smoothie/ConfigReader.h"
