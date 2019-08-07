@@ -208,7 +208,7 @@ void esphome_setup() {
     App.setup();
     ESP_LOGV(TAG,"esphome_setup() is exiting...");
     
-    xTaskCreate(task_esphome_loop, "esphome_loop", 30000, NULL, (tskIDLE_PRIORITY + 2UL), (TaskHandle_t *) NULL);
+    xTaskCreate(task_esphome_loop, "esphome_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL);
     // delay(5000);   //Wait wifi connecting.  TODO:// set as a condition.
 }
 

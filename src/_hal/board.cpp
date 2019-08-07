@@ -1,14 +1,12 @@
 #include "board.h"
 #include "Arduino.h"
 
-
-
-
 //https://i.ebayimg.com/images/g/j50AAOSwN8FZqBJI/s-l1600.jpg
 //This pin is serial0.tx pin.
 #define BUILID_IN_LED_PIN  1   
 
 void Board_Init(void){
+
 };
 
 void Board_LED_Toggle(uint8_t LEDNumber){

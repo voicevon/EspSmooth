@@ -1,15 +1,14 @@
 #include "ActuatorTask.h"
 #include "smoothie/robot/Robot.h"
-#include "smoothie/robot/Actuator/Actuator.h"
-#include "smoothie/robot/Actuator/ServoMotor.h"
-#include "smoothie/robot/Actuator/StepperMotor.h"
-#include "smoothie/robot/Actuator/DcMotor.h"
-#include "smoothie/robot/Actuator/XuefengMotor.h"
-// uint8_t xxx=0;
-// float p[3];
-// Actuator* aa;
-// float fff[3];
+#include "Actuator.h"
+#include "ServoMotor.h"
+#include "StepperMotor.h"
+#include "DcMotor.h"
+#include "XuefengMotor.h"
+
+int16_t actuators_position[6];
 float float_value;
+
 void ControlMotors(TimerHandle_t xTimer){
     ServoMotor* servoMotor;
     DcMotor* dcMotor;
@@ -44,4 +43,14 @@ void ControlMotors(TimerHandle_t xTimer){
         }
     }   
     // printf(">>>>>>>>>>>>>>>>>>>>>>>>>> exiting task>>>>>>>>>>>>\n");
+}
+
+void Controlmotors_setup(){
+    int interval = 1000;
+    int id = 1;
+    TimerHandle_t tmr = xTimerCreate("ControlMotors", pdMS_TO_TICKS(interval), pdTRUE, ( void * )id, &ControlMotors);
+    if( xTimerStart(tmr, 10 ) != pdPASS ) {
+        printf("[E][setup] Timer for ControlMotors  start error. \n");
+    }
+    printf("[D][main] Create xTimerTask COntrolMotors is started.\n" );
 }

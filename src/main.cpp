@@ -3,7 +3,7 @@
 
 #include "_hal/board.h"
 #include "_hal/stopwatch.h"
-
+#include "smoothie/robot/Actuator/ActuatorTask.h"
 #include "main.h"
 
 
@@ -30,16 +30,7 @@ void smooth_setup(){
 }
 
 extern float float_value;
-extern void ControlMotors(TimerHandle_t xTimer);   //@ smoothis/robot/Actuator/ActuatorTask.cpp
-void control_motor_setup(){
-    int interval = 1000;
-    int id = 1;
-    TimerHandle_t tmr = xTimerCreate("ControlMotors", pdMS_TO_TICKS(interval), pdTRUE, ( void * )id, &ControlMotors);
-    if( xTimerStart(tmr, 10 ) != pdPASS ) {
-        printf("[E][setup] Timer for ControlMotors  start error. \n");
-    }
-    printf("[D][main] Create xTimerTask COntrolMotors is started.\n" );
-}
+
 
 void setup(){
     Board_report_cpu();
@@ -52,7 +43,7 @@ void setup(){
     delay(5000);   //Keep uartTx empty for ProntFace handshaking.
     printf("\n\n"); 
     printf("Hi, Mr.ProntFace. You're online now. right?\n ");
-    control_motor_setup();
+    Controlmotors_setup();
     Board_report_memory();
 }
 
