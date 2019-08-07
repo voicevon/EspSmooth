@@ -19,7 +19,7 @@ void ControlMotors(TimerHandle_t xTimer){
     for(int i=0; i<3;i++){
         Actuator* actuator = robot->actuators[i];
         float target_position = actuator->get_current_position();
-        actuators_position[i]=(int16_t) target_position;
+        actuators_position[i]= target_position; //For mqtt sensor
         switch (actuator->get_motor_type())
         {
         case Actuator::SERVO_MOTOR:

@@ -137,22 +137,54 @@ void setup_sensor_mqtt_subscriber_working_mode(){
   working_mode_command->set_qos(0);
 }
 
-ramsensor::RamSensorInt16* current_working_state_sensor;
-mqtt::MQTTSensorComponent *mqtt_working_state_sensor;
+ramsensor::RamSensorInt16* actuator_pos_0;
+mqtt::MQTTSensorComponent *mqtt_actuator_pos_0;
 
-void setup_int_sensor_workingstate(){
-  current_working_state_sensor = new ramsensor::RamSensorInt16();
-  App.register_component(current_working_state_sensor);
-  App.register_sensor(current_working_state_sensor);
-  current_working_state_sensor->set_name("alpha_pos");
-  current_working_state_sensor->set_unit_of_measurement("");
-  current_working_state_sensor->set_icon("");
-  current_working_state_sensor->set_accuracy_decimals(0);
-  current_working_state_sensor->set_int_source(&actuators_position[0]);
-  mqtt_working_state_sensor = new mqtt::MQTTSensorComponent(current_working_state_sensor);
-  App.register_component(mqtt_working_state_sensor);
-
+void setup_int_sensor_pos_0(){
+  actuator_pos_0 = new ramsensor::RamSensorInt16();
+  App.register_component(actuator_pos_0);
+  App.register_sensor(actuator_pos_0);
+  actuator_pos_0->set_name("alpha_pos");
+  actuator_pos_0->set_unit_of_measurement("");
+  actuator_pos_0->set_icon("");
+  actuator_pos_0->set_accuracy_decimals(0);
+  actuator_pos_0->set_int_source(&actuators_position[0]);
+  mqtt_actuator_pos_0 = new mqtt::MQTTSensorComponent(actuator_pos_0);
+  App.register_component(mqtt_actuator_pos_0);
 }
+
+ramsensor::RamSensorInt16* actuator_pos_1;
+mqtt::MQTTSensorComponent *mqtt_actuator_pos_1;
+
+void setup_int_sensor_pos_1(){
+  actuator_pos_1 = new ramsensor::RamSensorInt16();
+  App.register_component(actuator_pos_1);
+  App.register_sensor(actuator_pos_1);
+  actuator_pos_1->set_name("beta_pos");
+  actuator_pos_1->set_unit_of_measurement("");
+  actuator_pos_1->set_icon("");
+  actuator_pos_1->set_accuracy_decimals(0);
+  actuator_pos_1->set_int_source(&actuators_position[1]);
+  mqtt_actuator_pos_1 = new mqtt::MQTTSensorComponent(actuator_pos_1);
+  App.register_component(mqtt_actuator_pos_1);
+}
+
+ramsensor::RamSensorInt16* actuator_pos_2;
+mqtt::MQTTSensorComponent *mqtt_actuator_pos_2;
+
+void setup_int_sensor_pos_2(){
+  actuator_pos_2 = new ramsensor::RamSensorInt16();
+  App.register_component(actuator_pos_2);
+  App.register_sensor(actuator_pos_2);
+  actuator_pos_2->set_name("gamma_pos");
+  actuator_pos_2->set_unit_of_measurement("");
+  actuator_pos_2->set_icon("");
+  actuator_pos_2->set_accuracy_decimals(0);
+  actuator_pos_2->set_int_source(&actuators_position[2]);
+  mqtt_actuator_pos_2 = new mqtt::MQTTSensorComponent(actuator_pos_2);
+  App.register_component(mqtt_actuator_pos_2);
+}
+
 void task_esphome_loop(void*){
   while(true){
     App.loop();
@@ -170,7 +202,9 @@ void esphome_setup() {
     setup_wifi_signal();
     setup_sensor_uptime();
     setup_sensor_mqtt_subscriber_working_mode();
-    setup_int_sensor_workingstate();
+    setup_int_sensor_pos_0();
+    setup_int_sensor_pos_1();
+    setup_int_sensor_pos_2();
     App.setup();
     ESP_LOGV(TAG,"esphome_setup() is exiting...");
     
