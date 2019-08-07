@@ -151,14 +151,19 @@ void setup_int_sensor_workingstate(){
   current_working_state_sensor->set_int_source(&current_working_state);
   mqtt_working_state_sensor = new mqtt::MQTTSensorComponent(current_working_state_sensor);
   App.register_component(mqtt_working_state_sensor);
+
+}
+void task_esphome_loop(void*){
+  while(true){
+    App.loop();
+  }
 }
 
-void esphome_pre_setup(){
-    App.pre_setup("smoothie", __DATE__ ", " __TIME__);
-    setup_logger();
-}
+
 void esphome_setup() {
     // Serial.println("aaaaaaaaaaaaaaaaaaaaaaa\n");
+    App.pre_setup("smoothie", __DATE__ ", " __TIME__);
+    setup_logger();
     ESP_LOGV(TAG,"esphome_setup() at entrance...");
     setup_wifi();
     setup_mqtt_broker();
@@ -168,9 +173,9 @@ void esphome_setup() {
     setup_int_sensor_workingstate();
     App.setup();
     ESP_LOGV(TAG,"esphome_setup() is exiting...");
+    
+    xTaskCreate(task_esphome_loop, "esphome_loop", 30000, NULL, (tskIDLE_PRIORITY + 2UL), (TaskHandle_t *) NULL);
+    // delay(5000);   //Wait wifi connecting.  TODO:// set as a condition.
 }
 
 
-void esphome_loop() {
-  App.loop();
-}

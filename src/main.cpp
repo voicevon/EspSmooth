@@ -85,19 +85,19 @@ void control_motor_setup(){
     }
     printf("[D][main] Create xTimerTask COntrolMotors is started.\n" );
 }
+
 void setup(){
-    esphome_pre_setup();
     show_memory_allocate();
 
-    // printf("Hi, Mr.ProntFace. You're online now. right?\n ");
-    // control_motor_setup();
-    esphome_setup();
+    esphome_setup();   //wifi setup must be in advance of starting a timer_interrupt. Even RTOS. 
     show_memory_allocate();
 
     smooth_setup(); 
-    delay(5000);   //Keep uartTx empty for Printrun handshaking.
+    delay(15000);   //Keep uartTx empty for Printrun handshaking. 
+    // printf("Hi, Mr.ProntFace. You're online now. right?\n ");
+    // control_motor_setup();
     show_memory_allocate();
-
+    // xTaskCreate(test, "esphome_loop", 30000, NULL, (tskIDLE_PRIORITY + 2UL), (TaskHandle_t *) NULL);
 }
 #include "smoothie/robot/Robot.h"
 #include "smoothie/robot/Actuator/DcMotor.h"
@@ -108,10 +108,9 @@ uint64_t cpu_idle_counter = 0;
 uint64_t last_time_stamp = 0;   //us
 // Actually, this is the lowest priority task.
 void loop(){
-    // return;
-     esphome_loop();
-     cpu_idle_counter++;
+    // test();
 
+     cpu_idle_counter++;
     if(esp_timer_get_time () - last_time_stamp >= rtos_report_inteval_second * 1000000){
         uint16_t passed_time = cpu_idle_counter / 10280 / rtos_report_inteval_second;
         uint16_t uptime_second = esp_timer_get_time() / 1000000;  
