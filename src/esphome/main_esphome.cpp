@@ -153,7 +153,7 @@ void setup_int_sensor_workingstate(){
   App.register_component(mqtt_working_state_sensor);
 }
 
-void setup() {
+void esphome_setup() {
     App.pre_setup("smoothie", __DATE__ ", " __TIME__);
     setup_logger();
     setup_wifi();
@@ -166,6 +166,6 @@ void setup() {
 }
 
 
-void loop() {
+void esphome_loop() {
   App.loop();
 }

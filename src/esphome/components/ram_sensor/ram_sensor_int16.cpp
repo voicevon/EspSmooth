@@ -2,7 +2,7 @@
 #include "ram_sensor_int16.h"
 #include "esphome/core/log.h"
 #include "esphome/core/helpers.h"
-#include "esphome.h"
+#include "esphome/esphome.h"
 
 
 

@@ -5,9 +5,9 @@
 #include <vector>
 #include <cstring>
 
-#include "smoothie/Module.h"
+#include "smoothie/smoothie/Module.h"
 #include "ActuatorCoordinates.h"
-#include "smoothie/AxisDefns.h"
+#include "smoothie/smoothie/AxisDefns.h"
 
 class GCode;
 class BaseSolution;

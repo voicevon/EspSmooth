@@ -1,8 +1,8 @@
 #pragma once
 
-#include "smoothie/Module.h"
 #include "_hal/__hal.h"
-#include "smoothie/ConfigReader.h"
+#include "smoothie/smoothie/Module.h"
+#include "smoothie/smoothie/ConfigReader.h"
 
 #include <tuple>
 

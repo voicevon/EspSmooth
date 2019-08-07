@@ -4,8 +4,8 @@
 // This is a m-code reconfigable class.
 //      means can control the gpio from m-code
 
-#include "smoothie/Module.h"
-#include "smoothie/ConfigReader.h"
+#include "smoothie/smoothie/Module.h"
+#include "smoothie/smoothie/ConfigReader.h"
 #include "_hal/Pin/PwmPin.h"
 #include "_hal/Pin/InputPin.h"
 #include "_hal/Pin/OutputPin.h"

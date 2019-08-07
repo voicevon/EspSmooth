@@ -1,14 +1,17 @@
 #include "Extruder.h"
 
-#include "robot/Conveyor.h"
 #include "Block.h"
+
+#include "robot/Conveyor.h"
 #include "robot/Actuator/StepperMotor.h"
-#include "smoothie/ConfigReader.h"
 #include "robot/Robot.h"
-#include "smoothie/GCode.h"
+
 #include "libs/OutputStream.h"
-#include "smoothie/AxisDefns.h"
-#include "smoothie/Dispatcher.h"
+
+#include "smoothie/smoothie/AxisDefns.h"
+#include "smoothie/smoothie/ConfigReader.h"
+#include "smoothie/smoothie/GCode.h"
+#include "smoothie/smoothie/Dispatcher.h"
 
 #include <math.h>
 
