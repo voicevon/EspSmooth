@@ -36,7 +36,7 @@ void setup(){
     Board_report_memory();
 
     smoothie_setup(); 
-    delay(5000);   //Keep uartTx empty for ProntFace handshaking.
+    delay(8000);   //Keep uartTx empty for ProntFace handshaking.
     printf("\n\n"); 
     printf("Hi, Mr.ProntFace. You're online now. right?\n ");
     Controlmotors_setup();

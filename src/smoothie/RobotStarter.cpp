@@ -518,7 +518,7 @@ static void handle_query(bool need_done)
  * Commands are sent to this thread via the message queue from things that can block (like I/O)
  * Other things can call dispatch_line direct from the in_command_ctx call.
  */
-static void command_handler()
+void command_handler(void*)
 {
     printf("DEBUG: Command thread running\n\n\n\n");
     int counter = 0;
@@ -781,7 +781,7 @@ void setup_section_voltage_monitors(ConfigReader cr){
 
 
 #include "Esp.h"   
-void smoothie_startup(void *)
+void smoothie_startup()
 {
     printf("INFO: Smoothie V2.alpha Build for %s - starting up\n", BUILD_TARGET);
     //get_pll1_clk();
@@ -993,18 +993,14 @@ void smoothie_startup(void *)
     Board_LED_Set(2, false);
     Board_LED_Set(3, false);
 
-    // run the command handler in this thread
-    command_handler();
-    // does not return from above
 }
 
 void smoothie_setup(){
 
     StopWatch_Init();
     printf("StopWatch clock rate= %lu Hz\n", StopWatch_TicksPerSecond());
-
+    smoothie_startup();
     // launch the startup thread which will become the command thread that executes all incoming commands
     // 10000 Bytes stack
-    xTaskCreate(smoothie_startup, "CommandThread", 30000, NULL, (tskIDLE_PRIORITY + 2UL), (TaskHandle_t *) NULL);
-    
+    xTaskCreate(command_handler, "CommandThread", 30000, NULL, (tskIDLE_PRIORITY + 2UL), (TaskHandle_t *) NULL);
 }
