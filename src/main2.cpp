@@ -78,10 +78,9 @@ void setup_ads1115(){
   App.register_component(ads1115_ads1115component);
   ads1115_ads1115sensor = new ads1115::ADS1115Sensor(ads1115_ads1115component);
   App.register_component(ads1115_ads1115sensor);
-  mqtt_mqttsensorcomponent = new mqtt::MQTTSensorComponent(ads1115_ads1115sensor);
-  App.register_component(mqtt_mqttsensorcomponent);
-
   App.register_sensor(ads1115_ads1115sensor);
+
+
   ads1115_ads1115component->register_sensor(ads1115_ads1115sensor);
 
   i2c_i2ccomponent->set_sda_pin(27);
@@ -102,6 +101,9 @@ void setup_ads1115(){
   ads1115_ads1115sensor->set_update_interval(1000);  //from component?
   ads1115_ads1115sensor->set_multiplexer(ads1115::ADS1115_MULTIPLEXER_P1_NG); //from sensor
   ads1115_ads1115sensor->set_gain(ads1115::ADS1115_GAIN_6P144);               //from sensor
+
+  // mqtt_mqttsensorcomponent = new mqtt::MQTTSensorComponent(ads1115_ads1115sensor);
+  // App.register_component(mqtt_mqttsensorcomponent);
 }
 
 void setup() {
@@ -113,5 +115,9 @@ void setup() {
 }
 
 void loop() {
-  App.loop();
+  // App.loop();
+  ads1115_ads1115sensor->update();
+  float xx= ads1115_ads1115sensor->state;
+  printf("adc = %f\n", xx);
+  delay(100);
 }
