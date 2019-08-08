@@ -1,5 +1,8 @@
 #pragma once
 #include "esphome/components/ram_sensor/ram_sensor_int16.h"
+#include "esphome/components/i2c/i2c.h"
+#include "esphome/components/ads1115/ads1115.h"
+
 // #include "esphome/components/adc/adc_sensor.h"
 // #include "esphome/components/binary_sensor/automation.h"
 // #include "esphome/components/binary_sensor/binary_sensor.h"

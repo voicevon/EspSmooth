@@ -11,8 +11,8 @@
 static const char *TAG = "espsmooth.main";
 
 
-extern void configureSPIFI();
-extern void smoothie_startup(void *);
+// extern void configureSPIFI();
+// extern void smoothie_startup(void *);
 
 
 // void smooth_setup(){
@@ -29,7 +29,6 @@ extern void smoothie_startup(void *);
 extern float float_value;
 
 void setup(){
-    Board_report_cpu();
     Board_report_memory();
     Board_Init();
     esphome_setup();   //wifi setup must be in advance of starting a timer_interrupt. Even RTOS. 
@@ -40,6 +39,7 @@ void setup(){
     printf("\n\n"); 
     printf("Hi, Mr.ProntFace. You're online now. right?\n ");
     Controlmotors_setup();
+    Board_report_cpu();
     Board_report_memory();
 }
 
