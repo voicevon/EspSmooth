@@ -3,6 +3,6 @@
 
 #include <fstream>
 
-std::string spiffs_reading(void);
+std::string spiffs_reading(const char* file_name);
 
 #endif

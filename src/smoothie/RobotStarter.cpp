@@ -585,7 +585,6 @@ void safe_sleep(uint32_t ms)
 #include "libs/SlowTicker.h"
 #include "libs/FastTicker.h"
 #include "robot/StepTicker.h"
-#include "smoothie/ConfigReader.h"
 #include "modules/tools/switch/Switch.h"
 #include "robot/Planner.h"
 #include "robot/Robot.h"
@@ -842,7 +841,7 @@ void smoothie_startup(void *)
         printf("DEBUG: Starting configuration of modules from memory...\n");
 #endif
 #if CONFIG_SOURCE == CONFIG_SOURCE_SPIFFS
-        std::string std_string = spiffs_reading();
+        std::string std_string = spiffs_reading("robot.ini");
         std::stringstream std_string_stream(std_string);
         ConfigReader cr(std_string_stream);
 #endif

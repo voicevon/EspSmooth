@@ -20,10 +20,8 @@
 #include "arm_solutions/CoreXZSolution.h"
 #include "arm_solutions/MorganSCARASolution.h"
 
-#include "smoothie/smoothie/ConfigReader.h"
 #include "smoothie/smoothie/Dispatcher.h"
 #include "smoothie/smoothie/GCode.h"
-
 #include "smoothie/RobotStarter.h"
 #include "modules/tools/temperaturecontrol/TemperatureControl.h"
 
@@ -31,6 +29,8 @@
 #include "libs/OutputStream.h"
 #include "libs/StringUtils.h"
 #include "libs/StringUtils.h"
+
+#include "_hal/configure/ConfigReader.h"
 
 #include "esphome/components/ads1115/ads1115.h"
 

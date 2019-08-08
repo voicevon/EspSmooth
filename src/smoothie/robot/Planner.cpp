@@ -7,10 +7,9 @@
 #include "smoothie/smoothie/Module.h"
 #include "smoothie/RobotStarter.h"
 
-#include "smoothie/smoothie/ConfigReader.h"
 #include "smoothie/smoothie/AxisDefns.h"
 #include "Actuator/StepperMotor.h"
-
+#include "_hal/configure/ConfigReader.h"
 
 #include <math.h>
 #include <algorithm>

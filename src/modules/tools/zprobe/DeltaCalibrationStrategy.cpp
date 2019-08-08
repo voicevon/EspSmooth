@@ -8,10 +8,10 @@
 
 #include "smoothie/RobotStarter.h"
 #include "smoothie/smoothie/GCode.h"
-#include "smoothie/smoothie/ConfigReader.h"
 #include "smoothie/smoothie/Dispatcher.h"
 
 #include "libs/OutputStream.h"
+#include "_hal/configure/ConfigReader.h"
 
 #include <cmath>
 #include <tuple>

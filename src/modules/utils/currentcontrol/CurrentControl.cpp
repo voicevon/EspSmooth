@@ -1,12 +1,14 @@
 #include "CurrentControl.h"
-#include "smoothie/smoothie/ConfigReader.h"
 // #include "Pwm.h"
-#include "_hal/__hal.h"
-#include "smoothie/smoothie/GCode.h"
-#include "libs/OutputStream.h"
+
 #include "smoothie/smoothie/Dispatcher.h"
-#include "smoothie/robot/Robot.h"
+#include "smoothie/smoothie/GCode.h"
 #include "smoothie/robot/Actuator/StepperMotor.h"
+#include "smoothie/robot/Robot.h"
+
+#include "libs/OutputStream.h"
+#include "_hal/__hal.h"
+#include "_hal/configure/ConfigReader.h"
 
 #include <string>
 #include <map>

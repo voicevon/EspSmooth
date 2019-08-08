@@ -1,5 +1,7 @@
 #include "board.h"
-#include "Arduino.h"
+#include "_hal/spiffs_ext.h"
+#include "esp32-hal-gpio.h"
+#include "Esp.h"
 
 //https://i.ebayimg.com/images/g/j50AAOSwN8FZqBJI/s-l1600.jpg
 //This pin is serial0.tx pin.
@@ -7,7 +9,8 @@
 
 void Board_Init(void){
     //load bus drivers
-
+    std::string xx = spiffs_reading("board.ini");
+    printf(" aaaaaaaaaaaaaaaaaaaaaaaaa  length= %i\n",xx.length());
 };
 
 void Board_LED_Toggle(uint8_t LEDNumber){
@@ -16,7 +19,7 @@ void Board_LED_Toggle(uint8_t LEDNumber){
 
 void Board_LED_Set(uint8_t LEDNumber, bool On){
     if(LEDNumber == 1){
-        pinMode(BUILID_IN_LED_PIN,OUTPUT);
+        pinMode(BUILID_IN_LED_PIN, OUTPUT);
         digitalWrite(BUILID_IN_LED_PIN, !On );
     }
 }
@@ -44,8 +47,7 @@ void Board_report_cpu(){
 // https://techtutorialsx.com/2017/12/17/esp32-arduino-getting-the-free-heap/
 void Board_report_memory(){
     printf(" ------------------------------------ Memory report ------------------------------------ \n");
-    Serial.print("[ESP.getFreeHeap()]      free heap size = ");
-    Serial.println(ESP.getFreeHeap());  
+    printf("[ESP.getFreeHeap()]      free heap size = %i\n",ESP.getFreeHeap());
     printf("[esp_get_free_heap_size] free heap size = %d \n",esp_get_free_heap_size());   //Are they same? NO! WHY ?
     printf("\n\n");
     delay(40);   //Wait for Serial/printf() is finished processing, seems serial sending is in a another thread/core cpu ?

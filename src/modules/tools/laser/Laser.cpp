@@ -3,12 +3,12 @@
 #include "_hal/Pin/PwmPin.h"
 #include "_hal/Pin/Pin.h"
 #include "_hal/__hal.h"
+#include "_hal/configure/ConfigReader.h"
 
 #include "smoothie/robot/StepTicker.h"
 #include "smoothie/robot/Robot.h"
 
 #include "smoothie/smoothie/Dispatcher.h"
-#include "smoothie/smoothie/ConfigReader.h"
 #include "smoothie/smoothie/GCode.h"
 
 #include "libs/OutputStream.h"

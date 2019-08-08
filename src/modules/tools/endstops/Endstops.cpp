@@ -2,6 +2,7 @@
 
 
 #include "_hal/__hal.h"
+#include "_hal/configure/ConfigReader.h"
 
 #include "libs/SlowTicker.h"
 #include "libs/OutputStream.h"
@@ -15,8 +16,6 @@
 #include "smoothie/robot/StepTicker.h"
 
 #include "smoothie/RobotStarter.h"
-
-#include "smoothie/smoothie/ConfigReader.h"
 #include "smoothie/smoothie/Dispatcher.h"
 #include "smoothie/smoothie/GCode.h"
 

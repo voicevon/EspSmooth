@@ -5,10 +5,10 @@
 //      means can control the gpio from m-code
 
 #include "smoothie/smoothie/Module.h"
-#include "smoothie/smoothie/ConfigReader.h"
 #include "_hal/Pin/PwmPin.h"
 #include "_hal/Pin/InputPin.h"
 #include "_hal/Pin/OutputPin.h"
+#include "_hal/configure/ConfigReader.h"
 
 #include <string>
 #include <atomic>
