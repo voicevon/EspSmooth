@@ -11,11 +11,14 @@ using namespace mqtt;
 using namespace i2c;
 
 
-void setup_logger_wifi_mqtt()
-{
+void setup_logger(){
   logger_logger = new logger::Logger(115200, 512, logger::UART_SELECTION_UART0);
   logger_logger->pre_setup();
   App.register_component(logger_logger);
+  
+}
+void setup_wifi_mqtt()
+{
   
   wifi_wificomponent = new wifi::WiFiComponent();
   wifi_wificomponent->set_use_address("smoothie.local");
@@ -65,7 +68,7 @@ void setup_logger_wifi_mqtt()
   mqtt_mqttclientcomponent->set_reboot_timeout(300000);
 
 }
-mqtt::MQTTSensorComponent *mqtt_mqttsensorcomponent;
+// mqtt::MQTTSensorComponent *mqtt_mqttsensorcomponent;
 
 i2c::I2CComponent *i2c_i2ccomponent;
 ads1115::ADS1115Component *ads1115_ads1115component;
@@ -109,15 +112,23 @@ void setup_ads1115(){
 void setup() {
 
   App.pre_setup("smoothie", __DATE__ ", " __TIME__);
-  setup_logger_wifi_mqtt();
+  setup_logger();
+  // setup_wifi_mqtt();
   setup_ads1115();
   App.setup();
+  logger_logger->set_log_level("sensor",ESPHOME_LOG_LEVEL_ERROR);
+  logger_logger->set_log_level("ads1115",ESPHOME_LOG_LEVEL_ERROR);
 }
-
+int i;
 void loop() {
   // App.loop();
   ads1115_ads1115sensor->update();
   float xx= ads1115_ads1115sensor->state;
-  printf("adc = %f\n", xx);
-  delay(100);
+  printf(" %f", xx);
+  i++;
+  if (i==10) {
+    i=0;
+    printf("\n");
+  }
+  delay(2);
 }
