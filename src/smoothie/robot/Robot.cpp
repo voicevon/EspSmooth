@@ -32,7 +32,7 @@
 #include "libs/StringUtils.h"
 #include "libs/StringUtils.h"
 
-
+#include "esphome/components/ads1115/ads1115.h"
 
 
 #include <math.h>
@@ -281,7 +281,7 @@ bool Robot::configure(ConfigReader& cr)
                     OutputPin en_pin(cr.get_string(mm, en_pin_key, "nc"));
                     printf("    [D][robot][config:%s]  for stepper motor pins: step= %s, dir= %s, en= %s\n", s->first.c_str(), step_pin.to_string().c_str(), dir_pin.to_string().c_str(), en_pin.to_string().c_str());
                     StepperMotor *new_stepper = new StepperMotor(step_pin, dir_pin, en_pin);
-                    // regietered_count = register_actuator(new_stepper);  Is this way better?
+                    // registered_count = register_actuator(new_stepper);  Is this way better?
                     new_actuator = new_stepper;
                 }
                 break;
@@ -317,12 +317,14 @@ bool Robot::configure(ConfigReader& cr)
                     //question here: what is the essencial differents with below two lines?
                     // esphome::ads1115::ADS1115Sensor ads1115_sensor();
                     // esphome::ads1115::ADS1115Sensor ads1115_sensor = esphome::ads1115::ADS1115Sensor();
+                    esphome::ads1115::ADS1115Sensor* ads1115_sensor = new esphome::ads1115::ADS1115Sensor(ads1115_component);
                     // ads1115_sensor.set_parent(ads1115_component);
-                    // ads1115_sensor.set_multiplexer(esphome::ads1115::ADS1115_MULTIPLEXER_P1_NG);
-                    // ads1115_sensor.set_gain(esphome::ads1115::ADS1115_GAIN_6P144);
-                    // ads1115_sensor.setup();
-                    // DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin,ads1115_sensor);
-                    // new_actuator = new_dc;
+                    ads1115_sensor->set_multiplexer(esphome::ads1115::ADS1115_MULTIPLEXER_P1_NG);
+                    ads1115_sensor->set_gain(esphome::ads1115::ADS1115_GAIN_6P144);
+                    ads1115_sensor->set_update_interval(2000000);
+                    ads1115_sensor->setup();
+                    DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin,ads1115_sensor);
+                    new_actuator = new_dc;
                     printf("-----ADS1115Sensor\n");
                 }
                 break;

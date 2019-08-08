@@ -7,23 +7,28 @@ const int PWM_FREQ = 50;    // 50Hz  20ms
 const int PWM_RESOLUTION_BITS = 16;     // 16 bit resolution
 const int HOME_DUTY = 0;
 
-DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin,esphome::ads1115::ADS1115Sensor& ads1115_sensor){
+DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin,esphome::ads1115::ADS1115Sensor* ads1115_sensor){
     motor_type_ = ACTUATOR_TYPE_T::DC_MOTOR;
     __enabled = false;
 
     __dir_pin = OutputPin(dir_pin);
     __pwm_pin = PwmPin(pwm_pin);
 
-    //  __ads1115 = ads1115_sensor; 
+    __ads1115Sensor = ads1115_sensor; 
 }
 
-// Called by timer.
+// Called by timerTask.
 void DcMotor::pid_loop(float target_position){
     if(!__enabled) return;   //??
-    Serial.print("*");
-    // __sensor_position = __ads1115.sample();
-    if(__sensor_position <10) return;    // there is an error.
+    printf("1111111111111111111\n");
 
+    __ads1115Sensor->update();
+    printf("2222222222222222 \n");
+    __sensor_position = __ads1115Sensor->state;
+    printf("Ads1115 Sensor value= %6.2f \n",__sensor_position );
+    return;
+
+    if(__sensor_position <10) return;    // there is an error.
     if(isnan(__sensor_position)) return;  //??
     float duty = __pid_controller.get_output_value(target_position,__sensor_position);
     duty *= 10.0f;
