@@ -6,11 +6,9 @@ using namespace esphome;
 logger::Logger *logger_logger;
 wifi::WiFiComponent *wifi_wificomponent;
 mqtt::MQTTClientComponent *mqtt_mqttclientcomponent;
-// using namespace sensor;
 using namespace mqtt;
 
 using namespace i2c;
-// using namespace json;
 
 
 void setup_logger_wifi_mqtt()
@@ -78,28 +76,32 @@ void setup_ads1115(){
   App.register_component(i2c_i2ccomponent);
   ads1115_ads1115component = new ads1115::ADS1115Component();
   App.register_component(ads1115_ads1115component);
+  ads1115_ads1115sensor = new ads1115::ADS1115Sensor(ads1115_ads1115component);
+  App.register_component(ads1115_ads1115sensor);
+  mqtt_mqttsensorcomponent = new mqtt::MQTTSensorComponent(ads1115_ads1115sensor);
+  App.register_component(mqtt_mqttsensorcomponent);
+
+  App.register_sensor(ads1115_ads1115sensor);
+  ads1115_ads1115component->register_sensor(ads1115_ads1115sensor);
 
   i2c_i2ccomponent->set_sda_pin(27);
   i2c_i2ccomponent->set_scl_pin(14);
   i2c_i2ccomponent->set_frequency(400000);
   i2c_i2ccomponent->set_scan(true);
 
-  ads1115_ads1115sensor = new ads1115::ADS1115Sensor(ads1115_ads1115component);
-  App.register_sensor(ads1115_ads1115sensor);
+
   ads1115_ads1115sensor->set_name("alpha_pos");
-  ads1115_ads1115sensor->set_unit_of_measurement("V");
-  ads1115_ads1115sensor->set_icon("mdi:flash");
+  ads1115_ads1115sensor->set_unit_of_measurement("");
+  ads1115_ads1115sensor->set_icon("");
   ads1115_ads1115sensor->set_accuracy_decimals(3);
-  mqtt_mqttsensorcomponent = new mqtt::MQTTSensorComponent(ads1115_ads1115sensor);
-  App.register_component(mqtt_mqttsensorcomponent);
+
 
   ads1115_ads1115component->set_i2c_parent(i2c_i2ccomponent);
   ads1115_ads1115component->set_i2c_address(0x48);
-  ads1115_ads1115sensor->set_update_interval(1000);
-  App.register_component(ads1115_ads1115sensor);
-  ads1115_ads1115sensor->set_multiplexer(ads1115::ADS1115_MULTIPLEXER_P1_NG);
-  ads1115_ads1115sensor->set_gain(ads1115::ADS1115_GAIN_6P144);
-  ads1115_ads1115component->register_sensor(ads1115_ads1115sensor);
+  
+  ads1115_ads1115sensor->set_update_interval(1000);  //from component?
+  ads1115_ads1115sensor->set_multiplexer(ads1115::ADS1115_MULTIPLEXER_P1_NG); //from sensor
+  ads1115_ads1115sensor->set_gain(ads1115::ADS1115_GAIN_6P144);               //from sensor
 }
 
 void setup() {
