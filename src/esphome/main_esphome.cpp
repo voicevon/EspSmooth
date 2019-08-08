@@ -1,7 +1,7 @@
 #include "HardwareSerial.h"
 #include "esphome.h"
 #include "main_esphome.h"
-#include "_hal/spiffs_ext.h"
+#include "_hal/FileSys/spiffs_ext.h"
 #include "_hal/configure/ConfigReader.h"
 
 
