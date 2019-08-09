@@ -56,6 +56,7 @@ void Ads1115_setup(ConfigReader cr){
 //  https://esp32.com/viewtopic.php?t=1459
 float Ads1115_read_sensor_mv(int chip_id,int channel){
   // printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ %i,%i\n",chip_id,channel);
-    ads1115_ads1115sensor[chip_id][channel]->update();
-    return ads1115_ads1115sensor[chip_id][channel]->state;
+    // ads1115_ads1115sensor[chip_id][channel]->update();
+    return ads1115_ads1115component[chip_id]->request_measurement(ads1115_ads1115sensor[chip_id][channel]);
+    // return ads1115_ads1115sensor[chip_id][channel]->state;
 }
