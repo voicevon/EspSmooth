@@ -318,14 +318,14 @@ bool Robot::configure(ConfigReader& cr)
                     // esphome::ads1115::ADS1115Sensor ads1115_sensor();
                     // esphome::ads1115::ADS1115Sensor ads1115_sensor = esphome::ads1115::ADS1115Sensor();
                     esphome::ads1115::ADS1115Sensor* ads1115_sensor = new esphome::ads1115::ADS1115Sensor(ads1115_component);
-                    // ads1115_sensor.set_parent(ads1115_component);
-                    ads1115_sensor->set_multiplexer(esphome::ads1115::ADS1115_MULTIPLEXER_P1_NG);
-                    ads1115_sensor->set_gain(esphome::ads1115::ADS1115_GAIN_6P144);
-                    ads1115_sensor->set_update_interval(2000000);
-                    ads1115_sensor->setup();
+                    // // ads1115_sensor.set_parent(ads1115_component);
+                    // ads1115_sensor->set_multiplexer(esphome::ads1115::ADS1115_MULTIPLEXER_P1_NG);
+                    // ads1115_sensor->set_gain(esphome::ads1115::ADS1115_GAIN_6P144);
+                    // ads1115_sensor->set_update_interval(2000000);
+                    // ads1115_sensor->setup();
                     DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin,ads1115_sensor);
                     new_actuator = new_dc;
-                    printf("-----ADS1115Sensor\n");
+                    // printf("-----ADS1115Sensor\n");
                 }
                 break;
         }
