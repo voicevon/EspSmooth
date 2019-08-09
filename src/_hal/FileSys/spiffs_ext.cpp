@@ -1,22 +1,29 @@
+#include <stdio.h>   //for printf()
+
 #include "spiffs_ext.h"
 #include "SPIFFS.h"
 
-
 #define FILE_SIZE 17000    // the real size is 15894 Bytes,  Jun 2019
 
-// TODO :  Add parameters:  File_name, file_size.
-std::string spiffs_reading(const char* file_name){
-    Serial.printf("[V][spiffs_reading] starting...\n]");
+std::string spiffs_read(){
+    printf(" +++++++++++++++++++++++++ \n");
+    return std::string ("11111111111111");
+}
+
+std::string spiffs_read(const char* file_name){
+    printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n");
+    delay(1000);
+    printf("[D][spiffs_reading] starting...\n]");
     std::string err = "READ CONFIG ERROR!";
     
     if(!SPIFFS.begin(true)) {
-        Serial.println("An error has occurred while mounting SPIFFS ");
+        printf("An error has occurred while mounting SPIFFS \n");
         return err;
     }
 
     File file = SPIFFS.open (file_name, FILE_READ);
     if(!file) {
-        Serial.println("There was an error opening the file for reading");
+        printf("There was an error opening the file for reading\n");
         return err;
     }
     
@@ -32,7 +39,7 @@ std::string spiffs_reading(const char* file_name){
     file_content[index] = 0;   //be sure to set the null terminator!!!
 
     std::string string_result(file_content);
-    printf("[I] [spiffs.reader]:  completed Reading /config.ini , file size is  = %i \n",string_result.length() );
+    printf("[I] [spiffs.reader]:  completed Reading file %s , file size is  = %i \n",file_name, string_result.length() );
     // printf("content in type of std::string:\n  %s \n",string_result.c_str());
     // printf("==================End of content in std::string=======\n");
 

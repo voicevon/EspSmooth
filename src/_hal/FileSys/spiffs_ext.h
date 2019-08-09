@@ -1,8 +1,10 @@
 #ifndef _SPIFFS_EXT_H_
 #define _SPIFFS_EXT_H_
 
-#include <fstream>
+//TODO:  make a static class
+#include <fstream>  //TODO:: return filestream.
 
-std::string spiffs_reading(const char* file_name);
+std::string spiffs_read(const char* file_name);
+std::string spiffs_read();
 
 #endif

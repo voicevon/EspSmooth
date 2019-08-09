@@ -194,21 +194,18 @@ void task_esphome_loop(void*){
     App.loop();
   }
 }
-
-#include <string.h>
-// #include <iostream>
-// #include <fstream>
-// #include "iosfwd"
+#include "libs/OutputStream.h"
 void esphome_setup() {
-    // std::string network_ini = spiffs_reading("network.ini");
-    // std::stringstream  std_string_stream(network_ini);
-    // ConfigReader cr(std_string_stream);
-    // ConfigReader cr();
-    // App.pre_setup("smoothie", __DATE__ ", " __TIME__);
-    // setup_logger();
-    // ESP_LOGV(TAG,"esphome_setup() at entrance...");
-    // setup_wifi(cr);
-    // setup_mqtt_broker(cr);
+    std::string  str = spiffs_read("network.ini");
+    // std::stringstream ss("");
+    std::stringstream sss(str);
+    ConfigReader cr(sss);
+
+    App.pre_setup("smoothie", __DATE__ ", " __TIME__);
+    setup_logger(cr);
+    ESP_LOGV(TAG,"esphome_setup() at entrance...");
+    setup_wifi(cr);
+    setup_mqtt_broker(cr);
     setup_wifi_signal();
     setup_sensor_uptime();
     setup_sensor_mqtt_subscriber_working_mode();

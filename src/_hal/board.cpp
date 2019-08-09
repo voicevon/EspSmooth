@@ -2,15 +2,20 @@
 #include "_hal/FileSys/spiffs_ext.h"
 #include "esp32-hal-gpio.h"
 #include "Esp.h"
-
+#include "libs/OutputStream.h"
 //https://i.ebayimg.com/images/g/j50AAOSwN8FZqBJI/s-l1600.jpg
 //This pin is serial0.tx pin.
 #define BUILID_IN_LED_PIN  1   
 
 void Board_Init(void){
     //load bus drivers
-    std::string xx = spiffs_reading("board.ini");
-    printf(" aaaaaaaaaaaaaaaaaaaaaaaaa  length= %i\n",xx.length());
+    std::string xx = spiffs_read();
+    printf(" aaaaaaaaaaaaaaaaaaa \n");
+    delay(1000);
+    printf(" bbbbbbbbbbbbbbb \n");
+    const char* file_name = "/board.ini";
+    std::string str = spiffs_read(file_name);
+    std::stringstream sss(str);
 };
 
 void Board_LED_Toggle(uint8_t LEDNumber){
@@ -47,8 +52,10 @@ void Board_report_cpu(){
 // https://techtutorialsx.com/2017/12/17/esp32-arduino-getting-the-free-heap/
 void Board_report_memory(){
     printf(" ------------------------------------ Memory report ------------------------------------ \n");
-    printf("[ESP.getFreeHeap()]      free heap size = %i\n",ESP.getFreeHeap());
+    // Serial.print("[ESP.getFreeHeap()]      free heap size = ");   //Don't use printf here. Why? I don't know.
+    // Serial.println(ESP.getFreeHeap());  
+    printf("[ESP.getFreeHeap()]      free heap size = %i\n",ESP.getFreeHeap());  //This doesn't work.
     printf("[esp_get_free_heap_size] free heap size = %d \n",esp_get_free_heap_size());   //Are they same? NO! WHY ?
-    printf("\n\n");
-    delay(40);   //Wait for Serial/printf() is finished processing, seems serial sending is in a another thread/core cpu ?
+    printf(" \n \n");
+    delay(400);   //Wait for Serial/printf() is finished processing, seems serial sending is in a another thread/core cpu ?
 }

@@ -841,7 +841,7 @@ void smoothie_startup(void *)
         printf("DEBUG: Starting configuration of modules from memory...\n");
 #endif
 #if CONFIG_SOURCE == CONFIG_SOURCE_SPIFFS
-        std::string std_string = spiffs_reading("robot.ini");
+        std::string std_string = spiffs_read("robot.ini");
         std::stringstream std_string_stream(std_string);
         ConfigReader cr(std_string_stream);
 #endif
