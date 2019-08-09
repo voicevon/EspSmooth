@@ -25,7 +25,7 @@
 #include "libs/RingBuffer.h"
 
 #include "_hal/__hal.h"
-#include "_hal/board.h"
+#include "_hal/Board/board.h"
 #include "_hal/uart.h"
 #include "_hal/Pin/AdcPin.h"
 #include "_hal/Pin/PwmPin.h"

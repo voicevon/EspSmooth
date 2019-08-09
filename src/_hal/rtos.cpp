@@ -13,7 +13,7 @@ UBaseType_t uxTaskGetSystemState( TaskStatus_t * const pxTaskStatusArray, const 
 
 
 
-#include "_hal/board.h"
+#include "_hal/Board/board.h"
 #include "_hal/__hal.h"
 #include "_hal/uart.h"
 // hooks from freeRTOS
