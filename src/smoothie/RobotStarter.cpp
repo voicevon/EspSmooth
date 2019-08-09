@@ -808,8 +808,8 @@ void smoothie_startup(void *)
 #if CONFIG_SOURCE == CONFIG_SOURCE_SPIFFS
         
         // std::string std_string = spiffs_read("robot.ini");
-        FileHelper* helper = new FileHelper();
-        std::string file_robot = helper->get_file_content("/robot.ini",false);
+        // FileHelper* helper = new FileHelper();
+        std::string file_robot = FileHelper::get_instance()->get_file_content("/robot.ini",false);
         std::stringstream std_string_stream(file_robot);
         ConfigReader cr(std_string_stream);
 #endif

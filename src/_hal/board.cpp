@@ -18,7 +18,7 @@
 #define BUILID_IN_LED_PIN  1   
 
 // #include "_sal/FileSys/spiffs_ext.h"
-FileHelper helper = FileHelper();
+// FileHelper helper = FileHelper();
 
 //  Crashed when using function parameter issue.
 //  https://github.com/espressif/arduino-esp32/issues/2092
@@ -71,7 +71,7 @@ void setup_section_bus(ConfigReader cr){
 
 void Board::init(void){
     //load bus drivers
-    std::string str = helper.get_file_content("/board.ini",true);
+    std::string str = FileHelper::get_instance()->get_file_content("/board.ini",true);
     std::stringstream sss(str);
     ConfigReader cr(sss);
     ConfigReader::section_map_t sm;

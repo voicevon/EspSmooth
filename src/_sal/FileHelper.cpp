@@ -2,7 +2,10 @@
 
 #include "stdio.h"
 
+FileHelper* FileHelper::__instance = nullptr;
+
 FileHelper::FileHelper(){ 
+    if(__instance == nullptr)  __instance = this;
     __file_media = MEDIA_SPIFFS; 
 }
 
