@@ -9,7 +9,6 @@ namespace i2c {
 static const char *TAG = "i2c";
 
 I2CComponent::I2CComponent() {
-  printf("pppppppppppppppppppppppp\n");
 #ifdef ARDUINO_ARCH_ESP32
   if (next_i2c_bus_num_ == 0)
     this->wire_ = &Wire;
