@@ -1,6 +1,9 @@
 #include "HardwareSerial.h"
 #include "esphome.h"
 #include "main_esphome.h"
+#include "_sal/FileSys/spiffs_ext.h"
+#include "_sal/configure/ConfigReader.h"
+
 
 using namespace esphome;
 
@@ -13,7 +16,7 @@ float g_slope = 0.000123;
 
 logger::Logger *logger_logger;
 
-void setup_logger(){
+void setup_logger(ConfigReader cr){
   logger_logger = new logger::Logger(115200, 512, logger::UART_SELECTION_UART0);
   logger_logger->pre_setup();
   // logger_logger->set_log_level("",ESPHOME_LOG_LEVEL_INFO);
@@ -24,7 +27,7 @@ void setup_logger(){
 
 wifi::WiFiComponent *wifi_wificomponent;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 
-void setup_wifi(){
+void setup_wifi(ConfigReader cr){
   wifi_wificomponent = new wifi::WiFiComponent();
   wifi_wificomponent->set_use_address("smoothie.local");
   wifi::WiFiAP wifi_wifiap = wifi::WiFiAP();
@@ -40,7 +43,7 @@ void setup_wifi(){
 
 mqtt::MQTTClientComponent *mqtt_mqttclientcomponent;
 
-void setup_mqtt_broker(){
+void setup_mqtt_broker(ConfigReader cr){
   mqtt_mqttclientcomponent = new mqtt::MQTTClientComponent();
   App.register_component(mqtt_mqttclientcomponent);
   //mqtt_mqttclientcomponent->set_broker_address("192.168.123.3");
@@ -190,21 +193,28 @@ void task_esphome_loop(void*){
     App.loop();
   }
 }
-
+#include "_sal/FileHelper.h"
+#include "libs/OutputStream.h"
 
 void esphome_setup() {
-    // Serial.println("aaaaaaaaaaaaaaaaaaaaaaa\n");
+    FileHelper* helper= new FileHelper();
+    std::string str = helper->get_file_content("/network.ini",true);
+    std::stringstream sss(str);
+    ConfigReader cr(sss);
+
     App.pre_setup("smoothie", __DATE__ ", " __TIME__);
-    setup_logger();
+    setup_logger(cr);
     ESP_LOGV(TAG,"esphome_setup() at entrance...");
-    setup_wifi();
-    setup_mqtt_broker();
+    setup_wifi(cr);
+    setup_mqtt_broker(cr);
     setup_wifi_signal();
     setup_sensor_uptime();
     setup_sensor_mqtt_subscriber_working_mode();
     setup_int_sensor_pos_0();
     setup_int_sensor_pos_1();
     setup_int_sensor_pos_2();
+    delete helper;
+
     App.setup();
     ESP_LOGV(TAG,"esphome_setup() is exiting...");
     

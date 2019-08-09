@@ -1,8 +1,8 @@
 #include "LinearDeltaSolution.h"
 
-#include "smoothie/smoothie/ConfigReader.h"
-#include "libs/Vector3.h"
 #include "smoothie/smoothie/AxisDefns.h"
+#include "libs/Vector3.h"
+#include "_sal/configure/ConfigReader.h"
 
 #include <math.h>
 #include <stdio.h>

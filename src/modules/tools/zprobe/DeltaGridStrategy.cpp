@@ -70,13 +70,12 @@
 #include "smoothie/robot/Conveyor.h"
 #include "smoothie/robot/arm_solutions/BaseSolution.h"
 #include "smoothie/robot/Actuator/StepperMotor.h"
-
-#include "smoothie/smoothie/ConfigReader.h"
 #include "smoothie/smoothie/Dispatcher.h"
 #include "smoothie/smoothie/GCode.h"
 
 #include "libs/StringUtils.h"
 #include "libs/OutputStream.h"
+#include "_sal/configure/ConfigReader.h"
 
 #include <string>
 #include <algorithm>

@@ -31,7 +31,8 @@
 #include "_hal/Pin/PwmPin.h"
 #include "_hal/Pin/OutputPin.h"
 #include "_hal/stopwatch.h"
-#include "_hal/spiffs_ext.h"
+#include "_sal/FileSys/spiffs_ext.h"
+#include "_sal/FileHelper.h"
 #include "esphome/components/i2c/i2c.h"
 #include "esphome/components/ads1115/ads1115.h"
 // static const char *TAG = "StartUp";
@@ -585,7 +586,6 @@ void safe_sleep(uint32_t ms)
 #include "libs/SlowTicker.h"
 #include "libs/FastTicker.h"
 #include "robot/StepTicker.h"
-#include "smoothie/ConfigReader.h"
 #include "modules/tools/switch/Switch.h"
 #include "robot/Planner.h"
 #include "robot/Robot.h"
@@ -842,8 +842,11 @@ void smoothie_startup(void *)
         printf("DEBUG: Starting configuration of modules from memory...\n");
 #endif
 #if CONFIG_SOURCE == CONFIG_SOURCE_SPIFFS
-        std::string std_string = spiffs_reading();
-        std::stringstream std_string_stream(std_string);
+        
+        // std::string std_string = spiffs_read("robot.ini");
+        FileHelper* helper = new FileHelper();
+        std::string file_robot = helper->get_file_content("/robot.ini",false);
+        std::stringstream std_string_stream(file_robot);
         ConfigReader cr(std_string_stream);
 #endif
         printf(" *************************** loading from config.ini *************************** \n");

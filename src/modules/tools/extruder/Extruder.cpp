@@ -6,12 +6,12 @@
 #include "smoothie/robot/Actuator/StepperMotor.h"
 #include "smoothie/robot/Robot.h"
 
-#include "libs/OutputStream.h"
-
 #include "smoothie/smoothie/AxisDefns.h"
-#include "smoothie/smoothie/ConfigReader.h"
 #include "smoothie/smoothie/GCode.h"
 #include "smoothie/smoothie/Dispatcher.h"
+
+#include "libs/OutputStream.h"
+#include "_sal/configure/ConfigReader.h"
 
 #include <math.h>
 

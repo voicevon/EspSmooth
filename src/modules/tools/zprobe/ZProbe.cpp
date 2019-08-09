@@ -11,11 +11,11 @@
 #include "smoothie/robot/StepTicker.h"
 
 #include "smoothie/smoothie/GCode.h"
-#include "smoothie/smoothie/ConfigReader.h"
 #include "smoothie/smoothie/Dispatcher.h"
 
 #include "libs/SlowTicker.h"
 #include "libs/OutputStream.h"
+#include "_sal/configure/ConfigReader.h"
 
 // strategies we know about
 #include "ThreePointStrategy.h"

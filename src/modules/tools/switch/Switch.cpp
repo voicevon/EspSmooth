@@ -3,7 +3,6 @@
 #include "smoothie/RobotStarter.h"
 
 #include "smoothie/smoothie/GCode.h"
-#include "smoothie/smoothie/ConfigReader.h"
 #include "smoothie/smoothie/GCodeProcessor.h"
 #include "smoothie/smoothie/Dispatcher.h"
 
@@ -15,6 +14,7 @@
 #include "_hal/Pin/OutputPin.h"
 #include "_hal/Pin/PwmPin.h"
 #include "_hal/Pin/SigmaDeltaPwm.h"
+#include "_sal/configure/ConfigReader.h"
 
 #include <algorithm>
 #include <math.h>

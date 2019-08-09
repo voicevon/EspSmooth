@@ -19,6 +19,7 @@ DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin,esphome::ads1115::ADS1115Se
 
 // Called by timerTask.
 void DcMotor::pid_loop(float target_position){
+    return;
     if(!__enabled) return;   //??
     printf("1111111111111111111\n");
 

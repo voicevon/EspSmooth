@@ -1,8 +1,7 @@
 #pragma once
 
 #include "smoothie/smoothie/Module.h"
-#include "smoothie/smoothie/ConfigReader.h"
-
+#include "_sal/configure/ConfigReader.h"
 #include <string>
 
 class TempSensor;

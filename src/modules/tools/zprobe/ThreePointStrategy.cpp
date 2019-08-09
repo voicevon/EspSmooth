@@ -55,7 +55,6 @@
 #include "ZProbe.h"
 #include "Plane3D.h"
 
-#include "smoothie/smoothie/ConfigReader.h"
 #include "smoothie/smoothie/Dispatcher.h"
 #include "smoothie/smoothie/GCode.h"
 
@@ -64,6 +63,7 @@
 #include "smoothie/robot/Conveyor.h"
 
 #include "libs/OutputStream.h"
+#include "_sal/configure/ConfigReader.h"
 
 #include <string>
 #include <algorithm>
