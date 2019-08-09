@@ -1,7 +1,7 @@
 #include "HardwareSerial.h"
 #include "esphome.h"
 #include "main_esphome.h"
-#include "_sal/FileSys/spiffs_ext.h"
+// #include "_sal/FileSys/spiffs_ext.h"
 #include "_sal/configure/ConfigReader.h"
 
 
@@ -197,8 +197,8 @@ void task_esphome_loop(void*){
 #include "libs/OutputStream.h"
 
 void esphome_setup() {
-    FileHelper* helper= new FileHelper();
-    std::string str = helper->get_file_content("/network.ini",true);
+    // FileHelper* helper= new FileHelper();
+    std::string str = FileHelper::get_instance()->get_file_content("/network.ini",false);
     std::stringstream sss(str);
     ConfigReader cr(sss);
 
@@ -213,7 +213,6 @@ void esphome_setup() {
     setup_int_sensor_pos_0();
     setup_int_sensor_pos_1();
     setup_int_sensor_pos_2();
-    delete helper;
 
     App.setup();
     ESP_LOGV(TAG,"esphome_setup() is exiting...");

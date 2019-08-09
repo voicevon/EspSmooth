@@ -1,32 +1,111 @@
 #include "string.h"
 #include "board.h"
+#include "_hal/Pin/Pin.h"
+#include "_hal/Pin/OutputPin.h"
+#include "_hal/Pin/InputPin.h"
 #include "_sal/FileHelper.h"
 #include "_sal/configure/ConfigReader.h"
+
 #include "esp32-hal-gpio.h"
 #include "Esp.h"
 #include "libs/OutputStream.h"
+#include "esphome/components/i2c/i2c.h"
+#include "esphome/components/ads1115/ads1115.h"
+
 
 //https://i.ebayimg.com/images/g/j50AAOSwN8FZqBJI/s-l1600.jpg
 //This pin is serial0.tx pin.
 #define BUILID_IN_LED_PIN  1   
 
-#include "_sal/FileSys/spiffs_ext.h"
-FileHelper helper = FileHelper();
+// #include "_sal/FileSys/spiffs_ext.h"
+// FileHelper helper = FileHelper();
 
 //  Crashed when using function parameter issue.
 //  https://github.com/espressif/arduino-esp32/issues/2092
-void Board_Init(void){
+
+Board* Board::__instance = nullptr;
+
+Board::Board(){
+    if(__instance == nullptr) 
+        __instance= this;
+}
+
+
+// configure the board: i2c, spi, s2c, etc...
+void __setup_section_bus(ConfigReader cr){
+    #define scl_pin_key "scl_pin"
+    #define sda_pin_key "sda_pin"
+    
+    ConfigReader::sub_section_map_t sub_section_bus;
+    if(!cr.get_sub_sections("bus", sub_section_bus)) {
+        printf("[E][RobotStart][Config][Bus] ERROR:configure-bus: no bus section found\n");
+        return;
+    }
+    auto target_i2c = sub_section_bus.find("i2c_ads1115");
+    if(target_i2c == sub_section_bus.end()) {
+        printf("[E][RobotStart][setup_section_bus()] can't find i2c_ads1115.xxx\n");
+        return; 
+    }
+
+    auto& this_i2c = target_i2c->second; // map of ic2 config values for this i2c
+    OutputPin ads1115_scl_pin(cr.get_string(this_i2c, scl_pin_key, "nc"));
+    InputPin adc1115_sda_pin(cr.get_string(this_i2c, sda_pin_key, "nc"));
+
+    esphome::i2c::I2CComponent* i2c_component = new esphome::i2c::I2CComponent();
+    i2c_component->set_scl_pin(ads1115_scl_pin.get_gpio_id());
+    i2c_component->set_sda_pin(adc1115_sda_pin.get_gpio_id());
+    i2c_component->set_frequency(200000);
+    i2c_component->set_scan(false);
+    i2c_component->dump_config();   //Doesn't work!
+    i2c_component->setup();
+    printf("-----I2CComponent\n");
+    // ads1115_sensor.set_icon
+    esphome::ads1115::ADS1115Component * ads1115_component = new esphome::ads1115::ADS1115Component();
+    ads1115_component->set_i2c_parent(i2c_component);
+    ads1115_component->set_i2c_address(0x48);
+    ads1115_component->set_continuous_mode(true);
+    ads1115_component->setup();
+    printf("-----ADS1115Component\n");
+
+}
+
+void Board::init(void){
     //load bus drivers
-    const char*  file_name = "/board.ini";
-    std::string str = helper.get_file_content("/board.ini",true);
+    std::string str = FileHelper::get_instance()->get_file_content("/board.ini",false);
     std::stringstream sss(str);
+    ConfigReader cr(sss);
+    ConfigReader::section_map_t sm;
+    ConfigReader::sub_section_map_t ssmap;
+    return;
+
+    cr.get_sub_sections("bus",ssmap);
+
+    auto s = ssmap.find("i2c_ads1115");
+    if(s == ssmap.end()) {
+        //wrong.
+        return;
+    }
+
+    auto& mm = s->second; // map of actuator config values for this actuator
+
+    OutputPin ads1115_sck_pin ( cr.get_string(mm, "scl_pin", "nc"));
+    InputPin ads1115_sda_pin (cr.get_string(mm, "sda_pin", "nc"));
+
+     esphome::ads1115::ADS1115Sensor* ads1115_sensor ;
+    // ads1115_sensor.set_parent(ads1115_component);
+    ads1115_sensor->set_multiplexer(esphome::ads1115::ADS1115_MULTIPLEXER_P1_NG);
+    ads1115_sensor->set_gain(esphome::ads1115::ADS1115_GAIN_6P144);
+    ads1115_sensor->set_update_interval(2000000);
+    ads1115_sensor->setup();
+
+    printf("-----ADS1115Sensor\n");
 };
 
-void Board_LED_Toggle(uint8_t LEDNumber){
+void Board::Board_LED_Toggle(uint8_t LEDNumber){
 
 };
 
-void Board_LED_Set(uint8_t LEDNumber, bool On){
+void Board::Board_LED_Set(uint8_t LEDNumber, bool On){
     if(LEDNumber == 1){
         pinMode(BUILID_IN_LED_PIN, OUTPUT);
         digitalWrite(BUILID_IN_LED_PIN, !On );
@@ -34,7 +113,7 @@ void Board_LED_Set(uint8_t LEDNumber, bool On){
 }
 
 
-void Board_report_cpu(){
+void Board::Board_report_cpu(){
     uint64_t chipid = ESP.getEfuseMac();
     uint16_t chip_id[4];
     chip_id[0] = chipid;
@@ -54,7 +133,7 @@ void Board_report_cpu(){
 
 // class ESP  
 // https://techtutorialsx.com/2017/12/17/esp32-arduino-getting-the-free-heap/
-void Board_report_memory(){
+void Board::Board_report_memory(){
     printf(" ------------------------------------ Memory report ------------------------------------ \n");
     // Serial.print("[ESP.getFreeHeap()]      free heap size = ");   //Don't use printf here. Why? I don't know.
     // Serial.println(ESP.getFreeHeap());  

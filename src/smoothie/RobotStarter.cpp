@@ -31,7 +31,7 @@
 #include "_hal/Pin/PwmPin.h"
 #include "_hal/Pin/OutputPin.h"
 #include "_hal/stopwatch.h"
-#include "_sal/FileSys/spiffs_ext.h"
+// #include "_sal/FileSys/spiffs_ext.h"
 #include "_sal/FileHelper.h"
 #include "esphome/components/i2c/i2c.h"
 #include "esphome/components/ads1115/ads1115.h"
@@ -542,7 +542,7 @@ static void command_handler()
             idle = true;
             if(config_error_msg.empty()) {
                 // toggle led to show we are alive, but idle
-                Board_LED_Toggle(0);
+                Board::getInstance()->Board_LED_Toggle(0);
             }
             handle_query(true);
         }
@@ -719,43 +719,7 @@ void setup_section_temperature_control(ConfigReader cr){
     //  printf ("[OK][setup.temperature.controls] bbbbbbbbbbbbbbbbbbb\n");
 }
 
-// configure the board: i2c, spi, s2c, etc...
-void setup_section_bus(ConfigReader cr){
-    #define scl_pin_key "scl_pin"
-    #define sda_pin_key "sda_pin"
-    
-    ConfigReader::sub_section_map_t sub_section_bus;
-    if(!cr.get_sub_sections("bus", sub_section_bus)) {
-        printf("[E][RobotStart][Config][Bus] ERROR:configure-bus: no bus section found\n");
-        return;
-    }
-    auto target_i2c = sub_section_bus.find("i2c_ads1115");
-    if(target_i2c == sub_section_bus.end()) {
-        printf("[E][RobotStart][setup_section_bus()] can't find i2c_ads1115.xxx\n");
-        return; 
-    }
 
-    auto& this_i2c = target_i2c->second; // map of ic2 config values for this i2c
-    OutputPin ads1115_scl_pin(cr.get_string(this_i2c, scl_pin_key, "nc"));
-    InputPin adc1115_sda_pin(cr.get_string(this_i2c, sda_pin_key, "nc"));
-
-    esphome::i2c::I2CComponent* i2c_component = new esphome::i2c::I2CComponent();
-    i2c_component->set_scl_pin(ads1115_scl_pin.get_gpio_id());
-    i2c_component->set_sda_pin(adc1115_sda_pin.get_gpio_id());
-    i2c_component->set_frequency(200000);
-    i2c_component->set_scan(false);
-    i2c_component->dump_config();   //Doesn't work!
-    i2c_component->setup();
-    printf("-----I2CComponent\n");
-    // ads1115_sensor.set_icon
-    ads1115_component = new esphome::ads1115::ADS1115Component();
-    ads1115_component->set_i2c_parent(i2c_component);
-    ads1115_component->set_i2c_address(0x48);
-    ads1115_component->set_continuous_mode(true);
-    ads1115_component->setup();
-    printf("-----ADS1115Component\n");
-
-}
 
 // configure voltage monitors if any
 void setup_section_voltage_monitors(ConfigReader cr){
@@ -787,7 +751,7 @@ void smoothie_startup(void *)
     //get_pll1_clk();
 
     // led 4 indicates boot phase 2 starts
-    Board_LED_Set(3, true);
+    Board::getInstance()->Board_LED_Set(3, true);
     // create the SlowTicker here as it is used by some modules
     SlowTicker *slow_ticker = new SlowTicker();
 
@@ -844,13 +808,13 @@ void smoothie_startup(void *)
 #if CONFIG_SOURCE == CONFIG_SOURCE_SPIFFS
         
         // std::string std_string = spiffs_read("robot.ini");
-        FileHelper* helper = new FileHelper();
-        std::string file_robot = helper->get_file_content("/robot.ini",false);
+        // FileHelper* helper = new FileHelper();
+        std::string file_robot = FileHelper::get_instance()->get_file_content("/robot.ini",false);
         std::stringstream std_string_stream(file_robot);
         ConfigReader cr(std_string_stream);
 #endif
         printf(" *************************** loading from config.ini *************************** \n");
-        setup_section_bus(cr);
+        // setup_section_bus(cr);
 
         Planner *planner = new Planner();
         Conveyor *conveyor = new Conveyor();
@@ -993,8 +957,8 @@ void smoothie_startup(void *)
     }
 
     // led 3,4 off indicates boot phase 2 complete
-    Board_LED_Set(2, false);
-    Board_LED_Set(3, false);
+    Board::getInstance()->Board_LED_Set(2, false);
+    Board::getInstance()->Board_LED_Set(3, false);
 
     // run the command handler in this thread
     command_handler();

@@ -37,11 +37,11 @@ std::string test(const char* cc){
 void setup(){
     // esp_log_level_set("*", ESP_LOG_DEBUG);
     // Serial.begin(115200);
-    Board_report_memory();
-    Board_Init();
+    Board::getInstance()->Board_report_memory();
+    Board::getInstance()->init();
     esphome_setup();   //wifi setup must be in advance of starting a timer_interrupt. Even RTOS. 
     // return;
-    Board_report_memory();
+    Board::getInstance()->Board_report_memory();
     // return;
     smoothie_setup(); 
     delay(5000);   //Keep uartTx empty for ProntFace handshaking.
@@ -49,8 +49,10 @@ void setup(){
     printf("Hi, Mr.ProntFace. You're online now. right?\n ");
     // return;
     Controlmotors_setup();
-    Board_report_cpu();
-    Board_report_memory();
+    Board::getInstance()->Board_report_cpu();
+    Board::getInstance()->Board_report_memory();
+    FileHelper::get_instance()->~FileHelper();    //No effection! WHY?
+    Board::getInstance()->Board_report_memory();
 }
 
 #include "smoothie/robot/Robot.h"

@@ -2,8 +2,14 @@
 
 #include "stdio.h"
 
+FileHelper* FileHelper::__instance = nullptr;
+
 FileHelper::FileHelper(){ 
+    if(__instance == nullptr)  __instance = this;
     __file_media = MEDIA_SPIFFS; 
+}
+FileHelper::~FileHelper(){
+    delete __instance;
 }
 
 void FileHelper::set_media(FILE_MEDIA_TYPE file_media){
