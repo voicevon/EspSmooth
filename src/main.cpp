@@ -51,6 +51,8 @@ void setup(){
     Controlmotors_setup();
     Board::getInstance()->Board_report_cpu();
     Board::getInstance()->Board_report_memory();
+    FileHelper::get_instance()->~FileHelper();    //No effection! WHY?
+    Board::getInstance()->Board_report_memory();
 }
 
 #include "smoothie/robot/Robot.h"

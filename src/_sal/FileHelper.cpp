@@ -8,6 +8,9 @@ FileHelper::FileHelper(){
     if(__instance == nullptr)  __instance = this;
     __file_media = MEDIA_SPIFFS; 
 }
+FileHelper::~FileHelper(){
+    delete __instance;
+}
 
 void FileHelper::set_media(FILE_MEDIA_TYPE file_media){
     __file_media = file_media;

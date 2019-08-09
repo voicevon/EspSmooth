@@ -32,7 +32,7 @@ Board::Board(){
 
 
 // configure the board: i2c, spi, s2c, etc...
-void setup_section_bus(ConfigReader cr){
+void __setup_section_bus(ConfigReader cr){
     #define scl_pin_key "scl_pin"
     #define sda_pin_key "sda_pin"
     
@@ -72,12 +72,10 @@ void setup_section_bus(ConfigReader cr){
 void Board::init(void){
     //load bus drivers
     std::string str = FileHelper::get_instance()->get_file_content("/board.ini",false);
-    // printf("aaaaaaaaaaaaaaaaaaaaa\n");
     std::stringstream sss(str);
     ConfigReader cr(sss);
     ConfigReader::section_map_t sm;
     ConfigReader::sub_section_map_t ssmap;
-    // printf("bbbbbbbbbbbbbbbbb\n");
     return;
 
     cr.get_sub_sections("bus",ssmap);
