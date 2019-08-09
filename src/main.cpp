@@ -1,7 +1,7 @@
 #include "HardwareSerial.h"
 #include "SPIFFS.h"     // ESP class
 
-#include "_hal/board.h"
+#include "_hal/Board/board.h"
 #include "_hal/stopwatch.h"
 #include "smoothie/robot/Actuator/ActuatorTask.h"
 #include "smoothie/RobotStarter.h"
