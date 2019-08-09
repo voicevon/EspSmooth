@@ -14,7 +14,7 @@ class Ads1115{
     private:
         Ads1115();
         static Ads1115* __instance;
-        esphome::i2c::I2CComponent *i2c_i2ccomponent;
+        esphome::i2c::I2CComponent * i2c_i2ccomponent;
         esphome::ads1115::ADS1115Component *ads1115_ads1115component[CHIP_COUNT];
         esphome::ads1115::ADS1115Sensor *ads1115_ads1115sensor[CHIP_COUNT][CHANNEL_COUNT];
 
