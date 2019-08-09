@@ -23,6 +23,14 @@ FileHelper helper = FileHelper();
 //  Crashed when using function parameter issue.
 //  https://github.com/espressif/arduino-esp32/issues/2092
 
+Board* Board::__instance = nullptr;
+
+Board::Board(){
+    if(__instance == nullptr) 
+        __instance= this;
+}
+
+
 // configure the board: i2c, spi, s2c, etc...
 void setup_section_bus(ConfigReader cr){
     #define scl_pin_key "scl_pin"
@@ -61,7 +69,7 @@ void setup_section_bus(ConfigReader cr){
 
 }
 
-void Board_Init(void){
+void Board::init(void){
     //load bus drivers
     std::string str = helper.get_file_content("/board.ini",true);
     std::stringstream sss(str);
@@ -92,11 +100,11 @@ void Board_Init(void){
     printf("-----ADS1115Sensor\n");
 };
 
-void Board_LED_Toggle(uint8_t LEDNumber){
+void Board::Board_LED_Toggle(uint8_t LEDNumber){
 
 };
 
-void Board_LED_Set(uint8_t LEDNumber, bool On){
+void Board::Board_LED_Set(uint8_t LEDNumber, bool On){
     if(LEDNumber == 1){
         pinMode(BUILID_IN_LED_PIN, OUTPUT);
         digitalWrite(BUILID_IN_LED_PIN, !On );
@@ -104,7 +112,7 @@ void Board_LED_Set(uint8_t LEDNumber, bool On){
 }
 
 
-void Board_report_cpu(){
+void Board::Board_report_cpu(){
     uint64_t chipid = ESP.getEfuseMac();
     uint16_t chip_id[4];
     chip_id[0] = chipid;
@@ -124,7 +132,7 @@ void Board_report_cpu(){
 
 // class ESP  
 // https://techtutorialsx.com/2017/12/17/esp32-arduino-getting-the-free-heap/
-void Board_report_memory(){
+void Board::Board_report_memory(){
     printf(" ------------------------------------ Memory report ------------------------------------ \n");
     // Serial.print("[ESP.getFreeHeap()]      free heap size = ");   //Don't use printf here. Why? I don't know.
     // Serial.println(ESP.getFreeHeap());  

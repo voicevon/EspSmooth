@@ -542,7 +542,7 @@ static void command_handler()
             idle = true;
             if(config_error_msg.empty()) {
                 // toggle led to show we are alive, but idle
-                Board_LED_Toggle(0);
+                Board::getInstance()->Board_LED_Toggle(0);
             }
             handle_query(true);
         }
@@ -751,7 +751,7 @@ void smoothie_startup(void *)
     //get_pll1_clk();
 
     // led 4 indicates boot phase 2 starts
-    Board_LED_Set(3, true);
+    Board::getInstance()->Board_LED_Set(3, true);
     // create the SlowTicker here as it is used by some modules
     SlowTicker *slow_ticker = new SlowTicker();
 
@@ -957,8 +957,8 @@ void smoothie_startup(void *)
     }
 
     // led 3,4 off indicates boot phase 2 complete
-    Board_LED_Set(2, false);
-    Board_LED_Set(3, false);
+    Board::getInstance()->Board_LED_Set(2, false);
+    Board::getInstance()->Board_LED_Set(3, false);
 
     // run the command handler in this thread
     command_handler();

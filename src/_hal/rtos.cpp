@@ -64,10 +64,10 @@ extern "C" void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTask
     configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2.  This hook
     function is called if a stack overflow is detected. */
     taskDISABLE_INTERRUPTS();
-    Board_LED_Set(0, true);
-    Board_LED_Set(1, false);
-    Board_LED_Set(2, true);
-    Board_LED_Set(3, true);
+    Board::getInstance()->Board_LED_Set(0, true);
+    Board::getInstance()->Board_LED_Set(1, false);
+    Board::getInstance()->Board_LED_Set(2, true);
+    Board::getInstance()->Board_LED_Set(3, true);
    __asm_("bkpt #0");
     for( ;; );
 }
@@ -98,10 +98,10 @@ extern "C" void vApplicationMallocFailedHook( void )
 }
 
 extern "C" void HardFault_Handler(void) {
-    Board_LED_Set(0, true);
-    Board_LED_Set(1, true);
-    Board_LED_Set(2, false);
-    Board_LED_Set(3, false);
+    Board::getInstance()->Board_LED_Set(0, true);
+    Board::getInstance()->Board_LED_Set(1, true);
+    Board::getInstance()->Board_LED_Set(2, false);
+    Board::getInstance()->Board_LED_Set(3, false);
     __asm_("bkpt #0");
     for( ;; );
 }
