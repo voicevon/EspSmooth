@@ -1,17 +1,12 @@
-
-#include "esphome/esphome.h"
-#include "_sal/configure/ConfigReader.h"
+#include "Ads1115.h"
+// #include "_sal/configure/ConfigReader.h"
 using namespace esphome;
 using namespace i2c;
 
-const int CHIP_COUNT = 1;
-const int CHANNEL_COUNT = 4; 
 
-i2c::I2CComponent *i2c_i2ccomponent;
-ads1115::ADS1115Component *ads1115_ads1115component[CHIP_COUNT];
-ads1115::ADS1115Sensor *ads1115_ads1115sensor[CHIP_COUNT][CHANNEL_COUNT];
-void setup_ads1115(ConfigReader cr){
-  
+Ads1115* Ads1115::__instance = nullptr;
+
+void Ads1115::Ads1115_setup(ConfigReader cr){
   i2c_i2ccomponent = new i2c::I2CComponent();
   i2c_i2ccomponent->set_sda_pin(27);
   i2c_i2ccomponent->set_scl_pin(14);
@@ -43,7 +38,7 @@ void setup_ads1115(ConfigReader cr){
   }
 }
 
-float Ads1115_read_sensor_mv(int chip_id,int channel){
+float Ads1115::Ads1115_read_sensor_mv(int chip_id,int channel){
     ads1115_ads1115sensor[chip_id][channel]->update();
     return ads1115_ads1115sensor[chip_id][channel]->state;
 }

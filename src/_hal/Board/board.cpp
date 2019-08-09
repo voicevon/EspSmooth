@@ -8,16 +8,13 @@
 #include "esp32-hal-gpio.h"
 #include "Esp.h"
 #include "libs/OutputStream.h"
-#include "esphome/components/i2c/i2c.h"
-#include "esphome/components/ads1115/ads1115.h"
-
+// #include "esphome/components/i2c/i2c.h"
+// #include "esphome/components/ads1115/ads1115.h"
+#include "Ads1115.h"
 
 //https://i.ebayimg.com/images/g/j50AAOSwN8FZqBJI/s-l1600.jpg
 //This pin is serial0.tx pin.
 #define BUILID_IN_LED_PIN  1   
-
-// #include "_sal/FileSys/spiffs_ext.h"
-// FileHelper helper = FileHelper();
 
 //  Crashed when using function parameter issue.
 //  https://github.com/espressif/arduino-esp32/issues/2092
@@ -30,44 +27,6 @@ Board::Board(){
 }
 
 
-// configure the board: i2c, spi, s2c, etc...
-void Board::__setup_section_bus(ConfigReader cr){
-    #define scl_pin_key "scl_pin"
-    #define sda_pin_key "sda_pin"
-    
-    ConfigReader::sub_section_map_t sub_section_bus;
-    if(!cr.get_sub_sections("bus", sub_section_bus)) {
-        printf("[E][RobotStart][Config][Bus] ERROR:configure-bus: no bus section found\n");
-        return;
-    }
-    auto target_i2c = sub_section_bus.find("i2c_ads1115");
-    if(target_i2c == sub_section_bus.end()) {
-        printf("[E][RobotStart][setup_section_bus()] can't find i2c_ads1115.xxx\n");
-        return; 
-    }
-
-    auto& this_i2c = target_i2c->second; // map of ic2 config values for this i2c
-    OutputPin ads1115_scl_pin(cr.get_string(this_i2c, scl_pin_key, "nc"));
-    InputPin adc1115_sda_pin(cr.get_string(this_i2c, sda_pin_key, "nc"));
-
-    esphome::i2c::I2CComponent* i2c_component = new esphome::i2c::I2CComponent();
-    i2c_component->set_scl_pin(ads1115_scl_pin.get_gpio_id());
-    i2c_component->set_sda_pin(adc1115_sda_pin.get_gpio_id());
-    i2c_component->set_frequency(200000);
-    i2c_component->set_scan(false);
-    i2c_component->dump_config();   //Doesn't work!
-    i2c_component->setup();
-    printf("-----I2CComponent\n");
-    // ads1115_sensor.set_icon
-    esphome::ads1115::ADS1115Component * ads1115_component = new esphome::ads1115::ADS1115Component();
-    ads1115_component->set_i2c_parent(i2c_component);
-    ads1115_component->set_i2c_address(0x48);
-    ads1115_component->set_continuous_mode(true);
-    ads1115_component->setup();
-    printf("-----ADS1115Component\n");
-
-}
-
 void Board::init(void){
     //load bus drivers
     std::string str = FileHelper::get_instance()->get_file_content("/board.ini",false);
@@ -75,8 +34,10 @@ void Board::init(void){
     ConfigReader cr(sss);
     ConfigReader::section_map_t sm;
     ConfigReader::sub_section_map_t ssmap;
-    return;
-    __setup_section_bus (cr);
+    
+    Ads1115::get_instance()->Ads1115_setup(cr);
+    // return;
+    // __setup_section_bus (cr);
 
 };
 
