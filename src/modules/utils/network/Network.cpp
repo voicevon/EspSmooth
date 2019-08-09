@@ -25,7 +25,7 @@
 #include "smoothie/smoothie/Dispatcher.h"
 
 #include "modules/utils/network/ftpd/ftpd.h"
-#include "_hal/configure/ConfigReader.h"
+#include "_sal/configure/ConfigReader.h"
 
 #define network_enable_key "enable"
 #define shell_enable_key "shell_enable"

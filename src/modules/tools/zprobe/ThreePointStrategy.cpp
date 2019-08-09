@@ -63,7 +63,7 @@
 #include "smoothie/robot/Conveyor.h"
 
 #include "libs/OutputStream.h"
-#include "_hal/configure/ConfigReader.h"
+#include "_sal/configure/ConfigReader.h"
 
 #include <string>
 #include <algorithm>

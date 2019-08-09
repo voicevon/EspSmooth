@@ -2,7 +2,7 @@
 
 #include "smoothie/RobotStarter.h"
 #include "libs/SlowTicker.h"
-#include "_hal/configure/ConfigReader.h"
+#include "_sal/configure/ConfigReader.h"
 
 #define kill_button_enable_key "enable"
 #define kill_button_pin_key "pin"

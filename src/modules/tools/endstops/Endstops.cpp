@@ -2,7 +2,7 @@
 
 
 #include "_hal/__hal.h"
-#include "_hal/configure/ConfigReader.h"
+#include "_sal/configure/ConfigReader.h"
 
 #include "libs/SlowTicker.h"
 #include "libs/OutputStream.h"

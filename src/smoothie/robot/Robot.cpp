@@ -30,7 +30,7 @@
 #include "libs/StringUtils.h"
 #include "libs/StringUtils.h"
 
-#include "_hal/configure/ConfigReader.h"
+#include "_sal/configure/ConfigReader.h"
 
 #include "esphome/components/ads1115/ads1115.h"
 

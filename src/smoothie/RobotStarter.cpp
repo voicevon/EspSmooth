@@ -31,7 +31,7 @@
 #include "_hal/Pin/PwmPin.h"
 #include "_hal/Pin/OutputPin.h"
 #include "_hal/stopwatch.h"
-#include "_hal/FileSys/spiffs_ext.h"
+#include "_sal/FileSys/spiffs_ext.h"
 #include "esphome/components/i2c/i2c.h"
 #include "esphome/components/ads1115/ads1115.h"
 // static const char *TAG = "StartUp";

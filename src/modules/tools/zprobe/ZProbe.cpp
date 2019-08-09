@@ -15,7 +15,7 @@
 
 #include "libs/SlowTicker.h"
 #include "libs/OutputStream.h"
-#include "_hal/configure/ConfigReader.h"
+#include "_sal/configure/ConfigReader.h"
 
 // strategies we know about
 #include "ThreePointStrategy.h"

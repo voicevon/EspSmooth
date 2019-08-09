@@ -3,7 +3,7 @@
 #include "_hal/Pin/PwmPin.h"
 #include "_hal/Pin/Pin.h"
 #include "_hal/__hal.h"
-#include "_hal/configure/ConfigReader.h"
+#include "_sal/configure/ConfigReader.h"
 
 #include "smoothie/robot/StepTicker.h"
 #include "smoothie/robot/Robot.h"

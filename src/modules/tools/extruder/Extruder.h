@@ -1,7 +1,7 @@
 #pragma once
 
 #include "_hal/__hal.h"
-#include "_hal/configure/ConfigReader.h"
+#include "_sal/configure/ConfigReader.h"
 #include "smoothie/smoothie/Module.h"
 
 #include <tuple>

@@ -6,7 +6,7 @@
 // #include "Adc.h"
 #include "_hal/__hal.h"
 #include "_hal/Pin/AdcPin.h"
-#include "_hal/configure/ConfigReader.h"
+#include "_sal/configure/ConfigReader.h"
 
 // a const list of predefined thermistors
 #include "predefined_thermistors.h"

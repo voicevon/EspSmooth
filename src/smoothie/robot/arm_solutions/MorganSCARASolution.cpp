@@ -1,7 +1,7 @@
 #include "MorganSCARASolution.h"
 
 #include "smoothie/smoothie/AxisDefns.h"
-#include "_hal/configure/ConfigReader.h"
+#include "_sal/configure/ConfigReader.h"
 
 #include <math.h>
 

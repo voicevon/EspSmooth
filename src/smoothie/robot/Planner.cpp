@@ -9,7 +9,7 @@
 
 #include "smoothie/smoothie/AxisDefns.h"
 #include "Actuator/StepperMotor.h"
-#include "_hal/configure/ConfigReader.h"
+#include "_sal/configure/ConfigReader.h"
 
 #include <math.h>
 #include <algorithm>

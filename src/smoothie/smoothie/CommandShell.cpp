@@ -19,7 +19,7 @@
 
 #include "_hal/Pin/OutputPin.h"
 #include "_hal/Pin/InputPin.h"
-#include "_hal/configure/ConfigWriter.h"
+#include "_sal/configure/ConfigWriter.h"
 
 #include "FreeRTOS.h"
 #include "freertos/task.h"

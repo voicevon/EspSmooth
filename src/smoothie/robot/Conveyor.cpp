@@ -10,7 +10,7 @@
 
 #include "smoothie/smoothie/AxisDefns.h"
 #include "smoothie/smoothie/GCode.h"
-#include "_hal/configure/ConfigReader.h"
+#include "_sal/configure/ConfigReader.h"
 
 #include "FreeRTOS.h"
 #include "freertos/task.h"

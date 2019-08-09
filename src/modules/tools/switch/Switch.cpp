@@ -14,7 +14,7 @@
 #include "_hal/Pin/OutputPin.h"
 #include "_hal/Pin/PwmPin.h"
 #include "_hal/Pin/SigmaDeltaPwm.h"
-#include "_hal/configure/ConfigReader.h"
+#include "_sal/configure/ConfigReader.h"
 
 #include <algorithm>
 #include <math.h>
