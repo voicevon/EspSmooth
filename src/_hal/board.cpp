@@ -1,20 +1,24 @@
+#include "string.h"
 #include "board.h"
-#include "_sal/FileSys/spiffs_ext.h"
+#include "_sal/FileHelper.h"
+#include "_sal/configure/ConfigReader.h"
 #include "esp32-hal-gpio.h"
 #include "Esp.h"
 #include "libs/OutputStream.h"
+
 //https://i.ebayimg.com/images/g/j50AAOSwN8FZqBJI/s-l1600.jpg
 //This pin is serial0.tx pin.
 #define BUILID_IN_LED_PIN  1   
 
+#include "_sal/FileSys/spiffs_ext.h"
+FileHelper helper = FileHelper();
+
+//  Crashed when using function parameter issue.
+//  https://github.com/espressif/arduino-esp32/issues/2092
 void Board_Init(void){
     //load bus drivers
-    std::string xx = spiffs_read();
-    printf(" aaaaaaaaaaaaaaaaaaa \n");
-    delay(1000);
-    printf(" bbbbbbbbbbbbbbb \n");
-    const char* file_name = "/board.ini";
-    std::string str = spiffs_read(file_name);
+    const char*  file_name = "/board.ini";
+    std::string str = helper.get_file_content("/board.ini",true);
     std::stringstream sss(str);
 };
 

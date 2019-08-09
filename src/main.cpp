@@ -27,12 +27,18 @@ static const char *TAG = "espsmooth.main";
 // }
 
 extern float float_value;
-
+#include <esp_log.h>
+#include "_sal/FileHelper.h"
+std::string test(const char* cc){
+    printf("%s\n",cc);
+    std::string xx = "aaaaaaa";
+    return xx;
+}
 void setup(){
+    // esp_log_level_set("*", ESP_LOG_DEBUG);
     // Serial.begin(115200);
     Board_report_memory();
     Board_Init();
-    while(1){};
     esphome_setup();   //wifi setup must be in advance of starting a timer_interrupt. Even RTOS. 
     Board_report_memory();
 
