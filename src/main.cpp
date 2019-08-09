@@ -40,12 +40,14 @@ void setup(){
     Board_report_memory();
     Board_Init();
     esphome_setup();   //wifi setup must be in advance of starting a timer_interrupt. Even RTOS. 
+    // return;
     Board_report_memory();
-
+    // return;
     smoothie_setup(); 
     delay(5000);   //Keep uartTx empty for ProntFace handshaking.
     printf("\n\n"); 
     printf("Hi, Mr.ProntFace. You're online now. right?\n ");
+    // return;
     Controlmotors_setup();
     Board_report_cpu();
     Board_report_memory();
@@ -70,10 +72,10 @@ void loop(){
         cpu_idle_counter = 0;
         last_time_stamp = esp_timer_get_time();
 
-        DcMotor* dc =(DcMotor*) Robot::getInstance()->actuators[1];
-        // float dc_angle = dc->for_test_read_sensor_position();
-        float dc_angle= dc->get_current_position();
-        printf("    Y Pos= %f", dc_angle);
+        // DcMotor* dc =(DcMotor*) Robot::getInstance()->actuators[1];
+        // // float dc_angle = dc->for_test_read_sensor_position();
+        // float dc_angle= dc->get_current_position();
+        // printf("    Y Pos= %f", dc_angle);
         printf("\n");
         
     }
