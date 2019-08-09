@@ -71,11 +71,14 @@ void setup_section_bus(ConfigReader cr){
 
 void Board::init(void){
     //load bus drivers
-    std::string str = FileHelper::get_instance()->get_file_content("/board.ini",true);
+    std::string str = FileHelper::get_instance()->get_file_content("/board.ini",false);
+    // printf("aaaaaaaaaaaaaaaaaaaaa\n");
     std::stringstream sss(str);
     ConfigReader cr(sss);
     ConfigReader::section_map_t sm;
     ConfigReader::sub_section_map_t ssmap;
+    // printf("bbbbbbbbbbbbbbbbb\n");
+    return;
 
     cr.get_sub_sections("bus",ssmap);
 

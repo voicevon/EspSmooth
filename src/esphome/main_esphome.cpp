@@ -198,7 +198,7 @@ void task_esphome_loop(void*){
 
 void esphome_setup() {
     // FileHelper* helper= new FileHelper();
-    std::string str = FileHelper::get_instance()->get_file_content("/network.ini",true);
+    std::string str = FileHelper::get_instance()->get_file_content("/network.ini",false);
     std::stringstream sss(str);
     ConfigReader cr(sss);
 
