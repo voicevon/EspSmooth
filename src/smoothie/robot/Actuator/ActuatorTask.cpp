@@ -46,7 +46,7 @@ void ControlMotors(TimerHandle_t xTimer){
 }
 
 void Controlmotors_setup(){
-    int interval = 500;
+    int interval = 20;
     int id = 1;
     TimerHandle_t tmr = xTimerCreate("ControlMotors", pdMS_TO_TICKS(interval), pdTRUE, ( void * )id, &ControlMotors);
     if( xTimerStart(tmr, 10 ) != pdPASS ) {
