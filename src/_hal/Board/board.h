@@ -27,7 +27,7 @@ class Board
     
     private:
         static Board* __instance;
-        void __setup_section_bus(ConfigReader cr);
+        // void __setup_section_bus(ConfigReader cr);
 
 };
 
