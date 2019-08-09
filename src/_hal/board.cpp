@@ -1,25 +1,56 @@
 #include "string.h"
 #include "board.h"
+#include "_hal/Pin/Pin.h"
+#include "_hal/Pin/OutputPin.h"
+#include "_hal/Pin/InputPin.h"
 #include "_sal/FileHelper.h"
 #include "_sal/configure/ConfigReader.h"
+
 #include "esp32-hal-gpio.h"
 #include "Esp.h"
 #include "libs/OutputStream.h"
+#include "esphome/components/i2c/i2c.h"
+#include "esphome/components/ads1115/ads1115.h"
+
 
 //https://i.ebayimg.com/images/g/j50AAOSwN8FZqBJI/s-l1600.jpg
 //This pin is serial0.tx pin.
 #define BUILID_IN_LED_PIN  1   
 
-#include "_sal/FileSys/spiffs_ext.h"
+// #include "_sal/FileSys/spiffs_ext.h"
 FileHelper helper = FileHelper();
 
 //  Crashed when using function parameter issue.
 //  https://github.com/espressif/arduino-esp32/issues/2092
 void Board_Init(void){
     //load bus drivers
-    const char*  file_name = "/board.ini";
     std::string str = helper.get_file_content("/board.ini",true);
     std::stringstream sss(str);
+    ConfigReader cr(sss);
+    ConfigReader::section_map_t sm;
+    ConfigReader::sub_section_map_t ssmap;
+
+    cr.get_sub_sections("bus",ssmap);
+
+    auto s = ssmap.find("i2c_ads1115");
+    if(s == ssmap.end()) {
+        //wrong.
+        return;
+    }
+
+    auto& mm = s->second; // map of actuator config values for this actuator
+
+    OutputPin ads1115_sck_pin ( cr.get_string(mm, "scl_pin", "nc"));
+    InputPin ads1115_sda_pin (cr.get_string(mm, "sda_pin", "nc"));
+
+     esphome::ads1115::ADS1115Sensor* ads1115_sensor ;
+    // ads1115_sensor.set_parent(ads1115_component);
+    ads1115_sensor->set_multiplexer(esphome::ads1115::ADS1115_MULTIPLEXER_P1_NG);
+    ads1115_sensor->set_gain(esphome::ads1115::ADS1115_GAIN_6P144);
+    ads1115_sensor->set_update_interval(2000000);
+    ads1115_sensor->setup();
+
+    printf("-----ADS1115Sensor\n");
 };
 
 void Board_LED_Toggle(uint8_t LEDNumber){

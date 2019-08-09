@@ -157,8 +157,8 @@ static const char* const actuator_keys[] = {
 extern esphome::ads1115::ADS1115Component* ads1115_component;    //from RobotStart.cpp
 bool Robot::configure(ConfigReader& cr)
 {
-    ConfigReader::section_map_t m;
-    if(!cr.get_section("motion control", m)) {
+    ConfigReader::section_map_t smap;
+    if(!cr.get_section("motion control", smap)) {
         printf("WARNING:configure-robot: no 'motion control' section found, defaults used\n");
     }
 
@@ -169,7 +169,7 @@ bool Robot::configure(ConfigReader& cr)
     if (this->arm_solution) delete this->arm_solution;
 
     bool is_delta= false;
-    std::string solution = cr.get_string(m, arm_solution_key, "cartesian");
+    std::string solution = cr.get_string(smap, arm_solution_key, "cartesian");
     
     if(solution == hbot_key || solution == corexy_key) {
         this->arm_solution = new HBotSolution(cr);
@@ -201,27 +201,27 @@ bool Robot::configure(ConfigReader& cr)
         printf("arm_solution = CartesianSolution\n");
     }
 
-    this->feed_rate = cr.get_float(m, default_feed_rate_key, 4000.0F); // mm/min
-    this->seek_rate = default_seek_rate = cr.get_float(m, default_seek_rate_key, 4000.0F); // mm/min
-    this->mm_per_line_segment = cr.get_float(m, mm_per_line_segment_key, 0.0F);
-    this->delta_segments_per_second = cr.get_float(m, delta_segments_per_second_key, is_delta?100:0);
-    this->mm_per_arc_segment = cr.get_float(m, mm_per_arc_segment_key, 0.0f);
-    this->mm_max_arc_error = cr.get_float(m, mm_max_arc_error_key, 0.01f);
-    this->arc_correction = cr.get_float(m, arc_correction_key, 5);
+    this->feed_rate = cr.get_float(smap, default_feed_rate_key, 4000.0F); // mm/min
+    this->seek_rate = default_seek_rate = cr.get_float(smap, default_seek_rate_key, 4000.0F); // mm/min
+    this->mm_per_line_segment = cr.get_float(smap, mm_per_line_segment_key, 0.0F);
+    this->delta_segments_per_second = cr.get_float(smap, delta_segments_per_second_key, is_delta?100:0);
+    this->mm_per_arc_segment = cr.get_float(smap, mm_per_arc_segment_key, 0.0f);
+    this->mm_max_arc_error = cr.get_float(smap, mm_max_arc_error_key, 0.01f);
+    this->arc_correction = cr.get_float(smap, arc_correction_key, 5);
 
     // in mm/sec but specified in config as mm/min
-    this->max_speeds[X_AXIS]  = cr.get_float(m, x_axis_max_speed_key, 60000.0F) / 60.0F;
-    this->max_speeds[Y_AXIS]  = cr.get_float(m, y_axis_max_speed_key, 60000.0F) / 60.0F;
-    this->max_speeds[Z_AXIS]  = cr.get_float(m, z_axis_max_speed_key, 300.0F) / 60.0F;
-    this->max_speed           = cr.get_float(m, max_speed_key, 0) / 60.0F; // zero disables it
+    this->max_speeds[X_AXIS]  = cr.get_float(smap, x_axis_max_speed_key, 60000.0F) / 60.0F;
+    this->max_speeds[Y_AXIS]  = cr.get_float(smap, y_axis_max_speed_key, 60000.0F) / 60.0F;
+    this->max_speeds[Z_AXIS]  = cr.get_float(smap, z_axis_max_speed_key, 300.0F) / 60.0F;
+    this->max_speed           = cr.get_float(smap, max_speed_key, 0) / 60.0F; // zero disables it
 
     // default acceleration setting, can be overriden with newer per axis settings
-    this->default_acceleration = cr.get_float(m, default_acceleration_key, 100.0F); // Acceleration is in mm/s²
+    this->default_acceleration = cr.get_float(smap, default_acceleration_key, 100.0F); // Acceleration is in mm/s²
 
-    this->segment_z_moves     = cr.get_bool(m, segment_z_moves_key, true);
-    this->save_wcs            = cr.get_bool(m, save_wcs_key, false);
-    this->save_g92            = cr.get_bool(m, save_g92_key, false);
-    const char *g92           = cr.get_string(m, set_g92_key, "");
+    this->segment_z_moves     = cr.get_bool(smap, segment_z_moves_key, true);
+    this->save_wcs            = cr.get_bool(smap, save_wcs_key, false);
+    this->save_g92            = cr.get_bool(smap, save_g92_key, false);
+    const char *g92           = cr.get_string(smap, set_g92_key, "");
 
     if(strlen(g92) > 0) {
         // optional setting for a fixed G92 offset
@@ -234,16 +234,16 @@ bool Robot::configure(ConfigReader& cr)
     }
     
     // configure the actuators
-    ConfigReader::sub_section_map_t ssm;
-    if(!cr.get_sub_sections("actuator", ssm)) {
+    ConfigReader::sub_section_map_t ssmap;
+    if(!cr.get_sub_sections("actuator", ssmap)) {
         printf("ERROR:configure-robot-actuator: no actuator section found\n");
         return false;
     }
     printf("[D][Robot] Going to set actuators one bye one.\n");
     // make each motor
     for (size_t a = 0; a < MAX_ROBOT_ACTUATORS; a++) {
-        auto s = ssm.find(actuator_keys[a]);
-        if(s == ssm.end()) break; // actuator not found and they must be in contiguous order
+        auto s = ssmap.find(actuator_keys[a]);
+        if(s == ssmap.end()) break; // actuator not found and they must be in contiguous order
 
         auto& mm = s->second; // map of actuator config values for this actuator
 
@@ -423,8 +423,8 @@ bool Robot::configure(ConfigReader& cr)
     check_max_actuator_speeds(); // check the configs are sane
 
     // common settings for all drivers/actuators
-    auto s = ssm.find(common_key);
-    if(s != ssm.end()) {
+    auto s = ssmap.find(common_key);
+    if(s != ssmap.end()) {
 #ifdef BOARD_MINIALPHA
         auto& mm = s->second; // map of general actuator config settings
         // driver reset pin, mini alpha is GPIO3_5
