@@ -55,6 +55,16 @@ void setup(){
     Board::getInstance()->Board_report_memory();
 }
 
+#include "FreeRTOS.h"
+#include "freertos/task.h"
+
+void show_task_list(){
+    char pcWriteBuffer[1024] = "";
+    // vTaskGetRunTimeStats(pcWriteBuffer);
+    vTaskList(pcWriteBuffer);
+    printf("Run Times:\n%s\n",pcWriteBuffer);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+}
 #include "smoothie/robot/Robot.h"
 #include "smoothie/robot/Actuator/DcMotor.h"
 
@@ -69,8 +79,7 @@ void loop(){
         uint16_t uptime_second = esp_timer_get_time() / 1000000;  
         printf("uptime = %i seconds, cpu usage =  %i/%%  ",uptime_second, 100 - passed_time);
 
-        //vTaskList(ptrTaskList);   vTaskList is not supportted?  Jun2019      https://github.com/espressif/esp-idf/issues/416
-
+        // vTaskList(ptrTaskList);   vTaskList is not supportted?  Jun2019      https://github.com/espressif/esp-idf/issues/416
         cpu_idle_counter = 0;
         last_time_stamp = esp_timer_get_time();
 
@@ -79,7 +88,7 @@ void loop(){
         // float dc_angle= dc->get_current_position();
         // printf("    Y Pos= %f", dc_angle);
         printf("\n");
-        
+        show_task_list();
     }
 
 }
