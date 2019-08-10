@@ -23,7 +23,7 @@ class Board
         void LED_Toggle(uint8_t LEDNumber);
         void LED_Set(uint8_t LEDNumber, bool On);
         void Board_report_cpu();
-        void Board_report_memory();
+        void report_memory();
     
     private:
         static Board* __instance;

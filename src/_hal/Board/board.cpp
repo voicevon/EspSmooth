@@ -73,7 +73,7 @@ void Board::Board_report_cpu(){
 
 // class ESP  
 // https://techtutorialsx.com/2017/12/17/esp32-arduino-getting-the-free-heap/
-void Board::Board_report_memory(){
+void Board::report_memory(){
     printf(" ------------------------------------ Memory report ------------------------------------ \n");
     // Serial.print("[ESP.getFreeHeap()]      free heap size = ");   //Don't use printf here. Why? I don't know.
     // Serial.println(ESP.getFreeHeap());  
