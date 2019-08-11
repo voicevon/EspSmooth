@@ -1,33 +1,10 @@
+//                     Hex file size of     RAM
+//  Normal C pattern :       1267198       47436      
+// Singleton pattern :       1266950       47436
+//        difference :           248           0
 
-/*
-*  FTP SERVER FOR ESP8266
- * based on FTP Serveur for Arduino Due and Ethernet shield (W5100) or WIZ820io (W5200)
- * based on Jean-Michel Gallego's work
- * modified to work with esp8266 SPIFFS by David Paiva (david@nailbuster.com)
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-//  2017: modified by @robo8080
 
-/*******************************************************************************
- **                                                                            **
- **                       DEFINITIONS FOR FTP SERVER                           **
- **                                                                            **
- *******************************************************************************/
-
-// Uncomment to print debugging info to console attached to ESP8266
-//#define FTP_DEBUG
+#define FTP_DEBUG
 
 #ifndef FTP_SERVERESP_H
 #define FTP_SERVERESP_H
@@ -51,10 +28,13 @@
 class FtpServer
 {
 public:
+  static FtpServer* get_instance() { return __instance; }
   void    begin(String uname, String pword);
   void    handleFTP();
 
 private:
+  FtpServer();
+  static FtpServer* __instance;
   void    iniVariables();
   void    clientConnected();
   void    disconnectClient();

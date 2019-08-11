@@ -2,9 +2,9 @@
 #include "SPIFFS.h"     // ESP class
 
 #include "_hal/Board/board.h"
-#include "_hal/stopwatch.h"
-#include "smoothie/robot/Actuator/ActuatorTask.h"
-#include "smoothie/RobotStarter.h"
+// #include "_hal/stopwatch.h"
+// #include "smoothie/robot/Actuator/ActuatorTask.h"
+// #include "smoothie/RobotStarter.h"
 #include "main.h"
 
 
@@ -12,50 +12,43 @@ static const char *TAG = "espsmooth.main";
 
 
 extern float float_value;
-#include <esp_log.h>
-#include "_sal/FileHelper.h"
-std::string test(const char* cc){
-    printf("%s\n",cc);
-    std::string xx = "aaaaaaa";
-    return xx;
-}
+// #include <esp_log.h>
+// #include "_SAL/Helpers/FileHelper.h"
+// std::string test(const char* cc){
+//     printf("%s\n",cc);
+//     std::string xx = "aaaaaaa";
+//     return xx;
+// }
 
+// #include "_sal/FtpServer/ESP32FtpServer.h"
+// FtpServer ftpSrv;   //set #define FTP_DEBUG in ESP32FtpServer.h to see ftp verbose on serial
+
+#include"_SAL/TaskManager.h"
 
 void setup(){
     // esp_log_level_set("*", ESP_LOG_DEBUG);
     // Serial.begin(115200);
     Board::getInstance()->report_memory();
     Board::getInstance()->init();
-    esphome_setup();   //wifi setup must be in advance of starting a timer_interrupt. Even RTOS. 
-    // return;
+    Start_Task(ESPHOME);
     Board::getInstance()->report_memory();
-    // return;
-    smoothie_setup(); 
+    //  smoothie_setup(); 
+    Start_Task(ROBOT);
+
     delay(5000);   //Keep uartTx empty for ProntFace handshaking.
     printf("\n\n"); 
     printf("Hi, Mr.ProntFace. You're online now. right?\n ");
-    // return;
-    Controlmotors_setup();
-    Board::getInstance()->Board_report_cpu();
-    Board::getInstance()->report_memory();
-    FileHelper::get_instance()->~FileHelper();    //No effection! WHY?
-    Board::getInstance()->report_memory();
+
+    Start_TimerTask(CONTROL_ROBOT_MOTORS);
+    // Board::getInstance()->Board_report_cpu();
+    // Board::getInstance()->report_memory();
+    // FileHelper::get_instance()->~FileHelper();    //No effection! WHY?
+    // Board::getInstance()->report_memory();
+
+    Start_Task(FTP_SERVER);
 }
 
-#include "FreeRTOS.h"
-#include "freertos/task.h"
-#include "_sal/RtosHelper.h"
-// manange vTaskList by ourself
-// https://github.com/espressif/arduino-esp32/issues/1089
-void show_task_list(){
-    char pcWriteBuffer[1024] = "";
-    // vTaskGetRunTimeStats(pcWriteBuffer);
-    // vTaskList(pcWriteBuffer);   vTaskList is not supportted?  Jun2019      https://github.com/espressif/esp-idf/issues/416
-    // vTaskList(pcWriteBuffer);
-    printf("Run Times:\n%s\n",pcWriteBuffer);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    RtosHelper::get_instance()->report_task_list();
-}
+
 #include "smoothie/robot/Robot.h"
 #include "smoothie/robot/Actuator/DcMotor.h"
 
@@ -78,7 +71,7 @@ void loop(){
         // float dc_angle= dc->get_current_position();
         // printf("    Y Pos= %f", dc_angle);
         printf("\n");
-        show_task_list();
+        // print_task_list();
     }
 
 }
