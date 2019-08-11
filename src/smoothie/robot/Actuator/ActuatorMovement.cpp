@@ -1,4 +1,4 @@
-#include "ActuatorTask.h"
+#include "ActuatorMovement.h"
 #include "smoothie/robot/Robot.h"
 #include "Actuator.h"
 #include "ServoMotor.h"
@@ -9,7 +9,7 @@
 int16_t actuators_position[6];
 float float_value;
 
-void ControlMotors(TimerHandle_t xTimer){
+void robot_motors_movement(TimerHandle_t xTimer){
     ServoMotor* servoMotor;
     DcMotor* dcMotor;
     XuefengMotor* xuefengMotor;
@@ -45,10 +45,10 @@ void ControlMotors(TimerHandle_t xTimer){
     // printf(">>>>>>>>>>>>>>>>>>>>>>>>>> exiting task>>>>>>>>>>>>\n");
 }
 
-void Controlmotors_setup(){
+void robot_motors_movement_setup(){
     int interval = 1000;
     int id = 1;
-    TimerHandle_t tmr = xTimerCreate("ControlMotors", pdMS_TO_TICKS(interval), pdTRUE, ( void * )id, &ControlMotors);
+    TimerHandle_t tmr = xTimerCreate("robot_motors_movement", pdMS_TO_TICKS(interval), pdTRUE, ( void * )id, &robot_motors_movement);
     if( xTimerStart(tmr, 10 ) != pdPASS ) {
         printf("[E][setup] Timer for ControlMotors  start error. \n");
     }

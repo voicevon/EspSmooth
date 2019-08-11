@@ -9,7 +9,7 @@ enum TASK_ITEMS_T {
 };
 
 enum TIMER_TASK_ITEMS_T{
-    CONTROL_MOTORS
+    CONTROL_ROBOT_MOTORS
 
 };
 extern void Start_TimerTask(TIMER_TASK_ITEMS_T);

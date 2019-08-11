@@ -2,9 +2,9 @@
 #include "SPIFFS.h"     // ESP class
 
 #include "_hal/Board/board.h"
-#include "_hal/stopwatch.h"
-#include "smoothie/robot/Actuator/ActuatorTask.h"
-#include "smoothie/RobotStarter.h"
+// #include "_hal/stopwatch.h"
+// #include "smoothie/robot/Actuator/ActuatorTask.h"
+// #include "smoothie/RobotStarter.h"
 #include "main.h"
 
 
@@ -12,16 +12,16 @@ static const char *TAG = "espsmooth.main";
 
 
 extern float float_value;
-#include <esp_log.h>
-#include "_SAL/Helpers/FileHelper.h"
-std::string test(const char* cc){
-    printf("%s\n",cc);
-    std::string xx = "aaaaaaa";
-    return xx;
-}
+// #include <esp_log.h>
+// #include "_SAL/Helpers/FileHelper.h"
+// std::string test(const char* cc){
+//     printf("%s\n",cc);
+//     std::string xx = "aaaaaaa";
+//     return xx;
+// }
 
-#include "_sal/FtpServer/ESP32FtpServer.h"
-FtpServer ftpSrv;   //set #define FTP_DEBUG in ESP32FtpServer.h to see ftp verbose on serial
+// #include "_sal/FtpServer/ESP32FtpServer.h"
+// FtpServer ftpSrv;   //set #define FTP_DEBUG in ESP32FtpServer.h to see ftp verbose on serial
 
 #include"_SAL/TaskManager.h"
 
@@ -34,15 +34,16 @@ void setup(){
     Board::getInstance()->report_memory();
     //  smoothie_setup(); 
     Start_Task(ROBOT);
+
     delay(5000);   //Keep uartTx empty for ProntFace handshaking.
     printf("\n\n"); 
     printf("Hi, Mr.ProntFace. You're online now. right?\n ");
-    // return;
-    //Controlmotors_setup();
-    Board::getInstance()->Board_report_cpu();
-    Board::getInstance()->report_memory();
-    FileHelper::get_instance()->~FileHelper();    //No effection! WHY?
-    Board::getInstance()->report_memory();
+
+    Start_TimerTask(CONTROL_ROBOT_MOTORS);
+    // Board::getInstance()->Board_report_cpu();
+    // Board::getInstance()->report_memory();
+    // FileHelper::get_instance()->~FileHelper();    //No effection! WHY?
+    // Board::getInstance()->report_memory();
 
     Start_Task(FTP_SERVER);
 }
