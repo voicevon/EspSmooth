@@ -3,11 +3,8 @@
 
 //---------------------------------------------------------------
 #include "_SAL/FtpServer/ESP32FtpServer.h"
-// FtpServer* __fpt_server;
-// extern FtpServer* ftpserver_setup();
 void ftp_loop(void*){
     while(true){
-        // __fpt_server->handleFTP();
         FtpServer::get_instance()->handleFTP();
     }
 }
@@ -45,7 +42,6 @@ void Start_Task(TASK_ITEMS_T target_task){
     switch (target_task)
     {
     case FTP_SERVER:
-        // __fpt_server = ftpserver_setup();
         FtpServer::get_instance()->begin("a","a");
         xTaskCreate(ftp_loop, "ftp_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL);
         break;
@@ -57,7 +53,6 @@ void Start_Task(TASK_ITEMS_T target_task){
         break;
     case ESPHOME:
         __esphome = esphome_setup();
-        // delay(5000);   //Wait wifi connecting.  TODO:// set as a condition.
         xTaskCreate(task_esphome_loop, "esphome_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL);
         break;
     case ROBOT:
