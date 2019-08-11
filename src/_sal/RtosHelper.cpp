@@ -37,7 +37,7 @@ void RtosHelper::report_task_list(){
         TaskStatus_t* ts ;
         UBaseType_t uxSize;
         uint32_t total_time;
-        uxTaskGetSystemState(ts,uxSize,&total_time);
+        // uxTaskGetSystemState(ts,uxSize,&total_time);
 
         printf("%s,%s,\n",ts->pcTaskName);
     }
