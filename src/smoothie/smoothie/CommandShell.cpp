@@ -17,8 +17,8 @@
 #include "libs/OutputStream.h"
 #include "libs/StringUtils.h"
 
-#include "_hal/Pin/OutputPin.h"
-#include "_hal/Pin/InputPin.h"
+// #include "_hal/Pin/OutputPin.h"
+// #include "_hal/Pin/InputPin.h"
 #include "_sal/configure/ConfigWriter.h"
 
 #include "FreeRTOS.h"

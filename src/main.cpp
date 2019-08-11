@@ -11,21 +11,6 @@
 static const char *TAG = "espsmooth.main";
 
 
-// extern void configureSPIFI();
-// extern void smoothie_startup(void *);
-
-
-// void smooth_setup(){
-
-//     StopWatch_Init();
-//     printf("StopWatch clock rate= %lu Hz\n", StopWatch_TicksPerSecond());
-
-//     // launch the startup thread which will become the command thread that executes all incoming commands
-//     // 10000 Bytes stack
-//     xTaskCreate(smoothie_startup, "CommandThread", 30000, NULL, (tskIDLE_PRIORITY + 2UL), (TaskHandle_t *) NULL);
-    
-// }
-
 extern float float_value;
 #include <esp_log.h>
 #include "_sal/FileHelper.h"
@@ -34,14 +19,16 @@ std::string test(const char* cc){
     std::string xx = "aaaaaaa";
     return xx;
 }
+
+
 void setup(){
     // esp_log_level_set("*", ESP_LOG_DEBUG);
     // Serial.begin(115200);
-    Board::getInstance()->Board_report_memory();
+    Board::getInstance()->report_memory();
     Board::getInstance()->init();
     esphome_setup();   //wifi setup must be in advance of starting a timer_interrupt. Even RTOS. 
     // return;
-    Board::getInstance()->Board_report_memory();
+    Board::getInstance()->report_memory();
     // return;
     smoothie_setup(); 
     delay(5000);   //Keep uartTx empty for ProntFace handshaking.
@@ -50,11 +37,25 @@ void setup(){
     // return;
     Controlmotors_setup();
     Board::getInstance()->Board_report_cpu();
-    Board::getInstance()->Board_report_memory();
+    Board::getInstance()->report_memory();
     FileHelper::get_instance()->~FileHelper();    //No effection! WHY?
-    Board::getInstance()->Board_report_memory();
+    Board::getInstance()->report_memory();
 }
 
+#include "FreeRTOS.h"
+#include "freertos/task.h"
+#include "_sal/RtosHelper.h"
+// manange vTaskList by ourself
+// https://github.com/espressif/arduino-esp32/issues/1089
+void show_task_list(){
+    char pcWriteBuffer[1024] = "";
+    // vTaskGetRunTimeStats(pcWriteBuffer);
+    // vTaskList(pcWriteBuffer);   vTaskList is not supportted?  Jun2019      https://github.com/espressif/esp-idf/issues/416
+    // vTaskList(pcWriteBuffer);
+    printf("Run Times:\n%s\n",pcWriteBuffer);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    RtosHelper::get_instance()->report_task_list();
+}
 #include "smoothie/robot/Robot.h"
 #include "smoothie/robot/Actuator/DcMotor.h"
 
@@ -69,8 +70,6 @@ void loop(){
         uint16_t uptime_second = esp_timer_get_time() / 1000000;  
         printf("uptime = %i seconds, cpu usage =  %i/%%  ",uptime_second, 100 - passed_time);
 
-        //vTaskList(ptrTaskList);   vTaskList is not supportted?  Jun2019      https://github.com/espressif/esp-idf/issues/416
-
         cpu_idle_counter = 0;
         last_time_stamp = esp_timer_get_time();
 
@@ -79,7 +78,7 @@ void loop(){
         // float dc_angle= dc->get_current_position();
         // printf("    Y Pos= %f", dc_angle);
         printf("\n");
-        
+        show_task_list();
     }
 
 }
