@@ -51,10 +51,13 @@
 class FtpServer
 {
 public:
+  static FtpServer* get_instance() { return __instance; }
   void    begin(String uname, String pword);
   void    handleFTP();
 
 private:
+  FtpServer();
+  static FtpServer* __instance;
   void    iniVariables();
   void    clientConnected();
   void    disconnectClient();

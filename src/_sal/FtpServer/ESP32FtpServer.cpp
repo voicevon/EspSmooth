@@ -34,13 +34,21 @@
 WiFiServer ftpServer( FTP_CTRL_PORT );
 WiFiServer dataServer( FTP_DATA_PORT_PASV );
 
-FtpServer* ftpserver_setup(){
-  //read config.
+FtpServer* FtpServer::__instance = nullptr; 
 
-  FtpServer* __ftp_server = new FtpServer();
-  __ftp_server->begin("a","a");
-  return __ftp_server;
+FtpServer::FtpServer(){
+  if(__instance == nullptr) {
+    __instance = this;
+  }
 }
+
+// FtpServer* ftpserver_setup(){
+//   //read config.
+
+//   FtpServer* __ftp_server = new FtpServer();
+//   __ftp_server->begin("a","a");
+//   return __ftp_server;
+// }
 void FtpServer::begin(String uname, String pword)
 {
   // Tells the ftp server to begin listening for incoming connection
