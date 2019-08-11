@@ -30,12 +30,10 @@ void setup(){
     // Serial.begin(115200);
     Board::getInstance()->report_memory();
     Board::getInstance()->init();
-    // esphome_setup();   //wifi setup must be in advance of starting a timer_interrupt. Even RTOS. 
     Start_Task(ESPHOME);
-    // return;
     Board::getInstance()->report_memory();
-    // return;
-    smoothie_setup(); 
+    //  smoothie_setup(); 
+    Start_Task(ROBOT);
     delay(5000);   //Keep uartTx empty for ProntFace handshaking.
     printf("\n\n"); 
     printf("Hi, Mr.ProntFace. You're online now. right?\n ");

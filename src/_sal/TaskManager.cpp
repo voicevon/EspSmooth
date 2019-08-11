@@ -1,8 +1,7 @@
 #include "TaskManager.h"
-#include "_SAL/FtpServer/ESP32FtpServer.h"
-#include "esphome/core/application.h"
 
-//===============================================================
+//---------------------------------------------------------------
+#include "_SAL/FtpServer/ESP32FtpServer.h"
 FtpServer* __fpt_server;
 extern FtpServer* ftpserver_setup();
 void ftp_loop(void*){
@@ -11,7 +10,8 @@ void ftp_loop(void*){
     }
 }
 
-//=============================================================
+//---------------------------------------------------------------
+#include "esphome/core/application.h"
 esphome::Application * __esphome;
 extern esphome::Application* esphome_setup();
 void task_esphome_loop(void*){
@@ -20,8 +20,13 @@ void task_esphome_loop(void*){
   }
 }
 
+//---------------------------------------------------------------
+extern void smoothie_setup();
 
 //==============================================================
+void Start_TimerTask(TIMER_TASK_ITEMS_T){
+
+}
 void Start_Task(TASK_ITEMS_T target_task){
     switch (target_task)
     {
@@ -40,6 +45,7 @@ void Start_Task(TASK_ITEMS_T target_task){
         xTaskCreate(task_esphome_loop, "esphome_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL);
         break;
     case ROBOT:
+        smoothie_setup();
         break;
     default:
         break;
