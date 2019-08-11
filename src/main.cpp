@@ -30,7 +30,8 @@ void setup(){
     // Serial.begin(115200);
     Board::getInstance()->report_memory();
     Board::getInstance()->init();
-    esphome_setup();   //wifi setup must be in advance of starting a timer_interrupt. Even RTOS. 
+    // esphome_setup();   //wifi setup must be in advance of starting a timer_interrupt. Even RTOS. 
+    Start_Task(ESPHOME);
     // return;
     Board::getInstance()->report_memory();
     // return;

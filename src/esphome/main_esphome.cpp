@@ -188,15 +188,11 @@ void setup_int_sensor_pos_2(){
   App.register_component(mqtt_actuator_pos_2);
 }
 
-void task_esphome_loop(void*){
-  while(true){
-    App.loop();
-  }
-}
+
 #include "_sal/FileHelper.h"
 #include "libs/OutputStream.h"
 
-void esphome_setup() {
+esphome::Application* esphome_setup() {
     // FileHelper* helper= new FileHelper();
     std::string str = FileHelper::get_instance()->get_file_content("/network.ini",false);
     std::stringstream sss(str);
@@ -216,9 +212,7 @@ void esphome_setup() {
 
     App.setup();
     ESP_LOGV(TAG,"esphome_setup() is exiting...");
-    
-    xTaskCreate(task_esphome_loop, "esphome_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL);
-    // delay(5000);   //Wait wifi connecting.  TODO:// set as a condition.
+    return &App;
 }
 
 
