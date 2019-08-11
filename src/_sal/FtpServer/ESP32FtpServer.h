@@ -1,6 +1,7 @@
 //                     Hex file size of     RAM
-//  Normal C pattern :       1267198           
+//  Normal C pattern :       1267198       47436      
 // Singleton pattern :       1266950       47436
+//        difference :           248           0
 
 
 #define FTP_DEBUG
