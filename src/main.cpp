@@ -20,6 +20,10 @@ std::string test(const char* cc){
     return xx;
 }
 
+#include "_sal/FtpServer/ESP32FtpServer.h"
+FtpServer ftpSrv;   //set #define FTP_DEBUG in ESP32FtpServer.h to see ftp verbose on serial
+
+#include"_SAL/TaskManager.h"
 
 void setup(){
     // esp_log_level_set("*", ESP_LOG_DEBUG);
@@ -35,27 +39,16 @@ void setup(){
     printf("\n\n"); 
     printf("Hi, Mr.ProntFace. You're online now. right?\n ");
     // return;
-    Controlmotors_setup();
+    //Controlmotors_setup();
     Board::getInstance()->Board_report_cpu();
     Board::getInstance()->report_memory();
     FileHelper::get_instance()->~FileHelper();    //No effection! WHY?
     Board::getInstance()->report_memory();
+
+    Start_Task(FTP_SERVER);
 }
 
-#include "FreeRTOS.h"
-#include "freertos/task.h"
-#include "_sal/RtosHelper.h"
-// manange vTaskList by ourself
-// https://github.com/espressif/arduino-esp32/issues/1089
-void show_task_list(){
-    char pcWriteBuffer[1024] = "";
-    // vTaskGetRunTimeStats(pcWriteBuffer);
-    // vTaskList(pcWriteBuffer);   vTaskList is not supportted?  Jun2019      https://github.com/espressif/esp-idf/issues/416
-    // vTaskList(pcWriteBuffer);
-    printf("Run Times:\n%s\n",pcWriteBuffer);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    RtosHelper::get_instance()->report_task_list();
-}
+
 #include "smoothie/robot/Robot.h"
 #include "smoothie/robot/Actuator/DcMotor.h"
 
@@ -78,7 +71,7 @@ void loop(){
         // float dc_angle= dc->get_current_position();
         // printf("    Y Pos= %f", dc_angle);
         printf("\n");
-        show_task_list();
+        // print_task_list();
     }
 
 }

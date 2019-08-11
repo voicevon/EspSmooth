@@ -28,7 +28,7 @@ void RtosHelper::add(TaskHandle_t* task_handle){
 // C:/Users/xm/.platformio>package/framework-arduinoespressif32/tools/sdk/sdkconfig
 // Search:  CONFIG_FREERTOS_USE_TRACE_FACILITY=
 // add 'y',  It doesn't recompile.
-void RtosHelper::report_task_list(){
+void RtosHelper::print_task_list(){
     printf ("---------------------- RtosHelper tasks -----------------------\n");
     printf(" Task name      Priority    Status       cpu    stack   \n");
     TaskHandle_t th;
