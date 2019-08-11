@@ -2,7 +2,7 @@
 
 enum TASK_ITEMS_T { 
     FTP_SERVER
-    , SERIAL_COMM
+    , SERIAL_COMM  // This is not the debug serial port, just comm for end users.
     , TCP_COMM
     , ROBOT
     , ESPHOME

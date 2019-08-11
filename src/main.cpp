@@ -1,45 +1,25 @@
 #include "HardwareSerial.h"
-#include "SPIFFS.h"     // ESP class
-
 #include "_hal/Board/board.h"
-// #include "_hal/stopwatch.h"
-// #include "smoothie/robot/Actuator/ActuatorTask.h"
-// #include "smoothie/RobotStarter.h"
 #include "main.h"
+#include"_SAL/TaskManager.h"
 
 
 static const char *TAG = "espsmooth.main";
 
-
 extern float float_value;
-// #include <esp_log.h>
-// #include "_SAL/Helpers/FileHelper.h"
-// std::string test(const char* cc){
-//     printf("%s\n",cc);
-//     std::string xx = "aaaaaaa";
-//     return xx;
-// }
 
-// #include "_sal/FtpServer/ESP32FtpServer.h"
-// FtpServer ftpSrv;   //set #define FTP_DEBUG in ESP32FtpServer.h to see ftp verbose on serial
-
-#include"_SAL/TaskManager.h"
 
 void setup(){
-    // esp_log_level_set("*", ESP_LOG_DEBUG);
-    // Serial.begin(115200);
     Board::getInstance()->report_memory();
     Board::getInstance()->init();
     Start_Task(ESPHOME);
     Board::getInstance()->report_memory();
-    //  smoothie_setup(); 
     Start_Task(ROBOT);
-
     delay(5000);   //Keep uartTx empty for ProntFace handshaking.
+    Start_TimerTask(CONTROL_ROBOT_MOTORS);
+    
     printf("\n\n"); 
     printf("Hi, Mr.ProntFace. You're online now. right?\n ");
-
-    Start_TimerTask(CONTROL_ROBOT_MOTORS);
     // Board::getInstance()->Board_report_cpu();
     // Board::getInstance()->report_memory();
     // FileHelper::get_instance()->~FileHelper();    //No effection! WHY?
@@ -71,7 +51,6 @@ void loop(){
         // float dc_angle= dc->get_current_position();
         // printf("    Y Pos= %f", dc_angle);
         printf("\n");
-        // print_task_list();
     }
 
 }

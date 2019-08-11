@@ -21,6 +21,7 @@ void task_esphome_loop(void*){
 }
 
 //---------------------------------------------------------------
+extern void tcp_setup();
 extern void smoothie_setup();
 extern void robot_motors_movement_setup();
 
@@ -46,9 +47,10 @@ void Start_Task(TASK_ITEMS_T target_task){
         xTaskCreate(ftp_loop, "ftp_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL);
         break;
     case SERIAL_COMM:
-
+        
         break;
     case TCP_COMM:
+        tcp_setup();
         break;
     case ESPHOME:
         __esphome = esphome_setup();
