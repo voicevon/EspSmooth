@@ -39,6 +39,8 @@ void Start_Task(TASK_ITEMS_T target_task){
         // delay(5000);   //Wait wifi connecting.  TODO:// set as a condition.
         xTaskCreate(task_esphome_loop, "esphome_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL);
         break;
+    case ROBOT:
+        break;
     default:
         break;
     }

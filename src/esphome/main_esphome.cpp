@@ -189,7 +189,7 @@ void setup_int_sensor_pos_2(){
 }
 
 
-#include "_sal/FileHelper.h"
+#include "_SAL/Helpers/FileHelper.h"
 #include "libs/OutputStream.h"
 
 esphome::Application* esphome_setup() {
