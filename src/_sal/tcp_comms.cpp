@@ -1,7 +1,7 @@
 // xQueue Create/send/receive
 // https://www.youtube.com/watch?v=DLqj01asDM0&t=246s
 
-#include "uart3_comms.h"
+#include "tcp_comms.h"
 #include "libs/OutputStream.h"
 #include "FreeRTOS.h"
 #include "freertos/task.h"
@@ -9,7 +9,7 @@
 
 static xTaskHandle xTaskToNotify = NULL;
 
-void set_notification_uart3(xTaskHandle h)
+void set_notification_tcp(xTaskHandle h)
 {
 	/* Store the handle of the calling task. */
 	xTaskToNotify = h;
@@ -17,14 +17,14 @@ void set_notification_uart3(xTaskHandle h)
 
 
 
-size_t read_uart3(char * buf, size_t length)
+size_t read_tcp(char * buf, size_t length)
 {
 	// int bytes = Chip_UART_ReadRB(LPC_UARTX, &rxring, buf, length);
 	// return bytes;
 	return 0;
 }
 
-size_t write_uart3(const char *buf, size_t length)
+size_t write_tcp(const char *buf, size_t length)
 {
 	// Note we do a blocking write here until all is written
 	size_t sent_cnt = 0;
@@ -45,10 +45,10 @@ static std::vector<OutputStream*> output_streams;    //TODO: unify output_stream
 void tcp_comms(void *)
 {
     //listen port 
-    set_notification_uart3(xTaskGetCurrentTaskHandle());
+    set_notification_tcp(xTaskGetCurrentTaskHandle());
 
 //     // create an output stream that writes to the uart
-    OutputStream os([](const char *buf, size_t len) { return write_uart3(buf, len); });
+    OutputStream os([](const char *buf, size_t len) { return write_tcp(buf, len); });
     output_streams.push_back(&os);
 
     const TickType_t waitms = pdMS_TO_TICKS( 300 );
@@ -65,7 +65,7 @@ void tcp_comms(void *)
             /* The call to ulTaskNotifyTake() timed out. check anyway */
         }
 
-        size_t n = read_uart3(rx_buf, sizeof(rx_buf));
+        size_t n = read_tcp(rx_buf, sizeof(rx_buf));
         if(n > 0) {
         //    process_command_buffer(n, rx_buf, &os, line, cnt, &discard);
         }
