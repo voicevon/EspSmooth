@@ -1,1 +1,1 @@
-Please read [Prject Wiki](https://github.com/voicevon/EspSmooth/wiki)
+Please read [Project Wiki](https://github.com/voicevon/EspSmooth/wiki)
