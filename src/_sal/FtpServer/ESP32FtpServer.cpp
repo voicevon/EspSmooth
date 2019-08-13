@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 //  2017: modified by @robo8080
-
+#include "stdio.h"
 #include "ESP32FtpServer.h"
 
 #include <WiFi.h>
@@ -27,6 +27,7 @@
 #include <FS.h>
 #include "SD.h"
 #include "SPI.h"
+
 
 //#define FTP_DEBUG
 
@@ -37,9 +38,16 @@ WiFiServer dataServer( FTP_DATA_PORT_PASV );
 FtpServer* FtpServer::__instance = nullptr; 
 
 FtpServer::FtpServer(){
-  if(__instance == nullptr) {
-    __instance = this;
-  }
+  printf("FtpServer()  11111\n");
+  // if(__instance == nullptr) {
+  //   printf("FtpServer() 22222222222 null\n");
+  //   __instance = this;
+  // }
+  // else{
+  //   printf("FtpServer() 3333333333333333\n");
+  // }
+  printf("FtpServer()  exit\n");
+
 }
 
 // FtpServer* ftpserver_setup(){
@@ -54,7 +62,7 @@ void FtpServer::begin(String uname, String pword)
   // Tells the ftp server to begin listening for incoming connection
 	_FTP_USER=uname;
 	_FTP_PASS = pword;
-
+  printf("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n");
 	ftpServer.begin();
 	delay(10);
 	dataServer.begin();	

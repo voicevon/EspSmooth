@@ -28,12 +28,17 @@
 class FtpServer
 {
 public:
-  static FtpServer* get_instance() { return __instance; }
+  static FtpServer* get_instance() { 
+    if(__instance == nullptr){
+      __instance = new FtpServer();
+    }
+    return __instance; 
+  }
   void    begin(String uname, String pword);
   void    handleFTP();
+  FtpServer();
 
 private:
-  FtpServer();
   static FtpServer* __instance;
   void    iniVariables();
   void    clientConnected();
