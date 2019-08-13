@@ -42,13 +42,6 @@ FtpServer::FtpServer(){
   }
 }
 
-// FtpServer* ftpserver_setup(){
-//   //read config.
-
-//   FtpServer* __ftp_server = new FtpServer();
-//   __ftp_server->begin("a","a");
-//   return __ftp_server;
-// }
 void FtpServer::begin(String uname, String pword)
 {
   // Tells the ftp server to begin listening for incoming connection
@@ -62,7 +55,7 @@ void FtpServer::begin(String uname, String pword)
 	millisTimeOut = (uint32_t)FTP_TIME_OUT * 60 * 1000;
 	millisDelay = 0;
 	cmdStatus = 0;
-    iniVariables();
+  iniVariables();
 }
 
 void FtpServer::iniVariables()
@@ -96,6 +89,7 @@ void FtpServer::handleFTP()
   {
     if( client.connected())
       disconnectClient();
+      
     cmdStatus = 1;
   }
   else if( cmdStatus == 1 )         // Ftp server waiting for connection

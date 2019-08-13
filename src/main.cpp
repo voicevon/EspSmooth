@@ -8,15 +8,17 @@ static const char *TAG = "espsmooth.main";
 
 extern float float_value;
 
-
+extern void start_tcp_server();
 void setup(){
     Board::getInstance()->report_memory();
     Board::getInstance()->init();
     Start_Task(ESPHOME);
+    // start_tcp_server();
+    // return;
     Board::getInstance()->report_memory();
     Start_Task(ROBOT);
     delay(5000);   //Keep uartTx empty for ProntFace handshaking.
-    Start_TimerTask(CONTROL_ROBOT_MOTORS);
+    // Start_TimerTask(CONTROL_ROBOT_MOTORS);
     
     printf("\n\n"); 
     printf("Hi, Mr.ProntFace. You're online now. right?\n ");
@@ -25,18 +27,20 @@ void setup(){
     // FileHelper::get_instance()->~FileHelper();    //No effection! WHY?
     // Board::getInstance()->report_memory();
 
-    Start_Task(FTP_SERVER);
+    // Start_Task(FTP_SERVER);
 }
 
 
 #include "smoothie/robot/Robot.h"
 #include "smoothie/robot/Actuator/DcMotor.h"
-
+extern void loop_333();
 uint64_t rtos_report_inteval_second = 5 ;
 uint64_t cpu_idle_counter = 0;
 uint64_t last_time_stamp = 0;   //us
 // Actually, this is the lowest priority task.
 void loop(){
+    // loop_333();
+    
     cpu_idle_counter++;
     if(esp_timer_get_time () - last_time_stamp >= rtos_report_inteval_second * 1000000){
         uint16_t passed_time = cpu_idle_counter / 10280 / rtos_report_inteval_second;
