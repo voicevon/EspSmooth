@@ -26,6 +26,7 @@ void setup(){
     // Board::getInstance()->report_memory();
 
     Start_Task(FTP_SERVER);
+    Start_Task(TCP_SERVER);
 }
 
 

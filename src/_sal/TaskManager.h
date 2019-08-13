@@ -1,7 +1,8 @@
 #pragma once
 
 enum TASK_ITEMS_T { 
-    FTP_SERVER
+      FTP_SERVER
+    , TCP_SERVER
     , SERIAL_COMM  // This is not the debug serial port, just comm for end users.
     , TCP_COMM
     , ROBOT
