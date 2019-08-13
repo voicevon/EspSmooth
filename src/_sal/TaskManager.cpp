@@ -1,11 +1,16 @@
 #include "TaskManager.h"
 
-
+bool volatile locked = false;   //TODO  use a mutex
 //---------------------------------------------------------------
 #include "_SAL/FtpServer/ESP32FtpServer.h"
 void ftp_loop(void*){
     while(true){
-        FtpServer::get_instance()->handleFTP();
+        if(!locked){
+            locked = true;
+            FtpServer::get_instance()->handleFTP();
+            // TcpServer::get_instance()->handleTCP();
+        }
+        locked = true;
         delay(100);
     }
 }
@@ -13,7 +18,12 @@ void ftp_loop(void*){
 #include "_SAL/TcpServer/TcpServer.h"
 void tcp_loop(void*){
     while(true){
-        TcpServer::get_instance()->handleTCP();
+        if(!locked){
+            locked = true;
+            // FtpServer::get_instance()->handleFTP();
+            TcpServer::get_instance()->handleTCP();
+        }
+        locked = false;
         delay(100);
     }
 }
