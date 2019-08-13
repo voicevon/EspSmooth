@@ -10,7 +10,7 @@ void ftp_loop(void*){
             FtpServer::get_instance()->handleFTP();
             // TcpServer::get_instance()->handleTCP();
         }
-        locked = true;
+        locked = false;
         delay(100);
     }
 }
