@@ -11,10 +11,8 @@ WiFiServer tcp_server( TCP_CTRL_PORT );
 
 TcpServer* TcpServer::__instance = nullptr; 
 
-TcpServer::TcpServer(){
+TcpServer::TcpServer() : StateMachine<e_STATES>(LISTENING){
   printf("[D]TcpServer() at entrance\n");
-
-
 }
 
 void TcpServer::begin(String uname, String pword)
@@ -25,7 +23,10 @@ void TcpServer::begin(String uname, String pword)
 	tcp_server.begin();
 
 }
-
+// template<T>
+bool TcpServer::is_allowed_to_enter_(STATES_t new_state){
+  return true;
+}
 void TcpServer::iniVariables()
 {
   // Default for data port
@@ -64,7 +65,7 @@ void TcpServer::handleTCP()
   {
     abortTransfer();
     iniVariables();
-    #ifdef TCP_DEBUG
+    #ifdef TCP_DEBUG_ON
 	Serial.println("Ftp server waiting for connection on port "+ String(TCP_CTRL_PORT));
     #endif
     cmdStatus = 2;
@@ -103,7 +104,7 @@ void TcpServer::handleTCP()
   else if (!client.connected() || !client)
   {
 	  cmdStatus = 1;
-      #ifdef TCP_DEBUG
+      #ifdef TCP_DEBUG_ON
 	    Serial.println("client disconnected");
 	  #endif
   }
@@ -128,7 +129,7 @@ void TcpServer::handleTCP()
 
 void TcpServer::clientConnected()
 {
-  #ifdef TCP_DEBUG
+  #ifdef TCP_DEBUG_ON
 	Serial.println("Client connected!");
   #endif
   client.println( "220--- Welcome to TCP for ESP8266 ---");
@@ -139,7 +140,7 @@ void TcpServer::clientConnected()
 
 void TcpServer::disconnectClient()
 {
-  #ifdef TCP_DEBUG
+  #ifdef TCP_DEBUG_ON
 	Serial.println(" Disconnecting client");
   #endif
   abortTransfer();
@@ -171,7 +172,7 @@ boolean TcpServer::userPassword()
   //   client.println( "530 ");
   // else
   // {
-    // #ifdef TCP_DEBUG
+    // #ifdef TCP_DEBUG_ON
       Serial.println( "OK. Waiting for commands.");
     // #endif
     client.println( "230 OK.");
@@ -254,7 +255,7 @@ boolean TcpServer::processCommand()
 	// dataPort = TCP_DATA_PORT_PASV;
   //   //data.connect( dataIp, dataPort );
   //   //data = dataServer.available();
-  //   #ifdef TCP_DEBUG
+  //   #ifdef TCP_DEBUG_ON
 	// Serial.println("Connection management set to passive");
   //     Serial.println( "Data port set to " + String(dataPort));
   //   #endif
@@ -372,7 +373,7 @@ boolean TcpServer::processCommand()
 //     			String fn, fs;
 //           fn = file.name();
 //     			fn.remove(0, 1);
-//       		#ifdef TCP_DEBUG
+//       		#ifdef TCP_DEBUG_ON
 //   			  Serial.println("File Name = "+ fn);
 //       		#endif
 //           fs = String(file.size());
@@ -493,7 +494,7 @@ boolean TcpServer::processCommand()
   //       client.println( "425 No data connection");
   //     else
   //     {
-  //       #ifdef TCP_DEBUG
+  //       #ifdef TCP_DEBUG_ON
 	// 	  Serial.println("Sending " + String(parameters));
   //       #endif
   //       client.println( "150-Connected to port "+ String(dataPort));
@@ -524,7 +525,7 @@ boolean TcpServer::processCommand()
   //     }
   //     else
   //     {
-  //       #ifdef TCP_DEBUG
+  //       #ifdef TCP_DEBUG_ON
   //         Serial.println( "Receiving " +String(parameters));
   //       #endif
   //       client.println( "150 Connected to port " + String(dataPort));
@@ -563,7 +564,7 @@ boolean TcpServer::processCommand()
   //       client.println( "550 File " +String(parameters)+ " not found");
   //     else
   //     {
-  //       #ifdef TCP_DEBUG
+  //       #ifdef TCP_DEBUG_ON
 	// 	  Serial.println("Renaming " + String(buf));
   //       #endif
   //       client.println( "350 RNFR accepted - file exists, ready for destination");     
@@ -588,7 +589,7 @@ boolean TcpServer::processCommand()
   //       client.println( "553 " +String(parameters)+ " already exists");
   //     else
   //     {          
-  //           #ifdef TCP_DEBUG
+  //           #ifdef TCP_DEBUG_ON
 	// 	  Serial.println("Renaming " + String(buf) + " to " + String(path));
   //           #endif
   //           if( SD.rename( buf, path ))
@@ -676,7 +677,7 @@ boolean TcpServer::dataConnect()
 // //    if (dataServer.available()) {
 // 		  data.stop();
 // 		  data = dataServer.available();
-// 			#ifdef TCP_DEBUG
+// 			#ifdef TCP_DEBUG_ON
 // 		      Serial.println("ftpdataserver client....");
 // 			#endif
 		
@@ -740,7 +741,7 @@ void TcpServer::abortTransfer()
   //   file.close();
   //   data.stop(); 
   //   client.println( "426 Transfer aborted"  );
-  //   #ifdef TCP_DEBUG
+  //   #ifdef TCP_DEBUG_ON
   //     Serial.println( "Transfer aborted!") ;
   //   #endif
   // }
@@ -766,7 +767,7 @@ int8_t TcpServer::readChar()
     char c = client.read();
 	 // char c;
 	 // client.readBytes((uint8_t*) c, 1);
-    #ifdef TCP_DEBUG
+    #ifdef TCP_DEBUG_ON
       Serial.print( c);
     #endif
     if( c == '\\' )
