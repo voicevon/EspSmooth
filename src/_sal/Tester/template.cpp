@@ -3,12 +3,14 @@
 template<typename T>
 class Base{
    public:
-      Base(T someValue){}
+      Base(T someValue);
       virtual T someFunc() =0;
 };
 
-// template<typename T>
-// Base<T>::Base(T someValue){}
+template<typename T>
+Base<T>::Base(T someValue){
+   
+}
 
 typedef enum on_off{ON,OFF} on_off_t; 
 

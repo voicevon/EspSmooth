@@ -1,10 +1,12 @@
 #include "StateMachine.h"
 
-
+template <typename T>
+StateMachine<T>::StateMachine(T begin_state){
+    // __current_state = begin_state;
+}
 // template <typename T>
 // StateMachine<T>::StateMachine(T begin_state){
-// StateMachine<T>::StateMachine(){
-    // __current_state = begin_state;
+//     // __current_state = begin_state;
 // }
 
 

@@ -5,7 +5,7 @@ template <typename T>
 class StateMachine{
     
     public:
-        StateMachine(T begin_state){}
+        StateMachine(T begin_state);
         // void to_state(T new_state);
     
     protected:
@@ -15,3 +15,4 @@ class StateMachine{
         // T __current_state;
 
 };
+
