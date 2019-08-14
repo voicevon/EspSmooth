@@ -63,8 +63,8 @@ private:
   
   // File file;
   
-  boolean  dataPassiveConn;
-  uint16_t dataPort;
+  // boolean  dataPassiveConn;
+  // uint16_t dataPort;
   char     buf[ TCP_BUF_SIZE ];       // data buffer for transfers
   char     cmdLine[ TCP_CMD_SIZE ];   // where to store incoming char from client
   char     cwdName[ TCP_CWD_SIZE ];   // name of current directory
@@ -77,12 +77,12 @@ private:
   uint32_t millisTimeOut,             // disconnect after 5 min of inactivity
            millisDelay,
            millisEndConnection,       // 
-           millisBeginTrans,          // store time of beginning of a transaction
-           bytesTransfered;           //
+           millisBeginTrans          // store time of beginning of a transaction
+          //  bytesTransfered;           //
   // String   _TCP_USER;
   // String   _TCP_PASS;
 
-  
+  ;
 
 };
 

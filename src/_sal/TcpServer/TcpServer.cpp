@@ -1,23 +1,4 @@
-/*
- * TCP Serveur for ESP8266
- * based on TCP Serveur for Arduino Due and Ethernet shield (W5100) or WIZ820io (W5200)
- * based on Jean-Michel Gallego's work
- * modified to work with esp8266 SPIFFS by David Paiva david@nailbuster.com
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-//  2017: modified by @robo8080
+
 #include "stdio.h"
 #include "TcpServer.h"
 
@@ -31,40 +12,18 @@ WiFiServer tcp_server( TCP_CTRL_PORT );
 TcpServer* TcpServer::__instance = nullptr; 
 
 TcpServer::TcpServer(){
-  printf("TcpServer()  11111\n");
-  // if(__instance == nullptr) {
-  //   printf("TcpServer() 22222222222 null\n");
-  //   __instance = this;
-  // }
-  // else{
-  //   printf("TcpServer() 3333333333333333\n");
-  // }
-  printf("TcpServer()  exit\n");
+  printf("[D]TcpServer() at entrance\n");
+
 
 }
 
-// TcpServer* ftpserver_setup(){
-//   //read config.
-
-//   TcpServer* __ftp_server = new TcpServer();
-//   __ftp_server->begin("a","a");
-//   return __ftp_server;
-// }
 void TcpServer::begin(String uname, String pword)
 {
-  // Tells the ftp server to begin listening for incoming connection
-	// _TCP_USER=uname;
-	// _TCP_PASS = pword;
-  printf("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n");
+
+  printf("[V][TcpServer.begin()] at entrance\n");
 
 	tcp_server.begin();
-	// delay(10);
-	// // dataServer.begin();	
-	// // delay(10);
-	// millisTimeOut = (uint32_t)TCP_TIME_OUT * 60 * 1000;
-	// millisDelay = 0;
-	// cmdStatus = 0;
-  //   iniVariables();
+
 }
 
 void TcpServer::iniVariables()
@@ -73,7 +32,7 @@ void TcpServer::iniVariables()
   // dataPort = TCP_DATA_PORT_PASV;
   
   // Default Data connection is Active
-  dataPassiveConn = true;
+  // dataPassiveConn = true;
   
   // Set the root directory
   strcpy( cwdName, "/" );
@@ -90,64 +49,64 @@ void TcpServer::handleTCP()
   //   return;
   // printf("tttttttccccccccccpppppppppppp\n");
   if (tcp_server.hasClient()) {
-    printf("hhhhhhhhhhhhhhhhhhhhhhhhhhh\n");
+    printf("[V][TcpServer][haneleTCP()] hasClient() \n");
 	  client.stop();
 	  client = tcp_server.available();
   }
   
-  // if( cmdStatus == 0 )
-  // {
-  //   if( client.connected())
-  //     disconnectClient();
-  //   cmdStatus = 1;
-  // }
-  // else if( cmdStatus == 1 )         // Ftp server waiting for connection
-  // {
-  //   abortTransfer();
-  //   iniVariables();
-  //   #ifdef TCP_DEBUG
-	// Serial.println("Ftp server waiting for connection on port "+ String(TCP_CTRL_PORT));
-  //   #endif
-  //   cmdStatus = 2;
-  // }
-  // else if( cmdStatus == 2 )         // Ftp server idle
-  // {
+  if( cmdStatus == 0 )
+  {
+    if( client.connected())
+      disconnectClient();
+    cmdStatus = 1;
+  }
+  else if( cmdStatus == 1 )         // Ftp server waiting for connection
+  {
+    abortTransfer();
+    iniVariables();
+    #ifdef TCP_DEBUG
+	Serial.println("Ftp server waiting for connection on port "+ String(TCP_CTRL_PORT));
+    #endif
+    cmdStatus = 2;
+  }
+  else if( cmdStatus == 2 )         // Ftp server idle
+  {
    		
-  //   if( client.connected() )                // A client connected
-  //   {
-  //     clientConnected();      
-  //     millisEndConnection = millis() + 10 * 1000 ; // wait client id during 10 s.
-  //     cmdStatus = 3;
-  //   }
-  // }
-  // else if( readChar() > 0 )         // got response
-  // {
-  //   if( cmdStatus == 3 )            // Ftp server waiting for user identity
-  //     if( userIdentity() )
-  //       cmdStatus = 4;
-  //     else
-  //       cmdStatus = 0;
-  //   else if( cmdStatus == 4 )       // Ftp server waiting for user registration
-  //     if( userPassword() )
-  //     {
-  //       cmdStatus = 5;
-  //       millisEndConnection = millis() + millisTimeOut;
-  //     }
-  //     else
-  //       cmdStatus = 0;
-  //   else if( cmdStatus == 5 )       // Ftp server waiting for user command
-  //     if( ! processCommand())
-  //       cmdStatus = 0;
-  //     else
-  //       millisEndConnection = millis() + millisTimeOut;
-  // }
-  // else if (!client.connected() || !client)
-  // {
-	//   cmdStatus = 1;
-  //     #ifdef TCP_DEBUG
-	//     Serial.println("client disconnected");
-	//   #endif
-  // }
+    if( client.connected() )                // A client connected
+    {
+      clientConnected();      
+      millisEndConnection = millis() + 10 * 1000 ; // wait client id during 10 s.
+      cmdStatus = 3;
+    }
+  }
+  else if( readChar() > 0 )         // got response
+  {
+    if( cmdStatus == 3 )            // Ftp server waiting for user identity
+      if( userIdentity() )
+        cmdStatus = 4;
+      else
+        cmdStatus = 0;
+    else if( cmdStatus == 4 )       // Ftp server waiting for user registration
+      if( userPassword() )
+      {
+        cmdStatus = 5;
+        millisEndConnection = millis() + millisTimeOut;
+      }
+      else
+        cmdStatus = 0;
+    else if( cmdStatus == 5 )       // Ftp server waiting for user command
+      if( ! processCommand())
+        cmdStatus = 0;
+      else
+        millisEndConnection = millis() + millisTimeOut;
+  }
+  else if (!client.connected() || !client)
+  {
+	  cmdStatus = 1;
+      #ifdef TCP_DEBUG
+	    Serial.println("client disconnected");
+	  #endif
+  }
 
   // if( transferStatus == 1 )         // Retrieve data
   // {
