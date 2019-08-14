@@ -34,22 +34,18 @@ typedef enum e_STATES {
 } STATES_t ;
 
 
-class TcpServer: public StateMachine<e_STATES> {
+class TcpServer: public StateMachine<STATES_t> {
     public:
+        TcpServer();
+
+        static TcpServer* get_instance();
         
-        static TcpServer* get_instance() { 
-            if(__instance == nullptr){
-                __instance = new TcpServer();
-            }
-            return __instance; 
-        }
         void    begin(String uname, String pword);
         void    handleTCP();
-        TcpServer();
 
     private:
         static TcpServer* __instance;
-        bool is_allowed_to_enter_(e_STATES new_state) override;
+        bool is_allowed_to_enter_(STATES_t new_state) override;
         
         void    iniVariables();
         void    clientConnected();

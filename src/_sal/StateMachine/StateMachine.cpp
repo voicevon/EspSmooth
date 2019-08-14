@@ -1,13 +1,14 @@
 #include "StateMachine.h"
 
 
-template<class T>
+template <typename T>
 StateMachine<T>::StateMachine(T begin_state){
+// StateMachine<T>::StateMachine(){
     __current_state = begin_state;
 }
 
 
-template <class T>
+template <typename T>
 void StateMachine<T>::to_state(T new_state){
     if(is_allowed_to_enter_(new_state)){
         __current_state = new_state;
