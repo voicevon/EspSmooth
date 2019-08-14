@@ -16,3 +16,7 @@ class StateMachine{
 
 };
 
+template <typename T>
+StateMachine<T>::StateMachine(T begin_state){
+    // __current_state = begin_state;
+}
