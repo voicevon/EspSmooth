@@ -38,58 +38,58 @@ class TcpServer: public StateMachine<STATES_t> {
     public:
         TcpServer();
 
-        static TcpServer* get_instance();
+        // static TcpServer* get_instance();
         
-        void    begin(String uname, String pword);
-        void    handleTCP();
+        // void    begin(String uname, String pword);
+        // void    handleTCP();
 
-    private:
-        static TcpServer* __instance;
-        bool is_allowed_to_enter_(STATES_t new_state) override;
+    // private:
+    //     static TcpServer* __instance;
+    //     bool is_allowed_to_enter_(STATES_t new_state) override;
         
-        void    iniVariables();
-        void    clientConnected();
-        void    disconnectClient();
-        boolean userIdentity();
-        boolean userPassword();
-        boolean processCommand();
-        boolean dataConnect();
-        boolean doRetrieve();
-        boolean doStore();
-        void    closeTransfer();
-        void    abortTransfer();
-        boolean makePath( char * fullname );
-        boolean makePath( char * fullName, char * param );
-        uint8_t getDateTime( uint16_t * pyear, uint8_t * pmonth, uint8_t * pday,
-                            uint8_t * phour, uint8_t * pminute, uint8_t * second );
-        char *  makeDateTimeStr( char * tstr, uint16_t date, uint16_t time );
-        int8_t  readChar();
+    //     void    iniVariables();
+    //     void    clientConnected();
+    //     void    disconnectClient();
+    //     boolean userIdentity();
+    //     boolean userPassword();
+    //     boolean processCommand();
+    //     boolean dataConnect();
+    //     boolean doRetrieve();
+    //     boolean doStore();
+    //     void    closeTransfer();
+    //     void    abortTransfer();
+    //     boolean makePath( char * fullname );
+    //     boolean makePath( char * fullName, char * param );
+    //     uint8_t getDateTime( uint16_t * pyear, uint8_t * pmonth, uint8_t * pday,
+    //                         uint8_t * phour, uint8_t * pminute, uint8_t * second );
+    //     char *  makeDateTimeStr( char * tstr, uint16_t date, uint16_t time );
+    //     int8_t  readChar();
 
-        IPAddress      dataIp;              // IP address of client for data
-        WiFiClient client;
-        WiFiClient data;
+    //     IPAddress      dataIp;              // IP address of client for data
+    //     WiFiClient client;
+    //     WiFiClient data;
         
-        // File file;
+    //     // File file;
         
-        // boolean  dataPassiveConn;
-        // uint16_t dataPort;
-        char     buf[ TCP_BUF_SIZE ];       // data buffer for transfers
-        char     cmdLine[ TCP_CMD_SIZE ];   // where to store incoming char from client
-        char     cwdName[ TCP_CWD_SIZE ];   // name of current directory
-        char     command[ 5 ];              // command sent by client
-        boolean  rnfrCmd;                   // previous command was RNFR
-        char *   parameters;                // point to begin of parameters sent by client
-        uint16_t iCL;                       // pointer to cmdLine next incoming char
-        int8_t   cmdStatus,                 // status of ftp command connexion
-                transferStatus;            // status of ftp data transfer
-        uint32_t millisTimeOut,             // disconnect after 5 min of inactivity
-                millisDelay,
-                millisEndConnection,       // 
-                millisBeginTrans          // store time of beginning of a transaction
-                //  bytesTransfered;           //
-        // String   _TCP_USER;
-        // String   _TCP_PASS;
-        ;
+    //     // boolean  dataPassiveConn;
+    //     // uint16_t dataPort;
+    //     char     buf[ TCP_BUF_SIZE ];       // data buffer for transfers
+    //     char     cmdLine[ TCP_CMD_SIZE ];   // where to store incoming char from client
+    //     char     cwdName[ TCP_CWD_SIZE ];   // name of current directory
+    //     char     command[ 5 ];              // command sent by client
+    //     boolean  rnfrCmd;                   // previous command was RNFR
+    //     char *   parameters;                // point to begin of parameters sent by client
+    //     uint16_t iCL;                       // pointer to cmdLine next incoming char
+    //     int8_t   cmdStatus,                 // status of ftp command connexion
+    //             transferStatus;            // status of ftp data transfer
+    //     uint32_t millisTimeOut,             // disconnect after 5 min of inactivity
+    //             millisDelay,
+    //             millisEndConnection,       // 
+    //             millisBeginTrans          // store time of beginning of a transaction
+    //             //  bytesTransfered;           //
+    //     // String   _TCP_USER;
+    //     // String   _TCP_PASS;
+    //     ;
 
 };
 

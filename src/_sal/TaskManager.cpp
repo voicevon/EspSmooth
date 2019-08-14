@@ -21,7 +21,7 @@ void tcp_loop(void*){
         if(!locked){
             locked = true;
             // FtpServer::get_instance()->handleFTP();
-            TcpServer::get_instance()->handleTCP();
+            // TcpServer::get_instance()->handleTCP();
         }
         locked = false;
         delay(100);
@@ -66,7 +66,7 @@ void Start_Task(TASK_ITEMS_T target_task){
         xTaskCreate(ftp_loop, "ftp_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL);
         break;
     case TCP_SERVER:
-        TcpServer::get_instance()->begin("a","a");
+        // TcpServer::get_instance()->begin("a","a");
         xTaskCreate(tcp_loop, "tcp_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL);
         break;
     case SERIAL_COMM:
