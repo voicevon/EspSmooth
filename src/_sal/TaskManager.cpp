@@ -1,13 +1,33 @@
 #include "TaskManager.h"
 
-
+bool volatile locked = false;   //TODO  use a mutex
 //---------------------------------------------------------------
 #include "_SAL/FtpServer/ESP32FtpServer.h"
 void ftp_loop(void*){
     while(true){
-        FtpServer::get_instance()->handleFTP();
+        if(!locked){
+            locked = true;
+            FtpServer::get_instance()->handleFTP();
+            // TcpServer::get_instance()->handleTCP();
+        }
+        locked = false;
+        delay(100);
     }
 }
+//---------------------------------------------------------------
+#include "_SAL/TcpServer/TcpServer.h"
+void tcp_loop(void*){
+    while(true){
+        if(!locked){
+            locked = true;
+            // FtpServer::get_instance()->handleFTP();
+            TcpServer::get_instance()->handleTCP();
+        }
+        locked = false;
+        delay(100);
+    }
+}
+
 
 //---------------------------------------------------------------
 #include "esphome/core/application.h"
@@ -44,6 +64,10 @@ void Start_Task(TASK_ITEMS_T target_task){
     case FTP_SERVER:
         FtpServer::get_instance()->begin("a","a");
         xTaskCreate(ftp_loop, "ftp_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL);
+        break;
+    case TCP_SERVER:
+        TcpServer::get_instance()->begin("a","a");
+        xTaskCreate(tcp_loop, "tcp_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL);
         break;
     case SERIAL_COMM:
         
