@@ -13,7 +13,7 @@
 
 #include "stdint.h"
 #include <WiFiClient.h>
-#include <_SAL/StateMachine/StateMachine.cpp>
+#include <_SAL/StateMachine/StateMachine.h>
 
 #define TCP_SERVER_VERSION "TCP Aug2019"
 
