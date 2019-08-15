@@ -8,29 +8,30 @@ const int PWM_FREQ = 50;    // 50Hz  20ms
 const int PWM_RESOLUTION_BITS = 16;     // 16 bit resolution
 const int HOME_DUTY = 0;
 
-DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin,esphome::ads1115::ADS1115Sensor* ads1115_sensor){
+// DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin,esphome::ads1115::ADS1115Sensor* ads1115_sensor){
+DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin, uint8_t ads1115_chip_id, esphome::ads1115::ADS1115Multiplexer ads1115_channel){
+
     motor_type_ = ACTUATOR_TYPE_T::DC_MOTOR;
     __enabled = false;
 
     __dir_pin = OutputPin(dir_pin);
     __pwm_pin = PwmPin(pwm_pin);
 
-    __ads1115Sensor = ads1115_sensor; 
+    // __ads1115Sensor = ads1115_sensor; 
+    __ads1115_chip_id = ads1115_chip_id;
+    __ads1115_channel = ads1115_channel;
 }
 
 // Called by timerTask.
 void DcMotor::pid_loop(float target_position){
-    float angle = Ads1115_read_sensor_mv(0,1);
-    printf("pid angle[1] = %f\n", angle);
-    return;
+    float angle = Ads1115_read_sensor_mv(__ads1115_chip_id,__ads1115_channel);
+    printf("pid angle[1] = %6.2f\n", angle);
     if(!__enabled) return;   //??
-    printf("1111111111111111111\n");
-
-    __ads1115Sensor->update();
-    printf("2222222222222222 \n");
-    __sensor_position = __ads1115Sensor->state;
-    printf("Ads1115 Sensor value= %6.2f \n",__sensor_position );
     return;
+    // __ads1115Sensor->update();
+    // __sensor_position = __ads1115Sensor->state;
+    // printf("Ads1115 Sensor value= %6.2f \n",__sensor_position );
+    // return;
 
     if(__sensor_position <10) return;    // there is an error.
     if(isnan(__sensor_position)) return;  //??

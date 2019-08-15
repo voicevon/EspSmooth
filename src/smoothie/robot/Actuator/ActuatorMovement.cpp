@@ -1,4 +1,4 @@
-#include "ActuatorMovement.h"
+// #include "ActuatorMovement.h"
 #include "smoothie/robot/Robot.h"
 #include "Actuator.h"
 #include "ServoMotor.h"
@@ -45,10 +45,9 @@ void robot_motors_movement(TimerHandle_t xTimer){
     // printf(">>>>>>>>>>>>>>>>>>>>>>>>>> exiting task>>>>>>>>>>>>\n");
 }
 
-void robot_motors_movement_setup(){
-    int interval = 1000;
+void robot_motors_movement_setup(int interval_ms){
     int id = 1;
-    TimerHandle_t tmr = xTimerCreate("robot_motors_movement", pdMS_TO_TICKS(interval), pdTRUE, ( void * )id, &robot_motors_movement);
+    TimerHandle_t tmr = xTimerCreate("robot_motors_movement", pdMS_TO_TICKS(interval_ms), pdTRUE, ( void * )id, &robot_motors_movement);
     if( xTimerStart(tmr, 10 ) != pdPASS ) {
         printf("[E][setup] Timer for ControlMotors  start error. \n");
     }
