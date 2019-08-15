@@ -103,7 +103,9 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
 
     if (!this->continuous_mode_) {
         // Start conversion
-        config |= 0b1000000000000000;
+        // config |= 0b1000000000000000;
+        config |= 0b1000000100000000;
+        // config &= 0b1111111011111111;
     }
     // return 1.23;
 
