@@ -14,18 +14,23 @@ void setup(){
     Start_Task(ESPHOME);
     Board::getInstance()->report_memory();
     Start_Task(ROBOT);
-    delay(5000);   //Keep uartTx empty for ProntFace handshaking.
-    Start_TimerTask(CONTROL_ROBOT_MOTORS);
-    
     printf("\n\n"); 
     printf("Hi, Mr.ProntFace. You're online now. right?\n ");
     // Board::getInstance()->Board_report_cpu();
     // Board::getInstance()->report_memory();
     // FileHelper::get_instance()->~FileHelper();    //No effection! WHY?
     // Board::getInstance()->report_memory();
+    // vTaskDelay(3000);   //Keep uartTx empty for ProntFace handshaking.
 
+
+    vTaskDelay(5000);   //wait robot is completely setup.   TODO: make a flag, or check RTOS log.
     Start_Task(FTP_SERVER);
     Start_Task(TCP_SERVER);
+    printf("\n\n\n");
+    delay(5000);
+    Start_TimerTask(CONTROL_ROBOT_MOTORS);
+    printf("setup() is completed! \n\n\n");
+
 }
 
 

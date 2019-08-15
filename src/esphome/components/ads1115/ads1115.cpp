@@ -111,9 +111,11 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
     // return 1.23;
 
     if (!this->continuous_mode_ || this->prev_config_ != config) {
-        printf("[W][Ads1115Componnet] continuous_mode=%i, or config is changed\n", continuous_mode_);
+        //config =  101000000100011
+        //previous= 000000000100011
+        printf("[W][Ads1115Componnet] continuous_mode=%i, config= %i, previous= %i \n", continuous_mode_, config,prev_config_);
         if (!this->write_byte_16(ADS1115_REGISTER_CONFIG, config)) {
-            this->status_set_warning();
+            // this->status_set_warning();
             return NAN;
         }
         this->prev_config_ = config;
@@ -123,12 +125,12 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
 
         uint32_t start = millis();
         while (this->read_byte_16(ADS1115_REGISTER_CONFIG, &config) && (config >> 15) == 0) {
-        if (millis() - start > 100) {
-            ESP_LOGW(TAG, "Reading ADS1115 timed out");
-            this->status_set_warning();
-            return NAN;
-        }
-        yield();
+            if (millis() - start > 100) {
+                // ESP_LOGW(TAG, "Reading ADS1115 timed out");
+                // this->status_set_warning();
+                return NAN;
+            }
+            yield();   //??
         }
     }
     // return 2.34;
