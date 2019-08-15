@@ -1,6 +1,6 @@
 // #include "Ads1115.h"
 #include "_sal/configure/ConfigReader.h"
-#include "esphome/esphome.h"
+#include "esphome/components/ads1115/ads1115.h"
 
 using namespace esphome;
 using namespace i2c;
@@ -13,7 +13,17 @@ esphome::i2c::I2CComponent * i2c_i2ccomponent;
 esphome::ads1115::ADS1115Component *ads1115_ads1115component[CHIP_COUNT];
 esphome::ads1115::ADS1115Sensor *ads1115_ads1115sensor[CHIP_COUNT][CHANNEL_COUNT];
 
-
+        // enum ADS1115Multiplexer {
+        // ADS1115_MULTIPLEXER_P0_N1 = 0b000,   channel = 4
+        // ADS1115_MULTIPLEXER_P0_N3 = 0b001,   channel = 5
+        // ADS1115_MULTIPLEXER_P1_N3 = 0b010,   channel = 6
+        // ADS1115_MULTIPLEXER_P2_N3 = 0b011,   channel = 7
+        
+        // ADS1115_MULTIPLEXER_P0_NG = 0b100,   channel = 0
+        // ADS1115_MULTIPLEXER_P1_NG = 0b101,   channel = 1
+        // ADS1115_MULTIPLEXER_P2_NG = 0b110,   channel = 2
+        // ADS1115_MULTIPLEXER_P3_NG = 0b111,   channel = 3
+        // };
 void Ads1115_setup(ConfigReader cr){
 	printf(" aaaaaaaaa \n");
 	i2c_i2ccomponent = new i2c::I2CComponent();
@@ -54,9 +64,7 @@ void Ads1115_setup(ConfigReader cr){
 
 //  Stack size is too small!
 //  https://esp32.com/viewtopic.php?t=1459
-float Ads1115_read_sensor_mv(int chip_id,int channel){
-	// printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ %i,%i\n",chip_id,channel);
-		// ads1115_ads1115sensor[chip_id][channel]->update();
-		return ads1115_ads1115component[chip_id]->request_measurement(ads1115_ads1115sensor[chip_id][channel]);
-		// return ads1115_ads1115sensor[chip_id][channel]->state;
+float Ads1115_read_sensor_mv(int chip_id,esphome::ads1115::ADS1115Multiplexer adc_channel){
+	int channel =  adc_channel <4 ? adc_channel : adc_channel - 4;
+	return ads1115_ads1115component[chip_id]->request_measurement(ads1115_ads1115sensor[chip_id][channel]);
 }

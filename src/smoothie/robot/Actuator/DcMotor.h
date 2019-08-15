@@ -12,6 +12,7 @@ class DcMotor:public Actuator
     public:
         
         // DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin,esphome::ads1115::ADS1115Sensor* ads1115_sensor);
+
         DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin, uint8_t ads1115_chip_id, esphome::ads1115::ADS1115Multiplexer ads1115_channel);
         virtual bool step() override;
         virtual void enable(bool state) override;
