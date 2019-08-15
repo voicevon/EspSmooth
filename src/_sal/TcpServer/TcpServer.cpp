@@ -27,6 +27,7 @@ void TcpServer::begin(String uname, String pword)
   printf("[V][TcpServer.begin()] at entrance\n");
 
 	tcp_server.begin();
+  printf("dddddddddddddddddddddddddddddddddddddddddddddd\n");
 
 }
 // template<T>
@@ -60,6 +61,7 @@ void TcpServer::handleTCP()
 	  client.stop();
 	  client = tcp_server.available();
   }
+  return;
   
   if( cmdStatus == 0 )
   {
