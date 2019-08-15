@@ -11,7 +11,7 @@ extern float float_value;
 void setup(){
     Board::getInstance()->report_memory();
     Board::getInstance()->init();
-    // Start_Task(ESPHOME);
+    Start_Task(ESPHOME);
     Board::getInstance()->report_memory();
     Start_Task(ROBOT);
     delay(5000);   //Keep uartTx empty for ProntFace handshaking.
@@ -24,8 +24,8 @@ void setup(){
     // FileHelper::get_instance()->~FileHelper();    //No effection! WHY?
     // Board::getInstance()->report_memory();
 
-    // Start_Task(FTP_SERVER);
-    // Start_Task(TCP_SERVER);
+    Start_Task(FTP_SERVER);
+    Start_Task(TCP_SERVER);
 }
 
 

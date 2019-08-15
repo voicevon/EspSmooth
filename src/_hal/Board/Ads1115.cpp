@@ -70,5 +70,6 @@ void Ads1115_setup(ConfigReader cr){
 //  https://esp32.com/viewtopic.php?t=1459
 float Ads1115_read_sensor_mv(int chip_id,esphome::ads1115::ADS1115Multiplexer adc_channel){
 	int channel =  adc_channel <4 ? adc_channel : adc_channel - 4;
+	// return 1.23;
 	return ads1115_ads1115component[chip_id]->request_measurement(ads1115_ads1115sensor[chip_id][channel]);
 }

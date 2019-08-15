@@ -46,6 +46,7 @@ void ADS1115Component::setup() {
     // Set data rate - 860 samples per second (we're in singleshot mode)
     //        0bxxxxxxxx100xxxxx
     config |= ADS1115_DATA_RATE_32_SPS << 5;
+    // config |= ADS1115_DATA_RATE_860_SPS << 5;
 
     // Set comparator mode - hysteresis
     //        0bxxxxxxxxxxx0xxxx
@@ -104,9 +105,10 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
         // Start conversion
         config |= 0b1000000000000000;
     }
+    // return 1.23;
 
     if (!this->continuous_mode_ || this->prev_config_ != config) {
-        printf("aaaaaaaaaaaaaaaaaaaaaaaaa\n");
+        printf("[W][Ads1115Componnet] continuous_mode=%i, or config is changed\n", continuous_mode_);
         if (!this->write_byte_16(ADS1115_REGISTER_CONFIG, config)) {
             this->status_set_warning();
             return NAN;
@@ -126,6 +128,7 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
         yield();
         }
     }
+    // return 2.34;
 
     uint16_t raw_conversion;
     if (!this->read_byte_16(ADS1115_REGISTER_CONVERSION, &raw_conversion)) {
@@ -133,6 +136,7 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
         return NAN;
     }
     auto signed_conversion = static_cast<int16_t>(raw_conversion);
+    // return 3.45;
 
     float millivolts;
     switch (sensor->get_gain()) {
@@ -157,8 +161,9 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
         default:
         millivolts = NAN;
     }
+    // return 4.56;
 
-    this->status_clear_warning();
+    // this->status_clear_warning();
     return millivolts / 1e3f;
     }
 
