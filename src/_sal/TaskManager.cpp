@@ -61,11 +61,13 @@ void Start_Task(TASK_ITEMS_T target_task){
     {
     case FTP_SERVER:
         FtpServer::get_instance()->begin("a","a");
-        xTaskCreate(ftp_loop, "ftp_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL);
+        // xTaskCreate(ftp_loop, "ftp_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL);
+        xTaskCreatePinnedToCore(ftp_loop, "ftp_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL,1);
         break;
     case TCP_SERVER:
         TcpServer::get_instance()->begin("a","a");
-        xTaskCreate(tcp_loop, "tcp_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL);
+        // xTaskCreate(tcp_loop, "tcp_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL);
+        xTaskCreatePinnedToCore(tcp_loop, "tcp_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL,1);
         break;
     case SERIAL_COMM:
         
@@ -75,7 +77,8 @@ void Start_Task(TASK_ITEMS_T target_task){
         break;
     case ESPHOME:
         __esphome = esphome_setup();
-        xTaskCreate(task_esphome_loop, "esphome_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL);
+        // xTaskCreate(task_esphome_loop, "esphome_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL);
+        xTaskCreatePinnedToCore(task_esphome_loop, "esphome_loop", 30000, NULL, (tskIDLE_PRIORITY + 1UL), (TaskHandle_t *) NULL,1);
         break;
     case ROBOT:
         smoothie_setup();
