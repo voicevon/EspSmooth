@@ -24,6 +24,8 @@ esphome::ads1115::ADS1115Sensor *ads1115_ads1115sensor[CHIP_COUNT][CHANNEL_COUNT
         // ADS1115_MULTIPLEXER_P2_NG = 0b110,   channel = 2
         // ADS1115_MULTIPLEXER_P3_NG = 0b111,   channel = 3
         // };
+
+//TODO:  into High-speed mode of I2C bus
 void Ads1115_setup(ConfigReader cr){
 	printf(" aaaaaaaaa \n");
 	i2c_i2ccomponent = new i2c::I2CComponent();
@@ -37,6 +39,7 @@ void Ads1115_setup(ConfigReader cr){
 	printf(" bbbbbbbbbb %i\n",i);
 		ads1115_ads1115component[i] = new ads1115::ADS1115Component();
 		ads1115_ads1115component[i]->set_i2c_parent(i2c_i2ccomponent);
+		ads1115_ads1115component[i]->set_continuous_mode(true);
 		if(i==0) ads1115_ads1115component[i]->set_i2c_address(0x48);
 		if(i==1) ads1115_ads1115component[i]->set_i2c_address(0x49);
 		if(i==2) ads1115_ads1115component[i]->set_i2c_address(0x4a);
@@ -52,6 +55,7 @@ void Ads1115_setup(ConfigReader cr){
 			if(j==2) ads1115_ads1115sensor[i][j]->set_multiplexer(ads1115::ADS1115_MULTIPLEXER_P2_NG); 
 			if(j==3) ads1115_ads1115sensor[i][j]->set_multiplexer(ads1115::ADS1115_MULTIPLEXER_P3_NG); 
 			ads1115_ads1115sensor[i][j]->set_gain(ads1115::ADS1115_GAIN_6P144);               
+
 			// ads1115_ads1115sensor[0][0]->set_name("alpha_pos");
 			// ads1115_ads1115sensor[0][0]->set_unit_of_measurement("");
 			// ads1115_ads1115sensor[0][0]->set_icon("");
