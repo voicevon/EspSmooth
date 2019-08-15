@@ -49,7 +49,7 @@ void Start_TimerTask(TIMER_TASK_ITEMS_T target_task){
     switch (target_task)
     {
         case CONTROL_ROBOT_MOTORS:
-            robot_motors_movement_setup(20);
+            robot_motors_movement_setup(2);
             break;
         default:
             break;

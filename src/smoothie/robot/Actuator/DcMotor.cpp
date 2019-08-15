@@ -23,7 +23,11 @@ DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin, uint8_t ads1115_chip_id, e
 }
 
 // Called by timerTask.
+int ii=0;
 void DcMotor::pid_loop(float target_position){
+    ii++;
+    printf ("%i ",ii);
+    return;
     if(!__enabled) return;   //??
     // return;
     float angle = Ads1115_read_sensor_mv(__ads1115_chip_id,__ads1115_channel);
