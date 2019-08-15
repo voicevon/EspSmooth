@@ -8,6 +8,7 @@ static const char *TAG = "ads1115";
 static const uint8_t ADS1115_REGISTER_CONVERSION = 0x00;
 static const uint8_t ADS1115_REGISTER_CONFIG = 0x01;
 
+static const uint8_t ADS1115_DATA_RATE_16_SPS  = 0b001;
 static const uint8_t ADS1115_DATA_RATE_32_SPS  = 0b010;
 static const uint8_t ADS1115_DATA_RATE_860_SPS = 0b111;
 
@@ -45,7 +46,7 @@ void ADS1115Component::setup() {
 
     // Set data rate - 860 samples per second (we're in singleshot mode)
     //        0bxxxxxxxx100xxxxx
-    config |= ADS1115_DATA_RATE_32_SPS << 5;
+    config |= ADS1115_DATA_RATE_16_SPS << 5;
     // config |= ADS1115_DATA_RATE_860_SPS << 5;
 
     // Set comparator mode - hysteresis
@@ -134,7 +135,7 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
 
     uint16_t raw_conversion;
     if (!this->read_byte_16(ADS1115_REGISTER_CONVERSION, &raw_conversion)) {
-        this->status_set_warning();
+        // this->status_set_warning();
         return NAN;
     }
     auto signed_conversion = static_cast<int16_t>(raw_conversion);
@@ -165,7 +166,8 @@ float ADS1115Component::request_measurement(ADS1115Sensor *sensor) {
     }
     // return 4.56;
 
-    // this->status_clear_warning();
+    //TODO: Thin esphome, anything involved to warning, or even to status.?
+    // this->status_clear_warning();    
     return millivolts / 1e3f;
     }
 

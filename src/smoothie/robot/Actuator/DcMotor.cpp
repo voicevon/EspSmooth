@@ -23,20 +23,19 @@ DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin, uint8_t ads1115_chip_id, e
 }
 
 // Called by timerTask.
-// int ii=0;
 void DcMotor::pid_loop(float target_position){
-    // ii++;
-    // printf ("%i ",ii);
-    // if(!__enabled) return;   //??
+    if(!__enabled) return;   //??
     float angle = Ads1115_read_sensor_mv(__ads1115_chip_id,__ads1115_channel);
-    printf("pid angle[1] = %6.2f\n", angle);
-    return;
+    printf("pid angle[1] = %6.3f\n", angle);
+    // return;
 
-    if(__sensor_position <10) return;    // there is an error.
     if(isnan(__sensor_position)) return;  //??
-    float duty = __pid_controller.get_output_value(target_position,__sensor_position);
-    duty *= 10.0f;
-    // printf("state =%i, target= %f, sensor = %f, duty= %f \n", __enabled, target_position, __sensor_position,duty);
+    if(__sensor_position <10) return;    // there is an error.
+    return;
+    // float duty = __pid_controller.get_output_value(target_position,__sensor_position);
+    float duty = 10.0f;
+    printf("state =%i, target= %f, sensor = %f, duty= %f \n", __enabled, target_position, __sensor_position,duty);
+    return;
     __pwm_pin.set_duty(duty);
 }
 
