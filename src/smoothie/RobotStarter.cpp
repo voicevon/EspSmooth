@@ -972,6 +972,6 @@ void smoothie_setup(){
 
     // launch the startup thread which will become the command thread that executes all incoming commands
     // 10000 Bytes stack
-    xTaskCreate(smoothie_startup, "CommandThread", 30000, NULL, (tskIDLE_PRIORITY + 2UL), (TaskHandle_t *) NULL);
-    
+    // xTaskCreate(smoothie_startup, "CommandThread", 30000, NULL, (tskIDLE_PRIORITY + 2UL), (TaskHandle_t *) NULL);
+    xTaskCreatePinnedToCore(smoothie_startup, "CommandThread", 30000, NULL, (tskIDLE_PRIORITY + 2UL), (TaskHandle_t *) NULL,1);
 }

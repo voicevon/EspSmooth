@@ -22,21 +22,23 @@ DcMotor::DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin, uint8_t ads1115_chip_id, e
     __ads1115_channel = ads1115_channel;
 }
 
-// Called by timerTask.
-// int ii=0;
+// Called by timerTask. Don't use  "printf()" because this is inside timer interupt.right?
 void DcMotor::pid_loop(float target_position){
-    // ii++;
-    // printf ("%i ",ii);
-    // if(!__enabled) return;   //??
+    if(!__enabled) return;   //??
     float angle = Ads1115_read_sensor_mv(__ads1115_chip_id,__ads1115_channel);
-    printf("pid angle[1] = %6.2f\n", angle);
-    return;
+    // printf("pid angle[1] = %6.2f\n", angle);
+    // return;
+    // vTaskDelay(10);
+    __sensor_position = angle* 100;
+    // return;
 
-    if(__sensor_position <10) return;    // there is an error.
     if(isnan(__sensor_position)) return;  //??
+    if(__sensor_position <10) return;    // there is an error.
+    // return;
     float duty = __pid_controller.get_output_value(target_position,__sensor_position);
-    duty *= 10.0f;
-    // printf("state =%i, target= %f, sensor = %f, duty= %f \n", __enabled, target_position, __sensor_position,duty);
+    // return;
+    duty*= 65536/560;
+    // printf("state =%i, target= %3.0f, sensor = %3.0f, duty= %3.0f \n", __enabled, target_position, __sensor_position,duty);
     __pwm_pin.set_duty(duty);
 }
 
