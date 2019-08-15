@@ -11,7 +11,9 @@ class DcMotor:public Actuator
 {
     public:
         
-        DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin,esphome::ads1115::ADS1115Sensor* ads1115_sensor);
+        // DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin,esphome::ads1115::ADS1115Sensor* ads1115_sensor);
+
+        DcMotor(OutputPin& dir_pin, PwmPin& pwm_pin, uint8_t ads1115_chip_id, esphome::ads1115::ADS1115Multiplexer ads1115_channel);
         virtual bool step() override;
         virtual void enable(bool state) override;
         void pid_loop(float target_position);
@@ -22,13 +24,17 @@ class DcMotor:public Actuator
     private:
         OutputPin __dir_pin;
         PwmPin __pwm_pin;
+        uint8_t __ads1115_chip_id;
+        esphome::ads1115::ADS1115Multiplexer __ads1115_channel;
+
         // uint8_t __pwm_channel;
         bool __enabled;
         float __sensor_position;
         MotorPidController __pid_controller;
         // esphome::ads1115::ADS1115Component* ads1115_component;
-        esphome::ads1115::ADS1115Sensor* __ads1115Sensor;
+        // esphome::ads1115::ADS1115Sensor* __ads1115Sensor;
         void __goto_position(float target_position,float sensor_position);
+        
 };
 
 

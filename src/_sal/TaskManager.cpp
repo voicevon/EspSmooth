@@ -28,7 +28,6 @@ void tcp_loop(void*){
     }
 }
 
-
 //---------------------------------------------------------------
 #include "esphome/core/application.h"
 esphome::Application * __esphome;
@@ -42,16 +41,15 @@ void task_esphome_loop(void*){
 //---------------------------------------------------------------
 extern void tcp_setup();
 extern void smoothie_setup();
-extern void robot_motors_movement_setup();
+extern void robot_motors_movement_setup(int interval_ms); 
+// extern void robot_motors_movement_setup(int interval_ms);
 
 //==============================================================
 void Start_TimerTask(TIMER_TASK_ITEMS_T target_task){
     switch (target_task)
     {
         case CONTROL_ROBOT_MOTORS:
-            void robot_motors_movement_setup();
-            // TimerHandle_t tmr = xTimerCreate("ControlMotors", pdMS_TO_TICKS(interval), pdTRUE, ( void * )id, &ControlMotors);
-
+            robot_motors_movement_setup(30);
             break;
         default:
             break;

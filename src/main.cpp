@@ -8,10 +8,7 @@ static const char *TAG = "espsmooth.main";
 
 extern float float_value;
 
-#include "_sal/TcpServer/TcpServer.h"
 void setup(){
-    auto xx= new TcpServer();
-    
     Board::getInstance()->report_memory();
     Board::getInstance()->init();
     Start_Task(ESPHOME);

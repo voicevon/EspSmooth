@@ -323,7 +323,8 @@ bool Robot::configure(ConfigReader& cr)
                     // ads1115_sensor->set_gain(esphome::ads1115::ADS1115_GAIN_6P144);
                     // ads1115_sensor->set_update_interval(2000000);
                     // ads1115_sensor->setup();
-                    DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin,ads1115_sensor);
+                    // DcMotor* new_dc = new DcMotor(dc_dir_pin, dc_pwm_pin,ads1115_sensor);
+                    DcMotor* new_dc = new DcMotor(dc_dir_pin,dc_pwm_pin,0,esphome::ads1115::ADS1115_MULTIPLEXER_P1_NG);
                     new_actuator = new_dc;
                     // printf("-----ADS1115Sensor\n");
                 }

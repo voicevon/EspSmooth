@@ -36,7 +36,6 @@ typedef enum e_STATES {
 
 class TcpServer: public StateMachine<STATES_t> {
     public:
-        TcpServer();
 
         static TcpServer* get_instance();
         
@@ -44,6 +43,7 @@ class TcpServer: public StateMachine<STATES_t> {
         void    handleTCP();
 
     private:
+        TcpServer();
         static TcpServer* __instance;
         bool is_allowed_to_enter_(STATES_t new_state) override;
         

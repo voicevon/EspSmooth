@@ -12,14 +12,14 @@ WiFiServer tcp_server( TCP_CTRL_PORT );
 TcpServer* TcpServer::__instance = nullptr; 
 
 TcpServer::TcpServer(): StateMachine(LISTENING){
-  printf("[D]TcpServer() at entrance\n");
+    printf("[D]TcpServer() at entrance\n");
 }
 
 TcpServer* TcpServer::get_instance(){
-              if(__instance == nullptr){
-                // __instance = new TcpServer();
-            }
-            return __instance; 
+    if(__instance == nullptr){
+        __instance = new TcpServer();
+    }
+    return __instance; 
 }
 void TcpServer::begin(String uname, String pword)
 {
