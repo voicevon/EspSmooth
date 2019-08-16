@@ -29,7 +29,7 @@ bool ServoMotor::step() {
     //Calculate and goto target_position
     static float last_angle = 0;
     // Serial.println("a");
-    current_position_steps += (direction?-1:1); return moving; 
+    current_position_steps += (direction_ ? -1 : 1); return moving; 
     return true;
     float target_angle = get_current_position();
     return true;
@@ -41,9 +41,9 @@ bool ServoMotor::step() {
     return true;
 }
 //virtual override
-void ServoMotor::set_direction(bool f) { 
-    direction= f; 
-}
+// void ServoMotor::set_direction(bool new_direction) { 
+//     direction= new_direction; 
+// }
 
 void ServoMotor::goto_position(float angle) // ,unit = DEGREE)
 {

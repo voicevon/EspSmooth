@@ -6,6 +6,8 @@ class XuefengMotor:public Actuator{
 
         XuefengMotor();
         void goto_position(float);
+        void set_direction(bool new_direction) override{};
+
     private:
 
     

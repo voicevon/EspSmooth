@@ -8,6 +8,8 @@
 
 #include <math.h>
 
+#include "HardwareSerial.h"
+
 StepperMotor::StepperMotor(OutputPin &step, OutputPin &dir, OutputPin &en):Actuator()
 {
     motor_type_ = ACTUATOR_TYPE_T::STEPPER_MOTOR;
@@ -42,16 +44,21 @@ StepperMotor::~StepperMotor()
 //virtual override
 bool StepperMotor::step() { 
     __step_pin.set(1); 
-    current_position_steps += (direction?-1:1); return moving; 
+    current_position_steps += (direction_ ? -1 : 1); return moving; 
 }
 //virtual override
 void StepperMotor::unstep() { 
     __step_pin.set(0); 
 }
 //virtual override
-void StepperMotor::set_direction(bool f) { 
-    __dir_pin.set(f); 
-    direction= f; 
+void StepperMotor::set_direction(bool new_direction) { 
+    // Serial.print("[V][StepperMotor] set_direction() = ");
+    // Serial.println(new_direction);
+
+    __dir_pin.set(new_direction); 
+    // Serial.println("[V][StepperMotor] set_direction() bbbbbbbbbbbbbbb ");
+    direction_ = new_direction; 
+    // Serial.println("[V][StepperMotor] set_direction() eeeeeeeeeeeeeee ");
 }
 //virtual override
 void StepperMotor::enable(bool state)
@@ -70,8 +77,8 @@ void StepperMotor::manual_step(bool dir)
     if(!is_enabled()) enable(true);
 
     // set direction if needed
-    if(this->direction != dir) {
-        this->direction= dir;
+    if(this->direction_ != dir) {
+        this->direction_ = dir;
         this->__dir_pin.set(dir);
         StopWatch_DelayUs(1);
     }

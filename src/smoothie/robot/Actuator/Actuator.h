@@ -20,7 +20,7 @@ class Actuator
         // called from unstep ISR
         virtual void unstep() {}
         // called from step ticker ISR
-        virtual void set_direction(bool f) {}
+        virtual void set_direction(bool new_direction) = 0;
 
         // Does a manual step pulse, used for direct encoder control of a stepper
         // NOTE manual step is experimental and may change and/or be removed in the future, it is an unsupported feature.
@@ -34,7 +34,7 @@ class Actuator
         void stop_moving() { moving= false; }
 
 
-        bool which_direction() const { return direction; }
+        bool which_direction() const { return direction_; }
 
         float get_steps_per_second()  const { return steps_per_second; }
         float get_steps_per_mm()  const { return steps_per_mm; }
@@ -73,7 +73,7 @@ class Actuator
 
         volatile struct {
             uint8_t motor_id:8;
-            volatile bool direction:1;
+            volatile bool direction_:1;
             volatile bool moving:1;
             bool selected:1;
             bool extruder:1;

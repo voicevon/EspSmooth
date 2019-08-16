@@ -18,7 +18,7 @@
 #if(GPIO_PINS_COUNT > MAX_MCU_GPIO_INDEX) 
     #define USE_EXPANDED_IO
 #endif
-
+// #include "Arduino.h"
 class Pin
 {
 public:
@@ -51,17 +51,23 @@ public:
     // Right now, it's not in SRAM !   By Xuming Jun 2019
     virtual inline void set(bool value)
     {
-        if (!this->valid_) return;
+        // if (!this->valid_) return;
         // printf("[V][Pin] set( %i ) ,gpio_id= %i\n", value, gpio_id_);
         if(this->gpio_id_ <= MAX_MCU_GPIO_INDEX){
             uint8_t v= (this->inverting_ ^ value) ? 1 : 0;
-            printf("[V][Pin] set( %i ) ,gpio_id= %i, v= %i\n", value, gpio_id_, v);
+            // printf("[V][Pin] set( %i ) ,gpio_id= %i, v= %i\n", value, gpio_id_, v);
+            // Serial.print("[V][Pin] set (gpio,value)=(");
+            // Serial.print(gpio_id_);
+            // Serial.print(",");
+            // Serial.print(v);
+            // Serial.println(")");
+
             digitalWrite(this->gpio_id_,v);
             if(open_drain) {
                 // simulates open drain by setting to input to turn off  ??
             }
         }else{  // expanded output
-            printf("[W][Pin] set() is not implicated. \n");
+            // printf("[W][Pin] set() is not implicated. \n");
         }
     }
 
