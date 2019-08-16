@@ -3,9 +3,14 @@
 
 static const uint8_t __GPIO_RANGE[20]= {0,2,4,5,13,14,15,16,17,18,19,21,22,23,25,26,27,32,33};
 // static const uint8_t __GPIO_RANGE[20];
-OutputPin::OutputPin(const char* pin_description,bool start){
+OutputPin::OutputPin(const char* pin_description,bool auto_start){
 	from_string(pin_description);
 	__is_started = false;   // to be a procted variable?
+
+	if(auto_start){
+		this->start();
+		__is_started = true;
+	}
 	return;
 	// TODO:
 	//check if the input pin_number is in the avaliable range.

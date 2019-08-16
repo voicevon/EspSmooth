@@ -13,7 +13,7 @@ class ServoMotor:public Actuator{
 //        ServoMotor(PwmPin pwm_pin);
         void goto_position(float angle);
         virtual bool step() override;
-        virtual void set_direction(bool f); 
+        void set_direction(bool new_direction){ direction_ = new_direction; }
         virtual void enable(bool state) override;
 
     private:

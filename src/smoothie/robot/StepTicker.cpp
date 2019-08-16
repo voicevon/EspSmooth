@@ -154,7 +154,7 @@ void StepTicker::unstep_tick()
 void StepTicker::step_tick (void)
 {
     //SET_STEPTICKER_DEBUG_PIN(running ? 1 : 0);
-
+    // return;
     if(unstep != 0) {
         // this is a failsafe, if we get here it means we missed the unstep from a previous tick
         // so we need to unstep the pin now or it will remain high
@@ -162,25 +162,32 @@ void StepTicker::step_tick (void)
         unstep_tick();
         missed_unsteps++; // keep trck for diagnostics
     }
-
+    // return;
     // if nothing has been setup we ignore the ticks
     if(!running) {
         // check if anything new available
         if(Conveyor::getInstance()->get_next_block(&current_block)) { // returns false if no new block is available
+            // Serial.println("[V][StepTicker] step_tick() aaaaaaaaaaaaaa .");
             running = start_next_block(); // returns true if there is at least one motor with steps to issue
-            if(!running) return;
+            // Serial.println("[V][StepTicker] step_tick() bbbbbbbbbbbbbb .");
+            if(!running){ 
+                Serial.println("[W][StepTicker] step_tick() robot is not running.");
+                return;
+            }
         } else {
+            // Serial.println("[W][StepTicker] step_tick() no new block is aavailable.");
             return;
         }
     }
-
+    // Serial.println("[V][StepTicker] step_tick() fffffffffffffff .");
+    // return;
     if(Module::is_halted()) {
         running = false;
         current_tick = 0;
         current_block = nullptr;
         return;
     }
-
+    // return;
     bool still_moving = false;
     // foreach motor, if it is active see if time to issue a step to that motor
     for (uint8_t m = 0; m < num_motors; m++) {
@@ -221,7 +228,7 @@ void StepTicker::step_tick (void)
             //  Serial.print("/");    // Even can we find one sign?
             bool ismoving = motor[m]->step(); // returns false if the moving flag was set to false externally (probes, endstops etc)
             // Solution A: Easier, Simpler, but Stupit
-            delayMicroseconds(100);
+            // delayMicroseconds(1);   // 100ns is enough
             this->motor[m]->unstep();
             // Solution B:we stepped so schedule an unstep
             // unstep |= (1<<m);
@@ -282,20 +289,31 @@ void StepTicker::step_tick (void)
 // only called from the step tick ISR (single consumer)
 bool StepTicker::start_next_block()
 {
+    // Serial.println("[V][StepTicker] start_next_block() aaaaaaaaaaaaaaaaa");
     if(current_block == nullptr) return false;
-
+    // Serial.println("[V][StepTicker] start_next_block() bbbbbbbbbbbbbbbbbbb");
     bool ok = false;
     // need to prepare each active motor
     for (uint8_t m = 0; m < num_motors; m++) {
+        Serial.print("[V][StepTicker] start_next_block() m= ");
+        Serial.println(m);
+
         if(current_block->tick_info[m].steps_to_move == 0) continue;
+        // Serial.println("[V][StepTicker] start_next_block() ccccccccccccc");
 
         ok = true; // mark at least one motor is moving
         // set direction bit here
         // NOTE this would be at least 10us before first step pulse.
         // TODO does this need to be done sooner, if so how without delaying next tick
+        // Serial.println("[V][StepTicker] start_next_block() ddddddddddddddd");
         motor[m]->set_direction(current_block->direction_bits[m]);
+        // Serial.println("[V][StepTicker] start_next_block() fffffffffffffff");
+
         motor[m]->start_moving(); // also let motor know it is moving now
+        // Serial.println("[V][StepTicker] start_next_block() hhhhhhhhhhhhhhhh");
+
     }
+    // Serial.println("[V][StepTicker] start_next_block() jjjjjjjjjjjjjjjjjj");
 
     current_tick = 0;
 
@@ -308,6 +326,7 @@ bool StepTicker::start_next_block()
         // basically it is a block that has zero steps for all motors
         Conveyor::getInstance()->block_finished();
     }
+    // Serial.println("[V][StepTicker] start_next_block() kkkkkkkkkkkkkkkkkkkk");
 
     return false;
 }

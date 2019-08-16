@@ -915,7 +915,9 @@ void smoothie_startup(void *)
     printf("[OK][message_queue] is created.\n");
     // Start comms threads Higher priority than the command thread
     // fixed stack size of 4k Bytes each
-    xTaskCreate(uart_comms, "UARTCommsThread", 1500, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
+    // xTaskCreate(uart_comms, "UARTCommsThread", 1500, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL);
+    xTaskCreatePinnedToCore(uart_comms, "UARTCommsThread", 1500, NULL, (tskIDLE_PRIORITY + 3UL), (TaskHandle_t *) NULL,1);
+    
     printf("[OK][task.startup] created task.UARTCommsThread. \n");
 
     // run any startup functions that have been registered

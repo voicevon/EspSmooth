@@ -7,7 +7,22 @@
 static const char *TAG = "espsmooth.main";
 
 extern float float_value;
+void setup2(){
+    pinMode(16,OUTPUT);
+    pinMode(17,OUTPUT);
+    pinMode(21,OUTPUT);
 
+    digitalWrite(21,LOW);
+    digitalWrite(17,LOW);
+    int interval = 200;
+    while(1){
+        digitalWrite(16,HIGH);
+        delayMicroseconds(10);
+        digitalWrite(16,LOW);
+        delayMicroseconds(interval);
+
+    }
+}
 void setup(){
     Board::getInstance()->report_memory();
     Board::getInstance()->init();
@@ -25,7 +40,7 @@ void setup(){
     printf("\n\n\n");
     Start_Task(TCP_SERVER);
     printf("\n\n\n");
-    Start_TimerTask(CONTROL_ROBOT_MOTORS);
+    // Start_TimerTask(CONTROL_ROBOT_MOTORS);
     printf("setup() is completed! \n\n\n");
     printf("Hi, Mr.ProntFace. You're online now. right?\n ");
 }
