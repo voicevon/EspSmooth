@@ -220,8 +220,11 @@ void StepTicker::step_tick (void)
             // step the motor
             //  Serial.print("/");    // Even can we find one sign?
             bool ismoving = motor[m]->step(); // returns false if the moving flag was set to false externally (probes, endstops etc)
-            // we stepped so schedule an unstep
-            unstep |= (1<<m);
+            // Solution A: Easier, Simpler, but Stupit
+            delayMicroseconds(100);
+            this->motor[m]->unstep();
+            // Solution B:we stepped so schedule an unstep
+            // unstep |= (1<<m);
 
             // Serial.print("  ");
             // Serial.print(current_block->tick_info[m].step_count);
@@ -247,6 +250,7 @@ void StepTicker::step_tick (void)
     // the pulse width will be 1us (or whatever it is set to) from this point on, so at least 2-3 us
     if( unstep != 0) {
         start_unstep_ticker();
+
     }
 
     // see if any motors are still moving

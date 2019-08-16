@@ -45,7 +45,14 @@ void robot_motors_movement(TimerHandle_t xTimer){
     // printf(">>>>>>>>>>>>>>>>>>>>>>>>>> exiting task>>>>>>>>>>>>\n");
 }
 
+#include "libs/SlowTicker.h"
+
+void test_slowStick(){
+
+}
 void robot_motors_movement_setup(int interval_ms){
+    SlowTicker::getInstance()->attach(interval_ms, &test_slowStick);
+    
     int id = 123;
     TimerHandle_t tmr = xTimerCreate("robot_motors_movement", pdMS_TO_TICKS(interval_ms), pdTRUE, ( void * )id, 
                                     &robot_motors_movement);
