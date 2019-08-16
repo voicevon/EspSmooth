@@ -7,6 +7,7 @@
 static const char *TAG = "espsmooth.main";
 
 extern float float_value;
+//test stepper motor driver.
 void setup2(){
     pinMode(16,OUTPUT);
     pinMode(17,OUTPUT);
