@@ -7,7 +7,7 @@ class OutputPin: public Pin
 {
     public:
         OutputPin(){};
-        OutputPin(const char* pin_description);
+        OutputPin(const char* pin_description, bool start);
         virtual bool start() override;
         virtual bool stop() override;
 

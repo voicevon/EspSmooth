@@ -115,7 +115,7 @@ bool Switch::configure(ConfigReader& cr, ConfigReader::section_map_t& m)
 
     } else if(type == "digital") {
         this->output_type = DIGITAL;
-        this->digital_pin = new OutputPin(output_pin.c_str());
+        this->digital_pin = new OutputPin(output_pin.c_str(),true);
         // this->digital_pin->from_string(output_pin)->as_output();
         // this->digital_pin->from_string(output_pin);
         this->digital_pin->start();

@@ -276,9 +276,9 @@ bool Robot::configure(ConfigReader& cr)
         switch (motor_type) {
             case Actuator::STEPPER_MOTOR: {     //stepper
                     printf("    [D][Robot] Configure stepper-motor\n");
-                    OutputPin step_pin(cr.get_string(mm, step_pin_key, "nc"));
-                    OutputPin dir_pin(cr.get_string(mm, dir_pin_key, "nc"));
-                    OutputPin en_pin(cr.get_string(mm, en_pin_key, "nc"));
+                    OutputPin step_pin(cr.get_string(mm, step_pin_key, "nc"),true);
+                    OutputPin dir_pin(cr.get_string(mm, dir_pin_key, "nc"),true);
+                    OutputPin en_pin(cr.get_string(mm, en_pin_key, "nc"),true);
                     printf("    [D][robot][config:%s]  for stepper motor pins: step= %s, dir= %s, en= %s\n", s->first.c_str(), step_pin.to_string().c_str(), dir_pin.to_string().c_str(), en_pin.to_string().c_str());
                     StepperMotor *new_stepper = new StepperMotor(step_pin, dir_pin, en_pin);
                     // registered_count = register_actuator(new_stepper);  Is this way better?
@@ -301,7 +301,7 @@ bool Robot::configure(ConfigReader& cr)
             case Actuator::DC_MOTOR: {    //Dc motor
                     printf("    [D][Robot] Configure DC-motor\n");
 
-                    OutputPin dc_dir_pin(cr.get_string(mm, dc_dir_pin_key, "nc"));
+                    OutputPin dc_dir_pin(cr.get_string(mm, dc_dir_pin_key, "nc"),true);
                     PwmPin dc_pwm_pin(cr.get_string(mm, dc_pwm_pin_key, "nc"));
                     int ads1115_addr = cr.get_int(mm,ads1115_address_key,0);
                     int ads1115_channel = cr.get_int(mm,ads1115_channel_key,0);

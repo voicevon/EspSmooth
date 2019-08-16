@@ -667,7 +667,7 @@ void setup_section_genenal(ConfigReader cr){
         rpi_baudrate= cr.get_int(m, "rpi_baudrate", 115200);
         printf("INFO: rpi port is %senabled, at baudrate: %lu\n", rpi_port_enabled ? "" : "not ", rpi_baudrate);
         std::string p = cr.get_string(m, "aux_play_led", "nc");
-        aux_play_led = new OutputPin(p.c_str());
+        aux_play_led = new OutputPin(p.c_str(),true);
         if(!aux_play_led->connected()) {
             delete aux_play_led;
             aux_play_led = nullptr;

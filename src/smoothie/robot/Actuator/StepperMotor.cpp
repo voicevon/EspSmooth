@@ -56,7 +56,8 @@ void StepperMotor::set_direction(bool f) {
 //virtual override
 void StepperMotor::enable(bool state)
 {
-    __en_pin.set(!state);
+    // printf("[V][StepperMotor] enable() state= %i\n",state);
+    __en_pin.set(state);
 }
 //virtual override
 bool StepperMotor::is_enabled() const

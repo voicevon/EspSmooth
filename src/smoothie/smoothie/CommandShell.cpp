@@ -667,7 +667,7 @@ bool CommandShell::gpio_cmd(std::string& params, OutputStream& os)
     if(dir == "out") {
         std::string v = stringutils::shift_parameter( params );
         if(v.empty()) return false;
-        OutputPin pin(gpio.c_str());
+        OutputPin pin(gpio.c_str(),true);
         if(!pin.connected()) {
             os.printf("Not a valid GPIO\n");
             return true;
