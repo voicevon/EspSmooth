@@ -228,7 +228,7 @@ void StepTicker::step_tick (void)
             //  Serial.print("/");    // Even can we find one sign?
             bool ismoving = motor[m]->step(); // returns false if the moving flag was set to false externally (probes, endstops etc)
             // Solution A: Easier, Simpler, but Stupit
-            delayMicroseconds(100);
+            // delayMicroseconds(1);   // 100ns is enough
             this->motor[m]->unstep();
             // Solution B:we stepped so schedule an unstep
             // unstep |= (1<<m);
