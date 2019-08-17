@@ -168,7 +168,7 @@ uint32_t Tmc26x::max_current= 2800; // 2.8 amps
  * Constructor
  */
 // Tmc26x::Tmc26x(char d) : designator(d)
-Tmc26x::Tmc26x():StepperMotor()
+Tmc26x::Tmc26x(OutputPin& step, OutputPin& dir, OutputPin& en):StepperMotor(step,  dir,  en)
 {
     //we are not started yet
     started = false;
