@@ -33,11 +33,13 @@
 #include <functional>
 #include <map>
 #include <bitset>
+#include "SPI.h"
+#include "_HAL/Pin/OutputPin.h"
 
 class OutputStream;
-class SPI;
+// class SPI;
 class ConfigReader;
-class Pin;
+// class Pin;
 class GCode;
 
 /*!
@@ -424,8 +426,10 @@ private:
     static bool common_setup;
 
     // one instance of SPI is shared
-    static SPI *spi;
-    Pin *spi_cs;
+    // static SPI *spi;
+    static SPIClass *spi;
+    // Pin *spi_cs;
+    OutputPin *spi_cs;
     std::string name;
 
     unsigned int resistor{75}; // current sense resitor value in milliohm

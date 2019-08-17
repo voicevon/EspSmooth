@@ -27,17 +27,17 @@
 
  */
 
-#ifdef BOARD_PRIMEALPHA
+// #ifdef BOARD_PRIMEALPHA
 #include "TMC26X.h"
 #include "main.h"
-#include "OutputStream.h"
-#include "Robot.h"
+#include "libs/OutputStream.h"
+#include "smoothie/robot/Robot.h"
 #include "StepperMotor.h"
 #include "Spi.h"
-#include "Pin.h"
-#include "ConfigReader.h"
-#include "StringUtils.h"
-#include "GCode.h"
+#include "_HAL/Pin/Pin.h"
+#include "_SAL/configure/ConfigReader.h"
+#include "libs/StringUtils.h"
+#include "smoothie/smoothie/GCode.h"
 
 
 #include <cmath>
@@ -160,7 +160,9 @@
 #define step_interpolation_key          "step_interpolation"
 
 //statics common to all instances
-SPI *TMC26X::spi= nullptr;
+#include "SPI.h"
+// SPI *TMC26X::spi= nullptr;
+SPIClass *TMC26X::spi= nullptr;
 bool TMC26X::common_setup= false;
 uint32_t TMC26X::max_current= 2800; // 2.8 amps
 /*
@@ -175,10 +177,12 @@ TMC26X::TMC26X(char d) : designator(d)
     error_reported.reset();
 
     // setup singleton spi instance
+    //TODO:   setup SPI bus outside of class.  Xuming Aug 2019
     if(spi == nullptr) {
-        spi = new SPI(0);
-        spi->frequency(100000);
-        spi->format(8, 3); // 8bit, mode3
+        // spi = new SPI(0);
+        spi = &SPI;
+        // spi->frequency(100000);
+        // spi->format(8, 3); // 8bit, mode3
     }
 
     // setting the default register values
@@ -229,7 +233,8 @@ bool TMC26X::config(ConfigReader& cr, const char *actuator_name)
     auto& mm = s->second; // map of tmc2660 config values for this actuator
 
     std::string cs_pin = cr.get_string(mm, spi_cs_pin_key, "nc");
-    spi_cs = new Pin(cs_pin.c_str(), Pin::AS_OUTPUT);
+    // spi_cs = new Pin(cs_pin.c_str(), Pin::AS_OUTPUT);
+    spi_cs = new OutputPin(cs_pin.c_str(), true);
     if(!spi_cs->connected()) {
         delete spi_cs;
         printf("ERROR:config_tmc2660: spi cs pin is invalid for: %s\n", actuator_name);
@@ -1113,6 +1118,8 @@ bool TMC26X::check_error_status_bits(OutputStream& stream)
     return error;
 }
 
+// #include "smoothie/RobotStarter.h"
+extern void print_to_all_consoles(const char *);
 bool TMC26X::check_errors()
 {
     std::ostringstream oss;
@@ -1185,7 +1192,8 @@ int TMC26X::sendSPI(uint8_t *b, int cnt, uint8_t *r)
 {
     spi_cs->set(false);
     for (int i = 0; i < cnt; ++i) {
-        r[i] = spi->write(b[i]);
+        // r[i] = spi->write(b[i]);
+        r[i] = spi->transfer(b[i]);
     }
     spi_cs->set(true);
     return cnt;
@@ -1242,4 +1250,4 @@ bool TMC26X::set_options(const GCode& gcode)
 
     return set;
 }
-#endif
+// #endif

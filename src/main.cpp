@@ -5,6 +5,9 @@
 
 
 static const char *TAG = "espsmooth.main";
+// work as a mqtt sensor.
+int16_t current_working_state;
+
 
 extern float float_value;
 //test stepper motor driver.

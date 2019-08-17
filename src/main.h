@@ -1,7 +1,6 @@
 #pragma once
 
-// work as a mqtt sensor.
-int16_t current_working_state;
+
 
 
 
