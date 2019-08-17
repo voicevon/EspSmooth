@@ -26,7 +26,7 @@
  THE SOFTWARE.
 
  */
-#define BOARD_PRIMEALPHA
+
 #ifdef BOARD_PRIMEALPHA
 #include "TMC26X.h"
 #include "smoothie/RobotStarter.h"

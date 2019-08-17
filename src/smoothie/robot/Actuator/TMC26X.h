@@ -33,9 +33,10 @@
 #include <functional>
 #include <map>
 #include <bitset>
+#include "StepperMotor.h"
 
 class OutputStream;
-class SPI;
+// class SPI;
 class ConfigReader;
 class Pin;
 class GCode;
@@ -44,7 +45,7 @@ class GCode;
  * \class TMC26X
  * \brief Class representing a TMC26X stepper driver
  */
-class TMC26X{
+class TMC26X: public StepperMotor {
     public:
         /*!
         * \brief creates a new represenatation of a stepper motor connected to a TMC26X stepper driver
