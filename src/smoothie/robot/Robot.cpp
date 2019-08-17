@@ -9,6 +9,7 @@
 #include "Actuator/ServoMotor.h"
 #include "Actuator/DcMotor.h"
 #include "Actuator/XuefengMotor.h"
+#include "Actuator/TMC26X.h"
 #include "_hal/__hal.h"
 #include "_hal/Pin/PinHelper.h"
 
@@ -328,6 +329,12 @@ bool Robot::configure(ConfigReader& cr)
                     new_actuator = new_dc;
                     // printf("-----ADS1115Sensor\n");
                 }
+                break;
+            case Actuator::TMC26X_MOTOR:
+                Tmc26x new_tmc26x_stepper = new Tmc26x();
+                new_tmc26x_stepper.setCurrent(1.23f);
+
+                new_actuator = new_tmc26x_stepper;
                 break;
         }
 

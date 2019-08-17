@@ -7,7 +7,7 @@
 class Actuator
 {
     public:
-        enum ACTUATOR_TYPE_T {STEPPER_MOTOR, SERVO_MOTOR, XUEFENG_MOTOR, DC_MOTOR};
+        enum ACTUATOR_TYPE_T {STEPPER_MOTOR, TMC26X_MOTOR, SERVO_MOTOR, XUEFENG_MOTOR, DC_MOTOR};
 
         Actuator();
         ~Actuator();

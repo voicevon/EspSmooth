@@ -45,7 +45,7 @@ class GCode;
  * \class TMC26X
  * \brief Class representing a TMC26X stepper driver
  */
-class TMC26X: public StepperMotor {
+class Tmc26x: public StepperMotor {
     public:
         /*!
         * \brief creates a new represenatation of a stepper motor connected to a TMC26X stepper driver
@@ -61,7 +61,7 @@ class TMC26X: public StepperMotor {
         * You can select a different stepping with setMicrosteps() to aa different value.
         * \sa start(), setMicrosteps()
         */
-        TMC26X(char designator);
+        Tmc26x(char designator);
 
         /*!
         * \brief configures the TMC26X stepper driver. Before you called this function the stepper driver is in nonfunctional mode.
