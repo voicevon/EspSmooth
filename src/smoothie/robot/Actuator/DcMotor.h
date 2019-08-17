@@ -21,7 +21,7 @@ class DcMotor:public Actuator
         void for_test_goto_position(float target_position);
         float for_test_read_sensor_position();
         void set_direction(bool new_direction) override{};
-
+        bool set_current(float c) override{};
     private:
         OutputPin __dir_pin;
         PwmPin __pwm_pin;

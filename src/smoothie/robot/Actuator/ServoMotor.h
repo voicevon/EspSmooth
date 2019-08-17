@@ -14,6 +14,7 @@ class ServoMotor:public Actuator{
         void goto_position(float angle);
         virtual bool step() override;
         void set_direction(bool new_direction){ direction_ = new_direction; }
+        bool set_current(float c) override{};
         virtual void enable(bool state) override;
 
     private:

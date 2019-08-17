@@ -59,6 +59,7 @@ class Actuator
 
         // TYPE_T type_from_string(const char* type_description);
         ACTUATOR_TYPE_T get_motor_type() const { return motor_type_; }
+        virtual bool set_current(float c) = 0;
 
     protected:
         void _init();

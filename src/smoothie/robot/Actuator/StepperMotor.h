@@ -29,10 +29,10 @@ class StepperMotor:public Actuator
         OutputPin __en_pin;
       
 
-
+#define BOARD_PRIMEALPHA
 #ifdef BOARD_PRIMEALPHA
     public:
-        bool set_current(float c);
+        
         bool set_microsteps(uint16_t ms);
         int get_microsteps();
         bool setup_tmc2660(ConfigReader& cr, const char *actuator_name);
@@ -43,6 +43,7 @@ class StepperMotor:public Actuator
         bool check_driver_error();
         static bool set_vmot(bool state) { bool last= vmot; vmot= state; return last; }
         void set_vmot_lost() { vmot_lost= true; }
+        bool set_current(float c) override;
 
     private:
         // TMC2660 driver
