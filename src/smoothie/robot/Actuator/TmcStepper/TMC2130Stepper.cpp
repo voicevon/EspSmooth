@@ -12,7 +12,9 @@ TMC2130Stepper::TMC2130Stepper(uint16_t pinCS, uint16_t pinMOSI, uint16_t pinMIS
   TMCStepper(default_RS),
   _pinCS(pinCS)
   {
-    SW_SPIClass *SW_SPI_Obj = new SW_SPIClass(pinMOSI, pinMISO, pinSCK);
+    // SW_SPIClass *SW_SPI_Obj = new SW_SPIClass(pinMOSI, pinMISO, pinSCK);
+    //TODO:  Move to bus_manage
+    SPIClass *SW_SPI_Obj = &SPI;
     TMC_SW_SPI = SW_SPI_Obj;
     defaults();
   }
@@ -21,7 +23,8 @@ TMC2130Stepper::TMC2130Stepper(uint16_t pinCS, float RS, uint16_t pinMOSI, uint1
   TMCStepper(RS),
   _pinCS(pinCS)
   {
-    SW_SPIClass *SW_SPI_Obj = new SW_SPIClass(pinMOSI, pinMISO, pinSCK);
+    // SW_SPIClass *SW_SPI_Obj = new SW_SPIClass(pinMOSI, pinMISO, pinSCK);
+    SPIClass *SW_SPI_Obj =  &SPI;
     TMC_SW_SPI = SW_SPI_Obj;
     defaults();
   }
@@ -115,7 +118,7 @@ void TMC2130Stepper::begin() {
   pinMode(_pinCS, OUTPUT);
   switchCSpin(HIGH);
 
-  if (TMC_SW_SPI != NULL) TMC_SW_SPI->init();
+  // if (TMC_SW_SPI != NULL) TMC_SW_SPI->init();
 
   GCONF(GCONF_register.sr);
   CHOPCONF(CHOPCONF_register.sr);

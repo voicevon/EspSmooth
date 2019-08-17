@@ -10,7 +10,8 @@ TMC2660Stepper::TMC2660Stepper(uint16_t pinCS, uint16_t pinMOSI, uint16_t pinMIS
   _pinCS(pinCS),
   Rsense(default_RS)
   {
-    SW_SPIClass *SW_SPI_Obj = new SW_SPIClass(pinMOSI, pinMISO, pinSCK);
+    // SW_SPIClass *SW_SPI_Obj = new SW_SPIClass(pinMOSI, pinMISO, pinSCK);
+    SPIClass *SW_SPI_Obj = &SPI;
     TMC_SW_SPI = SW_SPI_Obj;
   }
 
@@ -18,7 +19,8 @@ TMC2660Stepper::TMC2660Stepper(uint16_t pinCS, float RS, uint16_t pinMOSI, uint1
   _pinCS(pinCS),
   Rsense(RS)
   {
-    SW_SPIClass *SW_SPI_Obj = new SW_SPIClass(pinMOSI, pinMISO, pinSCK);
+    // SW_SPIClass *SW_SPI_Obj = new SW_SPIClass(pinMOSI, pinMISO, pinSCK);
+    SPIClass *SW_SPI_Obj = &SPI;
     TMC_SW_SPI = SW_SPI_Obj;
   }
 

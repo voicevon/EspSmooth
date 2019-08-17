@@ -12,28 +12,29 @@
 
 #include <Stream.h>
 #include <SPI.h>
+// #define SW_SPIClass SPIClass
 
-#ifdef __has_include
-	#define SW_CAPABLE_PLATFORM __has_include(<SoftwareSerial.h>)
-#else
-	#define SW_CAPABLE_PLATFORM defined(__AVR__) || defined(TARGET_LPC1768) || defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_STM32F1)
-#endif
+// #ifdef __has_include
+// 	#define SW_CAPABLE_PLATFORM __has_include(<SoftwareSerial.h>)
+// #else
+// 	#define SW_CAPABLE_PLATFORM defined(__AVR__) || defined(TARGET_LPC1768) || defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_STM32F1)
+// #endif
 
-#if SW_CAPABLE_PLATFORM
-	#include <SoftwareSerial.h>
-#endif
+// #if SW_CAPABLE_PLATFORM
+// 	#include <SoftwareSerial.h>
+// #endif
 
-#include "source/SW_SPI.h"
+// #include "source/SW_SPI.h"
 
 #pragma GCC diagnostic pop
 
-#include "source/TMC2130_bitfields.h"
-#include "source/TMC2160_bitfields.h"
-#include "source/TMC5130_bitfields.h"
-#include "source/TMC5160_bitfields.h"
-#include "source/TMC2208_bitfields.h"
-#include "source/TMC2209_bitfields.h"
-#include "source/TMC2660_bitfields.h"
+#include "TMC2130_bitfields.h"
+#include "TMC2160_bitfields.h"
+#include "TMC5130_bitfields.h"
+#include "TMC5160_bitfields.h"
+#include "TMC2208_bitfields.h"
+#include "TMC2209_bitfields.h"
+#include "TMC2660_bitfields.h"
 
 #define INIT_REGISTER(REG) REG##_t REG##_register = REG##_t
 #define INIT2130_REGISTER(REG) TMC2130_n::REG##_t REG##_register = TMC2130_n::REG##_t
@@ -349,7 +350,8 @@ class TMC2130Stepper : public TMCStepper {
 
 		static uint32_t spi_speed; // Default 2MHz
 		const uint16_t _pinCS;
-		SW_SPIClass * TMC_SW_SPI = NULL;
+		SPIClass * TMC_SW_SPI = NULL;
+		
 		static constexpr float default_RS = 0.11;
 };
 
@@ -1220,5 +1222,5 @@ class TMC2660Stepper {
 		float holdMultiplier = 0.5;
 		uint32_t spi_speed = 16000000/8; // Default 2MHz
 		uint8_t _savedToff = 0;
-		SW_SPIClass * TMC_SW_SPI = NULL;
+		SPIClass * TMC_SW_SPI = NULL;
 };
