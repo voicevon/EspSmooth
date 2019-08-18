@@ -226,7 +226,7 @@ void StepTicker::step_tick (void)
                 // done
                 current_block->tick_info[m].steps_to_move = 0;
                 motor[m]->stop_moving(); // let motor know it is no longer moving
-                Serial.print(" Block is done, stop motor.");        // Even can we find one sign?
+                Serial.println("[V][StepTicker]::step_tick() Block is done, to stop motor.");        // Even can we find one sign?
             }
         }
 
@@ -247,7 +247,7 @@ void StepTicker::step_tick (void)
     // see if any motors are still moving
     if(!still_moving) {
         //SET_STEPTICKER_DEBUG_PIN(0);
-
+        //Two reason be here:  Not started the first moving , or finished the previous moving.
         // all moves finished
         current_tick = 0;
 
@@ -256,9 +256,11 @@ void StepTicker::step_tick (void)
         Conveyor::getInstance()->block_finished();
 
         if(Conveyor::getInstance()->get_next_block(&current_block)) { // returns false if no new block is available
+            Serial.println("[D][StepTicker]::step_tick() going to start_next_block()");
             running = start_next_block(); // returns true if there is at least one motor with steps to issue
 
         } else {
+            Serial.println("[D][StepTicker]::step_tick() next_block is empty()");
             current_block = nullptr;
             running = false;
         }

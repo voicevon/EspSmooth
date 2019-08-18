@@ -531,7 +531,7 @@ static void command_handler()
 
         // This will timeout after 100 ms
         if(receive_message_queue(&line, &os)) {
-            printf("DEBUG: got line: %s\n", line);
+            printf("[D][RobotStarter]::command_handler()  got line message: %s\n", line);
             dispatch_line(*os, line);
             handle_query(false);
             os->set_done(); // set after all possible output

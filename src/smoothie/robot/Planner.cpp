@@ -63,7 +63,7 @@ bool Planner::initialize(uint8_t n)
 // Append a block to the queue, compute it's speed factors
 bool Planner::append_block(ActuatorCoordinates& actuator_pos, uint8_t n_motors, float rate_mm_s, float distance, float *unit_vec, float acceleration, float s_value, bool g123)
 {
-    Serial.print("[D][planenr.append_block()] at entrance.\n");
+    Serial.print("[D][Planenr]::append_block() at entrance.\n");
     // get the head block
     Block* block = queue->get_head();
     block->clear();
@@ -214,13 +214,12 @@ bool Planner::append_block(ActuatorCoordinates& actuator_pos, uint8_t n_motors, 
     }
 
     // Math-heavy re-computing of the whole queue to take the new
-    Serial.println("");
+    // Serial.println("");
     this->recalculate();
-
     // The block can now be used
     block->ready();
-
-    block->debug();  //Xuming
+    // Serial.print("[D][Planenr]::append_block() block is ready.\n");
+    // block->debug();  //Xuming
 
     while(!queue->queue_head()) {
         // queue is full
