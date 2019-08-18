@@ -87,8 +87,8 @@ protected:
         bool inverting_: 1;
         bool open_drain: 1;
         bool valid_: 1;
-        bool is_pull_up: 1;
-        bool is_pull_down: 1;
+        bool is_pull_up_: 1;
+        bool is_pull_down_: 1;
         bool adc_only: 1;     //true if adc only pin
         int adc_channel: 8;   //adc channel   ??
     };

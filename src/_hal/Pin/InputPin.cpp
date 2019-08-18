@@ -9,11 +9,11 @@ bool InputPin::start()
 {
     if(valid_) {
         if(this->gpio_id_ <= MAX_MCU_GPIO_INDEX ){
-            if(this->is_pull_up) {
+            if(this->is_pull_up_) {
                 pinMode(this->gpio_id_, INPUT_PULLUP);
                 return true;
             } 
-            if(this->is_pull_down){
+            if(this->is_pull_down_){
                 pinMode(this->gpio_id_, INPUT_PULLDOWN);
                 return true;
             }

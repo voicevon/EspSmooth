@@ -34,7 +34,7 @@ void Board::init(void){
     ConfigReader cr(sss);
     ConfigReader::section_map_t sm;
     ConfigReader::sub_section_map_t ssmap;
-    
+    return;
     Ads1115_setup(cr);
     // return;
     // __setup_section_bus (cr);

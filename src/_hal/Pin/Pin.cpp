@@ -95,16 +95,16 @@ Pin* Pin::from_string(std::string value)
                 this->open_drain= true; // we need to set pin to input when off for simulated opendrain
                 break;
             case '^':
-                this->is_pull_up = true;
-                this->is_pull_down = false;
+                this->is_pull_up_ = true;
+                this->is_pull_down_ = false;
                 break;
             case 'v':
-                this->is_pull_down = true;
-                this->is_pull_up = false;
+                this->is_pull_down_ = true;
+                this->is_pull_up_ = false;
                 break;
             case '-':
-            	this->is_pull_up = false;
-                this->is_pull_down = false;
+            	this->is_pull_up_ = false;
+                this->is_pull_down_ = false;
                 break;
         }
     }

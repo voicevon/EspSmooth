@@ -25,6 +25,10 @@ OutputPin::OutputPin(const char* pin_description,bool auto_start){
 bool OutputPin::start()
 {
 	if(__is_started) return true;
+	if(is_pull_up_)
+		digitalWrite(gpio_id_,HIGH);
+	if(is_pull_down_)
+		digitalWrite(gpio_id_,LOW);
 
     if(this->open_drain){                                   //need to check?
         pinMode(this->gpio_id_, OUTPUT_OPEN_DRAIN);   
