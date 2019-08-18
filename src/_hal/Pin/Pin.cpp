@@ -121,9 +121,12 @@ std::string Pin::to_string() const
         String str_pinnum = "GPIO_" ;
         if(this->gpio_id_ == 0 ) str_pinnum += "0";
         if(this->gpio_id_ < 10)  str_pinnum += "0";
+        
         str_pinnum += String(this->gpio_id_);
         if(this->open_drain) str_pinnum += 'o'; 
         if(this->inverting_) str_pinnum += "!";  
+        if(this->is_pull_up_) str_pinnum += "^";
+        if(this->is_pull_down_) str_pinnum += "v";
 
         std::string std_str(str_pinnum.c_str());
         return std_str;

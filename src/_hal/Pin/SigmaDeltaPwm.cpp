@@ -32,7 +32,7 @@ int SigmaDeltaPwm::max_pwm()
 void SigmaDeltaPwm::set(bool value)
 {
     _pwm = -1;
-    Pin::set(value);
+    OutputPin::set(value);
 }
 
 
@@ -41,10 +41,10 @@ void SigmaDeltaPwm::on_tick(void)
     if ((_pwm < 0) || _pwm >= PID_PWM_MAX) {
         return;
     } else if (_pwm == 0) {
-        Pin::set(false);
+        OutputPin::set(false);
         return;
     } else if (_pwm == PID_PWM_MAX - 1) {
-        Pin::set(true);
+        OutputPin::set(true);
         return;
     }
 
@@ -124,5 +124,5 @@ void SigmaDeltaPwm::on_tick(void)
         if (_sd_accumulator <= 0)
             _sd_direction = false;
     }
-    Pin::set(_sd_direction);
+    OutputPin::set(_sd_direction);
 }

@@ -29,3 +29,6 @@ bool InputPin::start()
 bool InputPin::stop(){
     return false;
 }
+void InputPin::set(bool value){
+	digitalWrite(gpio_id_, value ^ inverting_);
+}
