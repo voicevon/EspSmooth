@@ -28,8 +28,8 @@ class Actuator
         // use at your own risk
         virtual void manual_step(bool dir) {}
 
-        virtual void enable(bool state) {}
-        virtual bool is_enabled() const {return false;}
+        virtual void enable(bool state) = 0;
+        bool is_enabled() const { return enabled_; }
         bool is_moving() const { return moving; };
         void start_moving() { moving= true; }
         void stop_moving() { moving= false; }
@@ -80,6 +80,8 @@ class Actuator
             bool extruder:1;
         };
         ACTUATOR_TYPE_T motor_type_;
+        bool enabled_ = false;  
+
     private:
 
 

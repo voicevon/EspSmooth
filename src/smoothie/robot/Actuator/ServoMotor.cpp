@@ -11,7 +11,7 @@ const int MAX_PULSE = 65535; //
 
 ServoMotor::ServoMotor(PwmPin &pwm_pin):Actuator(){
     motor_type_ = ACTUATOR_TYPE_T::SERVO_MOTOR;
-    __enabled = false;
+    // enabled_ = false;
 
     __pwm_pin = PwmPin(pwm_pin);   // Is PwmPin() cloning the object from pwm_pin to __pwm_pin ?
 }
@@ -56,7 +56,7 @@ void ServoMotor::goto_position(float angle) // ,unit = DEGREE)
 //virtual override
 #define HOME_DUTY 0
 void ServoMotor::enable(bool state) {
-    if(__enabled) return;
+    // if(enabled_) return;
     
     Serial.println("[D][ServoMotor] enable() at entrance.");
     if(state)
@@ -64,11 +64,11 @@ void ServoMotor::enable(bool state) {
         __pwm_pin.init(SERVO_FREQ, PWM_RESOLUTION_BITS, HOME_DUTY);    // TODO: Home_duty is configable!     
         __pwm_pin.start();
         Serial.println("[D][ServoMotor]: enabled");
-        __enabled = true;
+        enabled_ = true;
     }else{
         __pwm_pin.stop();
         Serial.println("[D][ServoMotor]: disabled");
-        __enabled = false;
+        enabled_ = false;
     }
 }
 
