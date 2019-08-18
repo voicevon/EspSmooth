@@ -153,16 +153,6 @@ void StepTicker::unstep_tick()
 // step clock
 void StepTicker::step_tick (void)
 {
-    //SET_STEPTICKER_DEBUG_PIN(running ? 1 : 0);
-    // return;
-    if(unstep != 0) {
-        // this is a failsafe, if we get here it means we missed the unstep from a previous tick
-        // so we need to unstep the pin now or it will remain high
-        // Serial.print("^");
-        unstep_tick();
-        missed_unsteps++; // keep trck for diagnostics
-    }
-    // return;
     // if nothing has been setup we ignore the ticks
     if(!running) {
         // check if anything new available
@@ -179,20 +169,16 @@ void StepTicker::step_tick (void)
             return;
         }
     }
-    // Serial.println("[V][StepTicker] step_tick() fffffffffffffff .");
-    // return;
     if(Module::is_halted()) {
         running = false;
         current_tick = 0;
         current_block = nullptr;
         return;
     }
-    // return;
     bool still_moving = false;
     // foreach motor, if it is active see if time to issue a step to that motor
     for (uint8_t m = 0; m < num_motors; m++) {
         if(current_block->tick_info[m].steps_to_move == 0) continue; // not active
-
         current_block->tick_info[m].steps_per_tick += current_block->tick_info[m].acceleration_change;
 
         if(current_tick == current_block->tick_info[m].next_accel_event) {
@@ -225,7 +211,9 @@ void StepTicker::step_tick (void)
             ++current_block->tick_info[m].step_count;
 
             // step the motor
-            //  Serial.print("/");    // Even can we find one sign?
+            // if(m==1){
+            //     Serial.print("^");    // Even can we find one sign?
+            // }
             bool ismoving = motor[m]->step(); // returns false if the moving flag was set to false externally (probes, endstops etc)
             // Solution A: Easier, Simpler, but Stupit
             // delayMicroseconds(1);   // 100ns is enough
