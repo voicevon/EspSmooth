@@ -221,10 +221,6 @@ void StepTicker::step_tick (void)
             // Solution B:we stepped so schedule an unstep
             // unstep |= (1<<m);
 
-            // Serial.print("  ");
-            // Serial.print(current_block->tick_info[m].step_count);
-            // Serial.print("-");
-            // Serial.print(current_block->tick_info[m].steps_to_move);
             if(!ismoving || current_block->tick_info[m].step_count == current_block->tick_info[m].steps_to_move) {
                 // done
                 current_block->tick_info[m].steps_to_move = 0;
@@ -245,7 +241,6 @@ void StepTicker::step_tick (void)
     // the pulse width will be 1us (or whatever it is set to) from this point on, so at least 2-3 us
     if( unstep != 0) {
         start_unstep_ticker();
-
     }
 
     // see if any motors are still moving
@@ -266,7 +261,6 @@ void StepTicker::step_tick (void)
             current_block = nullptr;
             running = false;
         }
-
         // all moves finished
         // we delegate the slow stuff to the pendsv handler which will run as soon as this interrupt exits
         //NVIC_SetPendingIRQ(PendSV_IRQn); this doesn't work
@@ -319,16 +313,10 @@ bool StepTicker::start_next_block()
     return false;
 }
 
-
 // returns index of the stepper motor in the array and bitset
 int StepTicker::register_actuator(Actuator* m)
 {
     motor[num_motors++] = m;
     return num_motors - 1;
 }
-// int StepTicker::register_servo_motor(ServoMotor* servo_motor)
-// {
-//     __num_servo_motors++;
-//     servo_motors[__num_servo_motors] = servo_motor;
-//     return __num_servo_motors - 1; 
-// }
+
