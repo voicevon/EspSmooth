@@ -12,6 +12,7 @@ class InputPin: public Pin{
         InputPin(const char* description);
         virtual bool start() override;
         virtual bool stop() override;
+        inline void set(bool value) override;
         
     private:
         static uint8_t __GPIO_RANGE; 

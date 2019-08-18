@@ -10,6 +10,8 @@ class OutputPin: public Pin
         OutputPin(const char* pin_description, bool start);
         virtual bool start() override;
         virtual bool stop() override;
+        bool is_in_range();
+        inline void set(bool value) override;
 
     private:
         bool __is_started;

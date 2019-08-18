@@ -95,16 +95,16 @@ Pin* Pin::from_string(std::string value)
                 this->open_drain= true; // we need to set pin to input when off for simulated opendrain
                 break;
             case '^':
-                this->is_pull_up = true;
-                this->is_pull_down = false;
+                this->is_pull_up_ = true;
+                this->is_pull_down_ = false;
                 break;
             case 'v':
-                this->is_pull_down = true;
-                this->is_pull_up = false;
+                this->is_pull_down_ = true;
+                this->is_pull_up_ = false;
                 break;
             case '-':
-            	this->is_pull_up = false;
-                this->is_pull_down = false;
+            	this->is_pull_up_ = false;
+                this->is_pull_down_ = false;
                 break;
         }
     }
@@ -121,9 +121,12 @@ std::string Pin::to_string() const
         String str_pinnum = "GPIO_" ;
         if(this->gpio_id_ == 0 ) str_pinnum += "0";
         if(this->gpio_id_ < 10)  str_pinnum += "0";
+        
         str_pinnum += String(this->gpio_id_);
         if(this->open_drain) str_pinnum += 'o'; 
         if(this->inverting_) str_pinnum += "!";  
+        if(this->is_pull_up_) str_pinnum += "^";
+        if(this->is_pull_down_) str_pinnum += "v";
 
         std::string std_str(str_pinnum.c_str());
         return std_str;

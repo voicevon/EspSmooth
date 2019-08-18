@@ -27,7 +27,10 @@ esphome::ads1115::ADS1115Sensor *ads1115_ads1115sensor[CHIP_COUNT][CHANNEL_COUNT
 
 //TODO:  into High-speed mode of I2C bus
 void Ads1115_setup(ConfigReader cr){
-	printf(" aaaaaaaaa \n");
+	printf("[V][Ads1115] Ads1115_setup()  \n");
+
+	// cr.get_string( , "load", "never");
+	
 	i2c_i2ccomponent = new i2c::I2CComponent();
 	i2c_i2ccomponent->set_sda_pin(27);
 	i2c_i2ccomponent->set_scl_pin(14);

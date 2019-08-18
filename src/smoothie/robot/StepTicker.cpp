@@ -153,16 +153,6 @@ void StepTicker::unstep_tick()
 // step clock
 void StepTicker::step_tick (void)
 {
-    //SET_STEPTICKER_DEBUG_PIN(running ? 1 : 0);
-    // return;
-    if(unstep != 0) {
-        // this is a failsafe, if we get here it means we missed the unstep from a previous tick
-        // so we need to unstep the pin now or it will remain high
-        // Serial.print("^");
-        unstep_tick();
-        missed_unsteps++; // keep trck for diagnostics
-    }
-    // return;
     // if nothing has been setup we ignore the ticks
     if(!running) {
         // check if anything new available
@@ -179,20 +169,16 @@ void StepTicker::step_tick (void)
             return;
         }
     }
-    // Serial.println("[V][StepTicker] step_tick() fffffffffffffff .");
-    // return;
     if(Module::is_halted()) {
         running = false;
         current_tick = 0;
         current_block = nullptr;
         return;
     }
-    // return;
     bool still_moving = false;
     // foreach motor, if it is active see if time to issue a step to that motor
     for (uint8_t m = 0; m < num_motors; m++) {
         if(current_block->tick_info[m].steps_to_move == 0) continue; // not active
-
         current_block->tick_info[m].steps_per_tick += current_block->tick_info[m].acceleration_change;
 
         if(current_tick == current_block->tick_info[m].next_accel_event) {
@@ -225,7 +211,9 @@ void StepTicker::step_tick (void)
             ++current_block->tick_info[m].step_count;
 
             // step the motor
-            //  Serial.print("/");    // Even can we find one sign?
+            // if(m==1){
+            //     Serial.print("^");    // Even can we find one sign?
+            // }
             bool ismoving = motor[m]->step(); // returns false if the moving flag was set to false externally (probes, endstops etc)
             // Solution A: Easier, Simpler, but Stupit
             // delayMicroseconds(1);   // 100ns is enough
@@ -233,10 +221,6 @@ void StepTicker::step_tick (void)
             // Solution B:we stepped so schedule an unstep
             // unstep |= (1<<m);
 
-            // Serial.print("  ");
-            // Serial.print(current_block->tick_info[m].step_count);
-            // Serial.print("-");
-            // Serial.print(current_block->tick_info[m].steps_to_move);
             if(!ismoving || current_block->tick_info[m].step_count == current_block->tick_info[m].steps_to_move) {
                 // done
                 current_block->tick_info[m].steps_to_move = 0;
@@ -257,7 +241,6 @@ void StepTicker::step_tick (void)
     // the pulse width will be 1us (or whatever it is set to) from this point on, so at least 2-3 us
     if( unstep != 0) {
         start_unstep_ticker();
-
     }
 
     // see if any motors are still moving
@@ -278,7 +261,6 @@ void StepTicker::step_tick (void)
             current_block = nullptr;
             running = false;
         }
-
         // all moves finished
         // we delegate the slow stuff to the pendsv handler which will run as soon as this interrupt exits
         //NVIC_SetPendingIRQ(PendSV_IRQn); this doesn't work
@@ -331,16 +313,10 @@ bool StepTicker::start_next_block()
     return false;
 }
 
-
 // returns index of the stepper motor in the array and bitset
 int StepTicker::register_actuator(Actuator* m)
 {
     motor[num_motors++] = m;
     return num_motors - 1;
 }
-// int StepTicker::register_servo_motor(ServoMotor* servo_motor)
-// {
-//     __num_servo_motors++;
-//     servo_motors[__num_servo_motors] = servo_motor;
-//     return __num_servo_motors - 1; 
-// }
+

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "_hal/Pin/Pin.h"
+#include "_hal/Pin/OutputPin.h"
 
-class SigmaDeltaPwm : public Pin {
+class SigmaDeltaPwm : public OutputPin {
 public:
     SigmaDeltaPwm();
     void on_tick(void);
@@ -13,8 +13,10 @@ public:
 
     void     pwm(int);
     int      get_pwm() const { return _pwm; }
-    void     set(bool);
+    // void     set(bool);
+    
     void    as_output(){}
+    inline void set(bool value) override;
     
 
 private:

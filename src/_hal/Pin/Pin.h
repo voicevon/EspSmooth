@@ -49,27 +49,27 @@ public:
 
     // we need to do this inline due to ISR being in SRAM not FLASH
     // Right now, it's not in SRAM !   By Xuming Jun 2019
-    virtual inline void set(bool value)
-    {
-        // if (!this->valid_) return;
-        // printf("[V][Pin] set( %i ) ,gpio_id= %i\n", value, gpio_id_);
-        if(this->gpio_id_ <= MAX_MCU_GPIO_INDEX){
-            uint8_t v= (this->inverting_ ^ value) ? 1 : 0;
-            // printf("[V][Pin] set( %i ) ,gpio_id= %i, v= %i\n", value, gpio_id_, v);
-            // Serial.print("[V][Pin] set (gpio,value)=(");
-            // Serial.print(gpio_id_);
-            // Serial.print(",");
-            // Serial.print(v);
-            // Serial.println(")");
+    virtual inline void set(bool value) = 0;
+    // {
+    //     // if (!this->valid_) return;
+    //     // printf("[V][Pin] set( %i ) ,gpio_id= %i\n", value, gpio_id_);
+    //     if(this->gpio_id_ <= MAX_MCU_GPIO_INDEX){
+    //         uint8_t v= (this->inverting_ ^ value) ? 1 : 0;
+    //         // printf("[V][Pin] set( %i ) ,gpio_id= %i, v= %i\n", value, gpio_id_, v);
+    //         // Serial.print("[V][Pin] set (gpio,value)=(");
+    //         // Serial.print(gpio_id_);
+    //         // Serial.print(",");
+    //         // Serial.print(v);
+    //         // Serial.println(")");
 
-            digitalWrite(this->gpio_id_,v);
-            if(open_drain) {
-                // simulates open drain by setting to input to turn off  ??
-            }
-        }else{  // expanded output
-            // printf("[W][Pin] set() is not implicated. \n");
-        }
-    }
+    //         digitalWrite(this->gpio_id_,v);
+    //         if(open_drain) {
+    //             // simulates open drain by setting to input to turn off  ??
+    //         }
+    //     }else{  // expanded output
+    //         // printf("[W][Pin] set() is not implicated. \n");
+    //     }
+    // }
 
     inline uint8_t get_gpio_id() const { return this->gpio_id_; }
 
@@ -87,8 +87,8 @@ protected:
         bool inverting_: 1;
         bool open_drain: 1;
         bool valid_: 1;
-        bool is_pull_up: 1;
-        bool is_pull_down: 1;
+        bool is_pull_up_: 1;
+        bool is_pull_down_: 1;
         bool adc_only: 1;     //true if adc only pin
         int adc_channel: 8;   //adc channel   ??
     };
