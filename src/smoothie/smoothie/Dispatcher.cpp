@@ -70,19 +70,19 @@ bool Dispatcher::dispatch(GCode& gc, OutputStream& os, bool need_ok) const
 	auto& handler = gc.has_g() ? gcode_handlers : mcode_handlers;
 	const auto& f = handler.equal_range(gc.get_code());
 	bool ret = false;
-	Serial.println("---------------------------------------before plan a block\n");
+	// Serial.println("[V][Dispatch] dispach() --before plan a block\n");
 
 	for (auto it = f.first; it != f.second; ++it) {
-	Serial.println("======  before plan a block\n");
+	// Serial.println("======  before plan a block\n");
 		if(it->second(gc, os)) {
 			ret = true;
 		} else {
 			// not really useful as many handlers will only process if certain params are set, so not an error unless no handler deals with it.
 			DEBUG_WARNING("//INFO: handler did not handle %c%d\n", gc.has_g() ? 'G' : 'M', gc.get_code());
 		}
-	Serial.println("======  after plan a block\n");
+	// Serial.println("======  after plan a block\n");
 	}
-	Serial.println("---------------------------------------after plan a block\n");
+	Serial.println("[V][Dispatch] dispach() --------after plan a block\n");
 
 	if(ret) {
 		// Serial.println("QQQQQQQQQQ   4444\n");
@@ -92,20 +92,20 @@ bool Dispatcher::dispatch(GCode& gc, OutputStream& os, bool need_ok) const
 		if (gc.has_error()) {
 			// report error
 			if(grbl_mode) {
-				os.printf("error: ");
+				os.printf("[E][Dispacher] dispach() error: ");
 			} else {
-				os.printf("Error: ");
+				os.printf("[E][Dispacher] dispach() Error: ");
 			}
 
 			const char *errmsg = gc.get_error_message();
 			if(errmsg != nullptr) {
-				os.printf("%s\n", errmsg);
+				os.printf("[E][Dispacher] dispach() %s\n", errmsg);
 			} else {
-				os.printf("unknown\n");
+				os.printf("[E][Dispacher] dispach() unknown\n");
 			}
 
 			// we cannot continue safely after an error so we enter HALT state
-			os.printf("Entering Alarm/Halt state\n");
+			os.printf("[E][Dispacher] dispach() Entering Alarm/Halt state\n");
 			Module::broadcast_halt(true);
 			return true;
 		}
@@ -115,7 +115,7 @@ bool Dispatcher::dispatch(GCode& gc, OutputStream& os, bool need_ok) const
 		if(os.is_prepend_ok()) {
 			// output the result after the ok
 			os.set_prepend_ok(false);
-			os.printf("ok ");
+			os.printf("[D][Dispacher] dispach() is_prepend_ok()? Yes ");
 			os.flush_prepend(); // this flushes the internally stored prepend string to the output
 			send_ok = false;
 		}
@@ -127,7 +127,7 @@ bool Dispatcher::dispatch(GCode& gc, OutputStream& os, bool need_ok) const
 		}
 
 		if(send_ok && need_ok) {
-			os.printf("ok\n");
+			os.printf("[D][Dispacher] dispach() ok\n");
 		}
 		return true;
 	}

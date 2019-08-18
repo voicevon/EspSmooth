@@ -153,6 +153,7 @@ void StepTicker::unstep_tick()
 // step clock
 void StepTicker::step_tick (void)
 {
+    // Serial.print(xPortGetCoreID());
     // if nothing has been setup we ignore the ticks
     if(!running) {
         // check if anything new available
@@ -277,8 +278,8 @@ bool StepTicker::start_next_block()
     bool ok = false;
     // need to prepare each active motor
     for (uint8_t m = 0; m < num_motors; m++) {
-        Serial.print("[V][StepTicker] start_next_block() m= ");
-        Serial.println(m);
+        // Serial.print("[V][StepTicker] start_next_block() m= ");
+        // Serial.println(m);
 
         if(current_block->tick_info[m].steps_to_move == 0) continue;
         // Serial.println("[V][StepTicker] start_next_block() ccccccccccccc");
