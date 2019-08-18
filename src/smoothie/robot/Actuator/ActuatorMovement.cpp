@@ -5,6 +5,7 @@
 #include "StepperMotor.h"
 #include "DcMotor.h"
 #include "XuefengMotor.h"
+#include "TMC26X.h"
 
 int16_t actuators_position[6];
 float float_value;
@@ -13,6 +14,7 @@ void robot_motors_movement(TimerHandle_t xTimer){
     ServoMotor* servoMotor;
     DcMotor* dcMotor;
     XuefengMotor* xuefengMotor;
+    TMC26X* tmc26xx_motor;
     // printf("[D][TimerTask][ControlMotors] at entrance.\n");
     Robot* robot = Robot::getInstance();
     for(int i=0; i<3;i++){
@@ -36,7 +38,10 @@ void robot_motors_movement(TimerHandle_t xTimer){
             break;          
         case Actuator::STEPPER_MOTOR:
             //Do nothing.
-
+            break;
+        case Actuator::TMC26XX_MOTOR:
+            tmc26xx_motor = (TMC26X*) actuator;
+            tmc26xx_motor->goto_position(target_position);
             break;
         default:
             break;

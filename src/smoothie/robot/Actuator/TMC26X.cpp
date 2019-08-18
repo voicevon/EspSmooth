@@ -29,15 +29,13 @@
 
 // #ifdef BOARD_PRIMEALPHA
 #include "TMC26X.h"
-#include "main.h"
-#include "libs/OutputStream.h"
+#include "smoothie/RobotStarter.h"
 #include "smoothie/robot/Robot.h"
 #include "StepperMotor.h"
 #include "Spi.h"
 #include "_HAL/Pin/Pin.h"
-#include "_SAL/configure/ConfigReader.h"
 #include "libs/StringUtils.h"
-#include "smoothie/smoothie/GCode.h"
+
 
 
 #include <cmath>
@@ -165,10 +163,16 @@
 SPIClass *TMC26X::spi= nullptr;
 bool TMC26X::common_setup= false;
 uint32_t TMC26X::max_current= 2800; // 2.8 amps
+
+void TMC26X::goto_position(float target_position){
+
+}
+
 /*
  * Constructor
  */
-TMC26X::TMC26X(char d) : designator(d)
+// TMC26X::TMC26X(char d) : designator(d)
+TMC26X::TMC26X(OutputPin &step, OutputPin &dir, OutputPin &en) : StepperMotor(step, dir, en)
 {
     //we are not started yet
     started = false;

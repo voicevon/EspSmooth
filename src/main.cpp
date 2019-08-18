@@ -44,7 +44,7 @@ void setup(){
     printf("\n\n\n");
     Start_Task(TCP_SERVER);
     printf("\n\n\n");
-    // Start_TimerTask(CONTROL_ROBOT_MOTORS);
+    Start_TimerTask(CONTROL_ROBOT_MOTORS);
     printf("setup() is completed! \n\n\n");
     printf("Hi, Mr.ProntFace. You're online now. right?\n ");
 }
