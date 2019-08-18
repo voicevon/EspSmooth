@@ -9,6 +9,7 @@
 #include "Actuator/ServoMotor.h"
 #include "Actuator/DcMotor.h"
 #include "Actuator/XuefengMotor.h"
+#include "Actuator/TMC26X.h"
 #include "_hal/__hal.h"
 #include "_hal/Pin/PinHelper.h"
 
@@ -329,6 +330,15 @@ bool Robot::configure(ConfigReader& cr)
                     // printf("-----ADS1115Sensor\n");
                 }
                 break;
+            case Actuator::TMC26XX_MOTOR: {    //Spi bus motor
+                    OutputPin step("GPIO_12",true);
+                    OutputPin dir("GPIO_12",true);
+                    OutputPin en("GPIO_12!",true);
+                    TMC26X* new_tmc26xx = new TMC26X(step, dir, en);
+                    // new_actuator = new_tmc26xx;
+                break;
+            }
+
         }
 
         // register this actuator (NB This must be 0,1,2,...) of the actuators array
