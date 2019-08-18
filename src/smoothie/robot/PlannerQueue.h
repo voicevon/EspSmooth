@@ -13,11 +13,12 @@
 class PlannerQueue
 {
 public:
-    PlannerQueue(size_t length)
+    PlannerQueue(size_t length)   //Why this is not static?  because it's alway invoked by Planner::getInstance()->queue
     {
         m_size = length;
         m_buffer = new Block[length];
         m_rIndex = 0;
+        
         m_wIndex = 0;
     }
 

@@ -183,7 +183,8 @@ void StepTicker::step_tick (void)
         current_block->tick_info[m].steps_per_tick += current_block->tick_info[m].acceleration_change;
 
         if(current_tick == current_block->tick_info[m].next_accel_event) {
-            if(current_tick == current_block->accelerate_until) { // We are done accelerating, deceleration becomes 0 : plateau
+            if(current_tick == current_block->accelerate_until) { 
+                // We are done accelerating, deceleration becomes 0 : plateau
                 current_block->tick_info[m].acceleration_change = 0;
                 if(current_block->decelerate_after < current_block->total_move_ticks) {
                     current_block->tick_info[m].next_accel_event = current_block->decelerate_after;
