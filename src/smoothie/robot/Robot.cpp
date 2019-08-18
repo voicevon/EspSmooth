@@ -342,7 +342,7 @@ bool Robot::configure(ConfigReader& cr)
         }
 
         // register this actuator (NB This must be 0,1,2,...) of the actuators array
-        new_actuator->enable(true);
+        // new_actuator->enable(true);   this is a logical control, should be configure-able?
         regietered_count = register_actuator(new_actuator);
         if(regietered_count != a) {
             // this is a fatal error as they must be contiguous
