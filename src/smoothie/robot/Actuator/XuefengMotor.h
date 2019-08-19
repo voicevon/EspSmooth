@@ -8,6 +8,7 @@ class XuefengMotor:public Actuator{
         void goto_position(float);
         void set_direction(bool new_direction) override{};
         void enable(bool state) override{enabled_ = true;};
+        virtual bool step() override;
     private:
 
     

@@ -44,7 +44,8 @@ StepperMotor::~StepperMotor()
 //virtual override
 bool StepperMotor::step() { 
     __step_pin.set(1); 
-    current_position_steps += (direction_ ? -1 : 1); return moving; 
+    current_position_steps_ += (direction_ ? -1 : 1); 
+    return moving_; 
 }
 //virtual override
 void StepperMotor::unstep() { 
@@ -90,7 +91,7 @@ void StepperMotor::manual_step(bool dir)
     this->__step_pin.set(0);
 
     // keep track of actuators actual position in steps
-    this->current_position_steps += (dir ? -1 : 1);
+    this->current_position_steps_ += (dir ? -1 : 1);
 }
 
 
