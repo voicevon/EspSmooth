@@ -150,8 +150,13 @@ void StepTicker::unstep_tick()
 //     if(finished_fnc) finished_fnc();
 // }
 
-// step clock
-void StepTicker::step_tick (void)
+
+// What is and when to use IRAM_ATTR ?
+// https://www.esp32.com/viewtopic.php?t=4978
+
+// Without IRAM_ATTR:    DATA: 47660    HEX: 1283338
+// With    IRAM_ATTR:    DATA: 47660    HEX：1283414
+IRAM_ATTR void StepTicker::step_tick (void)
 {
     // Serial.print(xPortGetCoreID());
     // if nothing has been setup we ignore the ticks
@@ -255,7 +260,9 @@ void StepTicker::step_tick (void)
         // get next block
         // do it here so there is no delay in ticks
         Conveyor::getInstance()->block_finished();
-        Serial.println("ISR\n\n\n");
+        Serial.print("ISR ");
+        Serial.println(xPortGetCoreID());
+        Serial.println("\n");
 
         if(Conveyor::getInstance()->get_next_block(&current_block)) { // returns false if no new block is available
             Serial.println("[D][StepTicker]::step_tick() going to start_next_block()");
@@ -266,6 +273,7 @@ void StepTicker::step_tick (void)
             current_block = nullptr;
             running = false;
         }
+        Serial.println("\n\n\n\n");
         // all moves finished
         // we delegate the slow stuff to the pendsv handler which will run as soon as this interrupt exits
         //NVIC_SetPendingIRQ(PendSV_IRQn); this doesn't work
