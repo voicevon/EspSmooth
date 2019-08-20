@@ -133,6 +133,7 @@ void Conveyor::check_queue(bool force)
     }
 }
 
+#include "Ticker.h"
 // called from step ticker ISR
 // we only ever access or change the read/tail index of the queue so this is thread safe
 bool Conveyor::get_next_block(Block **block)
@@ -161,19 +162,22 @@ bool Conveyor::get_next_block(Block **block)
     // we cannot use this now if it is being updated
     if(!tail_block->locked) {
         //assert(b->is_ready); // should never happen
-        Serial.println("[V][Conveyor]::get_next_lock()  No, block is NOT locked");
+        // Serial.println("[V][Conveyor]::get_next_lock()  No, block is NOT locked");
+        
         tail_block->is_ticking = true;
-        Serial.println("[V][Conveyor]::get_next_lock()  aaaaaaaaaaaaa");
         tail_block->recalculate_flag = false;
+        // Serial.println("[V][Conveyor]::get_next_lock()  aaaaaaaaaaaaa");
+        // tail_block->nominal_speed = 123.4;
         Serial.println("[V][Conveyor]::get_next_lock()  bbbbbbbbbbbbbbb");
-        float xx = tail_block->nominal_speed;
-        Serial.println("[V][Conveyor]::get_next_lock()  cccccccccccc");
+        // float xx = tail_block->get_nominal_speed();
+        // float xx= tail_block->nominal_speed;
+        // Serial.println("[V][Conveyor]::get_next_lock()  cccccccccccc");
 
-        this->current_feedrate = xx;
-        // this->current_feedrate = tail_block->nominal_speed;
+        this->current_feedrate = 0;    // very temperory , just for avoid crashing.
+        // this->current_feedrate = xx;    // very temperory , just for avoid crashing.
         Serial.println("[V][Conveyor]::get_next_lock()  fffffff");
         *block = tail_block;
-        Serial.println("[V][Conveyor]::get_next_lock()  kkkkkkkkkkk");
+        // Serial.println("[V][Conveyor]::get_next_lock()  kkkkkkkkkkk");
         return true;
     }
 

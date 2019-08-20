@@ -901,7 +901,8 @@ bool Robot::handle_G92(GCode& gcode, OutputStream& os)
 
 bool Robot::handle_motion_command(GCode& gcode, OutputStream& os)
 {
-    Serial.println("[D][Robot]::handle_motion_command() I am handling command from message queue... ");
+    printf("[D][Robot]::handle_motion_command() I am handling command from message queue... ");
+    printf("[D][Robot]::handle_motion_command() Runing on CORE =%i\n", xPortGetCoreID());
     bool handled = true;
     enum MOTION_MODE_T motion_mode = NONE;
     if( gcode.has_g()) {

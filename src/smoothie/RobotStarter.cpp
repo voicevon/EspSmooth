@@ -532,10 +532,12 @@ static void command_handler()
         // This will timeout after 100 ms
         if(receive_message_queue(&line, &os)) {
             printf("[D][RobotStarter]::command_handler()  got line message: %s\n", line);
+            printf("[D][RobotStarter]::command_handler()  running core = %i\n", xPortGetCoreID());
+
             dispatch_line(*os, line);
             handle_query(false);
             os->set_done(); // set after all possible output
-
+            // yield();
         } else {
             // timed out or other error
 

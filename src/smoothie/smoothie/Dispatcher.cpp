@@ -79,7 +79,8 @@ bool Dispatcher::dispatch(GCode& gc, OutputStream& os, bool need_ok) const
 			DEBUG_WARNING("//INFO: handler did not handle %c%d\n", gc.has_g() ? 'G' : 'M', gc.get_code());
 		}
 	}
-	Serial.println("[V][Dispatcher]::dispach() -------- robot has put the message to the queue,and processed it. \n");
+	printf("[V][Dispatcher]::dispach() -------- robot has put the message to the queue,and processed it. \n");
+	printf("[V][Dispatcher]::dispach() running on CORE = %i \n",xPortGetCoreID());
 
 	if(ret) {
 
