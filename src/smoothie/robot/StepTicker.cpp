@@ -227,7 +227,7 @@ void StepTicker::step_tick (void)
                 // done
                 current_block->tick_info[m].steps_to_move = 0;
                 motor[m]->stop_moving(); // let motor know it is no longer moving
-                Serial.println("[V][StepTicker]::step_tick() Block is done, to stop motor.");        // Even can we find one sign?
+                // Serial.println("[V][StepTicker]::step_tick() Block is done, to stop motor.");        // Even can we find one sign?
             }
         }
 
@@ -255,6 +255,7 @@ void StepTicker::step_tick (void)
         // get next block
         // do it here so there is no delay in ticks
         Conveyor::getInstance()->block_finished();
+        Serial.println("ISR\n\n\n");
 
         if(Conveyor::getInstance()->get_next_block(&current_block)) { // returns false if no new block is available
             Serial.println("[D][StepTicker]::step_tick() going to start_next_block()");
