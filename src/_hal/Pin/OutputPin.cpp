@@ -25,7 +25,7 @@ OutputPin::OutputPin(const char* pin_description,bool auto_start){
 bool OutputPin::is_in_range(){
 	return true;
 }
-void OutputPin::set(bool value){
+IRAM_ATTR void OutputPin::set(bool value){
 	digitalWrite(gpio_id_, value ^ inverting_);
 }
 bool OutputPin::start()

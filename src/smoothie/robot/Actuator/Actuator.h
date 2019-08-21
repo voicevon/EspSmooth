@@ -3,6 +3,7 @@
 
 
 #include "stdint.h"
+#include "esp_attr.h"
 
 class Actuator
 {
@@ -30,9 +31,9 @@ class Actuator
 
         virtual void enable(bool state) = 0;
         bool is_enabled() const { return enabled_; }
-        bool is_moving() const { return moving_; };
-        void start_moving() { moving_= true; }
-        void stop_moving() { moving_= false; }
+        inline bool is_moving() const { return moving_; };
+        IRAM_ATTR void start_moving() { moving_= true; }
+        inline  void stop_moving() { moving_= false; }
 
 
         bool which_direction() const { return direction_; }

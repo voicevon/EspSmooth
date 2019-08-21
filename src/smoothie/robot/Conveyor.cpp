@@ -136,7 +136,7 @@ void Conveyor::check_queue(bool force)
 #include "Ticker.h"
 // called from step ticker ISR
 // we only ever access or change the read/tail index of the queue so this is thread safe
-bool Conveyor::get_next_block(Block **block)
+IRAM_ATTR bool Conveyor::get_next_block(Block **block)
 {
     // Serial.println("[V][Conveyor]::get_next_block() at entrance");
     // empty the entire queue
@@ -185,7 +185,7 @@ bool Conveyor::get_next_block(Block **block)
 }
 
 // called from step ticker ISR when block is finished, do not do anything slow here
-void Conveyor::block_finished()
+IRAM_ATTR void Conveyor::block_finished()
 {
     // release the tail
     PQUEUE->release_tail();

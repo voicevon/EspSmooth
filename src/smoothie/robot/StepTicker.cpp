@@ -282,7 +282,7 @@ IRAM_ATTR void StepTicker::step_tick (void)
 }
 
 // only called from the step tick ISR (single consumer)
-bool StepTicker::start_next_block()
+IRAM_ATTR bool StepTicker::start_next_block()
 {
     // Serial.println("[V][StepTicker] start_next_block() aaaaaaaaaaaaaaaaa");
     if(current_block == nullptr) return false;

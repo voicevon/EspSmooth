@@ -41,8 +41,8 @@ StepperMotor::~StepperMotor()
 {
 }
 
-//virtual override
-bool StepperMotor::step() { 
+//virtual override, invoked from ISR
+inline bool StepperMotor::step() { 
     __step_pin.set(1); 
     current_position_steps_ += (direction_ ? -1 : 1); 
     return moving_; 
@@ -51,8 +51,8 @@ bool StepperMotor::step() {
 void StepperMotor::unstep() { 
     __step_pin.set(0); 
 }
-//virtual override
-void StepperMotor::set_direction(bool new_direction) { 
+//virtual override  invoked from ISR
+IRAM_ATTR void StepperMotor::set_direction(bool new_direction) { 
     // Serial.print("[V][StepperMotor] set_direction() = ");
     // Serial.println(new_direction);
 
