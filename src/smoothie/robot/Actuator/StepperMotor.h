@@ -15,9 +15,9 @@ class StepperMotor:public Actuator
         ~StepperMotor();
 
 
-        inline virtual bool step() override;
-        inline virtual void unstep() override;
-        inline virtual void set_direction(bool f) override;
+        virtual bool step() override;
+        virtual void unstep() override;
+        virtual void set_direction(bool f) override;
         virtual void manual_step(bool dir) override;
         virtual void enable(bool state) override;
         // virtual bool is_enabled() const override;

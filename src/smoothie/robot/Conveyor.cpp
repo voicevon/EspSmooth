@@ -17,6 +17,7 @@
 
 #include <functional>
 #include <vector>
+#include "HardwareSerial.h"
 
 #define queue_delay_time_ms_key "queue_delay_time_ms"
 
@@ -132,10 +133,12 @@ void Conveyor::check_queue(bool force)
     }
 }
 
+#include "Ticker.h"
 // called from step ticker ISR
 // we only ever access or change the read/tail index of the queue so this is thread safe
-bool Conveyor::get_next_block(Block **block)
+IRAM_ATTR bool Conveyor::get_next_block(Block **block)
 {
+    // Serial.println("[V][Conveyor]::get_next_block() at entrance");
     // empty the entire queue
     if (flush){
         while (!PQUEUE->empty()) {
@@ -153,16 +156,28 @@ bool Conveyor::get_next_block(Block **block)
     // wait for queue to fill up, optimizes planning
     if(!allow_fetch) return false;
 
-    Block *b= PQUEUE->get_tail();
+    Block *tail_block = PQUEUE->get_tail();
+    // Serial.println("[V][Conveyor]::get_next_block()  got queue tail");
     //assert(b != nullptr);
     // we cannot use this now if it is being updated
-    if(!b->locked) {
+    if(!tail_block->locked) {
         //assert(b->is_ready); // should never happen
+        // Serial.println("[V][Conveyor]::get_next_lock()  No, block is NOT locked");
+        
+        tail_block->is_ticking = true;
+        tail_block->recalculate_flag = false;
+        // Serial.println("[V][Conveyor]::get_next_lock()  aaaaaaaaaaaaa");
+        // tail_block->nominal_speed = 123.4;
+        // Serial.println("[V][Conveyor]::get_next_lock()  bbbbbbbbbbbbbbb");
+        // float xx = tail_block->get_nominal_speed();
+        // float xx= tail_block->nominal_speed;
+        // Serial.println("[V][Conveyor]::get_next_lock()  cccccccccccc");
 
-        b->is_ticking= true;
-        b->recalculate_flag= false;
-        this->current_feedrate= b->nominal_speed;
-        *block= b;
+        this->current_feedrate = 0;    // very temperory , just for avoid crashing.
+        // this->current_feedrate = xx;    // very temperory , just for avoid crashing.
+        // Serial.println("[V][Conveyor]::get_next_lock()  fffffff");
+        *block = tail_block;
+        // Serial.println("[V][Conveyor]::get_next_lock()  kkkkkkkkkkk");
         return true;
     }
 
@@ -170,7 +185,7 @@ bool Conveyor::get_next_block(Block **block)
 }
 
 // called from step ticker ISR when block is finished, do not do anything slow here
-void Conveyor::block_finished()
+IRAM_ATTR void Conveyor::block_finished()
 {
     // release the tail
     PQUEUE->release_tail();

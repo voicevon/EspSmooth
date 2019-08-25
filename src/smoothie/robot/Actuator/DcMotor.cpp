@@ -43,8 +43,8 @@ void DcMotor::pid_loop(float target_position){
 }
 
 bool DcMotor::step(){
-    // pwm_pin.set_value(this->get_current_position());
-    return true;
+    current_position_steps_ += (direction_ ? -1 : 1); 
+    return moving_; 
 }
 
 //virtual  override

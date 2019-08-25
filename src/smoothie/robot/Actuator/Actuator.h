@@ -3,6 +3,7 @@
 
 
 #include "stdint.h"
+#include "esp_attr.h"
 
 class Actuator
 {
@@ -13,11 +14,11 @@ class Actuator
         Actuator();
         ~Actuator();
         static ACTUATOR_TYPE_T get_type_from_string(const char* type_description);
-        void set_motor_id(uint8_t id) { motor_id = id; }
-        uint8_t get_motor_id() const { return motor_id; }
+        void set_motor_id(uint8_t id) { motor_id_ = id; }
+        uint8_t get_motor_id() const { return motor_id_; }
         
         // called from step ticker ISR
-        virtual bool step(){return true;}
+        virtual bool step() = 0;
         // called from unstep ISR
         virtual void unstep() {}
         // called from step ticker ISR
@@ -30,27 +31,27 @@ class Actuator
 
         virtual void enable(bool state) = 0;
         bool is_enabled() const { return enabled_; }
-        bool is_moving() const { return moving; };
-        void start_moving() { moving= true; }
-        void stop_moving() { moving= false; }
+        inline bool is_moving() const { return moving_; };
+        IRAM_ATTR void start_moving() { moving_= true; }
+        inline  void stop_moving() { moving_= false; }
 
 
         bool which_direction() const { return direction_; }
 
-        float get_steps_per_second()  const { return steps_per_second; }
-        float get_steps_per_mm()  const { return steps_per_mm; }
+        float get_steps_per_second()  const { return steps_per_second_; }
+        float get_steps_per_mm()  const { return steps_per_mm_; }
         void change_steps_per_mm(float);
         void change_last_milestone(float);
         void set_last_milestones(float, int32_t);
         void update_last_milestones(float mm, int32_t steps);
-        float get_last_milestone(void) const { return last_milestone_mm; }
-        int32_t get_last_milestone_steps(void) const { return last_milestone_steps; }
-        float get_current_position(void) const { return (float)current_position_steps/steps_per_mm; }
-        uint32_t get_current_step(void) const { return current_position_steps; }
-        float get_max_rate(void) const { return max_rate; }
-        void set_max_rate(float mr) { max_rate= mr; }
-        void set_acceleration(float a) { acceleration= a; }
-        float get_acceleration() const { return acceleration; }
+        float get_last_milestone(void) const { return last_milestone_mm_; }
+        int32_t get_last_milestone_steps(void) const { return last_milestone_steps_; }
+        float get_current_position(void) const { return (float)current_position_steps_/steps_per_mm_; }
+        uint32_t get_current_step(void) const { return current_position_steps_; }
+        float get_max_rate(void) const { return max_rate_; }
+        void set_max_rate(float mr) { max_rate_= mr; }
+        void set_acceleration(float a) { acceleration_= a; }
+        float get_acceleration() const { return acceleration_; }
         bool is_selected() const { return selected; }
         void set_selected(bool b) { selected= b; }
         bool is_extruder() const { return extruder; }
@@ -63,19 +64,19 @@ class Actuator
 
     protected:
         void _init();
-        float steps_per_second;
-        float steps_per_mm;
-        float max_rate; // this is not really rate it is in mm/sec, misnamed used in Robot and Extruder
-        float acceleration;
+        float steps_per_second_;
+        float steps_per_mm_;
+        float max_rate_; // this is not really rate it is in mm/sec, misnamed used in Robot and Extruder
+        float acceleration_;
 
-        volatile int32_t current_position_steps;
-        int32_t last_milestone_steps;
-        float   last_milestone_mm;
+        volatile int32_t current_position_steps_;
+        int32_t last_milestone_steps_;
+        float   last_milestone_mm_;
 
         volatile struct {
-            uint8_t motor_id:8;
+            uint8_t motor_id_:8;
             volatile bool direction_:1;
-            volatile bool moving:1;
+            volatile bool moving_:1;
             bool selected:1;
             bool extruder:1;
         };

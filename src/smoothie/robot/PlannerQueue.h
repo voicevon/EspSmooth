@@ -9,15 +9,17 @@
 #include "Block.h"
 
 #include <stddef.h>
+#include "esp_attr.h"
 
 class PlannerQueue
 {
 public:
-    PlannerQueue(size_t length)
+    PlannerQueue(size_t length)   //Why this is not static?  because it's alway invoked by Planner::getInstance()->queue
     {
         m_size = length;
         m_buffer = new Block[length];
         m_rIndex = 0;
+        
         m_wIndex = 0;
     }
 
@@ -26,7 +28,7 @@ public:
         delete [] m_buffer;
     }
 
-    size_t next(size_t n) const
+    IRAM_ATTR size_t next(size_t n) const
     {
         return (n + 1) % m_size;
     }
@@ -37,7 +39,7 @@ public:
         return n - 1;
     }
 
-    bool empty() const
+    IRAM_ATTR bool empty() const
     {
         return (m_rIndex == m_wIndex);
     }
@@ -67,7 +69,7 @@ public:
 
     // returns a pointer to the tail of the queue, but does not remove it
     // return nullptr if there is nothing on the queue
-    Block* get_tail()
+    IRAM_ATTR Block* get_tail()
     {
         if (empty())
             return nullptr;
@@ -75,7 +77,7 @@ public:
     }
 
     // this releases the tail of the queue to be used again
-    void release_tail()
+    IRAM_ATTR void release_tail()
     {
         if(empty()) return; // this should not happen as we should never call this if we did not get a valid tail
         m_rIndex = next(m_rIndex);

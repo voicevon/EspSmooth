@@ -150,9 +150,15 @@ void StepTicker::unstep_tick()
 //     if(finished_fnc) finished_fnc();
 // }
 
-// step clock
-void StepTicker::step_tick (void)
+
+// What is and when to use IRAM_ATTR ?
+// https://www.esp32.com/viewtopic.php?t=4978
+
+// Without IRAM_ATTR:    DATA: 47660    HEX: 1283338
+// With    IRAM_ATTR:    DATA: 47660    HEX：1283414
+IRAM_ATTR void StepTicker::step_tick (void)
 {
+    // Serial.print(xPortGetCoreID());
     // if nothing has been setup we ignore the ticks
     if(!running) {
         // check if anything new available
@@ -182,7 +188,8 @@ void StepTicker::step_tick (void)
         current_block->tick_info[m].steps_per_tick += current_block->tick_info[m].acceleration_change;
 
         if(current_tick == current_block->tick_info[m].next_accel_event) {
-            if(current_tick == current_block->accelerate_until) { // We are done accelerating, deceleration becomes 0 : plateau
+            if(current_tick == current_block->accelerate_until) { 
+                // We are done accelerating, deceleration becomes 0 : plateau
                 current_block->tick_info[m].acceleration_change = 0;
                 if(current_block->decelerate_after < current_block->total_move_ticks) {
                     current_block->tick_info[m].next_accel_event = current_block->decelerate_after;
@@ -225,7 +232,7 @@ void StepTicker::step_tick (void)
                 // done
                 current_block->tick_info[m].steps_to_move = 0;
                 motor[m]->stop_moving(); // let motor know it is no longer moving
-                Serial.print(" Block is done, stop motor.");        // Even can we find one sign?
+                // Serial.println("[V][StepTicker]::step_tick() Block is done, to stop motor.");        // Even can we find one sign?
             }
         }
 
@@ -246,21 +253,27 @@ void StepTicker::step_tick (void)
     // see if any motors are still moving
     if(!still_moving) {
         //SET_STEPTICKER_DEBUG_PIN(0);
-
+        //Two reason be here:  Not started the first moving , or finished the previous moving.
         // all moves finished
         current_tick = 0;
 
         // get next block
         // do it here so there is no delay in ticks
         Conveyor::getInstance()->block_finished();
+        Serial.print("ISR ");
+        Serial.println(xPortGetCoreID());
+        Serial.println("\n");
 
         if(Conveyor::getInstance()->get_next_block(&current_block)) { // returns false if no new block is available
+            Serial.println("[D][StepTicker]::step_tick() going to start_next_block()");
             running = start_next_block(); // returns true if there is at least one motor with steps to issue
 
         } else {
+            Serial.println("[D][StepTicker]::step_tick() next_block is empty()");
             current_block = nullptr;
             running = false;
         }
+        Serial.println("\n\n\n\n");
         // all moves finished
         // we delegate the slow stuff to the pendsv handler which will run as soon as this interrupt exits
         //NVIC_SetPendingIRQ(PendSV_IRQn); this doesn't work
@@ -269,7 +282,7 @@ void StepTicker::step_tick (void)
 }
 
 // only called from the step tick ISR (single consumer)
-bool StepTicker::start_next_block()
+IRAM_ATTR bool StepTicker::start_next_block()
 {
     // Serial.println("[V][StepTicker] start_next_block() aaaaaaaaaaaaaaaaa");
     if(current_block == nullptr) return false;
@@ -277,8 +290,8 @@ bool StepTicker::start_next_block()
     bool ok = false;
     // need to prepare each active motor
     for (uint8_t m = 0; m < num_motors; m++) {
-        Serial.print("[V][StepTicker] start_next_block() m= ");
-        Serial.println(m);
+        // Serial.print("[V][StepTicker] start_next_block() m= ");
+        // Serial.println(m);
 
         if(current_block->tick_info[m].steps_to_move == 0) continue;
         // Serial.println("[V][StepTicker] start_next_block() ccccccccccccc");

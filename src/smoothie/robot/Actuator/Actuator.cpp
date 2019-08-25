@@ -11,14 +11,14 @@ Actuator::~Actuator(){
 
 }
 void Actuator::_init(){
-    steps_per_mm         = 1.0F;
-    max_rate             = 50.0F;
+    steps_per_mm_         = 1.0F;
+    max_rate_             = 50.0F;
 
-    last_milestone_steps = 0;
-    last_milestone_mm    = 0.0F;
-    current_position_steps= 0;
-    moving= false;
-    acceleration= NAN;
+    last_milestone_steps_ = 0;
+    last_milestone_mm_    = 0.0F;
+    current_position_steps_= 0;
+    moving_= false;
+    acceleration_= NAN;
     selected= true;
     extruder= false;
 
@@ -42,35 +42,35 @@ Actuator::ACTUATOR_TYPE_T Actuator::get_type_from_string(const char* type_descri
 }
 void Actuator::change_steps_per_mm(float new_steps)
 {
-    steps_per_mm = new_steps;
-    last_milestone_steps = roundf(last_milestone_mm * steps_per_mm);
-    current_position_steps = last_milestone_steps;
+    steps_per_mm_ = new_steps;
+    last_milestone_steps_ = roundf(last_milestone_mm_ * steps_per_mm_);
+    current_position_steps_ = last_milestone_steps_;
 }
 
 void Actuator::change_last_milestone(float new_milestone)
 {
-    last_milestone_mm = new_milestone;
-    last_milestone_steps = roundf(last_milestone_mm * steps_per_mm);
-    current_position_steps = last_milestone_steps;
+    last_milestone_mm_ = new_milestone;
+    last_milestone_steps_ = roundf(last_milestone_mm_ * steps_per_mm_);
+    current_position_steps_ = last_milestone_steps_;
 }
 
 void Actuator::set_last_milestones(float mm, int32_t steps)
 {
-    last_milestone_mm= mm;
-    last_milestone_steps= steps;
-    current_position_steps= last_milestone_steps;
+    last_milestone_mm_= mm;
+    last_milestone_steps_= steps;
+    current_position_steps_ = last_milestone_steps_;
 }
 
 void Actuator::update_last_milestones(float mm, int32_t steps)
 {
-    last_milestone_steps += steps;
-    last_milestone_mm = mm;
+    last_milestone_steps_ += steps;
+    last_milestone_mm_ = mm;
 }
 
 int32_t Actuator::steps_to_target(float target)
 {
-    int32_t target_steps = roundf(target * steps_per_mm);
-    return target_steps - last_milestone_steps;
+    int32_t target_steps = roundf(target * steps_per_mm_);
+    return target_steps - last_milestone_steps_;
 }
 
 // Does a manual step pulse, used for direct encoder control of a stepper
