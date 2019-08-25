@@ -34,11 +34,11 @@
 #include <map>
 #include <bitset>
 #include "SPI.h"
-#include "_HAL/Pin/OutputPin.h"
+#include "_hal/Pin/OutputPin.h"
 #include "StepperMotor.h"
 #include "smoothie/smoothie/GCode.h"
 #include "libs/OutputStream.h"
-#include "_SAL/configure/ConfigReader.h"
+#include "_sal/configure/ConfigReader.h"
 // class OutputStream;
 // class SPI;
 // class ConfigReader;

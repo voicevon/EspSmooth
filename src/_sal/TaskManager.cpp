@@ -2,7 +2,7 @@
 
 bool volatile locked = false;   //TODO  use a mutex
 //---------------------------------------------------------------
-#include "_SAL/FtpServer/ESP32FtpServer.h"
+#include "_sal/FtpServer/ESP32FtpServer.h"
 void ftp_loop(void*){
     while(true){
         if(!locked){
@@ -15,7 +15,7 @@ void ftp_loop(void*){
     }
 }
 //---------------------------------------------------------------
-#include "_SAL/TcpServer/TcpServer.h"
+#include "_sal/TcpServer/TcpServer.h"
 void tcp_loop(void*){
     while(true){
         if(!locked){

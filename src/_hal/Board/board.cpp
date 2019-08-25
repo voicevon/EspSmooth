@@ -1,9 +1,9 @@
 #include "string.h"
 #include "board.h"
-#include "_HAL/Pin/Pin.h"
-#include "_HAL/Pin/OutputPin.h"
-#include "_HAL/Pin/InputPin.h"
-#include "_SAL/Helpers/FileHelper.h"
+#include "_hal/Pin/Pin.h"
+#include "_hal/Pin/OutputPin.h"
+#include "_hal/Pin/InputPin.h"
+#include "_sal/Helpers/FileHelper.h"
 
 #include "esp32-hal-gpio.h"
 #include "Esp.h"

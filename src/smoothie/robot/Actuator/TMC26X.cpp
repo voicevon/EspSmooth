@@ -32,8 +32,8 @@
 #include "smoothie/RobotStarter.h"
 #include "smoothie/robot/Robot.h"
 #include "StepperMotor.h"
-#include "Spi.h"
-#include "_HAL/Pin/Pin.h"
+#include "SPI.h"
+#include "_hal/Pin/Pin.h"
 #include "libs/StringUtils.h"
 
 

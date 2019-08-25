@@ -24,15 +24,15 @@
 #include "libs/MessageQueue.h"
 #include "libs/RingBuffer.h"
 
-#include "_HAL/__hal.h"
-#include "_HAL/Board/board.h"
-#include "_HAL/uart.h"
-#include "_HAL/Pin/AdcPin.h"
-#include "_HAL/Pin/PwmPin.h"
-#include "_HAL/Pin/OutputPin.h"
-#include "_HAL/stopwatch.h"
+#include "_hal/__hal.h"
+#include "_hal/Board/board.h"
+#include "_hal/uart.h"
+#include "_hal/Pin/AdcPin.h"
+#include "_hal/Pin/PwmPin.h"
+#include "_hal/Pin/OutputPin.h"
+#include "_hal/stopwatch.h"
 // #include "_sal/FileSys/spiffs_ext.h"
-#include "_SAL/Helpers/FileHelper.h"
+#include "_sal/Helpers/FileHelper.h"
 #include "esphome/components/i2c/i2c.h"
 #include "esphome/components/ads1115/ads1115.h"
 // static const char *TAG = "StartUp";
@@ -318,7 +318,7 @@ void set_capture(std::function<void(char)> cf)
 static std::vector<OutputStream*> output_streams;
 
 #include "stdio.h"
-#include "_HAL/patch.h"
+#include "_hal/patch.h"
 char debug_const[100];
 // this is here so we do not need to duplicate this logic for USB and UART
 void process_command_buffer(size_t n, char *rx_buf, OutputStream *os, char *line, size_t& cnt, bool& discard)
