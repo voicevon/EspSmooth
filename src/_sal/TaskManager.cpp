@@ -56,6 +56,9 @@ void Start_TimerTask(TIMER_TASK_ITEMS_T target_task){
     }
 
 }
+
+#include "Apps/Weeder/weeder.h"
+extern void weeder_setup();
 void Start_Task(TASK_ITEMS_T target_task){
     switch (target_task)
     {
@@ -82,6 +85,9 @@ void Start_Task(TASK_ITEMS_T target_task){
         break;
     case ROBOT:
         smoothie_setup();
+        break;
+    case WEEDER:
+        weeder_setup();   
         break;
     default:
         break;

@@ -27,7 +27,10 @@ void setup2(){
 
     }
 }
+
 void setup(){
+    Start_Task(WEEDER);
+    return;
     Board::getInstance()->report_memory();
     Board::getInstance()->init();
     Start_Task(ESPHOME);
