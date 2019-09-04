@@ -15,10 +15,10 @@
 //     return xx;
 // }
 
-// PwmPin* Create_PwmPin(const char* pin_description){
-//     PwmPin* xx = new PwmPin(pin_description);
-//     PwmPin pp(pin_description);
-//     return &pp;
-//     // return xx;
-// }
+PwmPin* Create_PwmPin(const char* pin_description){
+    PwmPin* xx = new PwmPin(pin_description);
+    PwmPin pp(pin_description);
+    return &pp;
+    // return xx;
+}
 

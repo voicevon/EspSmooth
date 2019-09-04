@@ -4,12 +4,13 @@
 #include "OneSide.h"
 class Weeder{
     public:
-        static Weeder* get_instance(){ return instance_; }
+        static Weeder* get_instance(){ return __instance; }
         OneSide left;
         OneSide right;
-        void loop();
-        void time_tick();
+        void timer_loop();
+        void init();
     private:
-        static Weeder* instance_;
+        Weeder();
+        static Weeder* __instance;
 };
 #endif
