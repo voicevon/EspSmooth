@@ -7,8 +7,8 @@ class Weeder{
         static Weeder* get_instance(){ return instance_; }
         OneSide left;
         OneSide right;
-        void loop();
-        void time_tick();
+        void timer_loop();
+        // void time_tick();
     private:
         static Weeder* instance_;
 };
