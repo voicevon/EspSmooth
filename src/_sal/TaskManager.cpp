@@ -1,5 +1,7 @@
 #include "TaskManager.h"
 
+
+
 bool volatile locked = false;   //TODO  use a mutex
 //---------------------------------------------------------------
 #include "_sal/FtpServer/ESP32FtpServer.h"
@@ -42,7 +44,9 @@ void task_esphome_loop(void*){
 extern void tcp_setup();
 extern void smoothie_setup();
 extern void robot_motors_movement_setup(int interval_ms); 
+extern void weeder_setup();
 // extern void robot_motors_movement_setup(int interval_ms);
+#include "Apps/Weeder/weeder.h"
 
 //==============================================================
 void Start_TimerTask(TIMER_TASK_ITEMS_T target_task){
@@ -51,14 +55,15 @@ void Start_TimerTask(TIMER_TASK_ITEMS_T target_task){
         case CONTROL_ROBOT_MOTORS:
             robot_motors_movement_setup(500);
             break;
+        case WEEDER:
+            weeder_setup();
         default:
             break;
     }
 
 }
 
-#include "Apps/Weeder/weeder.h"
-extern void weeder_setup();
+
 void Start_Task(TASK_ITEMS_T target_task){
     switch (target_task)
     {
@@ -86,9 +91,9 @@ void Start_Task(TASK_ITEMS_T target_task){
     case ROBOT:
         smoothie_setup();
         break;
-    case WEEDER:
-        weeder_setup();   
-        break;
+    // case WEEDER:
+    //     weeder_setup();   
+    //     break;
     default:
         break;
     }

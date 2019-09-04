@@ -7,7 +7,8 @@ void OneSide::init(AdcPin toucher_pin,AdcPin feedback_pin, PwmPin actuator_pin,f
     feedback_pin.start();
     actuator_pin.start();
 }
-
+void OneSide::init(){
+}
 void OneSide::pid_loop_with_reading_sensors(){
     read_sensors();
     // pid_loop

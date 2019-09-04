@@ -28,8 +28,7 @@ bool OutputPin::is_in_range(){
 IRAM_ATTR void OutputPin::set(bool value){
 	digitalWrite(gpio_id_, value ^ inverting_);
 }
-bool OutputPin::start()
-{
+bool OutputPin::start(){
 	if(__is_started) return true;
 	if(is_pull_up_)
 		digitalWrite(gpio_id_,HIGH);

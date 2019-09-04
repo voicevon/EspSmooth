@@ -895,9 +895,9 @@ void smoothie_startup(void *)
             printf("Error: failed to start StepTicker\n");
         }
 
-        if(!AdcPin::start()) {
-            printf("Error: failed to start ADC\n");
-        }
+        // if(!AdcPin::start()) {
+        //     printf("Error: failed to start ADC\n");
+        // }
         
 
     } else {
