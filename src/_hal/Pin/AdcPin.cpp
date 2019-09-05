@@ -2,13 +2,15 @@
 // TODO allow non thermistor instances to be created
 
 #include "AdcPin.h"
-// #include "SlowTicker.h"
 AdcPin::AdcPin(std::string pin_description){
-    
+    from_string(pin_description);
+    adcAttachPin(this->gpio_id_);
+    adcStart(this->gpio_id_);
 }
 AdcPin::AdcPin(){
-    
+
 }
+
 
 // #include <string>
 // #include <cctype>
@@ -27,16 +29,19 @@ AdcPin::AdcPin(){
 // #define NO_ADC_INTERRUPTS
 
 // #define _LPC_ADC_ID LPC_ADC0
-// // const ADC_CHANNEL_T CHANNEL_LUT[] = {
-// //     ADC_CH0,                /**< ADC channel 0 */
-// //     ADC_CH1,                /**< ADC channel 1 */
-// //     ADC_CH2,                /**< ADC channel 2 */
-// //     ADC_CH3,                /**< ADC channel 3 */
-// //     ADC_CH4,                /**< ADC channel 4 */
-// //     ADC_CH5,                /**< ADC channel 5 */
-// //     ADC_CH6,                /**< ADC channel 6 */
-// //     ADC_CH7                 /**< ADC channel 7 */
-// // };
+// const adc1_channel_t CHANNEL_LUT[] = {
+// const adc1_channel_t ADC_CHANNEL_FROM_GPIO[] = {
+//     ADC2_CHANNEL_1 = 0,
+
+//     // ADC_CH0,                /**< ADC channel 0 */
+//     // ADC_CH1,                /**< ADC channel 1 */
+//     // ADC_CH2,                /**< ADC channel 2 */
+//     // ADC_CH3,                /**< ADC channel 3 */
+//     // ADC_CH4,                /**< ADC channel 4 */
+//     // ADC_CH5,                /**< ADC channel 5 */
+//     // ADC_CH6,                /**< ADC channel 6 */
+//     // ADC_CH7                 /**< ADC channel 7 */
+// };
 // const int CHANNEL_LUT[] = {
 //     0,                /**< ADC channel 0 */
 //     1,                /**< ADC channel 1 */
@@ -302,8 +307,8 @@ AdcPin::AdcPin(){
 
 // //#define USE_MEDIAN_FILTER
 // // gets called 20 times a second from a timer
-uint32_t AdcPin::read(){
-    return 0;
+uint16_t AdcPin::read(){
+    return analogRead(this->gpio_id_);
 }
 //     uint16_t median_buffer[num_samples];
 

@@ -6,6 +6,8 @@
 
 #include "Pin.h"
 #include "string.h"
+// #include <driver/adc.h>
+#include "esp32-hal-adc.h"
 // define how many bits of extra resolution required
 // 2 bits means the 12bit ADC is 14 bits of resolution
 // #define OVERSAMPLE 2
@@ -30,7 +32,7 @@ class AdcPin:public Pin{
 
     //     // specific to each instance
     //     AdcPin* from_string(const char *name);
-        uint32_t read();
+        uint16_t read();
         float read_voltage();
     //     int get_channel() const { return channel; }
     //     bool connected() const { return enabled; }
