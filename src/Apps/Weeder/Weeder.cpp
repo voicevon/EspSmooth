@@ -14,7 +14,6 @@ void Weeder::init(){
     OutputPin __k3_pin("GPIO_04",true);
     InputPin __button_a("GPIO_12");
     InputPin __button_b("GPIO_23");
-
 }
 void Weeder::timer_loop(){
     left.pid_loop_with_reading_sensors();
@@ -33,10 +32,10 @@ void weeder_setup(){
     
     int id = 1909;
     int interval_ms = 500;
-    TimerHandle_t tmr = xTimerCreate("robot_motors_movement", pdMS_TO_TICKS(interval_ms), pdTRUE, ( void * )id, 
+    TimerHandle_t tmr = xTimerCreate("weeder_timeTask", pdMS_TO_TICKS(interval_ms), pdTRUE, ( void * )id, 
                                     & timer_task);
     if( xTimerStart(tmr, 10 ) != pdPASS ) {
-        printf("[E][setup] Timer for ControlMotors  start error. \n");
+        printf("[E][setup] Timer for Weeder  start error. \n");
     }
-    printf("[D][main] Create xTimerTask COntrolMotors is started.\n" );
+    printf("[D][main] Create xTimerTask Weeder is started.\n" );
 }
