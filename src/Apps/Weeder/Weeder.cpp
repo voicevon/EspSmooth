@@ -7,9 +7,13 @@ Weeder::Weeder(){
 
 }
 void Weeder::init(){
-    left.init(AdcPin("GPIO_01"),AdcPin("GPIO_02"),PwmPin("GPIO_03"),1.0f,1.0f,1.0f);
-    right.init(AdcPin("GPIO_01"),AdcPin("GPIO_02"),PwmPin("GPIO_03"),1.0f,1.0f,1.0f);
-
+    left.init(AdcPin("GPIO_035"),AdcPin("GPIO_34"),PwmPin("GPIO_25"),1.0f,1.0f,1.0f);
+    right.init(AdcPin("GPIO_33"),AdcPin("GPIO_18"),PwmPin("GPIO_27"),1.0f,1.0f,1.0f);
+    OutputPin __k1_pin("GPIPO_13",true);
+    OutputPin __k2_pin("GPIO_32",true);
+    OutputPin __k3_pin("GPIO_04",true);
+    InputPin __button_a("GPIO_12");
+    InputPin __button_b("GPIO_23");
 }
 void Weeder::timer_loop(){
     left.pid_loop_with_reading_sensors();
@@ -18,16 +22,20 @@ void Weeder::timer_loop(){
 
 #include "FreeRTOS.h"
 #include "freertos/timers.h"
+
+static void timer_task(TimerHandle_t handle){
+    Weeder::get_instance()->timer_loop ();
+}
+
 void weeder_setup(){
     Weeder::get_instance()->init();
-    // SlowTicker::getInstance()->attach(interval_ms, &test_slowStick);
     
     int id = 1909;
     int interval_ms = 500;
-    // TimerHandle_t tmr = xTimerCreate("robot_motors_movement", pdMS_TO_TICKS(interval_ms), pdTRUE, ( void * )id, 
-    //                                 & Weeder::get_instance()->timer_loop);
-    // if( xTimerStart(tmr, 10 ) != pdPASS ) {
-    //     printf("[E][setup] Timer for ControlMotors  start error. \n");
-    // }
-    // printf("[D][main] Create xTimerTask COntrolMotors is started.\n" );
+    TimerHandle_t tmr = xTimerCreate("weeder_timeTask", pdMS_TO_TICKS(interval_ms), pdTRUE, ( void * )id, 
+                                    & timer_task);
+    if( xTimerStart(tmr, 10 ) != pdPASS ) {
+        printf("[E][setup] Timer for Weeder  start error. \n");
+    }
+    printf("[D][main] Create xTimerTask Weeder is started.\n" );
 }

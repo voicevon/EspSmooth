@@ -56,7 +56,7 @@ void test_slowStick(){
 
 }
 void robot_motors_movement_setup(int interval_ms){
-    SlowTicker::getInstance()->attach(interval_ms, &test_slowStick);
+    SlowTicker::getInstance()->attach(interval_ms, &test_slowStick);   //???
     
     int id = 123;
     TimerHandle_t tmr = xTimerCreate("robot_motors_movement", pdMS_TO_TICKS(interval_ms), pdTRUE, ( void * )id, 
