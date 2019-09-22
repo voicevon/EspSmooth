@@ -6,7 +6,7 @@
 #include "OneSide.h"
 class Weeder{
     public:
-        static Weeder* get_instance(){ return __instance; }
+        static Weeder* get_instance();
         OneSide left;
         OneSide right;
         void timer_loop();

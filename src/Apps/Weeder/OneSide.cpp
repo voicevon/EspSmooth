@@ -1,5 +1,12 @@
 #include "OneSide.h"
+#include "HardwareSerial.h"
 
+
+OneSide::OneSide(){
+}
+OneSide::~OneSide(){
+
+}
 
 void OneSide::init(AdcPin toucher_pin,AdcPin feedback_pin, PwmPin actuator_pin,float pid_p,float pid_i,float pid_d){
     __pid_controller.Init(pid_p,pid_i,pid_d);

@@ -1,32 +1,13 @@
-/*
- * PID.cpp
- *
- *  Created on: 13 July, 2017
- *  Author: Junsheng Fu
- */
 
 #include <iostream>
 #include "PID.h"
 
 using namespace std;
 
-/**
- * Constructor
- */
-PID::PID() {}
-
-/**
- * Destructor.
- */
+PID::PID() {
+}
 PID::~PID() {}
 
-
-/**
- * Initialize PID.
- * @param kp the proportional value for PID controller
- * @param ki the integral value for PID controller
- * @param kd the derivative value for PID controller
- */
 void PID::Init(double kp, double ki, double kd) {
   Kp = kp;
   Ki = ki;
@@ -37,11 +18,6 @@ void PID::Init(double kp, double ki, double kd) {
   d_error = 0;
 }
 
-
-/**
- * Update the PID error variables given cross track error
- * @param cte the current cross track error
- */
 void PID::UpdateError(double cte) {
 
   double pre_cte = p_error;

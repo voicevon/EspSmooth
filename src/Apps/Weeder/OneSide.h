@@ -10,14 +10,15 @@ class OneSide{
         AdcPin toucher_pin;
         AdcPin actuator_feedback_pin;
         PwmPin actuator_pin;
-        
+        OneSide();
+        ~OneSide();
         void init(AdcPin toucher_pin,AdcPin feedback_pin, PwmPin actuator_pin,float pid_p,float pid_i,float pid_d);
         void init();
         void pid_loop_with_reading_sensors();   
         void read_sensors();
         float get_toucher(){ return __toucher_length; }
         float get_feedback(){ return __feedback_length;}
-
+        float test_float;
     private:
         float __toucher_length;
         float __feedback_length;

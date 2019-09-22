@@ -18,6 +18,7 @@ class AdcPin:public Pin{
 
         AdcPin(std::string pin_description);
         AdcPin();
+        ~AdcPin(){};
         bool start() override { return false; }
         bool stop() override { return false; }
         void set(bool value) override{}

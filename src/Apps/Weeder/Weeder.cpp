@@ -1,10 +1,15 @@
 
 #include "weeder.h"
-
+#include "HardwareSerial.h"
 Weeder* Weeder::__instance = nullptr;
-
+Weeder* Weeder::get_instance(){
+    if (__instance == nullptr){
+        Serial.println ("Going to create object of Weeder");
+        __instance = new Weeder();
+    }
+    return __instance;
+}
 Weeder::Weeder(){
-
 }
 void Weeder::init(){
     left.init(AdcPin("GPIO_035"),AdcPin("GPIO_34"),PwmPin("GPIO_25"),1.0f,1.0f,1.0f);
