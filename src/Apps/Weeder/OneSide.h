@@ -16,8 +16,8 @@ class OneSide{
         void init();
         void pid_loop_with_reading_sensors();   
         void read_sensors();
-        float get_toucher(){ return __toucher_length; }
-        float get_feedback(){ return __feedback_length;}
+        float get_toucher_length(){ return __toucher_length; }
+        float get_feedback_length(){ return __feedback_length;}
         float test_float;
     private:
         float __toucher_length;
@@ -26,6 +26,12 @@ class OneSide{
         float __feedback_to_length(float adc_value);
         float __error_length;
         PID __pid_controller; 
+        float __get_error_length_of_actuaotr();
+        float __convert_command_from_toucher();
+        float __toucher_slope;
+        float __toucher_offset;
+        float __feedback_slope;
+        float __feedback_offset;
 
 };
 

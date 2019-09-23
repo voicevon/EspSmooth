@@ -12,16 +12,24 @@ Weeder* Weeder::get_instance(){
 Weeder::Weeder(){
 }
 void Weeder::init(){
-    left.init(AdcPin("GPIO_035"),AdcPin("GPIO_34"),PwmPin("GPIO_25"),1.0f,1.0f,1.0f);
-    right.init(AdcPin("GPIO_33"),AdcPin("GPIO_18"),PwmPin("GPIO_27"),1.0f,1.0f,1.0f);
-    OutputPin __k1_pin("GPIPO_13",true);
+    // left.init(AdcPin("GPIO_18"),AdcPin("GPIO_34"),PwmPin("GPIO_25"),1.0f,1.0f,1.0f);
+    right.init(AdcPin("GPIO_33"),AdcPin("GPIO_26"),PwmPin("GPIO_27"),1.0f, 0.0f, 0.0f);
+    OutputPin __k1_pin("GPIO_13",true);
     OutputPin __k2_pin("GPIO_32",true);
     OutputPin __k3_pin("GPIO_04",true);
     InputPin __button_a("GPIO_12");
     InputPin __button_b("GPIO_23");
 }
 void Weeder::timer_loop(){
-    left.pid_loop_with_reading_sensors();
+    // right.read_sensors();
+    // float xx = right.get_toucher_length();
+    // Serial.print("touch_sensor_length = ");
+    // Serial.println(xx);
+
+    // float xx = right.get_feedback_length();
+    // Serial.print("Feedback_length = ");
+    // Serial.println(xx);
+    // left.pid_loop_with_reading_sensors();
     right.pid_loop_with_reading_sensors();
 }
 
@@ -30,6 +38,7 @@ void Weeder::timer_loop(){
 
 static void timer_task(TimerHandle_t handle){
     Weeder::get_instance()->timer_loop ();
+
 }
 
 void weeder_setup(){

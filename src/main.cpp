@@ -69,11 +69,12 @@ uint64_t rtos_report_inteval_second = 5 ;
 uint64_t cpu_idle_counter = 0;
 uint64_t last_time_stamp = 0;   //us
 // Actually, this is the lowest priority task.
-uint64_t  i =0 ;
+volatile uint64_t  i =0 ;
 void loop(){
     i++;
-    if (i < 577888) return;
-
+    if (i < 1478988) return;
+    
+    i = 0;
     Weeder::get_instance()->timer_loop();
     return;
 
