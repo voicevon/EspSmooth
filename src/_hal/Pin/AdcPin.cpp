@@ -2,15 +2,53 @@
 // TODO allow non thermistor instances to be created
 
 #include "AdcPin.h"
+#include "HardwareSerial.h"
 AdcPin::AdcPin(std::string pin_description){
-    from_string(pin_description);
+    Pin* temp_pin = from_string(pin_description);
+    uint8_t xx= temp_pin->get_gpio_id();
+    Serial.println ("dddddddddddddddd");
+    Serial.println(xx);
+    this->gpio_id_ = temp_pin->get_gpio_id();
+    Serial.println(this->gpio_id_);
+
     adcAttachPin(this->gpio_id_);
     adcStart(this->gpio_id_);
+    Serial.println(this->gpio_id_);
 }
 AdcPin::AdcPin(){
 
 }
 
+
+float AdcPin::read_voltage(){
+    Serial.println("Warning: not implitated");
+    return 0;
+}
+uint16_t AdcPin::read(){
+    uint16_t adc =  analogRead(this->gpio_id_);
+
+    // Serial.print("AdcPin.read(), pin = ");
+    // Serial.println(this->gpio_id_);
+    // Serial.print("adc value = ");
+    // Serial.println(adc);
+
+    if (use_filter){
+        buffer[buffer_head] = adc;
+        buffer_head++;
+        if (buffer_head >=5)
+            buffer_head = 0;
+        
+        uint16_t sum = 0;
+        for(int i=0; i<5; i++){
+            sum += buffer[i];
+        }
+        return sum_adc / 5;
+    }else{
+        return adc;
+    }
+    
+
+}
 
 // #include <string>
 // #include <cctype>
@@ -307,9 +345,7 @@ AdcPin::AdcPin(){
 
 // //#define USE_MEDIAN_FILTER
 // // gets called 20 times a second from a timer
-uint16_t AdcPin::read(){
-    return analogRead(this->gpio_id_);
-}
+
 //     uint16_t median_buffer[num_samples];
 
 //     // needs atomic access TODO maybe be able to use std::atomic here or some lockless mutex
@@ -379,9 +415,7 @@ uint16_t AdcPin::read(){
 //     return k;
 // }
 
-float AdcPin::read_voltage(){
-    return 0;
-}
+
 //     // just return the voltage on the pin
 //     uint16_t median_buffer[num_samples];
 

@@ -18,6 +18,7 @@ class AdcPin:public Pin{
 
         AdcPin(std::string pin_description);
         AdcPin();
+        ~AdcPin(){};
         bool start() override { return false; }
         bool stop() override { return false; }
         void set(bool value) override{}
@@ -49,7 +50,12 @@ class AdcPin:public Pin{
 
     //     static void sample_isr();
 
-    // private:
+    private:
+        bool use_filter = false;
+        uint16_t sum_adc = 0;
+        uint16_t buffer[5];
+        uint8_t buffer_head = 0;
+
     //     static const int num_channels= 8;
     //     static AdcPin* instances[num_channels];
     //     static int ninstances;

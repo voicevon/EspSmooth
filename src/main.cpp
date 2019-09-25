@@ -28,10 +28,16 @@ void setup2(){
     }
 }
 
+#include "Apps/Weeder/Weeder.h"
+
 void setup(){
     // Start_Task(WEEDER);
-    Start_TimerTask(WEEDER);
+    // Start_TimerTask(WEEDER);
+    Serial.begin(115200);
+    Weeder::get_instance()->init();
     return;
+
+    
     Board::getInstance()->report_memory();
     Board::getInstance()->init();
     Start_Task(ESPHOME);
@@ -63,7 +69,17 @@ uint64_t rtos_report_inteval_second = 5 ;
 uint64_t cpu_idle_counter = 0;
 uint64_t last_time_stamp = 0;   //us
 // Actually, this is the lowest priority task.
+volatile uint64_t  i =0 ;
 void loop(){
+    i++;
+    if (i < 1478988) return;
+    
+    i = 0;
+    Weeder::get_instance()->timer_loop();
+    return;
+
+
+    
     cpu_idle_counter++;
     if(esp_timer_get_time () - last_time_stamp >= rtos_report_inteval_second * 1000000){
         uint16_t passed_time = cpu_idle_counter / 10280 / rtos_report_inteval_second;
