@@ -15,11 +15,11 @@ void Weeder::init(){
     // left.init_io(AdcPin("GPIO_18"),AdcPin("GPIO_34"),PwmPin("GPIO_25"));
     // left.init_pid(1.0f,1.0f,1.0f);
     right.toucher.init(AdcPin("GPIO_33"),0.02061,177.0);
-    right.actuator_feedback.init(AdcPin("GPIO_26"), 0.04115, 413.0);
+    right.actuator_feedback.init(AdcPin("GPIO_34"), 0.04115, 413.0 -16.0);
     right.actuator_pin = PwmPin("GPIO_27");
-    right.actuator_pin.init(5000, 16, 0);
+    right.actuator_pin.init(5000, 16, 32768);
     right.actuator_pin.start();
-    right.pid_controller.Init(1.0, 0.0, 0.0);
+    right.pid_controller.Init(2.05, 0, 0.0);
     
 
     OutputPin __k1_pin("GPIO_13",true);
@@ -28,8 +28,14 @@ void Weeder::init(){
     InputPin __button_a("GPIO_12");
     InputPin __button_b("GPIO_23");
 }
+unsigned long  last_pid_timestamp;
 void Weeder::timer_loop(){
+    unsigned now = micros();
+    uint16_t interval = now- last_pid_timestamp;
+    if (interval <=1000*10) return;
+
     right.pid_loop_with_reading_sensors();
+    last_pid_timestamp = now;
 }
 
 #include "FreeRTOS.h"

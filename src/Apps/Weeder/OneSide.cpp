@@ -34,17 +34,20 @@ void OneSide::pid_loop_with_reading_sensors(){
     Serial.print (target_length);
     Serial.print("  actuator feedback length = ");
     Serial.print (actuator_feedback.get_meaning_value());
-    Serial.print(" error_length = ");
+    Serial.print("  error_length = ");
     Serial.println(__error_length);
 
     // pid_loop
     pid_controller.UpdateError(__error_length);
-    float output = pid_controller.OutputSteerAng();
+    float output = pid_controller.get_output();
+    pid_controller.show_errors_and_output();
 
     // output pwm
-    uint16_t pwm_output = toucher.get_meaning_value() * 65536.0 / 61.0  - 177.0f * 65536.0f / 61.0f  ;
-    // uint16_t pwm_output = - output * 32768 / 300 + 32768 ;   // 20mA == Shorter length
-    // uint16_t pwm_output = output * 32768 / 150 + 32768 ;   // 20mA == Longer length
+    //uint16_t pwm_output = toucher.get_meaning_value() * 65536.0 / 61.0  - 177.0f * 65536.0f / 61.0f  ;
+    //uint16_t pwm_output = - output * 32768 / 300 + 32768 ;   // 4mA == Shorter length
+    uint16_t pwm_output = output * 32768 / 150 + 32768 ;   // 20mA == Longer length
+    pwm_output = 65536 - pwm_output;
+    
     Serial.print("PWM output = ");
     Serial.println(pwm_output);
     actuator_pin.set_duty(pwm_output);

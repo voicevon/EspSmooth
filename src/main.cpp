@@ -71,9 +71,8 @@ uint64_t last_time_stamp = 0;   //us
 // Actually, this is the lowest priority task.
 volatile uint64_t  i =0 ;
 void loop(){
-    i++;
-    if (i < 1478988) return;
-    
+    // i++;
+    // if (i < 1478988) return;
     i = 0;
     Weeder::get_instance()->timer_loop();
     return;
