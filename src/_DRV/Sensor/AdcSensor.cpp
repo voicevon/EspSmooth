@@ -14,7 +14,9 @@ float AdcSensor::read_adc(){
     _last_reading =  analogRead(__sensor_pin.get_gpio_id());
     return _last_reading;
 }
-
+float AdcSensor::get_last_reading(){
+    return _last_reading;
+}
 float AdcSensor::get_meaning_value(){
     float result = _last_reading * _slope + _offset;
     return result;

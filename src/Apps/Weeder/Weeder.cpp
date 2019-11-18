@@ -12,10 +12,8 @@ Weeder* Weeder::get_instance(){
 Weeder::Weeder(){
 }
 void Weeder::init(){
-    // left.init_io(AdcPin("GPIO_18"),AdcPin("GPIO_34"),PwmPin("GPIO_25"));
-    // left.init_pid(1.0f,1.0f,1.0f);
-    right.toucher.init(AdcPin("GPIO_33"),0.02061,177.0);
-    right.actuator_feedback.init(AdcPin("GPIO_34"), 0.04115, 413.0 -16.0);
+    right.toucher.init(AdcPin("GPIO_34"),0.0343, 127.78);
+    right.actuator_feedback.init(AdcPin("GPIO_33"), 0.0386, 419);
     right.actuator_pin = PwmPin("GPIO_27");
     right.actuator_pin.init(5000, 16, 32768);
     right.actuator_pin.start();
@@ -31,8 +29,9 @@ void Weeder::init(){
 unsigned long  last_pid_timestamp;
 void Weeder::timer_loop(){
     unsigned now = micros();
-    uint16_t interval = now- last_pid_timestamp;
-    if (interval <=1000*10) return;
+    uint16_t interval = now - last_pid_timestamp;
+    if (interval <= 1000 * 10) return;
+    delay(10);
 
     right.pid_loop_with_reading_sensors();
     last_pid_timestamp = now;

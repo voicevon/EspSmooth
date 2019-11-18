@@ -18,6 +18,7 @@ class AdcSensor: public Sensor {
         bool start();
 
         float get_meaning_value(); 
+        float get_last_reading();
     private:
         AdcPin __sensor_pin;
 
