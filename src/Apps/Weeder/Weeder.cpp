@@ -1,4 +1,5 @@
 
+
 #include "weeder.h"
 #include "HardwareSerial.h"
 Weeder* Weeder::__instance = nullptr;
@@ -11,6 +12,9 @@ Weeder* Weeder::get_instance(){
 }
 Weeder::Weeder(){
 }
+
+
+//  https://randomnerdtutorials.com/esp32-pinout-reference-gpios/
 void Weeder::init(){
     right.toucher.init(AdcPin("GPIO_34"),0.0343, 127.78);
     right.actuator_feedback.init(AdcPin("GPIO_33"), 0.0386, 419);
@@ -18,7 +22,15 @@ void Weeder::init(){
     right.actuator_pin.init(5000, 16, 32768);
     right.actuator_pin.start();
     right.pid_controller.Init(2.05, 0, 0.0);
-    
+    right.set_show_debug(false);
+
+    left.toucher.init(AdcPin("GPIO_26"),0.0343, 127.78);
+    left.actuator_feedback.init(AdcPin("GPIO_35"), 0.0386, 419);
+    left.actuator_pin = PwmPin("GPIO_36");
+    left.actuator_pin.init(5000, 16, 32768);
+    left.actuator_pin.start();
+    left.pid_controller.Init(2.05, 0, 0.0);
+    left.set_show_debug(false);
 
     OutputPin __k1_pin("GPIO_13",true);
     OutputPin __k2_pin("GPIO_32",true);
@@ -34,6 +46,7 @@ void Weeder::timer_loop(){
     delay(10);
 
     right.pid_loop_with_reading_sensors();
+    left.pid_loop_with_reading_sensors();
     last_pid_timestamp = now;
 }
 
