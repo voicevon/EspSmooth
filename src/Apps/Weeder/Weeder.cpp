@@ -24,13 +24,13 @@ void Weeder::init(){
     right.pid_controller.Init(2.05, 0, 0.0);
     right.set_show_debug(false);
 
-    left.toucher.init(AdcPin("GPIO_26"),0.0343, 127.78);
+    left.toucher.init(AdcPin("GPIO_26"),0.0180, 167.78);
     left.actuator_feedback.init(AdcPin("GPIO_35"), 0.0386, 419);
-    left.actuator_pin = PwmPin("GPIO_36");
+    left.actuator_pin = PwmPin("GPIO_19");
     left.actuator_pin.init(5000, 16, 32768);
     left.actuator_pin.start();
     left.pid_controller.Init(2.05, 0, 0.0);
-    left.set_show_debug(false);
+    left.set_show_debug(false); 
 
     OutputPin __k1_pin("GPIO_13",true);
     OutputPin __k2_pin("GPIO_32",true);
