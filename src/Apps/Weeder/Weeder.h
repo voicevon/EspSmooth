@@ -1,8 +1,8 @@
 #ifndef _APP_WEEDER_H_
 #define _APP_WEEDER_H_
 
-#include "_HAL/Pin/OutputPin.h"
-#include "_HAL/Pin/InputPin.h"
+#include "_hal/Pin/OutputPin.h"
+#include "_hal/Pin/InputPin.h"
 #include "OneSide.h"
 class Weeder{
     public:

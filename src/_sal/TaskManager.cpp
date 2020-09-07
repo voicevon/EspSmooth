@@ -46,7 +46,7 @@ extern void smoothie_setup();
 extern void robot_motors_movement_setup(int interval_ms); 
 extern void weeder_setup();
 // extern void robot_motors_movement_setup(int interval_ms);
-#include "Apps/Weeder/weeder.h"
+#include "Apps/Weeder/Weeder.h"
 
 //==============================================================
 void Start_TimerTask(TIMER_TASK_ITEMS_T target_task){

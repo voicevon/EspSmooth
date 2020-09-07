@@ -1,7 +1,7 @@
 #ifndef _APP_WEEDER_ONE_SIDE_H_
 #define _APP_WEEDER_ONE_SIDE_H_
-#include "_HAL/Pin/PwmPin.h"
-#include "_SAL/PID/pid.h"
+#include "_hal/Pin/PwmPin.h"
+#include "_sal/PID/pid.h"
 
 #include "_DRV/Sensor/AdcSensors.h"
 

@@ -1,7 +1,7 @@
 #ifndef _PWM_ACTUATOR_H_
 #define _PWM_ACTUATOR_H_
 #include "actuator.h"
-#include "_HAL/Pin/PwmPin.h"
+#include "_hal/Pin/PwmPin.h"
 
 class PwmActuator: public Actuator{
     public:

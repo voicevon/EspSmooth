@@ -8,7 +8,7 @@ class Sensor{
         float _last_reading = 1.0;
 };
 
-#include "_HAL/Pin/AdcPin.h"
+#include "_hal/Pin/AdcPin.h"
 
 class AdcSensor: public Sensor {
     public:

@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include "PID.h"
+#include "pid.h"
 #include "HardwareSerial.h"
 
 using namespace std;
