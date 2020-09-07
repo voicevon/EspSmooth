@@ -64,9 +64,10 @@ void PID::show_config(){
 
 void PID::show_errors_and_output(){
     HardwareSerial targetSerial = Serial;
-    targetSerial.print(__sideId);
-    targetSerial.print(p_error);
-    targetSerial.print(__last_output);
+    if(__sideId == 1){
+        targetSerial.print(p_error);
+        targetSerial.print(__last_output);
+    }
     // targetSerial.println(__sideId);
     // targetSerial.println("[C] PID::show_errors()");
     // targetSerial.print("    (P_error，I_error, D_error, p_out,i_out,d_out) = (");
