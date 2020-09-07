@@ -59,7 +59,7 @@ void OneSide::pid_loop_with_reading_sensors(){
 
     pid_controller.UpdateError(__error_length);
     float output = pid_controller.get_output();
-    // pid_controller.show_errors_and_output();
+    pid_controller.show_errors_and_output();
 
     // output pwm.
     uint16_t pwm_output = output * 32768 / 150 + 32768 ;   // 20mA == Longer length

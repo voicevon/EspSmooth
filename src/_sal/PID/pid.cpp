@@ -9,7 +9,8 @@ PID::PID() {
 }
 PID::~PID() {}
 
-void PID::Init(double kp, double ki, double kd) {
+void PID::Init(int sideId, double kp, double ki, double kd) {
+    __sideId = sideId;
     Kp = kp;
     Ki = ki;
     Kd = kd;
@@ -62,24 +63,29 @@ void PID::show_config(){
 }
 
 void PID::show_errors_and_output(){
-    Serial.println("[C] PID::show_errors()");
-    Serial.print("    (P_error，I_error, D_error, p_out,i_out,d_out) = (");
-    Serial.print(p_error);
-    Serial.print(",");
-    Serial.print(sum_error);
-    Serial.print(",");
-    Serial.print(d_error);
-    Serial.println(")  (");
+    HardwareSerial targetSerial = Serial;
+    targetSerial.print(__sideId);
+    targetSerial.print(p_error);
+    targetSerial.print(__last_output);
+    // targetSerial.println(__sideId);
+    // targetSerial.println("[C] PID::show_errors()");
+    // targetSerial.print("    (P_error，I_error, D_error, p_out,i_out,d_out) = (");
+    // targetSerial.print(p_error);
+    // targetSerial.print(",");
+    // targetSerial.print(sum_error);
+    // targetSerial.print(",");
+    // targetSerial.print(d_error);
+    // targetSerial.println(")  (");
 
-    Serial.print(Kp * p_error);
-    Serial.print(",");
-    Serial.print(Ki * sum_error);
-    Serial.print(",");
-    Serial.print(Kd * d_error);
-    Serial.println(")");
-    Serial.print("last_output = ");
-    Serial.println(__last_output);
-    Serial.print("last_output = ");
+    // targetSerial.print(Kp * p_error);
+    // targetSerial.print(",");
+    // targetSerial.print(Ki * sum_error);
+    // targetSerial.print(",");
+    // targetSerial.print(Kd * d_error);
+    // targetSerial.println(")");
+    // targetSerial.print("last_output = ");
+    // targetSerial.println(__last_output);
+    // targetSerial.print("last_output = ");
 }
 
 /**

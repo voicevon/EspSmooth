@@ -13,7 +13,10 @@ class PID {
         PID();
         virtual ~PID();
 
-        void Init(double kp, double ki, double kd);
+        ///
+        /// sidId: 1=left side, 2=right side
+        ///
+        void Init(int sideId,double kp, double ki, double kd);
 
         void UpdateError(double cte);
 
@@ -33,6 +36,7 @@ class PID {
          */
         double OutputThrottle(double max_thro);
     private:
+        int __sideId;
         float __last_output = 0;
         double p_error;
         // double i_error;
