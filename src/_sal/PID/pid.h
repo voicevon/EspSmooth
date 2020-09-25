@@ -1,7 +1,7 @@
 
 #ifndef PID_H
 #define PID_H
-
+#include "HardwareSerial.h"
 # define ERR_BUFFER_COUNT 300
 class PID {
     public:
@@ -36,6 +36,8 @@ class PID {
          */
         double OutputThrottle(double max_thro);
     private:
+        HardwareSerial target_serial = Serial2;
+
         int __sideId;
         float __last_output = 0;
         double p_error;
