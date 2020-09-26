@@ -65,14 +65,16 @@ void PID::show_config(){
 
 void PID::show_errors_and_output(){
     if(__sideId == 1){
-        int err = p_error;
-        int out = __last_output;
+        int16_t err = p_error;
+        int16_t out = __last_output;
         target_serial.write(0xff);
         target_serial.write(0xff);
         target_serial.write(0xff);
-        target_serial.print(err);
+        target_serial.write(err / 256);
+        target_serial.write(err % 256);
         target_serial.write(0xff);
-        target_serial.print(out);
+        target_serial.write(out / 256);
+        target_serial.write(out % 256);
     }
     // targetSerial.println(__sideId);
     // targetSerial.println("[C] PID::show_errors()");
