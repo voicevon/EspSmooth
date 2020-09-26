@@ -10,6 +10,7 @@ Weeder* Weeder::get_instance(){
     }
     return __instance;
 }
+
 Weeder::Weeder(){
 }
 
@@ -23,6 +24,7 @@ void Weeder::init(){
     right.actuator_pin.start();
     right.pid_controller.Init(1, 2.05, 0, 0.0);
     right.set_show_debug(false);
+    right.init(1);
 
     left.toucher.init(AdcPin("GPIO_26"),0.0180, 167.78);
     left.actuator_feedback.init(AdcPin("GPIO_35"), 0.0386, 419);
@@ -31,7 +33,7 @@ void Weeder::init(){
     left.actuator_pin.start();
     left.pid_controller.Init(2, 2.05, 0, 0.0);
     left.set_show_debug(false); 
-
+    left.init(2);
     OutputPin __k1_pin("GPIO_13",true);
     OutputPin __k2_pin("GPIO_32",true);
     OutputPin __k3_pin("GPIO_04",true);

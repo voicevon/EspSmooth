@@ -4,6 +4,7 @@
 
 
 OneSide::OneSide(){
+    target_serial.begin(115200);
 }
 OneSide::~OneSide(){
 
@@ -45,6 +46,25 @@ void OneSide::__show_debug(){
     Serial.println(" ");
 }
 
+void OneSide::init(int side_id){
+    __side_id = side_id;
+}
+void OneSide::output_curves(){
+
+    if(__side_id == 1){
+        int16_t target_length = __target_length;
+        int16_t reality = target_length + __error_length;
+        target_serial.write(0xff);
+        target_serial.write(0xff);
+        target_serial.write(0xff);
+        target_serial.write(target_length / 256);
+        target_serial.write(target_length % 256);
+        target_serial.write(0xff);
+        target_serial.write(reality / 256);
+        target_serial.write(reality % 256);
+    }
+
+}
 void OneSide::pid_loop_with_reading_sensors(){
     read_sensors();
     __target_length = __convert_command_from_toucher();
@@ -61,6 +81,7 @@ void OneSide::pid_loop_with_reading_sensors(){
     float output = pid_controller.get_output();
     pid_controller.show_errors_and_output();
 
+    output_curves();
     // output pwm.
     uint16_t pwm_output = output * 32768 / 150 + 32768 ;   // 20mA == Longer length
     pwm_output = 65536 - pwm_output;

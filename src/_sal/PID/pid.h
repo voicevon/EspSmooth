@@ -36,7 +36,7 @@ class PID {
          */
         double OutputThrottle(double max_thro);
     private:
-        HardwareSerial target_serial = Serial2;
+        // HardwareSerial target_serial = Serial2;
 
         int __sideId;
         float __last_output = 0;

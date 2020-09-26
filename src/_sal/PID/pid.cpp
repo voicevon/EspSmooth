@@ -21,7 +21,7 @@ void PID::Init(int sideId, double kp, double ki, double kd) {
     for(int i=0; i< ERR_BUFFER_COUNT ; i++){
         i_err_buffer[i] = 0;
     }
-    target_serial.begin(115200);
+    // target_serial.begin(115200);
 }
 
 void PID::UpdateError(double cte) {
@@ -64,18 +64,18 @@ void PID::show_config(){
 }
 
 void PID::show_errors_and_output(){
-    if(__sideId == 1){
-        int16_t err = p_error;
-        int16_t out = __last_output;
-        target_serial.write(0xff);
-        target_serial.write(0xff);
-        target_serial.write(0xff);
-        target_serial.write(err / 256);
-        target_serial.write(err % 256);
-        target_serial.write(0xff);
-        target_serial.write(out / 256);
-        target_serial.write(out % 256);
-    }
+    // if(__sideId == 1){
+    //     int16_t err = p_error;
+    //     int16_t out = __last_output;
+    //     target_serial.write(0xff);
+    //     target_serial.write(0xff);
+    //     target_serial.write(0xff);
+    //     target_serial.write(err / 256);
+    //     target_serial.write(err % 256);
+    //     target_serial.write(0xff);
+    //     target_serial.write(out / 256);
+    //     target_serial.write(out % 256);
+    // }
     // targetSerial.println(__sideId);
     // targetSerial.println("[C] PID::show_errors()");
     // targetSerial.print("    (P_error，I_error, D_error, p_out,i_out,d_out) = (");
